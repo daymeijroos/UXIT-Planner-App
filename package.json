@@ -1,0 +1,49 @@
+{
+  "private": true,
+  "scripts": {
+    "push": "npx prisma db push --force-reset",
+    "seed": "npm run push && npx prisma db seed",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@formkit/auto-animate": "^1.0.0-beta.6",
+    "@next-auth/prisma-adapter": "^1.0.5",
+    "@prisma/client": "^4.12.0",
+    "@tanstack/react-query": "^4.28.0",
+    "@trpc/client": "^10.18.0",
+    "@trpc/next": "^10.18.0",
+    "@trpc/react-query": "^10.18.0",
+    "@trpc/server": "^10.18.0",
+    "@types/prettier": "^2.7.2",
+    "graphql": "^16.6.0",
+    "next": "latest",
+    "next-auth": "^4.20.1",
+    "next-pwa": "^5.6.0",
+    "react": "^18.2.0",
+    "react-aria": "^3.23.1",
+    "react-dom": "^18.2.0",
+    "superjson": "^1.12.2",
+    "zod": "^3.21.4"
+  },
+  "devDependencies": {
+    "@types/node": "17.0.4",
+    "@types/react": "17.0.38",
+    "@types/ws": "^8.5.4",
+    "@typescript-eslint/eslint-plugin": "^5.57.1",
+    "autoprefixer": "^10.4.14",
+    "eslint": "^8.37.0",
+    "eslint-config-next": "^13.2.4",
+    "postcss": "^8.4.21",
+    "prettier": "^2.8.7",
+    "prettier-plugin-tailwindcss": "^0.2.7",
+    "prisma": "^4.12.0",
+    "tailwindcss": "^3.3.1",
+    "ts-node": "^10.9.1",
+    "typescript": "5.0.3"
+  },
+  "prisma": {
+    "seed": "ts-node --transpile-only ./prisma/seed.ts"
+  }
+}

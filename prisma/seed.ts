@@ -1,49 +1,122 @@
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient } from "@prisma/client";
+import {faker} from "@faker-js/faker";
+import cuid from "cuid";
 
-const prisma = new PrismaClient()
+const prisma = new PrismaClient();
 
-//use createmany to create a bunch of posts filled with mock filler posts with random events
+async function main() {
+  // Create Shift Types
+  const shiftType1 = await prisma.shift_Type.create({
+    data: {
+      name: "Shift Type 1",
+      description: "Description for Shift Type 1",
+    },
+  });
 
-async function posts() {
-  // await prisma.post.create({
-  //   data: {
-  //     title: 'Im feeling good, went for some ice-cream',
-  //     content: 'Today was a good day, I went for some ice-cream and it was delicious',
-  //   }
-  // })
-  // await prisma.post.create({
-  //   data: {
-  //     title: 'I went to the gym',
-  //     content: 'Today I went to the gym and I did some squats',
-  //   }
-  // })
-  // await prisma.post.create({
-  //   data: {
-  //     title: 'Did some coding',
-  //     content: 'Today I did some coding and it was fun',
-  //   }
-  // })
-  // // await prisma.post.create({
-  // //   data: {
-  // //     title: 'I went for a walk',
-  // //     content: 'Today I went for a walk and it was nice',
-  // //   }
-  // // })
-  // // await prisma.post.create({
-  // //   data: {
-  // //     title: 'I went to the beach',
-  // //     content: 'Today I went to the beach and it was sunny',
-  // //   }
-  // // })
+  const shiftType2 = await prisma.shift_Type.create({
+    data: {
+      name: "Shift Type 2",
+      description: "Description for Shift Type 2",
+    },
+  });
+
+  console.log("Shift Types created: ", shiftType1, shiftType2)
+
+  // Genereer mockdata voor gebruikers, voorkeuren en standaard beschikbaarheid
+  const users = [];
+  for (let i = 0; i < 2; i++) {
+    const availabilityId = cuid();
+    const availabilityNextId = cuid();
+
+    users.push(
+      prisma.user.create({
+        data: {
+          first_name: faker.name.firstName(),
+          last_name: faker.name.lastName(),
+          email: faker.internet.email(),
+          preference: {
+            create: {
+              preferedWorkHours: faker.datatype.number({ min: 1, max: 8 }),
+              shift_type_id: i % 2 === 0 ? shiftType1.id : shiftType2.id,
+              availability: {
+                create: [
+                  {
+                    id: availabilityId + i.toString(),
+                    weekday: 1,
+                    sequence_start: true,
+                    shift_types: {
+                      connect: {
+                        id: i % 2 === 0 ? shiftType1.id : shiftType2.id,
+                      },
+                    },
+                  },
+                  {
+                    id: availabilityNextId + i.toString(),
+                    weekday: 2,
+                    sequence_start: false,
+                    shift_types: {
+                      connect: {
+                        id: i % 2 === 0 ? shiftType1.id : shiftType2.id,
+                      },
+                    },
+                    previous: {
+                      connect: {
+                        id: availabilityId + i.toString(),
+                      },
+                    },
+                    next: {
+                      connect: {
+                        id: availabilityId + i.toString(),
+                      },
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        },
+      })
+    );
+  }
+  await Promise.all(users);
+
+  // Genereer mockdata voor shifts
+  const shifts = [];
+  for (let i = 0; i < 10; i++) {
+    const shiftStart = faker.date.future();
+    const shiftEnd = new Date(shiftStart.getTime() + faker.datatype.number({ min: 1, max: 8 }) * 60 * 60 * 1000);
+    shifts.push(
+      prisma.shift.create({
+        data: {
+          start: shiftStart,
+          end: shiftEnd,
+        },
+      })
+    );
+  }
+  const createdShifts = await Promise.all(shifts);
+
+  // Genereer mockdata voor staff_required
+  const staffRequiredList = [];
+  for (let i = 0; i < 10; i++) {
+    staffRequiredList.push(
+      prisma.staff_Required.create({
+        data: {
+          amount: faker.datatype.number({ min: 1, max: 5 }),
+          shift_id: createdShifts[i % 10].id,
+          shift_type_id: i % 2 === 0 ? shiftType1.id : shiftType2.id,
+        },
+      })
+    );
+  }
+  await Promise.all(staffRequiredList);
 }
 
-posts().then(async () => {
-  await prisma.$disconnect()
-
-})
-
-.catch(async (e) => {
-  console.error(e)
-  await prisma.$disconnect()
-  process.exit(1)
-})
+main()
+  .catch((e) => {
+    console.error(e);
+    process.exit(1);
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
+  });

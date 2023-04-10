@@ -17,6 +17,7 @@
     "@trpc/react-query": "^10.18.0",
     "@trpc/server": "^10.18.0",
     "@types/prettier": "^2.7.2",
+    "cuid": "^3.0.0",
     "graphql": "^16.6.0",
     "next": "latest",
     "next-auth": "^4.20.1",
@@ -28,6 +29,7 @@
     "zod": "^3.21.4"
   },
   "devDependencies": {
+    "@faker-js/faker": "^7.6.0",
     "@types/node": "17.0.4",
     "@types/react": "17.0.38",
     "@types/ws": "^8.5.4",

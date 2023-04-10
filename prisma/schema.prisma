@@ -73,7 +73,7 @@ model Default_Availability {
   weekday             Int
   sequence_start      Boolean
   preference_id       String
-  next_id             String? @unique
+  next_id             String?               @unique
   preference          User_Preference       @relation(fields: [preference_id], references: [id])
   next                Default_Availability? @relation("Sequence", fields: [next_id], references: [id])
   previous            Default_Availability? @relation("Sequence")
@@ -91,12 +91,12 @@ model Availability {
 }
 
 model Role {
-  Name                String @id
+  Name                String          @id
   Description         String
 }
 
 model Shift {
-  id                  String @id @default(cuid())
+  id                  String          @id @default(cuid())
   start               DateTime
   end                 DateTime
   staffings           Staffing[]
@@ -104,26 +104,26 @@ model Shift {
 }
 
 model Staffing {
-  id                  String @id @default(cuid())
+  id                  String          @id @default(cuid())
   shift_id            String
   shift_type_id       String
   user_id             String
-  shift               Shift @relation(fields: [shift_id], references: [id])
-  shift_type          Shift_Type @relation(fields: [shift_type_id], references: [id])
-  user                User @relation(fields: [user_id], references: [id])
+  shift               Shift           @relation(fields: [shift_id], references: [id])
+  shift_type          Shift_Type      @relation(fields: [shift_type_id], references: [id])
+  user                User            @relation(fields: [user_id], references: [id])
 }
 
 model Staff_Required {
-  id                  String @id @default(cuid())
+  id                  String          @id @default(cuid())
   amount              Int
   shift_id            String
   shift_type_id       String
-  shift               Shift @relation(fields: [shift_id], references: [id])
-  shift_type          Shift_Type @relation(fields: [shift_type_id], references: [id])
+  shift               Shift           @relation(fields: [shift_id], references: [id])
+  shift_type          Shift_Type      @relation(fields: [shift_type_id], references: [id])
 }
 
 model Shift_Type {
-  id                    String @id @default(cuid())
+  id                    String        @id @default(cuid())
   name                  String
   description           String
   availability          Availability[]

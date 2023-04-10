@@ -47,3 +47,4 @@ next-env.d.ts
 /public/fallback-*.js
 
 /prisma/db.sqlite
+prisma/db.sqlite-journal

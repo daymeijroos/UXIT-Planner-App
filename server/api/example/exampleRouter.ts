@@ -1,6 +1,3 @@
-import { Post, User } from "@prisma/client";
-import { observable } from "@trpc/server/observable";
-import EventEmitter from "events";
 import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure, protectedProcedure } from "../trpc";

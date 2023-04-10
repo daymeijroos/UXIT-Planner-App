@@ -76,31 +76,29 @@ model User_Preference {
   shift_type_id         String
   user_id               String      @unique
   shift_type            Shift_Type  @relation(fields: [shift_type_id], references: [id])
+  absence               Absence[]
   availability          Availability[]
-  default_availability  Default_Availability[]
   user                  User        @relation(fields: [user_id], references: [id])
 }
 
-model Default_Availability {
+model Availability {
   id                  String                @id @default(cuid())
   weekday             Int
   sequence_start      Boolean
   preference_id       String
   next_id             String?               @unique
   preference          User_Preference       @relation(fields: [preference_id], references: [id])
-  next                Default_Availability? @relation("Sequence", fields: [next_id], references: [id])
-  previous            Default_Availability? @relation("Sequence")
+  next                Availability? @relation("Sequence", fields: [next_id], references: [id])
+  previous            Availability? @relation("Sequence")
   shift_types         Shift_Type[]
 }
 
-model Availability {
+model Absence {
   id                  String          @id @default(cuid())
-  date                DateTime
-  start               DateTime?
-  end                 DateTime?
+  start               DateTime
+  end                 DateTime
   preference_id       String
   preference          User_Preference @relation(fields: [preference_id], references: [id])
-  shift_types         Shift_Type[]
 }
 
 model Role {
@@ -140,7 +138,6 @@ model Shift_Type {
   name                  String
   description           String
   availability          Availability[]
-  default_availability  Default_Availability[]
   staffings             Staffing[]
   staff_required        Staff_Required[]
   user_preferences      User_Preference[]

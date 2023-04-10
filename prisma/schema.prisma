@@ -36,15 +36,17 @@ model Session {
 }
 
 model User {
-    id            String    @id @default(cuid())
-    name          String?
-    email         String?   @unique
+    id            String           @id @default(cuid())
+    first_name    String?
+    last_name     String?
+    email         String?          @unique
     emailVerified DateTime?
     image         String?
-    role          String    @default("USER")
+    role          String           @default("USER")
+    preference    User_Preference?
+    staffings     Staffing[]
     accounts      Account[]
     sessions      Session[]
-    posts         Post[]
 }
 
 model VerificationToken {
@@ -55,13 +57,78 @@ model VerificationToken {
     @@unique([identifier, token])
 }
 
-model Post {
-    id        String   @id @default(cuid())
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-    title     String
-    content   String?
-    user      User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
-    userId    String?
-    userName  String?
+model User_Preference {
+  id                    String      @id @default(cuid())
+  preferedWorkHours     Int
+  shift_type_id         String
+  user_id               String      @unique
+  shift_type            Shift_Type  @relation(fields: [shift_type_id], references: [id])
+  availability          Availability[]
+  default_availability  Default_Availability[]
+  user                  User        @relation(fields: [user_id], references: [id])
+}
+
+model Default_Availability {
+  id                  String                @id @default(cuid())
+  weekday             Int
+  sequence_start      Boolean
+  preference_id       String
+  next_id             String? @unique
+  preference          User_Preference       @relation(fields: [preference_id], references: [id])
+  next                Default_Availability? @relation("Sequence", fields: [next_id], references: [id])
+  previous            Default_Availability? @relation("Sequence")
+  shift_types         Shift_Type[]
+}
+
+model Availability {
+  id                  String          @id @default(cuid())
+  date                DateTime
+  start               DateTime?
+  end                 DateTime?
+  preference_id       String
+  preference          User_Preference @relation(fields: [preference_id], references: [id])
+  shift_types         Shift_Type[]
+}
+
+model Role {
+  Name                String @id
+  Description         String
+}
+
+model Shift {
+  id                  String @id @default(cuid())
+  start               DateTime
+  end                 DateTime
+  staffings           Staffing[]
+  staff_required      Staff_Required[]
+}
+
+model Staffing {
+  id                  String @id @default(cuid())
+  shift_id            String
+  shift_type_id       String
+  user_id             String
+  shift               Shift @relation(fields: [shift_id], references: [id])
+  shift_type          Shift_Type @relation(fields: [shift_type_id], references: [id])
+  user                User @relation(fields: [user_id], references: [id])
+}
+
+model Staff_Required {
+  id                  String @id @default(cuid())
+  amount              Int
+  shift_id            String
+  shift_type_id       String
+  shift               Shift @relation(fields: [shift_id], references: [id])
+  shift_type          Shift_Type @relation(fields: [shift_type_id], references: [id])
+}
+
+model Shift_Type {
+  id                    String @id @default(cuid())
+  name                  String
+  description           String
+  availability          Availability[]
+  default_availability  Default_Availability[]
+  staffings             Staffing[]
+  staff_required        Staff_Required[]
+  user_preferences      User_Preference[]
 }

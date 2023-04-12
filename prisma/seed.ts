@@ -8,19 +8,26 @@ async function main() {
   // Create Shift Types
   const shiftType1 = await prisma.shift_Type.create({
     data: {
-      name: "Shift Type 1",
-      description: "Description for Shift Type 1",
-    },
+      name: "Balie",
+      description: "De vrijwilliger wil bij de balie zitten."
+    }
   });
 
   const shiftType2 = await prisma.shift_Type.create({
     data: {
-      name: "Shift Type 2",
-      description: "Description for Shift Type 2",
-    },
+      name: "Galerie",
+      description: "De vrijwilliger wil bij de galerie staan."
+    }
   });
 
-  console.log("Shift Types created: ", shiftType1, shiftType2)
+  const shiftType3 = await prisma.shift_Type.create({
+    data: {
+      name: "Beide",
+      description: "De vrijwilliger geeft zich op om bij beide de balie en galerie te staan."
+    }
+  });
+
+  console.log("Shift Types created: ", shiftType1, shiftType2, shiftType3);
 
   // Genereer mockdata voor gebruikers, voorkeuren en standaard beschikbaarheid
   const users = [];

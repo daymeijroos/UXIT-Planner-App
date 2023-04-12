@@ -51,9 +51,9 @@ async function main() {
                   sequence_start: true,
                   shift_types: {
                     connect: {
-                      id: shiftType1.id,
-                    },
-                  },
+                      id: shiftType1.id
+                    }
+                  }
                 },
                 {
                   id: cuid(),
@@ -61,25 +61,25 @@ async function main() {
                   sequence_start: false,
                   shift_types: {
                     connect: {
-                      id: shiftType1.id,
-                    },
+                      id: shiftType1.id
+                    }
                   },
                   previous: {
                     connect: {
-                      id: availabilityId,
-                    },
+                      id: availabilityId
+                    }
                   },
                   next: {
                     connect: {
-                      id: availabilityId,
-                    },
-                  },
-                },
-              ],
-            },
-          },
-        },
-      },
+                      id: availabilityId
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
     })
   );
   await Promise.all(users);
@@ -93,8 +93,8 @@ async function main() {
       prisma.shift.create({
         data: {
           start: shiftStart,
-          end: shiftEnd,
-        },
+          end: shiftEnd
+        }
       })
     );
   }
@@ -108,8 +108,8 @@ async function main() {
         data: {
           amount: faker.datatype.number({ min: 1, max: 5 }),
           shift_id: createdShifts[i % 10].id,
-          shift_type_id: i % 2 === 0 ? shiftType1.id : shiftType2.id,
-        },
+          shift_type_id: i % 2 === 0 ? shiftType1.id : shiftType2.id
+        }
       })
     );
   }

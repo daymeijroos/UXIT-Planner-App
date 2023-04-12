@@ -139,18 +139,61 @@ async function main() {
 
   // Genereer mockdata voor shifts
   const shifts = [];
-  for (let i = 0; i < 10; i++) {
-    const shiftStart = faker.date.future();
-    const shiftEnd = new Date(shiftStart.getTime() + faker.datatype.number({ min: 1, max: 8 }) * 60 * 60 * 1000);
-    shifts.push(
-      prisma.shift.create({
-        data: {
-          start: shiftStart,
-          end: shiftEnd
-        }
-      })
-    );
-  }
+
+  shifts.push(
+    prisma.shift.create({
+      data: {
+        create: [
+          // dinsdag
+          {
+            start: "2023-04-25T11:45:00.000Z",
+            end: "2023-04-25T15:00:00.000Z"
+          },
+          {
+            start: "2023-04-25T14:00:00.000Z",
+            end: "2023-04-25T17:15:00.000Z"
+          },
+          // woensdag
+          {
+            start: "2023-04-26T11:45:00.000Z",
+            end: "2023-04-26T15:00:00.000Z"
+          },
+          {
+            start: "2023-04-26T14:00:00.000Z",
+            end: "2023-04-26T17:15:00.000Z"
+          },
+          // donderdag
+          {
+            start: "2023-04-27T11:45:00.000Z",
+            end: "2023-04-27T15:00:00.000Z"
+          },
+          {
+            start: "2023-04-27T14:00:00.000Z",
+            end: "2023-04-27T17:15:00.000Z"
+          },
+          // vrijdag
+          {
+            start: "2023-04-28T11:45:00.000Z",
+            end: "2023-04-28T15:00:00.000Z"
+          },
+          {
+            start: "2023-04-28T14:00:00.000Z",
+            end: "2023-04-28T17:15:00.000Z"
+          },
+          // zaterdag
+          {
+            start: "2023-04-29T11:45:00.000Z",
+            end: "2023-04-29T17:15:00.000Z"
+          },
+          // zondag
+          {
+            start: "2023-04-30T11:45:00.000Z",
+            end: "2023-04-30T17:15:00.000Z"
+          }
+        ]
+      }
+    })
+  );
   const createdShifts = await Promise.all(shifts);
 
   // Genereer mockdata voor staff_required

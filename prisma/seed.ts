@@ -137,66 +137,137 @@ async function main() {
   );
   await Promise.all(users);
 
-  // Genereer mockdata voor shifts
+  // mockdata voor shifts
   const shifts = [];
+
+  // dinsdag
+  shifts.push(
+    prisma.shift.create({
+        data: {
+          start: "2023-04-25T11:45:00.000Z",
+          end: "2023-04-25T15:00:00.000Z"
+        }
+      }
+    )
+  );
 
   shifts.push(
     prisma.shift.create({
-      data: {
-        create: [
-          // dinsdag
-          {
-            start: "2023-04-25T11:45:00.000Z",
-            end: "2023-04-25T15:00:00.000Z"
-          },
-          {
-            start: "2023-04-25T14:00:00.000Z",
-            end: "2023-04-25T17:15:00.000Z"
-          },
-          // woensdag
-          {
-            start: "2023-04-26T11:45:00.000Z",
-            end: "2023-04-26T15:00:00.000Z"
-          },
-          {
-            start: "2023-04-26T14:00:00.000Z",
-            end: "2023-04-26T17:15:00.000Z"
-          },
-          // donderdag
-          {
-            start: "2023-04-27T11:45:00.000Z",
-            end: "2023-04-27T15:00:00.000Z"
-          },
-          {
-            start: "2023-04-27T14:00:00.000Z",
-            end: "2023-04-27T17:15:00.000Z"
-          },
-          // vrijdag
-          {
-            start: "2023-04-28T11:45:00.000Z",
-            end: "2023-04-28T15:00:00.000Z"
-          },
-          {
-            start: "2023-04-28T14:00:00.000Z",
-            end: "2023-04-28T17:15:00.000Z"
-          },
-          // zaterdag
-          {
-            start: "2023-04-29T11:45:00.000Z",
-            end: "2023-04-29T17:15:00.000Z"
-          },
-          // zondag
-          {
-            start: "2023-04-30T11:45:00.000Z",
-            end: "2023-04-30T17:15:00.000Z"
-          }
-        ]
+        data: {
+          start: "2023-04-25T14:00:00.000Z",
+          end: "2023-04-25T17:15:00.000Z"
+        }
       }
-    })
+    )
+  );
+
+  // woensdag
+  shifts.push(
+    prisma.shift.create({
+        data: {
+          start: "2023-04-26T11:45:00.000Z",
+          end: "2023-04-26T15:00:00.000Z"
+        }
+      }
+    )
+  );
+
+  shifts.push(
+    prisma.shift.create({
+        data: {
+          start: "2023-04-26T14:00:00.000Z",
+          end: "2023-04-26T17:15:00.000Z"
+        }
+      }
+    )
+  );
+
+  // donderdag
+  shifts.push(
+    prisma.shift.create({
+        data: {
+          start: "2023-04-27T11:45:00.000Z",
+          end: "2023-04-27T15:00:00.000Z"
+        }
+      }
+    )
+  );
+
+  shifts.push(
+    prisma.shift.create({
+        data: {
+          start: "2023-04-27T14:00:00.000Z",
+          end: "2023-04-27T17:15:00.000Z"
+        }
+      }
+    )
+  );
+
+  // vrijdag
+  shifts.push(
+    prisma.shift.create({
+        data: {
+          start: "2023-04-28T11:45:00.000Z",
+          end: "2023-04-28T15:00:00.000Z"
+        }
+      }
+    )
+  );
+
+  shifts.push(
+    prisma.shift.create({
+        data: {
+          start: "2023-04-28T14:00:00.000Z",
+          end: "2023-04-28T17:15:00.000Z"
+        }
+      }
+    )
+  );
+
+  // zaterdag
+  shifts.push(
+    prisma.shift.create({
+        data: {
+          start: "2023-04-29T11:45:00.000Z",
+          end: "2023-04-29T17:15:00.000Z"
+        }
+      }
+    )
+  );
+
+  shifts.push(
+    prisma.shift.create({
+        data: {
+          start: "2023-04-29T11:45:00.000Z",
+          end: "2023-04-29T17:15:00.000Z"
+        }
+      }
+    )
+  );
+
+  // zondag
+  shifts.push(
+    prisma.shift.create({
+        data: {
+          start: "2023-04-30T11:45:00.000Z",
+          end: "2023-04-30T17:15:00.000Z"
+        }
+      }
+    )
+  );
+
+  shifts.push(
+    prisma.shift.create({
+        data: {
+          start: "2023-04-30T11:45:00.000Z",
+          end: "2023-04-30T17:15:00.000Z"
+        }
+      }
+    )
   );
   const createdShifts = await Promise.all(shifts);
 
-  // Genereer mockdata voor staff_required
+// Genereer mockdata voor staff_required
   const staffRequiredList = [];
   for (let i = 0; i < 10; i++) {
     staffRequiredList.push(

@@ -6,6 +6,7 @@ const prisma = new PrismaClient();
 
 async function main() {
   // Create Shift Types
+  // weet niet of dit de bedoeling was maar heb een 3e shifttype toegevoegd voor als de vrijwilliger bij beide kan staan
   const shiftType1 = await prisma.shift_Type.create({
     data: {
       name: "Balie",
@@ -235,16 +236,6 @@ async function main() {
     )
   );
 
-  shifts.push(
-    prisma.shift.create({
-        data: {
-          start: "2023-04-29T11:45:00.000Z",
-          end: "2023-04-29T17:15:00.000Z"
-        }
-      }
-    )
-  );
-
   // zondag
   shifts.push(
     prisma.shift.create({
@@ -256,30 +247,118 @@ async function main() {
     )
   );
 
-  shifts.push(
-    prisma.shift.create({
-        data: {
-          start: "2023-04-30T11:45:00.000Z",
-          end: "2023-04-30T17:15:00.000Z"
-        }
-      }
-    )
-  );
   const createdShifts = await Promise.all(shifts);
 
 // Genereer mockdata voor staff_required
+  // willen we alleen balie rooster genereren of ook galerie (in het algemeen maar atm. voor demo)? Alles staat hier voorlopig op balie
   const staffRequiredList = [];
-  for (let i = 0; i < 10; i++) {
-    staffRequiredList.push(
-      prisma.staff_Required.create({
-        data: {
-          amount: faker.datatype.number({ min: 1, max: 5 }),
-          shift_id: createdShifts[i % 10].id,
-          shift_type_id: i % 2 === 0 ? shiftType1.id : shiftType2.id
-        }
-      })
-    );
-  }
+
+  // dinsdag
+  staffRequiredList.push(
+    prisma.staff_Required.create({
+      data: {
+        amount: 1,
+        shift_id: createdShifts[0].id,
+        shift_type_id: shiftType1.id
+      }
+    })
+  );
+
+  staffRequiredList.push(
+    prisma.staff_Required.create({
+      data: {
+        amount: 1,
+        shift_id: createdShifts[1].id,
+        shift_type_id: shiftType1.id
+      }
+    })
+  );
+
+  // woensdag
+  staffRequiredList.push(
+    prisma.staff_Required.create({
+      data: {
+        amount: 1,
+        shift_id: createdShifts[2].id,
+        shift_type_id: shiftType1.id
+      }
+    })
+  );
+
+  staffRequiredList.push(
+    prisma.staff_Required.create({
+      data: {
+        amount: 1,
+        shift_id: createdShifts[3].id,
+        shift_type_id: shiftType1.id
+      }
+    })
+  );
+
+  // donderdag
+  staffRequiredList.push(
+    prisma.staff_Required.create({
+      data: {
+        amount: 1,
+        shift_id: createdShifts[4].id,
+        shift_type_id: shiftType1.id
+      }
+    })
+  );
+
+  staffRequiredList.push(
+    prisma.staff_Required.create({
+      data: {
+        amount: 1,
+        shift_id: createdShifts[5].id,
+        shift_type_id: shiftType1.id
+      }
+    })
+  );
+
+  // vrijdag
+  staffRequiredList.push(
+    prisma.staff_Required.create({
+      data: {
+        amount: 1,
+        shift_id: createdShifts[6].id,
+        shift_type_id: shiftType1.id
+      }
+    })
+  );
+
+  staffRequiredList.push(
+    prisma.staff_Required.create({
+      data: {
+        amount: 1,
+        shift_id: createdShifts[7].id,
+        shift_type_id: shiftType1.id
+      }
+    })
+  );
+
+  // zaterdag
+  staffRequiredList.push(
+    prisma.staff_Required.create({
+      data: {
+        amount: 2,
+        shift_id: createdShifts[8].id,
+        shift_type_id: shiftType1.id
+      }
+    })
+  );
+
+  // zondag
+  staffRequiredList.push(
+    prisma.staff_Required.create({
+      data: {
+        amount: 2,
+        shift_id: createdShifts[9].id,
+        shift_type_id: shiftType1.id
+      }
+    })
+  );
+
   await Promise.all(staffRequiredList);
 }
 

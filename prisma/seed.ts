@@ -32,13 +32,14 @@ async function main() {
   // Genereer mockdata voor gebruikers, voorkeuren en standaard beschikbaarheid
   const users = [];
 
+  // user 1
   const availabilityId = cuid();
   users.push(
     prisma.user.create({
       data: {
-        first_name: "Max",
-        last_name: "de Vries",
-        email: "s1137579@student.hsleiden.nl",
+        first_name: "Robert",
+        last_name: "Swarts",
+        email: "robertswarts@pulchri.nl",
         preference: {
           create: {
             preferedWorkHours: 2,
@@ -62,6 +63,58 @@ async function main() {
                   shift_types: {
                     connect: {
                       id: shiftType1.id
+                    }
+                  },
+                  previous: {
+                    connect: {
+                      id: availabilityId
+                    }
+                  },
+                  next: {
+                    connect: {
+                      id: availabilityId
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    })
+  );
+
+  // user 2
+  availabilityId = cuid();
+  users.push(
+    prisma.user.create({
+      data: {
+        first_name: "Lars",
+        last_name: "Baer",
+        email: "larsbaer@pulchri.nl",
+        preference: {
+          create: {
+            preferedWorkHours: 4,
+            shift_type_id: shiftType3,
+            availability: {
+              create: [
+                {
+                  id: availabilityId,
+                  weekday: 1,
+                  sequence_start: true,
+                  shift_types: {
+                    connect: {
+                      id: shiftType3.id
+                    }
+                  }
+                },
+                {
+                  id: cuid(),
+                  weekday: 2,
+                  sequence_start: false,
+                  shift_types: {
+                    connect: {
+                      id: shiftType3.id
                     }
                   },
                   previous: {

@@ -29,7 +29,7 @@ async function main() {
 
   console.log("Shift Types created: ", shiftType1, shiftType2, shiftType3);
 
-  // Genereer mockdata voor gebruikers, voorkeuren en standaard beschikbaarheid
+  // mockdata voor gebruikers, voorkeuren en standaard beschikbaarheid
   const users = [];
 
   // user 1
@@ -43,7 +43,7 @@ async function main() {
         preference: {
           create: {
             preferedWorkHours: 2,
-            shift_type_id: shiftType1,
+            shift_type_id: shiftType1.id,
             availability: {
               create: [
                 {
@@ -95,7 +95,7 @@ async function main() {
         preference: {
           create: {
             preferedWorkHours: 4,
-            shift_type_id: shiftType3,
+            shift_type_id: shiftType3.id,
             availability: {
               create: [
                 {

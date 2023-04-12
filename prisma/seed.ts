@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import {faker} from "@faker-js/faker";
+import { faker } from "@faker-js/faker";
 import cuid from "cuid";
 
 const prisma = new PrismaClient();
@@ -31,60 +31,57 @@ async function main() {
 
   // Genereer mockdata voor gebruikers, voorkeuren en standaard beschikbaarheid
   const users = [];
-  for (let i = 0; i < 2; i++) {
-    const availabilityId = cuid();
-    const availabilityNextId = cuid();
 
-    users.push(
-      prisma.user.create({
-        data: {
-          first_name: faker.name.firstName(),
-          last_name: faker.name.lastName(),
-          email: faker.internet.email(),
-          preference: {
-            create: {
-              preferedWorkHours: faker.datatype.number({ min: 1, max: 8 }),
-              shift_type_id: i % 2 === 0 ? shiftType1.id : shiftType2.id,
-              availability: {
-                create: [
-                  {
-                    id: availabilityId + i.toString(),
-                    weekday: 1,
-                    sequence_start: true,
-                    shift_types: {
-                      connect: {
-                        id: i % 2 === 0 ? shiftType1.id : shiftType2.id,
-                      },
+  const availabilityId = cuid();
+  users.push(
+    prisma.user.create({
+      data: {
+        first_name: "Max",
+        last_name: "de Vries",
+        email: "s1137579@student.hsleiden.nl",
+        preference: {
+          create: {
+            preferedWorkHours: 2,
+            shift_type_id: shiftType1,
+            availability: {
+              create: [
+                {
+                  id: availabilityId,
+                  weekday: 1,
+                  sequence_start: true,
+                  shift_types: {
+                    connect: {
+                      id: shiftType1.id,
                     },
                   },
-                  {
-                    id: availabilityNextId + i.toString(),
-                    weekday: 2,
-                    sequence_start: false,
-                    shift_types: {
-                      connect: {
-                        id: i % 2 === 0 ? shiftType1.id : shiftType2.id,
-                      },
-                    },
-                    previous: {
-                      connect: {
-                        id: availabilityId + i.toString(),
-                      },
-                    },
-                    next: {
-                      connect: {
-                        id: availabilityId + i.toString(),
-                      },
+                },
+                {
+                  id: cuid(),
+                  weekday: 2,
+                  sequence_start: false,
+                  shift_types: {
+                    connect: {
+                      id: shiftType1.id,
                     },
                   },
-                ],
-              },
+                  previous: {
+                    connect: {
+                      id: availabilityId,
+                    },
+                  },
+                  next: {
+                    connect: {
+                      id: availabilityId,
+                    },
+                  },
+                },
+              ],
             },
           },
         },
-      })
-    );
-  }
+      },
+    })
+  );
   await Promise.all(users);
 
   // Genereer mockdata voor shifts

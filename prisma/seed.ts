@@ -31,10 +31,21 @@ async function main() {
   console.log("Shift Types created: ", shiftType1, shiftType2, shiftType3);
 
   // mockdata voor gebruikers, voorkeuren en standaard beschikbaarheid
+  // user 1: robert swarts, elke dag, max 2x
+  // user 2, lars baer, dinsdag/woensdag, max 2x
+  // user 3, manuel vermeer, donderdag/vrijdag, max 2x
+  // user 4, david sprong, zaterdag, max 1x
+  // user 5, olivier verbeten, zondag, max 1x
+  // user 6, emma beil, elke dag, max 4x
+  // user 7, barbara damme, woensdag/zaterdag/zondag, max 1x
+  // user 8, isabella host, dinsdag/woensdag, max 2x
+  // user 9, marieke burckhard, donerdag/vrijdag/zaterdag, max 2x
+  // user 10, maria nellessen, vrijdag/zaterdag/zondag, max 3x
   const users = [];
 
   // user 1
-  const availabilityId = cuid();
+  let availabilityId: string;
+  availabilityId = cuid();
   users.push(
     prisma.user.create({
       data: {
@@ -48,8 +59,8 @@ async function main() {
             availability: {
               create: [
                 {
-                  id: availabilityId,
-                  weekday: 1,
+                  id: availabilityId + "1",
+                  weekday: 2,
                   sequence_start: true,
                   shift_types: {
                     connect: {
@@ -58,8 +69,8 @@ async function main() {
                   }
                 },
                 {
-                  id: cuid(),
-                  weekday: 2,
+                  id: availabilityId + "2",
+                  weekday: 3,
                   sequence_start: false,
                   shift_types: {
                     connect: {
@@ -68,12 +79,87 @@ async function main() {
                   },
                   previous: {
                     connect: {
-                      id: availabilityId
+                      id: availabilityId + "1"
                     }
                   },
                   next: {
                     connect: {
-                      id: availabilityId
+                      id: availabilityId + "3"
+                    }
+                  }
+                },
+                {
+                  id: availabilityId + "3",
+                  weekday: 4,
+                  sequence_start: false,
+                  shift_types: {
+                    connect: {
+                      id: shiftType1.id
+                    }
+                  },
+                  previous: {
+                    connect: {
+                      id: availabilityId + "2"
+                    }
+                  },
+                  next: {
+                    connect: {
+                      id: availabilityId + "4"
+                    }
+                  }
+                },
+                {
+                  id: availabilityId + "4",
+                  weekday: 5,
+                  sequence_start: false,
+                  shift_types: {
+                    connect: {
+                      id: shiftType1.id
+                    }
+                  },
+                  previous: {
+                    connect: {
+                      id: availabilityId + "3"
+                    }
+                  },
+                  next: {
+                    connect: {
+                      id: availabilityId + "5"
+                    }
+                  }
+                },
+                {
+                  id: availabilityId + "5",
+                  weekday: 6,
+                  sequence_start: false,
+                  shift_types: {
+                    connect: {
+                      id: shiftType1.id
+                    }
+                  },
+                  previous: {
+                    connect: {
+                      id: availabilityId + "4"
+                    }
+                  },
+                  next: {
+                    connect: {
+                      id: availabilityId + "6"
+                    }
+                  }
+                },
+                {
+                  id: availabilityId + "6",
+                  weekday: 7,
+                  sequence_start: false,
+                  shift_types: {
+                    connect: {
+                      id: shiftType1.id
+                    }
+                  },
+                  previous: {
+                    connect: {
+                      id: availabilityId + "5"
                     }
                   }
                 }
@@ -95,37 +181,32 @@ async function main() {
         email: "larsbaer@pulchri.nl",
         preference: {
           create: {
-            preferedWorkHours: 4,
-            shift_type_id: shiftType3.id,
+            preferedWorkHours: 2,
+            shift_type_id: shiftType1.id,
             availability: {
               create: [
                 {
-                  id: availabilityId,
-                  weekday: 1,
+                  id: availabilityId + "1",
+                  weekday: 2,
                   sequence_start: true,
                   shift_types: {
                     connect: {
-                      id: shiftType3.id
+                      id: shiftType1.id
                     }
                   }
                 },
                 {
-                  id: cuid(),
-                  weekday: 2,
+                  id: availabilityId + "2",
+                  weekday: 3,
                   sequence_start: false,
                   shift_types: {
                     connect: {
-                      id: shiftType3.id
+                      id: shiftType1.id
                     }
                   },
                   previous: {
                     connect: {
-                      id: availabilityId
-                    }
-                  },
-                  next: {
-                    connect: {
-                      id: availabilityId
+                      id: availabilityId + "1"
                     }
                   }
                 }
@@ -136,6 +217,493 @@ async function main() {
       }
     })
   );
+
+  // user 3
+  availabilityId = cuid();
+  users.push(
+    prisma.user.create({
+      data: {
+        first_name: "Manuel",
+        last_name: "Vermeer",
+        email: "manuelvermeer@pulchri.nl",
+        preference: {
+          create: {
+            preferedWorkHours: 2,
+            shift_type_id: shiftType1.id,
+            availability: {
+              create: [
+                {
+                  id: availabilityId + "3",
+                  weekday: 4,
+                  sequence_start: true,
+                  shift_types: {
+                    connect: {
+                      id: shiftType3.id
+                    }
+                  }
+                },
+                {
+                  id: availabilityId + "4",
+                  weekday: 5,
+                  sequence_start: false,
+                  shift_types: {
+                    connect: {
+                      id: shiftType1.id
+                    }
+                  },
+                  previous: {
+                    connect: {
+                      id: availabilityId + "3"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    })
+  );
+
+  // user 4
+  availabilityId = cuid();
+  users.push(
+    prisma.user.create({
+      data: {
+        first_name: "David",
+        last_name: "Sprong",
+        email: "davidsprong@pulchri.nl",
+        preference: {
+          create: {
+            preferedWorkHours: 1,
+            shift_type_id: shiftType1.id,
+            availability: {
+              create: [
+                {
+                  id: availabilityId + "5",
+                  weekday: 6,
+                  sequence_start: true,
+                  shift_types: {
+                    connect: {
+                      id: shiftType1.id
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    })
+  );
+
+  // user 5
+  availabilityId = cuid();
+  users.push(
+    prisma.user.create({
+      data: {
+        first_name: "Olivier",
+        last_name: "Verbeten",
+        email: "olivierverbeten@pulchri.nl",
+        preference: {
+          create: {
+            preferedWorkHours: 1,
+            shift_type_id: shiftType1.id,
+            availability: {
+              create: [
+                {
+                  id: availabilityId + "6",
+                  weekday: 7,
+                  sequence_start: true,
+                  shift_types: {
+                    connect: {
+                      id: shiftType1.id
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    })
+  );
+
+  // user 6
+  availabilityId = cuid();
+  users.push(
+    prisma.user.create({
+      data: {
+        first_name: "Emma",
+        last_name: "Beil",
+        email: "emmabeil@pulchri.nl",
+        preference: {
+          create: {
+            preferedWorkHours: 4,
+            shift_type_id: shiftType1.id,
+            availability: {
+              create: [
+                {
+                  id: availabilityId + "1",
+                  weekday: 2,
+                  sequence_start: true,
+                  shift_types: {
+                    connect: {
+                      id: shiftType1.id
+                    }
+                  }
+                },
+                {
+                  id: availabilityId + "2",
+                  weekday: 3,
+                  sequence_start: false,
+                  shift_types: {
+                    connect: {
+                      id: shiftType1.id
+                    }
+                  },
+                  previous: {
+                    connect: {
+                      id: availabilityId + "1"
+                    }
+                  },
+                  next: {
+                    connect: {
+                      id: availabilityId + "3"
+                    }
+                  }
+                },
+                {
+                  id: availabilityId + "3",
+                  weekday: 4,
+                  sequence_start: false,
+                  shift_types: {
+                    connect: {
+                      id: shiftType1.id
+                    }
+                  },
+                  previous: {
+                    connect: {
+                      id: availabilityId + "2"
+                    }
+                  },
+                  next: {
+                    connect: {
+                      id: availabilityId + "4"
+                    }
+                  }
+                },
+                {
+                  id: availabilityId + "4",
+                  weekday: 5,
+                  sequence_start: false,
+                  shift_types: {
+                    connect: {
+                      id: shiftType1.id
+                    }
+                  },
+                  previous: {
+                    connect: {
+                      id: availabilityId + "3"
+                    }
+                  },
+                  next: {
+                    connect: {
+                      id: availabilityId + "5"
+                    }
+                  }
+                },
+                {
+                  id: availabilityId + "5",
+                  weekday: 6,
+                  sequence_start: false,
+                  shift_types: {
+                    connect: {
+                      id: shiftType1.id
+                    }
+                  },
+                  previous: {
+                    connect: {
+                      id: availabilityId + "4"
+                    }
+                  },
+                  next: {
+                    connect: {
+                      id: availabilityId + "6"
+                    }
+                  }
+                },
+                {
+                  id: availabilityId + "6",
+                  weekday: 7,
+                  sequence_start: false,
+                  shift_types: {
+                    connect: {
+                      id: shiftType1.id
+                    }
+                  },
+                  previous: {
+                    connect: {
+                      id: availabilityId + "5"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    })
+  );
+
+  // user 7
+  availabilityId = cuid();
+  users.push(
+    prisma.user.create({
+      data: {
+        first_name: "Barbara",
+        last_name: "Damme",
+        email: "barbaradamme@pulchri.nl",
+        preference: {
+          create: {
+            preferedWorkHours: 1,
+            shift_type_id: shiftType1.id,
+            availability: {
+              create: [
+                {
+                  id: availabilityId + "2",
+                  weekday: 3,
+                  sequence_start: true,
+                  shift_types: {
+                    connect: {
+                      id: shiftType1.id
+                    }
+                  }
+                },
+                {
+                  id: availabilityId + "5",
+                  weekday: 6,
+                  sequence_start: false,
+                  shift_types: {
+                    connect: {
+                      id: shiftType1.id
+                    }
+                  },
+                  previous: {
+                    connect: {
+                      id: availabilityId + "2"
+                    }
+                  },
+                  next: {
+                    connect: {
+                      id: availabilityId + "6"
+                    }
+                  }
+                },
+                {
+                  id: availabilityId + "6",
+                  weekday: 7,
+                  sequence_start: false,
+                  shift_types: {
+                    connect: {
+                      id: shiftType1.id
+                    }
+                  },
+                  previous: {
+                    connect: {
+                      id: availabilityId + "5"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    })
+  );
+
+  // user 8
+  availabilityId = cuid();
+  users.push(
+    prisma.user.create({
+      data: {
+        first_name: "Isabella",
+        last_name: "Host",
+        email: "isabellahost@pulchri.nl",
+        preference: {
+          create: {
+            preferedWorkHours: 2,
+            shift_type_id: shiftType1.id,
+            availability: {
+              create: [
+                {
+                  id: availabilityId + "1",
+                  weekday: 2,
+                  sequence_start: true,
+                  shift_types: {
+                    connect: {
+                      id: shiftType1.id
+                    }
+                  }
+                },
+                {
+                  id: availabilityId + "2",
+                  weekday: 3,
+                  sequence_start: false,
+                  shift_types: {
+                    connect: {
+                      id: shiftType1.id
+                    }
+                  },
+                  previous: {
+                    connect: {
+                      id: availabilityId + "1"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    })
+  );
+
+  // user 9
+  availabilityId = cuid();
+  users.push(
+    prisma.user.create({
+      data: {
+        first_name: "Marieke",
+        last_name: "Burckhard",
+        email: "mariekeburckhard@pulchri.nl",
+        preference: {
+          create: {
+            preferedWorkHours: 2,
+            shift_type_id: shiftType1.id,
+            availability: {
+              create: [
+                {
+                  id: availabilityId + "3",
+                  weekday: 4,
+                  sequence_start: true,
+                  shift_types: {
+                    connect: {
+                      id: shiftType1.id
+                    }
+                  }
+                },
+                {
+                  id: availabilityId + "4",
+                  weekday: 5,
+                  sequence_start: false,
+                  shift_types: {
+                    connect: {
+                      id: shiftType1.id
+                    }
+                  },
+                  previous: {
+                    connect: {
+                      id: availabilityId + "3"
+                    }
+                  },
+                  next: {
+                    connect: {
+                      id: availabilityId + "5"
+                    }
+                  }
+                },
+                {
+                  id: availabilityId + "5",
+                  weekday: 6,
+                  sequence_start: false,
+                  shift_types: {
+                    connect: {
+                      id: shiftType1.id
+                    }
+                  },
+                  previous: {
+                    connect: {
+                      id: availabilityId + "4"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    })
+  );
+
+  // user 10
+  availabilityId = cuid();
+  users.push(
+    prisma.user.create({
+      data: {
+        first_name: "Maria",
+        last_name: "Nellessen",
+        email: "marianellessen@pulchri.nl",
+        preference: {
+          create: {
+            preferedWorkHours: 3,
+            shift_type_id: shiftType1.id,
+            availability: {
+              create: [
+                {
+                  id: availabilityId + "4",
+                  weekday: 5,
+                  sequence_start: true,
+                  shift_types: {
+                    connect: {
+                      id: shiftType1.id
+                    }
+                  }
+                },
+                {
+                  id: availabilityId + "5",
+                  weekday: 6,
+                  sequence_start: false,
+                  shift_types: {
+                    connect: {
+                      id: shiftType1.id
+                    }
+                  },
+                  previous: {
+                    connect: {
+                      id: availabilityId + "4"
+                    }
+                  },
+                  next: {
+                    connect: {
+                      id: availabilityId + "6"
+                    }
+                  }
+                },
+                {
+                  id: availabilityId + "6",
+                  weekday: 7,
+                  sequence_start: false,
+                  shift_types: {
+                    connect: {
+                      id: shiftType1.id
+                    }
+                  },
+                  previous: {
+                    connect: {
+                      id: availabilityId + "5"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    })
+  );
+
   await Promise.all(users);
 
   // mockdata voor shifts

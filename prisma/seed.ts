@@ -97,11 +97,6 @@ async function main() {
                       id: shiftType1.id
                     }
                   },
-                  previous: {
-                    connect: {
-                      id: availabilityId + "2"
-                    }
-                  },
                   next: {
                     connect: {
                       id: availabilityId + "4"
@@ -115,11 +110,6 @@ async function main() {
                   shift_types: {
                     connect: {
                       id: shiftType1.id
-                    }
-                  },
-                  previous: {
-                    connect: {
-                      id: availabilityId + "3"
                     }
                   },
                   next: {
@@ -137,11 +127,6 @@ async function main() {
                       id: shiftType1.id
                     }
                   },
-                  previous: {
-                    connect: {
-                      id: availabilityId + "4"
-                    }
-                  },
                   next: {
                     connect: {
                       id: availabilityId + "6"
@@ -155,11 +140,6 @@ async function main() {
                   shift_types: {
                     connect: {
                       id: shiftType1.id
-                    }
-                  },
-                  previous: {
-                    connect: {
-                      id: availabilityId + "5"
                     }
                   },
                   next: {
@@ -397,11 +377,6 @@ async function main() {
                       id: shiftType1.id
                     }
                   },
-                  previous: {
-                    connect: {
-                      id: availabilityId + "2"
-                    }
-                  },
                   next: {
                     connect: {
                       id: availabilityId + "4"
@@ -415,11 +390,6 @@ async function main() {
                   shift_types: {
                     connect: {
                       id: shiftType1.id
-                    }
-                  },
-                  previous: {
-                    connect: {
-                      id: availabilityId + "3"
                     }
                   },
                   next: {
@@ -437,11 +407,6 @@ async function main() {
                       id: shiftType1.id
                     }
                   },
-                  previous: {
-                    connect: {
-                      id: availabilityId + "4"
-                    }
-                  },
                   next: {
                     connect: {
                       id: availabilityId + "6"
@@ -455,11 +420,6 @@ async function main() {
                   shift_types: {
                     connect: {
                       id: shiftType1.id
-                    }
-                  },
-                  previous: {
-                    connect: {
-                      id: availabilityId + "5"
                     }
                   },
                   next: {
@@ -527,11 +487,6 @@ async function main() {
                   shift_types: {
                     connect: {
                       id: shiftType1.id
-                    }
-                  },
-                  previous: {
-                    connect: {
-                      id: availabilityId + "2"
                     }
                   },
                   next: {
@@ -653,11 +608,6 @@ async function main() {
                       id: shiftType1.id
                     }
                   },
-                  previous: {
-                    connect: {
-                      id: availabilityId + "2"
-                    }
-                  },
                   next: {
                     connect: {
                       id: availabilityId + "1"
@@ -723,11 +673,6 @@ async function main() {
                   shift_types: {
                     connect: {
                       id: shiftType1.id
-                    }
-                  },
-                  previous: {
-                    connect: {
-                      id: availabilityId + "2"
                     }
                   },
                   next: {

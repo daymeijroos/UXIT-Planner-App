@@ -161,6 +161,11 @@ async function main() {
                     connect: {
                       id: availabilityId + "5"
                     }
+                  },
+                  next: {
+                    connect: {
+                      id: availabilityId + "1"
+                    }
                   }
                 }
               ]
@@ -208,6 +213,11 @@ async function main() {
                     connect: {
                       id: availabilityId + "1"
                     }
+                  },
+                  next: {
+                    connect: {
+                      id: availabilityId + "1"
+                    }
                   }
                 }
               ]
@@ -233,7 +243,7 @@ async function main() {
             availability: {
               create: [
                 {
-                  id: availabilityId + "3",
+                  id: availabilityId + "1",
                   weekday: 4,
                   sequence_start: true,
                   shift_types: {
@@ -243,7 +253,7 @@ async function main() {
                   }
                 },
                 {
-                  id: availabilityId + "4",
+                  id: availabilityId + "2",
                   weekday: 5,
                   sequence_start: false,
                   shift_types: {
@@ -253,7 +263,12 @@ async function main() {
                   },
                   previous: {
                     connect: {
-                      id: availabilityId + "3"
+                      id: availabilityId + "1"
+                    }
+                  },
+                  next: {
+                    connect: {
+                      id: availabilityId + "1"
                     }
                   }
                 }
@@ -280,7 +295,7 @@ async function main() {
             availability: {
               create: [
                 {
-                  id: availabilityId + "5",
+                  id: availabilityId + "1",
                   weekday: 6,
                   sequence_start: true,
                   shift_types: {
@@ -312,7 +327,7 @@ async function main() {
             availability: {
               create: [
                 {
-                  id: availabilityId + "6",
+                  id: availabilityId + "1",
                   weekday: 7,
                   sequence_start: true,
                   shift_types: {
@@ -446,6 +461,11 @@ async function main() {
                     connect: {
                       id: availabilityId + "5"
                     }
+                  },
+                  next: {
+                    connect: {
+                      id: availabilityId + "1"
+                    }
                   }
                 }
               ]
@@ -471,7 +491,7 @@ async function main() {
             availability: {
               create: [
                 {
-                  id: availabilityId + "2",
+                  id: availabilityId + "1",
                   weekday: 3,
                   sequence_start: true,
                   shift_types: {
@@ -481,8 +501,28 @@ async function main() {
                   }
                 },
                 {
-                  id: availabilityId + "5",
+                  id: availabilityId + "2",
                   weekday: 6,
+                  sequence_start: false,
+                  shift_types: {
+                    connect: {
+                      id: shiftType1.id
+                    }
+                  },
+                  previous: {
+                    connect: {
+                      id: availabilityId + "1"
+                    }
+                  },
+                  next: {
+                    connect: {
+                      id: availabilityId + "3"
+                    }
+                  }
+                },
+                {
+                  id: availabilityId + "3",
+                  weekday: 7,
                   sequence_start: false,
                   shift_types: {
                     connect: {
@@ -496,22 +536,7 @@ async function main() {
                   },
                   next: {
                     connect: {
-                      id: availabilityId + "6"
-                    }
-                  }
-                },
-                {
-                  id: availabilityId + "6",
-                  weekday: 7,
-                  sequence_start: false,
-                  shift_types: {
-                    connect: {
-                      id: shiftType1.id
-                    }
-                  },
-                  previous: {
-                    connect: {
-                      id: availabilityId + "5"
+                      id: availabilityId + "1"
                     }
                   }
                 }
@@ -560,6 +585,11 @@ async function main() {
                     connect: {
                       id: availabilityId + "1"
                     }
+                  },
+                  next: {
+                    connect: {
+                      id: availabilityId + "1"
+                    }
                   }
                 }
               ]
@@ -585,7 +615,7 @@ async function main() {
             availability: {
               create: [
                 {
-                  id: availabilityId + "3",
+                  id: availabilityId + "1",
                   weekday: 4,
                   sequence_start: true,
                   shift_types: {
@@ -595,7 +625,7 @@ async function main() {
                   }
                 },
                 {
-                  id: availabilityId + "4",
+                  id: availabilityId + "2",
                   weekday: 5,
                   sequence_start: false,
                   shift_types: {
@@ -605,17 +635,17 @@ async function main() {
                   },
                   previous: {
                     connect: {
-                      id: availabilityId + "3"
+                      id: availabilityId + "1"
                     }
                   },
                   next: {
                     connect: {
-                      id: availabilityId + "5"
+                      id: availabilityId + "3"
                     }
                   }
                 },
                 {
-                  id: availabilityId + "5",
+                  id: availabilityId + "3",
                   weekday: 6,
                   sequence_start: false,
                   shift_types: {
@@ -625,7 +655,12 @@ async function main() {
                   },
                   previous: {
                     connect: {
-                      id: availabilityId + "4"
+                      id: availabilityId + "2"
+                    }
+                  },
+                  next: {
+                    connect: {
+                      id: availabilityId + "1"
                     }
                   }
                 }
@@ -652,7 +687,7 @@ async function main() {
             availability: {
               create: [
                 {
-                  id: availabilityId + "4",
+                  id: availabilityId + "1",
                   weekday: 5,
                   sequence_start: true,
                   shift_types: {
@@ -662,7 +697,7 @@ async function main() {
                   }
                 },
                 {
-                  id: availabilityId + "5",
+                  id: availabilityId + "2",
                   weekday: 6,
                   sequence_start: false,
                   shift_types: {
@@ -672,17 +707,17 @@ async function main() {
                   },
                   previous: {
                     connect: {
-                      id: availabilityId + "4"
+                      id: availabilityId + "1"
                     }
                   },
                   next: {
                     connect: {
-                      id: availabilityId + "6"
+                      id: availabilityId + "3"
                     }
                   }
                 },
                 {
-                  id: availabilityId + "6",
+                  id: availabilityId + "3",
                   weekday: 7,
                   sequence_start: false,
                   shift_types: {
@@ -692,7 +727,12 @@ async function main() {
                   },
                   previous: {
                     connect: {
-                      id: availabilityId + "5"
+                      id: availabilityId + "2"
+                    }
+                  },
+                  next: {
+                    connect: {
+                      id: availabilityId + "1"
                     }
                   }
                 }

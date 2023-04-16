@@ -26,12 +26,17 @@ export async function getAvailabilityForWeek(userId: string, weekNumber: number)
   });
   
   let sequenceCount = 1;
+  let dayOfWeek = 1;
   while (sequenceCount < weekNumber && availability && availability.next_id) {
     availability = await prisma.availability.findUnique({
       where: { id: availability.next_id },
       include: { shift_types: true },
     });
-    sequenceCount++;
+    if (!availability) break;
+    if (availability.weekday < dayOfWeek) {
+      dayOfWeek = availability?.weekday;
+      sequenceCount++;
+    }
   }
   
   return availability;

@@ -9,16 +9,16 @@ interface CardProps {
   children?: React.ReactNode
 }
 
+const cardStyle = `border-2 border-black py-4 px-4 m-4 text-black bg-white`;
+
 export function Card(props: CardProps) {
+  let buttonProps = props.buttonProps || {};
+  buttonProps.className = `${buttonProps.className} m-0 mt-4`;
 
   return (
-    <div className={`flex flex-col items-center justify-center ${props.className}`}>
-      <div className="flex flex-col items-center justify-center bg-white rounded-lg shadow-lg p-4">
-        <div className="flex flex-col items-center justify-center">
-          {props.children}
-        </div>
-        {props.button && <Button color={props.buttonColor} children={props.buttonText} {...props.buttonProps}/>}
-      </div>
+    <div className={`${cardStyle} ${props.className}`}>
+      {props.children}
+      {props.button && <Button color={props.buttonColor} children={props.buttonText} {...buttonProps}/>}
     </div>
   );
 }

@@ -5,13 +5,13 @@ import { useRouter } from "next/router";
 
 const Navigation = () => {
   return (
-    <NavigationBar/>
+    <NavigationBar />
   );
 };
 
 const NavigationButton = ({ day, linkTo, selected }) => {
   const { buttonProps, isPressed } = useButton({
-    onPress: () => console.log(day),
+    onPress: () => console.log(day)
   });
   const { isFocusVisible, focusProps } = useFocusRing();
 
@@ -47,13 +47,32 @@ const NavigationBar = () => {
   const selected = router.pathname;
 
   return (
-    <nav className="bg-white py-2 px-4 rounded-lg flex space-x-2 justify-center">
-      <NavigationButton day="Dinsdag 2023-04-18" linkTo="/rooster/dinsdag" selected={selected} />
-      <NavigationButton day="Woensdag 2023-04-19" linkTo="/rooster/woensdag" selected={selected} />
-      <NavigationButton day="Donderdag 2023-04-20" linkTo="/rooster/donderdag" selected={selected} />
-      <NavigationButton day="Vrijdag 2023-04-21" linkTo="/rooster/vrijdag" selected={selected} />
-      <NavigationButton day="Zaterdag 2023-04-22" linkTo="/rooster/zaterdag" selected={selected} />
-      <NavigationButton day="Zondag 2023-04-23" linkTo="/rooster/zondag" selected={selected} />
+
+
+    <nav className="bg-white py-2 px-4 rounded-lg flex flex-col space-x-2 justify-center">
+      <div className="flex items-center justify-between border-black border-2 my-2">
+        <button
+          className="text-black rounded-full w-8 h-8 flex items-center justify-center focus:outline-none"
+        >
+          <span className="sr-only">Previous week</span>
+          &lt;
+        </button>
+        <div className="font-bold text-xl">{`Week 16`}</div>
+        <button
+          className="text-black rounded-full w-8 h-8 flex items-center justify-center focus:outline-none"
+        >
+          <span className="sr-only">Next week</span>
+          &gt;
+        </button>
+      </div>
+      <div className="flex space-x-2 justify-center">
+        <NavigationButton day="Dinsdag 2023-04-18" linkTo="/rooster/dinsdag" selected={selected} />
+        <NavigationButton day="Woensdag 2023-04-19" linkTo="/rooster/woensdag" selected={selected} />
+        <NavigationButton day="Donderdag 2023-04-20" linkTo="/rooster/donderdag" selected={selected} />
+        <NavigationButton day="Vrijdag 2023-04-21" linkTo="/rooster/vrijdag" selected={selected} />
+        <NavigationButton day="Zaterdag 2023-04-22" linkTo="/rooster/zaterdag" selected={selected} />
+        <NavigationButton day="Zondag 2023-04-23" linkTo="/rooster/zondag" selected={selected} />
+      </div>
     </nav>
   );
 };

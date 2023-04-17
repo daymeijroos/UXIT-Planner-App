@@ -1,130 +1,57 @@
-import { Availability, Shift, Staffing, User } from "@prisma/client";
+import { Absence, Availability, Shift_Type, Staff_Required, Staffing, User, User_Preference } from "@prisma/client";
 import { prisma } from "../db";
+import { SplitDate } from "./date/splitDate";
+import { AvailabilityWithShiftTypes } from "../types/AvailibilityWithShiftTypes";
+import { getAvailibilityforDate } from "./availibility/getAvailibilityForDate";
 
-export async function getStaffings(shiftId: string, shiftTypeId: string): Promise<number> {
-  return await prisma.staffing.count({
-    where: { shift_id: shiftId, shift_type_id: shiftTypeId },
-  });
-}
+export const generateSchedule = async (fromDate?: Date, toDate?: Date) => {
+  const shifts = await getShifts(fromDate, toDate);
+  const users = await getUsers();
+  if (!shifts || !users) return
+  console.log(`Processing ${shifts.length} shifts`);
 
-export function getWeekNumber(date: Date): number {
-  const firstDayOfYear = new Date(date.getFullYear(), 0, 1);
-  const pastDaysOfYear = (date.valueOf() - firstDayOfYear.valueOf()) / 86400000;
-  return Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
-}
+  for (const shift of shifts) {
+    console.log(`Processing shift ${shift.id}`);
 
-export async function getAvailabilityForWeek(userId: string, weekNumber: number) {
-  const userPreference = await prisma.user_Preference.findUnique({
-    where: { user_id: userId },
-  });
-  
-  if (!userPreference) return null;
-  
-  let availability = await prisma.availability.findFirst({
-    where: { preference_id: userPreference.id, sequence_start: true },
-    include: { shift_types: true },
-  });
-  
-  let sequenceCount = 1;
-  let dayOfWeek = 1;
-  while (sequenceCount < weekNumber && availability && availability.next_id) {
-    availability = await prisma.availability.findUnique({
-      where: { id: availability.next_id },
-      include: { shift_types: true },
-    });
-    if (!availability) break;
-    if (availability.weekday < dayOfWeek) {
-      dayOfWeek = availability?.weekday;
-      sequenceCount++;
-    }
-  }
-  
-  return availability;
-}
+    for (const sr of shift.staff_required) {
+      const staffRequired = await checkStaffRequired(sr);
+      if (staffRequired === 0) continue;
 
-function getStartOfWeek(date: Date): Date {
-  const startOfWeek = new Date(date);
-  const dayOfWeek = startOfWeek.getDay() || 7;
-  startOfWeek.setDate(startOfWeek.getDate() - dayOfWeek + 1);
-  startOfWeek.setHours(0, 0, 0, 0);
-  return startOfWeek;
-}
+      for (let i = 0; i < staffRequired; i++) {
+        for (const user of users) {
+          const isDefaultAvailable = await checkUserDefaultAvailabilityForShiftType(user, sr.shift_type, shift.start, shift.end);
+          console.log(`User ${user.id} is default available: ${isDefaultAvailable}`)
+          if (!isDefaultAvailable) continue;
+          const isAbsent = await checkUserAbsent(user, shift.start, shift.end);
+          console.log(`User ${user.id} is absent: ${isAbsent}`)
+          if (isAbsent) continue;
+          const reachedMax = await reachedMaxStaffings(user);
+          console.log(`User ${user.id} reached max staffings: ${reachedMax}`)
+          if (reachedMax) continue;
 
-export async function userHasReachedMaxHours(userId: string, shiftTypeId: string, date: Date): Promise<boolean> {
-  const weekNumber = getWeekNumber(date);
-  const absence = await getAvailabilityForWeek(userId, weekNumber);
-  const userPreference = await prisma.user_Preference.findUnique({ where: { user_id: userId } });
-  
-  if (!absence) return true;
-  if (!userPreference) return true;
-  
-  const shiftStartDate = getStartOfWeek(date);
-  const scheduledHours = await prisma.staffing.count({
-    where: {
-      user_id: userId,
-      shift_type_id: shiftTypeId,
-      shift: {
-        start: {
-          gte: shiftStartDate,
-          lt: new Date(shiftStartDate.getFullYear(), shiftStartDate.getMonth(), shiftStartDate.getDate() + 7, 0, 0, 0),
-        },
-      },
-    },
-  });
-  
-  return scheduledHours >= userPreference.preferedWorkHours;
-}
+          console.log("POG")
 
-async function findUserForShiftTypeOnDate(shiftTypeId: string, date: Date): Promise<User | null> {
-  const weekNumber = getWeekNumber(date);
-  
-  const users = await prisma.user.findMany({
-    where: { preference: { shift_type_id: shiftTypeId } },
-  });
-  
-  for (const user of users) {
-    if (!(await userHasReachedMaxHours(user.id, shiftTypeId, date))) {
-      return user;
-    }
-  }
-  
-  return null;
-}
+          const staffing = {
+            shift_id: shift.id,
+            shift_type_id: sr.shift_type_id,
+            user_id: user.id,
+          }
 
-async function createStaffing(shiftId: string, shiftTypeId: string, userId: string): Promise<Staffing> {
-  return await prisma.staffing.create({
-    data: {
-      shift_id: shiftId,
-      shift_type_id: shiftTypeId,
-      user_id: userId,
-    },
-  });
-}
-
-async function processStaffRequiredForShift(shift: Shift): Promise<void> {
-  const staffRequiredList = await prisma.staff_Required.findMany({ where: { shift_id: shift.id } });
-  
-  for (const staffRequired of staffRequiredList) {
-    const staffingsCount = await getStaffings(shift.id, staffRequired.shift_type_id);
-    const requiredCount = staffRequired.amount;
-    const remainingStaffCount = requiredCount - staffingsCount;
-    
-    for (let i = 0; i < remainingStaffCount; i++) {
-      const user = await findUserForShiftTypeOnDate(staffRequired.shift_type_id, shift.start);
-      
-      if (user) {
-        await createStaffing(shift.id, staffRequired.shift_type_id, user.id);
-      } else {
-        console.log(`No suitable user found for shift type ${staffRequired.shift_type_id} on ${shift.start}`);
+          await prisma.staffing.create({
+            data: staffing,
+          });
+        }
       }
     }
   }
+  console.log("Done");
+  return;
 }
 
-export default async function processAllShifts(fromDate?: Date, toDate?: Date): Promise<void> {
-  let params = {}
+const getShifts = async (fromDate?: Date, toDate?: Date) => {
+  let dateParams = {}
   if (fromDate && toDate) {
-    params = {
+    dateParams = {
       where: {
         start: {
           gte: fromDate,
@@ -135,10 +62,81 @@ export default async function processAllShifts(fromDate?: Date, toDate?: Date): 
       }
     };
   }
-  const shifts = await prisma.shift.findMany(params);
-  console.log(`Processing ${shifts.length} shifts`);
-  
-  for (const shift of shifts) {
-    await processStaffRequiredForShift(shift);
-  }
+  return await prisma.shift.findMany({...dateParams, include: { 
+    staff_required: {
+      include: {
+        shift_type: true,
+      },
+    } 
+  }});
+}
+
+export interface UserExtended extends User {
+  preference: (User_Preference & {
+    absence: Absence[],
+    availability: AvailabilityWithShiftTypes[]
+  }) | null,
+  staffings: Staffing[]
+}
+
+const getUsers = async () => {
+  return await prisma.user.findMany({
+    include: {
+      preference: {
+        include: {
+          absence: true,
+          availability: {
+            include: {
+              shift_types: true,
+            },
+          },
+        },
+      },
+      staffings: true,
+    },
+  });
+}
+
+const checkUserDefaultAvailabilityForShiftType = async (user: UserExtended, shiftType: Shift_Type, startDate: Date, endDate: Date): Promise<boolean> => {
+  if (!user.preference) return false;
+  console.log("User has preference")
+  const startDateSplit = SplitDate.fromDate(startDate);
+  const endDateSplit = SplitDate.fromDate(endDate);
+  const startWeekday = startDateSplit.weekday;
+  const endWeekday = endDateSplit.weekday;
+
+  const availibility = await getAvailibilityforDate(user.preference.availability, startDateSplit);
+  if (!availibility) return false;
+  console.log("User has availibility")
+  if (!availibility.shift_types.find((st) => st.id === shiftType.id)) return false;
+  console.log("User has shift type")
+  return true
+}
+
+const checkUserAbsent = async (user: UserExtended, startDate: Date, endDate: Date): Promise<boolean> => {
+  if (!user.preference) return false;
+  const absences = user.preference.absence.filter((a) => {
+    return a.start <= startDate && a.end >= endDate;
+  });
+
+  if (absences.length <= 0) return false;
+  return true;
+}
+
+const checkStaffRequired = async (staff_required: Staff_Required): Promise<number> => {
+  const staffingsForShift = await prisma.staffing.findMany({
+    where: {
+      shift_id: staff_required.shift_id,
+      shift_type_id: staff_required.shift_type_id,
+    },
+  });
+
+  return staff_required.amount - staffingsForShift.length
+}
+
+const reachedMaxStaffings = async (user: UserExtended): Promise<boolean> => {
+  const maxStaffings = user.preference?.maxStaffings || 0;
+  if (maxStaffings === 0) return false;
+  if (user.staffings.length < maxStaffings) return false;
+  return true;
 }

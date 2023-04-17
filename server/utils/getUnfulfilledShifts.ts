@@ -36,7 +36,5 @@ export async function getUnfulfilledShifts() {
 
   const unfulfilledShifts = (await Promise.all((await Promise.all(unfulfilledShiftsPromise)).flat())).filter((shift) => typeof shift !== 'undefined');
 
-  console.log(unfulfilledShifts);
-
   return unfulfilledShifts;
 }

@@ -7,7 +7,7 @@ const Home = () => {
   return (
     <div>
       <Navigation/>
-      <Button className="w-11/12" color="error">
+      <Button fillWidth color="error">
         Warn Button
       </Button>
       <Card button buttonText="dissmisss" buttonColor="success">

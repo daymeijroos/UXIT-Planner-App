@@ -72,7 +72,7 @@ model VerificationToken {
 
 model User_Preference {
   id                    String      @id @default(cuid())
-  preferedWorkHours     Int
+  maxStaffings          Int
   shift_type_id         String
   user_id               String      @unique
   shift_type            Shift_Type  @relation(fields: [shift_type_id], references: [id])
@@ -83,13 +83,10 @@ model User_Preference {
 
 model Availability {
   id                  String                @id @default(cuid())
+  sequence_week       Int                   @default(0)
   weekday             Int
-  sequence_start      Boolean
   preference_id       String
-  next_id             String?               @unique
   preference          User_Preference       @relation(fields: [preference_id], references: [id])
-  next                Availability? @relation("Sequence", fields: [next_id], references: [id])
-  previous            Availability? @relation("Sequence")
   shift_types         Shift_Type[]
 }
 

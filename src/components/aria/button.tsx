@@ -2,7 +2,7 @@ import {AriaButtonProps, useButton} from 'react-aria';
 import React from 'react';
 import {useFocusRing} from 'react-aria';
 
-interface ButtonProps extends AriaButtonProps {
+export interface ButtonProps extends AriaButtonProps {
   className?: string;
   color?: "primary" | "success" | "error";
   round?: boolean;

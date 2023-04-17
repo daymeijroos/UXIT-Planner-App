@@ -19,12 +19,16 @@
 //   )
 // }
 
+import { Button } from "../components/aria/button";
 import Navigation from "../components/aria/navigation";
 
 const Home = () => {
   return (
     <div>
       <Navigation/>
+      <Button className="w-11/12" color="error">
+        Warn Button
+      </Button>
     </div>
   );
 };

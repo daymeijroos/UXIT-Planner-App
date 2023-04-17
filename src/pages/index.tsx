@@ -15,6 +15,7 @@ const Home = () => {
         <p className="text-gray-500">This is a card</p>
       </Card>
       <StaffingCard staffing={{
+        //Hier kan een staffing van de staffing endpoint in. Deze zijn compatibel met de staffing type van de staffing card
         id: "1",
         shift_id: "1",
         shift: {

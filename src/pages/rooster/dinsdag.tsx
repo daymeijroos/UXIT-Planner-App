@@ -9,9 +9,8 @@ const DinsdagPage = () => {
   return (
     <div>
       <Navigation/>
-      <p>Rooster van dinsdag</p>
-      <Schedule/>
-      <Header />
+      <Schedule />
+      <Header /> 
     </div>
   );
 };

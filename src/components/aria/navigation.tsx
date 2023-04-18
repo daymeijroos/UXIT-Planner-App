@@ -2,12 +2,6 @@ import { useButton } from "@react-aria/button";
 import { useFocusRing } from "@react-aria/focus";
 import React, { useState } from "react";
 
-const Navigation = () => {
-  return (
-    <NavigationBar />
-  );
-};
-
 interface NavigationButtonProps {
   day: string;
   date: string;
@@ -15,7 +9,7 @@ interface NavigationButtonProps {
   isSelected: boolean;
 }
 
-const NavigationButton = (props: NavigationButtonProps) => {
+const DateSwitcherButton = (props: NavigationButtonProps) => {
   const ref = React.useRef(null);
   const { buttonProps, isPressed } = useButton({
     onPress: props.onClick,
@@ -44,7 +38,7 @@ const NavigationButton = (props: NavigationButtonProps) => {
   );
 };
 
-const NavigationBar = () => {
+export const DateSwitcher = () => {
   const [selectedDay, setSelectedDay] = useState<string>("Donderdag");
 
   const handleClick = (day: string) => {
@@ -67,15 +61,13 @@ const NavigationBar = () => {
         </button>
       </div>
       <div className="flex space-x-2 justify-center">
-        <NavigationButton day="Dinsdag" date={"2023-04-18"} onClick={() => handleClick("Dinsdag")} isSelected={selectedDay === "Dinsdag"} />
-        <NavigationButton day="Woensdag" date={"2023-04-19"} onClick={() => handleClick("Woensdag")} isSelected={selectedDay === "Woensdag"} />
-        <NavigationButton day="Donderdag" date={"2023-04-20"} onClick={() => handleClick("Donderdag")} isSelected={selectedDay === "Donderdag"} />
-        <NavigationButton day="Vrijdag" date={"2023-04-21"} onClick={() => handleClick("Vrijdag")} isSelected={selectedDay === "Vrijdag"} />
-        <NavigationButton day="Zaterdag" date={"2023-04-22"} onClick={() => handleClick("Zaterdag")} isSelected={selectedDay === "Zaterdag"} />
-        <NavigationButton day="Zondag" date={"2023-04-23"} onClick={() => handleClick("Zondag")} isSelected={selectedDay === "Zondag"} />
+        <DateSwitcherButton day="Dinsdag" date={"2023-04-18"} onClick={() => handleClick("Dinsdag")} isSelected={selectedDay === "Dinsdag"} />
+        <DateSwitcherButton day="Woensdag" date={"2023-04-19"} onClick={() => handleClick("Woensdag")} isSelected={selectedDay === "Woensdag"} />
+        <DateSwitcherButton day="Donderdag" date={"2023-04-20"} onClick={() => handleClick("Donderdag")} isSelected={selectedDay === "Donderdag"} />
+        <DateSwitcherButton day="Vrijdag" date={"2023-04-21"} onClick={() => handleClick("Vrijdag")} isSelected={selectedDay === "Vrijdag"} />
+        <DateSwitcherButton day="Zaterdag" date={"2023-04-22"} onClick={() => handleClick("Zaterdag")} isSelected={selectedDay === "Zaterdag"} />
+        <DateSwitcherButton day="Zondag" date={"2023-04-23"} onClick={() => handleClick("Zondag")} isSelected={selectedDay === "Zondag"} />
       </div>
     </nav>
   );
 };
-
-export default Navigation;

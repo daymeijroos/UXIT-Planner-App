@@ -1,6 +1,6 @@
 import { Button } from "../components/aria/button";
 import { Card } from "../components/aria/card";
-import Navigation from "../components/aria/navigation";
+import { DateSwitcher } from "../components/aria/navigation";
 import { StaffingCard } from "../components/overview-components/staffing-card";
 import { Zap } from "react-feather";
 import { api } from "../utils/api";
@@ -17,7 +17,7 @@ const Home = () => {
       <Button fillWidth color="success" onPress={() => {generateSchedule()}}>
         <b>Generate schedule</b><Zap className="ml-2"/>
       </Button>
-      <Navigation/>
+      <DateSwitcher/>
 
       <Card button buttonText="dissmisss" buttonColor="success">
         <h1 className="text-2xl font-bold">Hello World</h1>

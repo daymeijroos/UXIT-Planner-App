@@ -2,14 +2,22 @@ import { Button } from "../components/aria/button";
 import { Card } from "../components/aria/card";
 import Navigation from "../components/aria/navigation";
 import { StaffingCard } from "../components/overview-components/staffing-card";
+import { Zap } from "react-feather";
+import { api } from "../utils/api";
 
 const Home = () => {
+  const context = api.useContext();
+  const { mutate: generateSchedule } = api.schedule.generate.useMutation({onSuccess: () => {
+    context.staffing.getStaffing.invalidate().catch((error) => {
+    console.error(error);
+  })}});
+
   return (
     <div>
-      <Navigation/>
-      <Button fillWidth color="error">
-        Warn Button
+      <Button fillWidth color="success" onPress={() => {generateSchedule()}}>
+        <b>Generate schedule</b><Zap className="ml-2"/>
       </Button>
+
       <Card button buttonText="dissmisss" buttonColor="success">
         <h1 className="text-2xl font-bold">Hello World</h1>
         <p className="text-gray-500">This is a card</p>

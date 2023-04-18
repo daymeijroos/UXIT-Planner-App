@@ -3,14 +3,12 @@ import { useEffect, useState } from "react";
 import { Button } from "../components/aria/button";
 import { api } from "../utils/api";
 
-
 export default () => {
   const { mutate: generateSchedule } = api.schedule.generate.useMutation({onSuccess: () => {
       context.schedule.getUnfulfilledShifts.invalidate().catch((error) => {
       console.error(error);
     });
   }});
-  const { mutateAsync: testSchedule } = api.schedule.test.useMutation();
   const unfulfilledShifts = api.schedule.getUnfulfilledShifts.useQuery();
 
 
@@ -18,10 +16,6 @@ export default () => {
 
   const handleGenerate = () => {
     const res = generateSchedule();
-  };
-
-  const handleTest = async () => {
-    const res = await testSchedule();
   };
 
   if (unfulfilledShifts.isLoading) {
@@ -35,9 +29,9 @@ export default () => {
   return (
     <div className="flex flex-col items-center justify-center w-full h-full">
       <Button onPress={handleGenerate}>Generate Schedule</Button>
-      <Button onPress={handleTest}>Test Schedule</Button>
       <p>
         {unfulfilledShifts.data?.length} unfulfilled shifts
+        total staff required {unfulfilledShifts.data?.reduce((acc, curr) => acc + curr!.amount_required, 0)}
       </p>
       {unfulfilledShifts.data?.map((request) => {
         const requestResolved = request

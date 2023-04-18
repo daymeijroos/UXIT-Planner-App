@@ -1,5 +1,4 @@
 import { PrismaClient } from "@prisma/client";
-import { faker } from "@faker-js/faker";
 import cuid from "cuid";
 
 const prisma = new PrismaClient();
@@ -21,14 +20,7 @@ async function main() {
     }
   });
 
-  const shiftType3 = await prisma.shift_Type.create({
-    data: {
-      name: "Beide",
-      description: "De vrijwilliger geeft zich op om bij beide de balie en galerie te staan."
-    }
-  });
-
-  console.log("Shift Types created: ", shiftType1, shiftType2, shiftType3);
+  console.log("Shift Types created: ", shiftType1, shiftType2);
 
   // mockdata voor gebruikers, voorkeuren en standaard beschikbaarheid
   // user 1: robert swarts, elke dag, max 2x
@@ -54,14 +46,12 @@ async function main() {
         email: "robertswarts@pulchri.nl",
         preference: {
           create: {
-            preferedWorkHours: 2,
+            maxStaffings: 2,
             shift_type_id: shiftType1.id,
             availability: {
               create: [
                 {
-                  id: availabilityId + "1",
                   weekday: 2,
-                  sequence_start: true,
                   shift_types: {
                     connect: {
                       id: shiftType1.id
@@ -69,84 +59,44 @@ async function main() {
                   }
                 },
                 {
-                  id: availabilityId + "2",
                   weekday: 3,
-                  sequence_start: false,
                   shift_types: {
                     connect: {
                       id: shiftType1.id
                     }
                   },
-                  previous: {
-                    connect: {
-                      id: availabilityId + "1"
-                    }
-                  },
-                  next: {
-                    connect: {
-                      id: availabilityId + "3"
-                    }
-                  }
                 },
                 {
-                  id: availabilityId + "3",
                   weekday: 4,
-                  sequence_start: false,
                   shift_types: {
                     connect: {
                       id: shiftType1.id
                     }
                   },
-                  next: {
-                    connect: {
-                      id: availabilityId + "4"
-                    }
-                  }
                 },
                 {
-                  id: availabilityId + "4",
                   weekday: 5,
-                  sequence_start: false,
                   shift_types: {
                     connect: {
                       id: shiftType1.id
                     }
                   },
-                  next: {
-                    connect: {
-                      id: availabilityId + "5"
-                    }
-                  }
                 },
                 {
-                  id: availabilityId + "5",
                   weekday: 6,
-                  sequence_start: false,
                   shift_types: {
                     connect: {
                       id: shiftType1.id
                     }
                   },
-                  next: {
-                    connect: {
-                      id: availabilityId + "6"
-                    }
-                  }
                 },
                 {
-                  id: availabilityId + "6",
                   weekday: 7,
-                  sequence_start: false,
                   shift_types: {
                     connect: {
                       id: shiftType1.id
                     }
                   },
-                  next: {
-                    connect: {
-                      id: availabilityId + "1"
-                    }
-                  }
                 }
               ]
             }
@@ -166,14 +116,12 @@ async function main() {
         email: "larsbaer@pulchri.nl",
         preference: {
           create: {
-            preferedWorkHours: 2,
+            maxStaffings: 2,
             shift_type_id: shiftType1.id,
             availability: {
               create: [
                 {
-                  id: availabilityId + "1",
                   weekday: 2,
-                  sequence_start: true,
                   shift_types: {
                     connect: {
                       id: shiftType1.id
@@ -181,24 +129,12 @@ async function main() {
                   }
                 },
                 {
-                  id: availabilityId + "2",
                   weekday: 3,
-                  sequence_start: false,
                   shift_types: {
                     connect: {
                       id: shiftType1.id
                     }
                   },
-                  previous: {
-                    connect: {
-                      id: availabilityId + "1"
-                    }
-                  },
-                  next: {
-                    connect: {
-                      id: availabilityId + "1"
-                    }
-                  }
                 }
               ]
             }
@@ -218,39 +154,28 @@ async function main() {
         email: "manuelvermeer@pulchri.nl",
         preference: {
           create: {
-            preferedWorkHours: 2,
+            maxStaffings: 2,
             shift_type_id: shiftType1.id,
             availability: {
               create: [
                 {
-                  id: availabilityId + "1",
                   weekday: 4,
-                  sequence_start: true,
                   shift_types: {
-                    connect: {
-                      id: shiftType3.id
-                    }
+                    connect: [{
+                      id: shiftType1.id
+                    },
+                    {
+                      id: shiftType2.id
+                    }]
                   }
                 },
                 {
-                  id: availabilityId + "2",
                   weekday: 5,
-                  sequence_start: false,
                   shift_types: {
                     connect: {
                       id: shiftType1.id
                     }
                   },
-                  previous: {
-                    connect: {
-                      id: availabilityId + "1"
-                    }
-                  },
-                  next: {
-                    connect: {
-                      id: availabilityId + "1"
-                    }
-                  }
                 }
               ]
             }
@@ -270,14 +195,12 @@ async function main() {
         email: "davidsprong@pulchri.nl",
         preference: {
           create: {
-            preferedWorkHours: 1,
+            maxStaffings: 1,
             shift_type_id: shiftType1.id,
             availability: {
               create: [
                 {
-                  id: availabilityId + "1",
                   weekday: 6,
-                  sequence_start: true,
                   shift_types: {
                     connect: {
                       id: shiftType1.id
@@ -302,14 +225,12 @@ async function main() {
         email: "olivierverbeten@pulchri.nl",
         preference: {
           create: {
-            preferedWorkHours: 1,
+            maxStaffings: 1,
             shift_type_id: shiftType1.id,
             availability: {
               create: [
                 {
-                  id: availabilityId + "1",
                   weekday: 7,
-                  sequence_start: true,
                   shift_types: {
                     connect: {
                       id: shiftType1.id
@@ -334,14 +255,12 @@ async function main() {
         email: "emmabeil@pulchri.nl",
         preference: {
           create: {
-            preferedWorkHours: 4,
+            maxStaffings: 4,
             shift_type_id: shiftType1.id,
             availability: {
               create: [
                 {
-                  id: availabilityId + "1",
                   weekday: 2,
-                  sequence_start: true,
                   shift_types: {
                     connect: {
                       id: shiftType1.id
@@ -349,84 +268,44 @@ async function main() {
                   }
                 },
                 {
-                  id: availabilityId + "2",
                   weekday: 3,
-                  sequence_start: false,
                   shift_types: {
                     connect: {
                       id: shiftType1.id
                     }
                   },
-                  previous: {
-                    connect: {
-                      id: availabilityId + "1"
-                    }
-                  },
-                  next: {
-                    connect: {
-                      id: availabilityId + "3"
-                    }
-                  }
                 },
                 {
-                  id: availabilityId + "3",
                   weekday: 4,
-                  sequence_start: false,
                   shift_types: {
                     connect: {
                       id: shiftType1.id
                     }
                   },
-                  next: {
-                    connect: {
-                      id: availabilityId + "4"
-                    }
-                  }
                 },
                 {
-                  id: availabilityId + "4",
                   weekday: 5,
-                  sequence_start: false,
                   shift_types: {
                     connect: {
                       id: shiftType1.id
                     }
                   },
-                  next: {
-                    connect: {
-                      id: availabilityId + "5"
-                    }
-                  }
                 },
                 {
-                  id: availabilityId + "5",
                   weekday: 6,
-                  sequence_start: false,
                   shift_types: {
                     connect: {
                       id: shiftType1.id
                     }
                   },
-                  next: {
-                    connect: {
-                      id: availabilityId + "6"
-                    }
-                  }
                 },
                 {
-                  id: availabilityId + "6",
                   weekday: 7,
-                  sequence_start: false,
                   shift_types: {
                     connect: {
                       id: shiftType1.id
                     }
                   },
-                  next: {
-                    connect: {
-                      id: availabilityId + "1"
-                    }
-                  }
                 }
               ]
             }
@@ -446,14 +325,12 @@ async function main() {
         email: "barbaradamme@pulchri.nl",
         preference: {
           create: {
-            preferedWorkHours: 1,
+            maxStaffings: 1,
             shift_type_id: shiftType1.id,
             availability: {
               create: [
                 {
-                  id: availabilityId + "1",
                   weekday: 3,
-                  sequence_start: true,
                   shift_types: {
                     connect: {
                       id: shiftType1.id
@@ -461,39 +338,20 @@ async function main() {
                   }
                 },
                 {
-                  id: availabilityId + "2",
                   weekday: 6,
-                  sequence_start: false,
                   shift_types: {
                     connect: {
                       id: shiftType1.id
                     }
                   },
-                  previous: {
-                    connect: {
-                      id: availabilityId + "1"
-                    }
-                  },
-                  next: {
-                    connect: {
-                      id: availabilityId + "3"
-                    }
-                  }
                 },
                 {
-                  id: availabilityId + "3",
                   weekday: 7,
-                  sequence_start: false,
                   shift_types: {
                     connect: {
                       id: shiftType1.id
                     }
                   },
-                  next: {
-                    connect: {
-                      id: availabilityId + "1"
-                    }
-                  }
                 }
               ]
             }
@@ -513,14 +371,12 @@ async function main() {
         email: "isabellahost@pulchri.nl",
         preference: {
           create: {
-            preferedWorkHours: 2,
+            maxStaffings: 2,
             shift_type_id: shiftType1.id,
             availability: {
               create: [
                 {
-                  id: availabilityId + "1",
                   weekday: 2,
-                  sequence_start: true,
                   shift_types: {
                     connect: {
                       id: shiftType1.id
@@ -528,24 +384,12 @@ async function main() {
                   }
                 },
                 {
-                  id: availabilityId + "2",
                   weekday: 3,
-                  sequence_start: false,
                   shift_types: {
                     connect: {
                       id: shiftType1.id
                     }
                   },
-                  previous: {
-                    connect: {
-                      id: availabilityId + "1"
-                    }
-                  },
-                  next: {
-                    connect: {
-                      id: availabilityId + "1"
-                    }
-                  }
                 }
               ]
             }
@@ -565,14 +409,12 @@ async function main() {
         email: "mariekeburckhard@pulchri.nl",
         preference: {
           create: {
-            preferedWorkHours: 2,
+            maxStaffings: 2,
             shift_type_id: shiftType1.id,
             availability: {
               create: [
                 {
-                  id: availabilityId + "1",
                   weekday: 4,
-                  sequence_start: true,
                   shift_types: {
                     connect: {
                       id: shiftType1.id
@@ -580,39 +422,20 @@ async function main() {
                   }
                 },
                 {
-                  id: availabilityId + "2",
                   weekday: 5,
-                  sequence_start: false,
                   shift_types: {
                     connect: {
                       id: shiftType1.id
                     }
                   },
-                  previous: {
-                    connect: {
-                      id: availabilityId + "1"
-                    }
-                  },
-                  next: {
-                    connect: {
-                      id: availabilityId + "3"
-                    }
-                  }
                 },
                 {
-                  id: availabilityId + "3",
                   weekday: 6,
-                  sequence_start: false,
                   shift_types: {
                     connect: {
                       id: shiftType1.id
                     }
                   },
-                  next: {
-                    connect: {
-                      id: availabilityId + "1"
-                    }
-                  }
                 }
               ]
             }
@@ -632,14 +455,12 @@ async function main() {
         email: "marianellessen@pulchri.nl",
         preference: {
           create: {
-            preferedWorkHours: 3,
+            maxStaffings: 3,
             shift_type_id: shiftType1.id,
             availability: {
               create: [
                 {
-                  id: availabilityId + "1",
                   weekday: 5,
-                  sequence_start: true,
                   shift_types: {
                     connect: {
                       id: shiftType1.id
@@ -647,39 +468,21 @@ async function main() {
                   }
                 },
                 {
-                  id: availabilityId + "2",
                   weekday: 6,
-                  sequence_start: false,
                   shift_types: {
                     connect: {
                       id: shiftType1.id
                     }
                   },
-                  previous: {
-                    connect: {
-                      id: availabilityId + "1"
-                    }
-                  },
-                  next: {
-                    connect: {
-                      id: availabilityId + "3"
-                    }
-                  }
                 },
                 {
                   id: availabilityId + "3",
                   weekday: 7,
-                  sequence_start: false,
                   shift_types: {
                     connect: {
                       id: shiftType1.id
                     }
                   },
-                  next: {
-                    connect: {
-                      id: availabilityId + "1"
-                    }
-                  }
                 }
               ]
             }

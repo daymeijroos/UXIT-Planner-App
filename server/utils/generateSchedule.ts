@@ -1,4 +1,4 @@
-import { Absence, Shift_Type, Staff_Required, Staffing, User, User_Preference } from "@prisma/client";
+import { Absence, Shift, Shift_Type, Staff_Required, Staffing, User, User_Preference } from "@prisma/client";
 import { prisma } from "../db";
 import { SplitDate } from "../../shared/types/splitDate";
 import { AvailabilityWithShiftTypes } from "../types/AvailibilityWithShiftTypes";
@@ -19,17 +19,14 @@ export const generateSchedule = async (fromDate?: Date, toDate?: Date) => {
 
       for (let i = 0; i < staffRequired; i++) {
         for (const user of users) {
+          const alreadyStaffed = await checkUserAlreadyStaffed(user, shift);
+          if (alreadyStaffed) continue;
           const isDefaultAvailable = await checkUserDefaultAvailabilityForShiftType(user, sr.shift_type, shift.start, shift.end);
-          console.log(`User ${user.id} is default available: ${isDefaultAvailable}`)
           if (!isDefaultAvailable) continue;
           const isAbsent = await checkUserAbsent(user, shift.start, shift.end);
-          console.log(`User ${user.id} is absent: ${isAbsent}`)
           if (isAbsent) continue;
-          const reachedMax = await reachedMaxStaffings(user);
-          console.log(`User ${user.id} reached max staffings: ${reachedMax}`)
+          const reachedMax = await reachedMaxStaffings(user, shift.start);
           if (reachedMax) continue;
-
-          console.log("POG")
 
           const staffing = {
             shift_id: shift.id,
@@ -100,7 +97,6 @@ const getUsers = async () => {
 
 const checkUserDefaultAvailabilityForShiftType = async (user: UserExtended, shiftType: Shift_Type, startDate: Date, endDate: Date): Promise<boolean> => {
   if (!user.preference) return false;
-  console.log("User has preference")
   const startDateSplit = SplitDate.fromDate(startDate);
   const endDateSplit = SplitDate.fromDate(endDate);
   const startWeekday = startDateSplit.weekday;
@@ -108,9 +104,7 @@ const checkUserDefaultAvailabilityForShiftType = async (user: UserExtended, shif
 
   const availibility = await getAvailibilityforDate(user.preference.availability, startDateSplit);
   if (!availibility) return false;
-  console.log("User has availibility")
   if (!availibility.shift_types.find((st) => st.id === shiftType.id)) return false;
-  console.log("User has shift type")
   return true
 }
 
@@ -135,9 +129,35 @@ const checkStaffRequired = async (staff_required: Staff_Required): Promise<numbe
   return staff_required.amount - staffingsForShift.length
 }
 
-const reachedMaxStaffings = async (user: UserExtended): Promise<boolean> => {
+const reachedMaxStaffings = async (user: UserExtended, startDate: Date): Promise<boolean> => {
+  const startDateSplit = SplitDate.fromDate(startDate);
   const maxStaffings = user.preference?.maxStaffings || 0;
+  const amountStaffed  = await prisma.staffing.count({
+    where: {
+      user_id: user.id,
+      shift: {
+        start: {
+          gte: startDateSplit.getWeekStart(),
+        },
+        end: {
+          lte: startDateSplit.getWeekEnd(),
+        },
+      },
+    },
+  });
   if (maxStaffings === 0) return false;
-  if (user.staffings.length < maxStaffings) return false;
+  if (amountStaffed < maxStaffings) return false;
   return true;
+}
+
+const checkUserAlreadyStaffed = async (user: UserExtended, shift: Shift): Promise<boolean> => {
+  const staffings = await prisma.staffing.findMany({
+    where: {
+      user_id: user.id,
+      shift_id: shift.id,
+    },
+  });
+
+  if (staffings.length > 0) return true;
+  return false;
 }

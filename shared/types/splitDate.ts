@@ -30,4 +30,16 @@ export class SplitDate {
   public getDate(): Date {
     return new Date(this.year, this.month, this.day, this.hour, this.minute);
   }
+
+  public getWeekStart(): Date {
+    const date = new Date(this.year, this.month, this.day, this.hour, this.minute);
+    const diff = date.getDate() - date.getDay() + (date.getDay() === 0 ? -6 : 1);
+    return new Date(date.setDate(diff));
+  }
+
+  public getWeekEnd(): Date {
+    const date = new Date(this.year, this.month, this.day, this.hour, this.minute);
+    const diff = date.getDate() - date.getDay() + (date.getDay() === 0 ? -6 : 1) + 6;
+    return new Date(date.setDate(diff));
+  }
 }

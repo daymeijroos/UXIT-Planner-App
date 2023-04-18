@@ -1,12 +1,12 @@
 import Header from "../components/aria/header";
-import Navigation from "../components/aria/navigation";
+import { DateSwitcher } from "../components/aria/navigation";
 import Schedule from "../components/aria/schedule";
 
 const index = () => {
 
   return (
     <div>
-      <Navigation />
+      <DateSwitcher />
       <Schedule />
       <Header />
     </div>

@@ -71,23 +71,24 @@ model VerificationToken {
 }
 
 model User_Preference {
-  id                    String      @id @default(cuid())
+  id                    String        @id @default(cuid())
   maxStaffings          Int
   shift_type_id         String
-  user_id               String      @unique
-  shift_type            Shift_Type  @relation(fields: [shift_type_id], references: [id])
+  user_id               String        @unique
+  shift_type            Shift_Type    @relation(fields: [shift_type_id], references: [id])
   absence               Absence[]
   availability          Availability[]
-  user                  User        @relation(fields: [user_id], references: [id])
+  user                  User          @relation(fields: [user_id], references: [id])
 }
 
 model Availability {
-  id                  String                @id @default(cuid())
-  sequence_week       Int                   @default(0)
+  id                  String          @id @default(cuid())
+  sequence_week       Int             @default(0)
   weekday             Int
   preference_id       String
-  preference          User_Preference       @relation(fields: [preference_id], references: [id])
+  preference          User_Preference @relation(fields: [preference_id], references: [id])
   shift_types         Shift_Type[]
+  @@unique([preference_id, weekday, sequence_week])
 }
 
 model Absence {

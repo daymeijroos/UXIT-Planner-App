@@ -8,8 +8,6 @@ import { api } from '../../utils/api';
 const schedule = () => {
   const router = useRouter();
 
- 
-
   const staffings = api.staffing.getStaffing.useQuery();
 
   if (staffings.isLoading) {
@@ -21,164 +19,15 @@ const schedule = () => {
   }
 
   return (
-
     <div className='overflow-y-auto h-[70vh]'>
-      
-      <StaffingCard staffing={staffings.data[0]} />
-
-      {/* <StaffingCard staffing={{
-              shift: {
-                id: "1",
-                // start and end are type Date 
-                start: new Date(),
-                end: new Date(),
-                staffings: [
-                  {
-                    user: {
-                      id: "1",
-                      first_name: "Niek"
-                    },
-                    shift_type: {
-                      id: "1",
-                      name: "balie"
-                    }
-                  },
-                  {
-                    user: {
-                      id: "2",
-                      first_name: "Henk"
-                    },
-                    shift_type: {
-                      id: "2",
-                      name: "zaal"
-                    }
-                  },
-                  {
-                    user: {
-                      id: "3",
-                      first_name: "Laura"
-                    },
-                    shift_type: {
-                      id: "2",
-                      name: "zaal"
-                    }
-                  }
-                ]
-              },
-
-              shift_type: {
-                id: "1",
-                name: "balie"
-              },
-              user: {
-                id: "1",
-                first_name: "Niek"
-              }
-      }} />
-
-      <StaffingCard staffing={{
-              shift: {
-                id: "1",
-                // start and end are type Date 
-                start: new Date(),
-                end: new Date(),
-                staffings: [
-                  {
-                    user: {
-                      id: "1",
-                      first_name: "Niek"
-                    },
-                    shift_type: {
-                      id: "1",
-                      name: "balie"
-                    }
-                  },
-                  {
-                    user: {
-                      id: "2",
-                      first_name: "Henk"
-                    },
-                    shift_type: {
-                      id: "2",
-                      name: "zaal"
-                    }
-                  },
-                  {
-                    user: {
-                      id: "3",
-                      first_name: "Laura"
-                    },
-                    shift_type: {
-                      id: "2",
-                      name: "zaal"
-                    }
-                  }
-                ]
-              },
-
-              shift_type: {
-                id: "1",
-                name: "balie"
-              },
-              user: {
-                id: "1",
-                first_name: "Niek"
-              }
-      }} />
-
-      <StaffingCard staffing={{
-              shift: {
-                id: "1",
-                // start and end are type Date 
-                start: new Date(),
-                end: new Date(),
-                staffings: [
-                  {
-                    user: {
-                      id: "1",
-                      first_name: "Niek"
-                    },
-                    shift_type: {
-                      id: "1",
-                      name: "balie"
-                    }
-                  },
-                  {
-                    user: {
-                      id: "2",
-                      first_name: "Henk"
-                    },
-                    shift_type: {
-                      id: "2",
-                      name: "zaal"
-                    }
-                  },
-                  {
-                    user: {
-                      id: "3",
-                      first_name: "Laura"
-                    },
-                    shift_type: {
-                      id: "2",
-                      name: "zaal"
-                    }
-                  }
-                ]
-              },
-
-              shift_type: {
-                id: "1",
-                name: "balie"
-              },
-              user: {
-                id: "1",
-                first_name: "Niek"
-              }
-      }} /> */}
-
+      {
+        staffings.data?.map((get) => (
+          <StaffingCard staffing={get} />
+        ))
+      }
     </div>
-
   );
+
 };
 
 export default schedule;

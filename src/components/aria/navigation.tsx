@@ -26,7 +26,7 @@ const NavigationButton = ({ day, linkTo, selected }) => {
           isFocusVisible ? "ring-blue-300" : ""
         } ${
           isCurrentDay
-            ? "bg-teal"
+            ? "bg-teal border-black border-2"
             : isPressed
               ? "bg-teal"
               : "bg-white text-gray-700"

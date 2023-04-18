@@ -1,6 +1,6 @@
-import { Absence, Availability, Shift_Type, Staff_Required, Staffing, User, User_Preference } from "@prisma/client";
+import { Absence, Shift_Type, Staff_Required, Staffing, User, User_Preference } from "@prisma/client";
 import { prisma } from "../db";
-import { SplitDate } from "./date/splitDate";
+import { SplitDate } from "../../shared/types/splitDate";
 import { AvailabilityWithShiftTypes } from "../types/AvailibilityWithShiftTypes";
 import { getAvailibilityforDate } from "./availibility/getAvailibilityForDate";
 

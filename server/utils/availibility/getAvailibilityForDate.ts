@@ -1,10 +1,7 @@
-import { Availability, Shift_Type } from "@prisma/client";
-import { prisma } from "../../db";
 import { AvailabilityWithShiftTypes } from "../../types/AvailibilityWithShiftTypes";
-import { SplitDate } from "../date/splitDate";
+import { SplitDate } from "../../../shared/types/splitDate";
 
 export async function getAvailibilityforDate(availabilities: AvailabilityWithShiftTypes[], date: SplitDate): Promise<AvailabilityWithShiftTypes | undefined> {
-
   const maxSequenceWeek = Math.max(...availabilities.map(a => a.sequence_week)) + 1;
   console.log(`maxSequenceWeek: ${maxSequenceWeek}`);
   const remainder = date.week % maxSequenceWeek;

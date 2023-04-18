@@ -7,6 +7,7 @@ import { createTRPCRouter, publicProcedure } from "../trpc";
 export const staffingRouter = createTRPCRouter({
   getStaffing: publicProcedure
     .input(z.object({
+      from: z.date().optional(),
       days: z.number().optional(),
     }).optional())
     .query(({ctx, input}) => {
@@ -14,7 +15,7 @@ export const staffingRouter = createTRPCRouter({
         where: {
           shift: {
             start: {
-              gte: new Date(new Date().setDate(new Date().getDate())),
+              gte: input?.from || new Date(new Date().setHours(0, 0, 0, 0)),
             },
             end: {
               lte: new Date(new Date().setDate(new Date().getDate() + (input?.days || 7))),

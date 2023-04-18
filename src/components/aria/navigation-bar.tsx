@@ -1,14 +1,13 @@
 import React from 'react';
 import { Bell, Calendar, User } from 'react-feather';
 import { useRouter } from 'next/navigation';
-// import button.tsx
-import {Button} from "./button"
+import { Button } from "./button"
 
-const header = () => {
+export const NavigationBar = () => {
   const router = useRouter();
   return (
-    <nav className="fixed bottom-0 bg-gray-0 text-black py-3 px-6 flex justify-around items-center w-screen">
-      <Button  onPress={() => router.push('/notifications')} >
+    <nav className="fixed bottom-0 bg-gray-0 text-black py-3 px-6 flex items-center w-screen justify-center space-x-4">
+      <Button>
         <Bell className='stroke-1' color='#000' size="24"  width="30" height="30" />
       </Button>
       <Button color='success' onPress={() => router.push(
@@ -16,11 +15,10 @@ const header = () => {
         )}>
         <Calendar className='stroke-1'  color='#000' size="24" width="30" height="30"/>
       </Button>
-      <Button  onPress={() => router.push('/account')} >
+      <Button>
         <User className='stroke-1' color='#000' size="24" width="30" height="30" />
       </Button>
     </nav>
   );
 };
-export default header;
 

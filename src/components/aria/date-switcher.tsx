@@ -38,13 +38,20 @@ const DateSwitcherButton = (props: NavigationButtonProps) => {
   );
 };
 
-export const DateSwitcher = () => {
-  const [selectedDay, setSelectedDay] = useState<string>("Donderdag");
+interface DateSwitcherProps {
+  setSelectedDate: (date: Date) => void;
+  selectedDate: Date;
+}
 
-  const handleClick = (day: string) => {
-    setSelectedDay(day);
-  }
+export const DateSwitcher = ({setSelectedDate, selectedDate}: DateSwitcherProps) => {
+  const tuesday = new Date(new Date('2023-04-18T00:00:00Z').setHours(0, 0, 0, 0))
+  const wednesday = new Date(new Date('2023-04-19T00:00:00Z').setHours(0, 0, 0, 0))
+  const thursday = new Date(new Date('2023-04-20T00:00:00Z').setHours(0, 0, 0, 0))
+  const friday = new Date(new Date('2023-04-21T00:00:00Z').setHours(0, 0, 0, 0))
+  const saturday = new Date(new Date('2023-04-22T00:00:00Z').setHours(0, 0, 0, 0))
+  const sunday = new Date(new Date('2023-04-23T00:00:00Z').setHours(0, 0, 0, 0))
 
+  
   return (
     <nav className="bg-white py-2 px-4 rounded-lg flex flex-col space-x-2 justify-center">
       <div className="flex items-center justify-between border-black border-2 my-2">
@@ -61,12 +68,12 @@ export const DateSwitcher = () => {
         </button>
       </div>
       <div className="flex space-x-2 justify-center">
-        <DateSwitcherButton day="Dinsdag" date={"2023-04-18"} onClick={() => handleClick("Dinsdag")} isSelected={selectedDay === "Dinsdag"} />
-        <DateSwitcherButton day="Woensdag" date={"2023-04-19"} onClick={() => handleClick("Woensdag")} isSelected={selectedDay === "Woensdag"} />
-        <DateSwitcherButton day="Donderdag" date={"2023-04-20"} onClick={() => handleClick("Donderdag")} isSelected={selectedDay === "Donderdag"} />
-        <DateSwitcherButton day="Vrijdag" date={"2023-04-21"} onClick={() => handleClick("Vrijdag")} isSelected={selectedDay === "Vrijdag"} />
-        <DateSwitcherButton day="Zaterdag" date={"2023-04-22"} onClick={() => handleClick("Zaterdag")} isSelected={selectedDay === "Zaterdag"} />
-        <DateSwitcherButton day="Zondag" date={"2023-04-23"} onClick={() => handleClick("Zondag")} isSelected={selectedDay === "Zondag"} />
+        <DateSwitcherButton day="Dinsdag" date={"2023-04-18"} onClick={() => setSelectedDate(tuesday)} isSelected={selectedDate.getTime() === tuesday.getTime()} />
+        <DateSwitcherButton day="Woensdag" date={"2023-04-19"} onClick={() => setSelectedDate(wednesday)} isSelected={selectedDate.getTime() === wednesday.getTime()} />
+        <DateSwitcherButton day="Donderdag" date={"2023-04-20"} onClick={() => setSelectedDate(thursday)} isSelected={selectedDate.getTime() === thursday.getTime()} />
+        <DateSwitcherButton day="Vrijdag" date={"2023-04-21"} onClick={() => setSelectedDate(friday)} isSelected={selectedDate.getTime() === friday.getTime()} />
+        <DateSwitcherButton day="Zaterdag" date={"2023-04-22"} onClick={() => setSelectedDate(saturday)} isSelected={selectedDate.getTime() === saturday.getTime()} />
+        <DateSwitcherButton day="Zondag" date={"2023-04-23"} onClick={() => setSelectedDate(sunday)} isSelected={selectedDate.getTime() === sunday.getTime()} />
       </div>
     </nav>
   );

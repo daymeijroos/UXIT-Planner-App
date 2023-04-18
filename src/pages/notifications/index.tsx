@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
-import Navigation from "../../components/aria/navigation";
-import Header from "../../components/aria/header";
+import Navigation from "../../components/aria/date-switcher";
+import Header from "../../components/aria/navigation-bar";
 
 const notifications = () => {
   const router = useRouter();

@@ -501,8 +501,8 @@ async function main() {
   shifts.push(
     prisma.shift.create({
         data: {
-          start: "2023-04-25T11:45:00.000Z",
-          end: "2023-04-25T15:00:00.000Z"
+          start: "2023-04-18T11:45:00.000Z",
+          end: "2023-04-18T15:00:00.000Z"
         }
       }
     )
@@ -511,8 +511,8 @@ async function main() {
   shifts.push(
     prisma.shift.create({
         data: {
-          start: "2023-04-25T14:00:00.000Z",
-          end: "2023-04-25T17:15:00.000Z"
+          start: "2023-04-18T14:00:00.000Z",
+          end: "2023-04-18T17:15:00.000Z"
         }
       }
     )
@@ -522,8 +522,8 @@ async function main() {
   shifts.push(
     prisma.shift.create({
         data: {
-          start: "2023-04-26T11:45:00.000Z",
-          end: "2023-04-26T15:00:00.000Z"
+          start: "2023-04-19T11:45:00.000Z",
+          end: "2023-04-19T15:00:00.000Z"
         }
       }
     )
@@ -532,8 +532,8 @@ async function main() {
   shifts.push(
     prisma.shift.create({
         data: {
-          start: "2023-04-26T14:00:00.000Z",
-          end: "2023-04-26T17:15:00.000Z"
+          start: "2023-04-19T14:00:00.000Z",
+          end: "2023-04-19T17:15:00.000Z"
         }
       }
     )
@@ -543,8 +543,8 @@ async function main() {
   shifts.push(
     prisma.shift.create({
         data: {
-          start: "2023-04-27T11:45:00.000Z",
-          end: "2023-04-27T15:00:00.000Z"
+          start: "2023-04-20T11:45:00.000Z",
+          end: "2023-04-20T15:00:00.000Z"
         }
       }
     )
@@ -553,8 +553,8 @@ async function main() {
   shifts.push(
     prisma.shift.create({
         data: {
-          start: "2023-04-27T14:00:00.000Z",
-          end: "2023-04-27T17:15:00.000Z"
+          start: "2023-04-20T14:00:00.000Z",
+          end: "2023-04-20T17:15:00.000Z"
         }
       }
     )
@@ -564,8 +564,8 @@ async function main() {
   shifts.push(
     prisma.shift.create({
         data: {
-          start: "2023-04-28T11:45:00.000Z",
-          end: "2023-04-28T15:00:00.000Z"
+          start: "2023-04-21T11:45:00.000Z",
+          end: "2023-04-21T15:00:00.000Z"
         }
       }
     )
@@ -574,8 +574,8 @@ async function main() {
   shifts.push(
     prisma.shift.create({
         data: {
-          start: "2023-04-28T14:00:00.000Z",
-          end: "2023-04-28T17:15:00.000Z"
+          start: "2023-04-21T14:00:00.000Z",
+          end: "2023-04-21T17:15:00.000Z"
         }
       }
     )
@@ -585,8 +585,8 @@ async function main() {
   shifts.push(
     prisma.shift.create({
         data: {
-          start: "2023-04-29T11:45:00.000Z",
-          end: "2023-04-29T17:15:00.000Z"
+          start: "2023-04-22T11:45:00.000Z",
+          end: "2023-04-22T17:15:00.000Z"
         }
       }
     )
@@ -596,8 +596,8 @@ async function main() {
   shifts.push(
     prisma.shift.create({
         data: {
-          start: "2023-04-30T11:45:00.000Z",
-          end: "2023-04-30T17:15:00.000Z"
+          start: "2023-04-23T11:45:00.000Z",
+          end: "2023-04-23T17:15:00.000Z"
         }
       }
     )

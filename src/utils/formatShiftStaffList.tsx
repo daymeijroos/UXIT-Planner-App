@@ -10,7 +10,7 @@ export function formatShiftStaffList(staffing: StaffingWithColleagues) {
       shifts[shiftTypeName] = [];
     }
 
-    const staffName = `${staffing.user_id === nestedStaffing.user.id? "U" : nestedStaffing.user.first_name}`;
+    const staffName = `${nestedStaffing.user.first_name}`;
 
     shifts[shiftTypeName].push(staffName);
   });

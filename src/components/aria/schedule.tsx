@@ -6,8 +6,6 @@ import { StaffingWithColleagues } from '../../types/StaffingWithColleagues';
 
 
 const schedule = () => {
-  const router = useRouter();
-
   const staffings = api.staffing.getStaffing.useQuery();
 
   if (staffings.isLoading) {

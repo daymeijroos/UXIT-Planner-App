@@ -21,15 +21,15 @@ const NavigationButton = ({ day, linkTo, selected }) => {
     <Link href={linkTo}>
       <div
         className={`${
-          isPressed ? "bg-blue-400" : "bg-white"
+          isPressed ? "bg-teal" : "bg-teal"
         } text-black rounded-full h-12 w-12 flex flex-col items-center justify-center focus:outline-none focus:ring-4 ${
           isFocusVisible ? "ring-blue-300" : ""
         } ${
           isCurrentDay
-            ? "bg-dark-teal"
+            ? "bg-teal border-black border-2"
             : isPressed
-              ? "bg-dark-teal"
-              : "bg-white text-gray-700"
+              ? "bg-teal"
+              : "bg-white text-black"
         }`}
         {...buttonProps}
         {...focusProps}

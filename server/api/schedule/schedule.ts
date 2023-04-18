@@ -16,8 +16,22 @@ export const scheduleRouter = createTRPCRouter({
       end_date: z.date(),
     }).optional())
     .mutation(({input}) => {
-      return generateSchedule(input?.start_date, input?.end_date)
-        .then(() => console.log("Alle shifts zijn verwerkt."))
-        .catch((error) => console.error("Er is een fout opgetreden:", error))
+      /////////////////////////////////////////////////////////////////////////
+      //Functie was zo snel dat het fake lijkt. Daarom een timeout van 700ms.//
+      //IN PRODUCTION: Verwijder de timeout.                                 //
+      /////////////////////////////////////////////////////////////////////////
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          generateSchedule(input?.start_date, input?.end_date)
+            .then(() => {
+              console.log("Alle shifts zijn verwerkt.");
+              resolve('Success');
+            })
+            .catch((error) => {
+              console.error("Er is een fout opgetreden:", error);
+              reject(error);
+            });
+        }, 700);
+      });
     })
 });

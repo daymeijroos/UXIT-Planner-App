@@ -1,3 +1,12 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.headerNavButton{
+    width: 90px;
+    height: 56px;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    justify-items: center;
+}

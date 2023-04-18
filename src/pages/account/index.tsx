@@ -1,19 +1,17 @@
+
 import { useRouter } from "next/router";
 import Navigation from "../../components/aria/navigation";
 import Header from "../../components/aria/header";
-import Schedule from "../../components/aria/schedule";
 
-const DinsdagPage = () => {
+const account = () => {
   const router = useRouter();
 
   return (
     <div>
-      <Navigation/>
-      <p>Rooster van dinsdag</p>
-      <Schedule/>
+      <p>Account</p>
       <Header />
     </div>
   );
 };
 
-export default DinsdagPage;
+export default account;

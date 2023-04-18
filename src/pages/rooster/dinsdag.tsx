@@ -1,5 +1,7 @@
 import { useRouter } from "next/router";
 import Navigation from "../../components/aria/navigation";
+import Header from "../../components/aria/header";
+import Schedule from "../../components/aria/schedule";
 
 const DinsdagPage = () => {
   const router = useRouter();
@@ -7,7 +9,8 @@ const DinsdagPage = () => {
   return (
     <div>
       <Navigation/>
-      <p>Rooster van dinsdag</p>
+      <Schedule />
+      <Header /> 
     </div>
   );
 };

@@ -12,7 +12,7 @@ interface ScheduleProps {
 export const Schedule = ({selectedDate, weekStart}: ScheduleProps) => {
 
   const [parent, enableAnimations] = useAutoAnimate({
-    duration: 100,
+    duration: 150,
   })
 
   const staffings = api.staffing.getStaffing.useQuery({from: weekStart});

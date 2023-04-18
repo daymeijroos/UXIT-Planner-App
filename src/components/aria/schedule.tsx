@@ -1,5 +1,4 @@
 import React from 'react';
-import { useRouter } from 'next/navigation';
 import { StaffingCard } from "../../components/overview-components/staffing-card";
 import { api } from '../../utils/api';
 import { StaffingWithColleagues } from '../../types/StaffingWithColleagues';

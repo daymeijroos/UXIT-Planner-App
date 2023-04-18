@@ -29,7 +29,7 @@ const NavigationButton = ({ day, linkTo, selected }) => {
             ? "bg-teal border-black border-2"
             : isPressed
               ? "bg-teal"
-              : "bg-white text-gray-700"
+              : "bg-white text-black"
         }`}
         {...buttonProps}
         {...focusProps}

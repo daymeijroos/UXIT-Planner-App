@@ -42,6 +42,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
         <meta name="theme-color" content="#317EFB" />
       </Head>
       <Component {...pageProps} />
+      
     </SessionProvider>
   )
 }

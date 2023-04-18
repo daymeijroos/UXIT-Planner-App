@@ -27,7 +27,14 @@ export const Schedule = ({selectedDate, weekStart}: ScheduleProps) => {
 
   return (
     <div ref={parent} className='overflow-y-auto h-[70vh]'>
-      {
+    {
+      staffings.data?.filter((get: StaffingWithColleagues) => {
+        const date = new Date(get.shift.start);
+        date.setHours(0, 0, 0, 0);
+        return date.getTime() === selectedDate.getTime();
+      }).length === 0 ? (
+        <p className='text-center m-4'>Er zijn geen vrijwilligers ingepland op deze datum.</p>
+      ) : (
         staffings.data?.map((get: StaffingWithColleagues) => {
           const date = new Date(get.shift.start);
           date.setHours(0, 0, 0, 0);
@@ -35,7 +42,8 @@ export const Schedule = ({selectedDate, weekStart}: ScheduleProps) => {
             return (<StaffingCard staffing={get} />)
           }
         })
-      }
+      )
+    }
     </div>
   );
 

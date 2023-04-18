@@ -31,6 +31,7 @@ export default () => {
       <Button onPress={handleGenerate}>Generate Schedule</Button>
       <p>
         {unfulfilledShifts.data?.length} unfulfilled shifts
+        total staff required {unfulfilledShifts.data?.reduce((acc, curr) => acc + curr!.amount_required, 0)}
       </p>
       {unfulfilledShifts.data?.map((request) => {
         const requestResolved = request

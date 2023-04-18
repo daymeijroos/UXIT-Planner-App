@@ -40,6 +40,7 @@ export const generateSchedule = async (fromDate?: Date, toDate?: Date) => {
           await prisma.staffing.create({
             data: staffing,
           });
+          break;
         }
       }
     }

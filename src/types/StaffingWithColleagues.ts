@@ -5,7 +5,7 @@ export interface StaffingWithColleagues extends Staffing {
     staffings: {
       user: {
         id: string,
-        first_name: string
+        first_name?: string
       },
       shift_type: Shift_Type
     }[]

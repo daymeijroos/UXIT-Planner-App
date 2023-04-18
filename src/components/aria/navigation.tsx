@@ -2,6 +2,7 @@ import { useButton } from "@react-aria/button";
 import { useFocusRing } from "@react-aria/focus";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import React from "react";
 
 const Navigation = () => {
   return (
@@ -9,16 +10,23 @@ const Navigation = () => {
   );
 };
 
-const NavigationButton = ({ day, linkTo, selected }) => {
+interface NavigationButtonProps {
+  day: string;
+  linkTo: string;
+  selected: string;
+}
+
+const NavigationButton = (props: NavigationButtonProps) => {
+  const ref = React.useRef(null);
   const { buttonProps, isPressed } = useButton({
-    onPress: () => console.log(day)
-  });
+    onPress: () => console.log(props.day),
+  }, ref)
   const { isFocusVisible, focusProps } = useFocusRing();
 
-  const isCurrentDay = linkTo === selected;
+  const isCurrentDay = props.linkTo === props.selected;
 
   return (
-    <Link href={linkTo}>
+    <Link href={props.linkTo}>
       <div
         className={`${
           isPressed ? "bg-teal" : "bg-teal"
@@ -34,9 +42,9 @@ const NavigationButton = ({ day, linkTo, selected }) => {
         {...buttonProps}
         {...focusProps}
       >
-        <span className="sr-only">{day}</span>
-        <span className="text-lg font-bold">{day.slice(0, 2)}</span>
-        <span className="text-sm">{new Date(day).getDate()}</span>
+        <span className="sr-only">{props.day}</span>
+        <span className="text-lg font-bold">{props.day.slice(0, 2)}</span>
+        <span className="text-sm">{new Date(props.day).getDate()}</span>
       </div>
     </Link>
   );

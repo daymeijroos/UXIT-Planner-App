@@ -2,21 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-.headerNavButton{
-    width: 90px;
-    height: 56px;
-    align-items: center;
-    display: flex;
-    justify-content: center;
-    justify-items: center;
-    background-color: transparent !important;
-    border: 1px solid black !important;
-}
-.headerNavButton_active{
-  background-color: rgb(95, 202, 190) !important;
-}
-
-
 body {
   font-family: "Nunito Sans", sans-serif;
 }

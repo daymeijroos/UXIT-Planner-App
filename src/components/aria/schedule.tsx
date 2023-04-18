@@ -3,6 +3,7 @@ import { useRouter } from 'next/navigation';
 //  import StaffingCard
  import { StaffingCard } from "../../components/overview-components/staffing-card";
 import { api } from '../../utils/api';
+import { StaffingWithColleagues } from '../../types/StaffingWithColleagues';
 
 
 const schedule = () => {
@@ -21,7 +22,7 @@ const schedule = () => {
   return (
     <div className='overflow-y-auto h-[70vh]'>
       {
-        staffings.data?.map((get) => (
+        staffings.data?.map((get: StaffingWithColleagues) => (
           <StaffingCard staffing={get} />
         ))
       }

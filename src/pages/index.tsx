@@ -13,9 +13,13 @@ const index = () => {
   const context = api.useContext();
   const { mutate: generateSchedule } = api.schedule.generate.useMutation({onSuccess: () => {
     context.staffing.getStaffing.invalidate({from: weekStart}).catch((error) => {
-    console.error(error);
-  });
-}});
+      console.error(error);
+    });
+    context.schedule.getUnfulfilledShifts.invalidate().catch((error) => {
+      console.error(error);
+    });
+  }
+});
 
   return (
     <div>

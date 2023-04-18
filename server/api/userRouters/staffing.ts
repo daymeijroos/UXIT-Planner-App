@@ -43,4 +43,8 @@ export const staffingRouter = createTRPCRouter({
       })
     }
   ),
+  removeAllStaffing: publicProcedure
+    .mutation(async ({ctx}) => {
+      return ctx.prisma.staffing.deleteMany()
+    })
 });

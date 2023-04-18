@@ -2,6 +2,9 @@
 import { useEffect, useState } from "react";
 import { Button } from "../components/aria/button";
 import { api } from "../utils/api";
+import { useRouter } from "next/router";
+
+import { CornerUpLeft  } from "react-feather";
 
 export default () => {
   const { mutate: generateSchedule } = api.schedule.generate.useMutation({onSuccess: () => {
@@ -26,9 +29,13 @@ export default () => {
     return <div>{unfulfilledShifts.error.message}</div>;
   }
 
+  const router = useRouter();
   return (
     <div className="flex flex-col items-center justify-center w-full h-full">
-      <Button onPress={handleGenerate}>Generate Schedule</Button>
+      <div className= "flex m-4 space-x-4">
+        <Button onPress={() => {router.push("/")}}><CornerUpLeft/></Button>
+        <Button color="success" onPress={handleGenerate} className="w-max">Generate Schedule</Button>
+      </div>
       <p>
         {unfulfilledShifts.data?.length} unfulfilled shifts
         total staff required {unfulfilledShifts.data?.reduce((acc, curr) => acc + curr!.amount_required, 0)}

@@ -2,7 +2,7 @@ import React from 'react';
 import { StaffingCard } from "../../components/overview-components/staffing-card";
 import { api } from '../../utils/api';
 import { StaffingWithColleagues } from '../../types/StaffingWithColleagues';
-
+import { useAutoAnimate } from '@formkit/auto-animate/react'
 
 interface ScheduleProps {
   selectedDate: Date;
@@ -10,6 +10,11 @@ interface ScheduleProps {
 }
 
 export const Schedule = ({selectedDate, weekStart}: ScheduleProps) => {
+
+  const [parent, enableAnimations] = useAutoAnimate({
+    duration: 100,
+  })
+
   const staffings = api.staffing.getStaffing.useQuery({from: weekStart});
 
   if (staffings.isLoading) {
@@ -21,7 +26,7 @@ export const Schedule = ({selectedDate, weekStart}: ScheduleProps) => {
   }
 
   return (
-    <div className='overflow-y-auto h-[70vh]'>
+    <div ref={parent} className='overflow-y-auto h-[70vh]'>
       {
         staffings.data?.map((get: StaffingWithColleagues) => {
           const date = new Date(get.shift.start);

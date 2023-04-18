@@ -33,7 +33,7 @@ export default () => {
   return (
     <div className="flex flex-col items-center justify-center w-full h-full">
       <div className= "flex m-4 space-x-4">
-        <Button onPress={() => {router.push("/")}}><CornerUpLeft/></Button>
+        <Button onPress={() => {router.push("/")}} title="Terug" aria-label="Terug"><CornerUpLeft/></Button>
         <Button color="success" onPress={handleGenerate} className="w-max">Generate Schedule</Button>
       </div>
       <p>

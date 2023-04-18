@@ -3,6 +3,7 @@ import React from 'react';
 import {useFocusRing} from 'react-aria';
 
 export interface ButtonProps extends AriaButtonProps {
+  title?: string;
   className?: string;
   color?: "primary" | "success" | "error";
   round?: boolean;
@@ -15,7 +16,7 @@ const buttonStyles = {
   primary: `border-2 border-black py-4 px-4 text-black bg-blue-grey drop-shadow-lg hover:bg-steel active:bg-slate active:drop-shadow-none flex items-center justify-center`,
   success: `border-2 border-black py-4 px-4 text-black bg-teal drop-shadow-lg hover:bg-light-teal active:bg-dark-teal active:drop-shadow-none flex items-center justify-center`,
   error: `border-2 border-black py-4 px-4 text-black bg-coral drop-shadow-lg hover:bg-salmon active:bg-red-orange active:drop-shadow-none flex items-center justify-center`,
-  default: `border-2 border-black py-4 px-4 text-black bg-white drop-shadow-lg hover:bg-light-grey active:bg-light-grey active:drop-shadow-none flex items-center justify-center`,
+  default: `border-2 border-black py-4 px-4 text-black bg-white drop-shadow-lg hover:bg-light-grey active:bg-medium-grey active:drop-shadow-none flex items-center justify-center`,
 };
 
 const focusStyles = 'outline-none ring-4 ring-pale-yellow'
@@ -43,6 +44,7 @@ export function Button(props: ButtonProps) {
       ${props.round ? 'rounded-full' : 'rounded-sm'}
       ${props.fillWidth? 'w-full' : ''}`}
       
+        title={props.title}
         {...buttonProps}
         {...focusProps}
         ref={ref}>

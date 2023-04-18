@@ -17,6 +17,7 @@ const Home = () => {
       <Button fillWidth color="success" onPress={() => {generateSchedule()}}>
         <b>Generate schedule</b><Zap className="ml-2"/>
       </Button>
+      <Navigation/>
 
       <Card button buttonText="dissmisss" buttonColor="success">
         <h1 className="text-2xl font-bold">Hello World</h1>

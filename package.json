@@ -18,6 +18,7 @@
     "@trpc/server": "^10.18.0",
     "@types/prettier": "^2.7.2",
     "cuid": "^3.0.0",
+    "feather-icons": "^4.29.0",
     "graphql": "^16.6.0",
     "next": "latest",
     "next-auth": "^4.20.1",

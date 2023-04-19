@@ -36,24 +36,27 @@ export const Schedule = ({selectedDate, weekStart}: ScheduleProps) => {
     }
     return accumulator;
   }, []);
+
+  const sortedStaffings = uniqueStaffings.sort((a: StaffingWithColleagues, b: StaffingWithColleagues) => {
+    const dateA = new Date(a.shift.start);
+    const dateB = new Date(b.shift.start);
+    return dateA.getTime() - dateB.getTime();
+  });
+
+  const filteredStaffings = sortedStaffings.filter((get: StaffingWithColleagues) => {
+    const date = new Date(get.shift.start);
+    date.setHours(0, 0, 0, 0);
+    return date.getTime() === selectedDate.getTime();
+  });
   
 
   return (
     <div ref={parent} className='overflow-y-auto h-[70vh]'>
     {
-      uniqueStaffings.sort((a: StaffingWithColleagues, b: StaffingWithColleagues) => {
-          const dateA = new Date(a.shift.start);
-          const dateB = new Date(b.shift.start);
-          return dateA.getTime() - dateB.getTime();
-        })
-        .filter((get: StaffingWithColleagues) => {
-          const date = new Date(get.shift.start);
-          date.setHours(0, 0, 0, 0);
-          return date.getTime() === selectedDate.getTime();
-        }).length === 0 ? (
+      filteredStaffings.length === 0 ? (
         <p className='text-center m-4'>Er zijn geen vrijwilligers ingepland op deze datum.</p>
       ) : (
-        uniqueStaffings.map((get: StaffingWithColleagues) => {
+        filteredStaffings.map((get: StaffingWithColleagues) => {
           const date = new Date(get.shift.start);
           date.setHours(0, 0, 0, 0);
           if (date.getTime() === selectedDate.getTime()) {

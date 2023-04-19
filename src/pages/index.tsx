@@ -6,7 +6,7 @@ import { Zap } from "react-feather";
 import { useState } from "react";
 import { api } from "../utils/api";
 
-const index = () => {
+const Index = () => {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date(new Date().setHours(0, 0, 0, 0)));
   const weekStart = new Date(new Date('2023-04-18T00:00:00Z').setHours(0, 0, 0, 0))
 
@@ -33,4 +33,4 @@ const index = () => {
   );
 };
 
-export default index;
+export default Index;

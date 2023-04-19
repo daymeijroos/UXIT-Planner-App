@@ -39,7 +39,7 @@ export function Button(props: ButtonProps) {
         props.color === "error" ? buttonStyles.error :
         props.color === "success" ? buttonStyles.success :
         buttonStyles.default
-      } ${props.className} 
+      } ${props.className ?? ''} 
       ${isFocusVisible ? focusStyles : ''}
       ${props.round ? 'rounded-full' : 'rounded-sm'}
       ${props.fillWidth? 'w-full' : ''}`}

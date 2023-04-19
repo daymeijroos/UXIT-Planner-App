@@ -6,20 +6,16 @@ import { useRouter } from "next/router";
 
 import { CornerUpLeft  } from "react-feather";
 
-export default () => {
-  const { mutate: generateSchedule } = api.schedule.generate.useMutation({onSuccess: () => {
+const TestGenerate = () => {
+  const router = useRouter();
+
+  const { mutateAsync: generateSchedule } = api.schedule.generate.useMutation({onSuccess: () => {
       context.schedule.getUnfulfilledShifts.invalidate().catch((error) => {
       console.error(error);
     });
   }});
   const unfulfilledShifts = api.schedule.getUnfulfilledShifts.useQuery();
-
-
   const context = api.useContext();
-
-  const handleGenerate = () => {
-    const res = generateSchedule();
-  };
 
   if (unfulfilledShifts.isLoading) {
     return <div>loading...</div>;
@@ -29,12 +25,11 @@ export default () => {
     return <div>{unfulfilledShifts.error.message}</div>;
   }
 
-  const router = useRouter();
   return (
     <div className="flex flex-col items-center justify-center w-full h-full">
       <div className= "flex m-4 space-x-4">
-        <Button onPress={() => {router.push("/")}} title="Terug" aria-label="Terug"><CornerUpLeft/></Button>
-        <Button color="success" onPress={handleGenerate} className="w-max">Generate Schedule</Button>
+        <Button onPress={() => {void router.push("/")}} title="Terug" aria-label="Terug"><CornerUpLeft/></Button>
+        <Button color="success" onPress={() => {void generateSchedule()}} className="w-max">Generate Schedule</Button>
       </div>
       <p>
         {unfulfilledShifts.data?.length} unfulfilled shifts
@@ -54,3 +49,5 @@ export default () => {
     </div>
   );
 };
+
+export default TestGenerate;

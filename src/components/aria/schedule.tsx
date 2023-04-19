@@ -60,7 +60,7 @@ export const Schedule = ({selectedDate, weekStart}: ScheduleProps) => {
           const date = new Date(get.shift.start);
           date.setHours(0, 0, 0, 0);
           if (date.getTime() === selectedDate.getTime()) {
-            return <StaffingCard staffing={get} />;
+            return <StaffingCard staffing={get} key={get.shift_id}/>;
           }
         })
       )

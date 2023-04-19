@@ -154,7 +154,15 @@ const checkUserAlreadyStaffed = async (user: UserExtended, shift: Shift): Promis
   const staffings = await prisma.staffing.findMany({
     where: {
       user_id: user.id,
-      shift_id: shift.id,
+      // filter by date, from beginning of the day to end of the day
+      shift: {
+        start: {
+          gte: new Date(new Date(shift.start).setHours(0, 0, 0, 0)),
+        },
+        end: {
+          lte: new Date(new Date(shift.end).setHours(23, 59, 59, 999)),
+        },
+      },
     },
   });
 

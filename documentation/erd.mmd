@@ -1,0 +1,10 @@
+erDiagram
+	User ||--o{ User_Preference : has
+	User_Preference ||--o{ Absence : has
+	User_Preference ||--o{ Availability : has
+	Availability ||--o{ Shift : has
+	Shift ||--|{ Staff_Required : has
+	Shift ||--o{ Staffing : has
+	Shift_Type ||--|{ Staff_Required : "is part of"
+	Shift_Type ||--o{ Staffing : "is part of"
+	Shift_Type ||--o{ Availability : "is part of"

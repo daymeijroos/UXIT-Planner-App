@@ -19,3 +19,19 @@ After that you can run the project in developer mode with `npm run dev`.
 - [React-Aria](https://react-spectrum.adobe.com/react-aria/getting-started.html)
 - [Tailwind](https://tailwindcss.com/docs)
 - [AutoAnimate](https://auto-animate.formkit.com/#usage)
+
+
+
+
+```
+erDiagram
+	User ||--o{ User_Preference : has
+	User_Preference ||--o{ Absence : has
+	User_Preference ||--o{ Availability : has
+	Availability ||--o{ Shift : has
+	Shift ||--|{ Staff_Required : has
+	Shift ||--o{ Staffing : has
+	Shift_Type ||--|{ Staff_Required : "is part of"
+	Shift_Type ||--o{ Staffing : "is part of"
+	Shift_Type ||--o{ Availability : "is part of"
+```

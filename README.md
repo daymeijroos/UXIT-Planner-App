@@ -23,7 +23,7 @@ After that you can run the project in developer mode with `npm run dev`.
 
 
 
-```
+```mmd
 erDiagram
 	User ||--o{ User_Preference : has
 	User_Preference ||--o{ Absence : has

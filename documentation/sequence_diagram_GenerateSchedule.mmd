@@ -1,0 +1,20 @@
+sequenceDiagram
+  participant User
+  participant FrontEnd
+  participant BackEnd
+  participant NextAuth
+  participant Prisma
+
+  User->>FrontEnd: Open app
+  FrontEnd->>User: Show app home screen
+  User->>FrontEnd: Click "Generate schedule"
+  FrontEnd->>User: Show generate menu
+  User->>FrontEnd: Provide generate start date and end date
+  FrontEnd->>BackEnd: Send generate request
+  BackEnd->>NextAuth: Check user authentication
+  NextAuth->>BackEnd: Return user
+  BackEnd->>Prisma: Get shifts, users (staff) and user_preferences
+  Prisma->>BackEnd: Return shifts, users (staff) and user_preferences
+  BackEnd->>BackEnd: Generate schedule
+  BackEnd->>FrontEnd: Send schedule
+  FrontEnd->>User: Show schedule and how many shifts have been skipped

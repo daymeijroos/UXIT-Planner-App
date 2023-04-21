@@ -1,0 +1,17 @@
+sequenceDiagram
+  participant User
+  participant FrontEnd
+  participant BackEnd
+  participant NextAuth
+  participant Prisma
+
+  User->>FrontEnd: Open app
+  FrontEnd->>BackEnd: Retrieve Volunteer shift data from BackEnd
+  BackEnd->>NextAuth: Check User authentication
+  NextAuth->>Prisma: Lookup user
+  Prisma->>NextAuth: Return user
+  NextAuth->>BackEnd: Return user
+  BackEnd->>Prisma: Lookup shift data for user
+  Prisma->>BackEnd: Return shift data
+  BackEnd->>FrontEnd: Return shift data
+  FrontEnd->>User: Display shift data

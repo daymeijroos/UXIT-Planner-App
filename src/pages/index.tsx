@@ -12,7 +12,6 @@ const Index = () => {
 
   useEffect(() => {
     setSelectedDate(new Date(new Date().setHours(0, 0, 0, 0)))
-    console.log('useEffect')
   }, [])
 
   const context = api.useContext();

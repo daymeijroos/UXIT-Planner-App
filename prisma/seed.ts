@@ -27,6 +27,21 @@ async function main() {
       description: "Retired rol is voor gebruikers die niet meer actief zijn binnen pulchri en dus ook niet gebruik mogen maken van de planner."
     }
   });
+
+  // create admin user
+  const adminUser = await prisma.user.create({
+    data: {
+      first_name: "Admin",
+      last_name: "Admin",
+      email: process.env.ADMIN_EMAIL,
+      role: {
+        connect: {
+          name: adminRole.name
+        }
+      }
+    }
+  });
+
   // Create Shift Types
   // weet niet of dit de bedoeling was maar heb een 3e shifttype toegevoegd voor als de vrijwilliger bij beide kan staan
   const shiftType1 = await prisma.shift_Type.create({

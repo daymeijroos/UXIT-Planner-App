@@ -43,7 +43,7 @@ export const authOptions: NextAuthOptions = {
     session({ session, user }) {
       if (session.user) {
         session.user.id = user.id;
-        session.user.role = (user as User).role ?? 'customer'
+        session.user.role = (user as User).role_name ?? 'USER'
       }
       return session;
     },
@@ -66,7 +66,7 @@ export const authOptions: NextAuthOptions = {
         const emailWhitelist = await prisma.user.findMany({
           where: {
             email: email,
-            role: {
+            role_name: {
               not: 'RETIRED'
             }
           }

@@ -65,7 +65,10 @@ export const authOptions: NextAuthOptions = {
         // Place your whitelisted emails below
         const emailWhitelist = await prisma.user.findMany({
           where: {
-            email: email
+            email: email,
+            role: {
+              not: 'RETIRED'
+            }
           }
         })
         if (emailWhitelist.length <= 0) throw new Error('Email not found');

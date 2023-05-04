@@ -4,6 +4,29 @@ import cuid from "cuid";
 const prisma = new PrismaClient();
 
 async function main() {
+  //create user role
+  const userRole = await prisma.role.create({
+    data: {
+      name: "USER",
+      description: "Dit zijn de standaard gebruikers van de app."
+    }
+  });
+
+  //create admin role
+  const adminRole = await prisma.role.create({
+    data: {
+      name: "ADMIN",
+      description: "Admin rol houd alle rechten om de planner te beheren."
+    }
+  });
+
+  //create retired role
+  const retiredRole = await prisma.role.create({
+    data: {
+      name: "RETIRED",
+      description: "Retired rol is voor gebruikers die niet meer actief zijn binnen pulchri en dus ook niet gebruik mogen maken van de planner."
+    }
+  });
   // Create Shift Types
   // weet niet of dit de bedoeling was maar heb een 3e shifttype toegevoegd voor als de vrijwilliger bij beide kan staan
   const shiftType1 = await prisma.shift_Type.create({
@@ -499,119 +522,119 @@ async function main() {
     date.setUTCHours(date.getUTCHours() - 2);
     return date.toISOString();
   }
-  
+
   // mockdata voor shifts
   const shifts = [];
 
   // dinsdag
   shifts.push(
     prisma.shift.create({
-        data: {
-          start: convertToAmsterdamTimezone("2023-04-18T11:45:00.000Z"),
-          end: convertToAmsterdamTimezone("2023-04-18T15:00:00.000Z")
-        }
+      data: {
+        start: convertToAmsterdamTimezone("2023-04-18T11:45:00.000Z"),
+        end: convertToAmsterdamTimezone("2023-04-18T15:00:00.000Z")
       }
+    }
     )
   );
 
   shifts.push(
     prisma.shift.create({
-        data: {
-          start: convertToAmsterdamTimezone("2023-04-18T14:00:00.000Z"),
-          end: convertToAmsterdamTimezone("2023-04-18T17:15:00.000Z")
-        }
+      data: {
+        start: convertToAmsterdamTimezone("2023-04-18T14:00:00.000Z"),
+        end: convertToAmsterdamTimezone("2023-04-18T17:15:00.000Z")
       }
+    }
     )
   );
 
   // woensdag
   shifts.push(
     prisma.shift.create({
-        data: {
-          start: convertToAmsterdamTimezone("2023-04-19T11:45:00.000Z"),
-          end: convertToAmsterdamTimezone("2023-04-19T15:00:00.000Z")
-        }
+      data: {
+        start: convertToAmsterdamTimezone("2023-04-19T11:45:00.000Z"),
+        end: convertToAmsterdamTimezone("2023-04-19T15:00:00.000Z")
       }
+    }
     )
   );
 
   shifts.push(
     prisma.shift.create({
-        data: {
-          start: convertToAmsterdamTimezone("2023-04-19T14:00:00.000Z"),
-          end: convertToAmsterdamTimezone("2023-04-19T17:15:00.000Z")
-        }
+      data: {
+        start: convertToAmsterdamTimezone("2023-04-19T14:00:00.000Z"),
+        end: convertToAmsterdamTimezone("2023-04-19T17:15:00.000Z")
       }
+    }
     )
   );
 
   // donderdag
   shifts.push(
     prisma.shift.create({
-        data: {
-          start: convertToAmsterdamTimezone("2023-04-20T11:45:00.000Z"),
-          end: convertToAmsterdamTimezone("2023-04-20T15:00:00.000Z")
-        }
+      data: {
+        start: convertToAmsterdamTimezone("2023-04-20T11:45:00.000Z"),
+        end: convertToAmsterdamTimezone("2023-04-20T15:00:00.000Z")
       }
+    }
     )
   );
 
   shifts.push(
     prisma.shift.create({
-        data: {
-          start: convertToAmsterdamTimezone("2023-04-20T14:00:00.000Z"),
-          end: convertToAmsterdamTimezone("2023-04-20T17:15:00.000Z")
-        }
+      data: {
+        start: convertToAmsterdamTimezone("2023-04-20T14:00:00.000Z"),
+        end: convertToAmsterdamTimezone("2023-04-20T17:15:00.000Z")
       }
+    }
     )
   );
 
   // vrijdag
   shifts.push(
     prisma.shift.create({
-        data: {
-          start: convertToAmsterdamTimezone("2023-04-21T11:45:00.000Z"),
-          end: convertToAmsterdamTimezone("2023-04-21T15:00:00.000Z")
-        }
+      data: {
+        start: convertToAmsterdamTimezone("2023-04-21T11:45:00.000Z"),
+        end: convertToAmsterdamTimezone("2023-04-21T15:00:00.000Z")
       }
+    }
     )
   );
 
   shifts.push(
     prisma.shift.create({
-        data: {
-          start: convertToAmsterdamTimezone("2023-04-21T14:00:00.000Z"),
-          end: convertToAmsterdamTimezone("2023-04-21T17:15:00.000Z")
-        }
+      data: {
+        start: convertToAmsterdamTimezone("2023-04-21T14:00:00.000Z"),
+        end: convertToAmsterdamTimezone("2023-04-21T17:15:00.000Z")
       }
+    }
     )
   );
 
   // zaterdag
   shifts.push(
     prisma.shift.create({
-        data: {
-          start: convertToAmsterdamTimezone("2023-04-22T11:45:00.000Z"),
-          end: convertToAmsterdamTimezone("2023-04-22T17:15:00.000Z")
-        }
+      data: {
+        start: convertToAmsterdamTimezone("2023-04-22T11:45:00.000Z"),
+        end: convertToAmsterdamTimezone("2023-04-22T17:15:00.000Z")
       }
+    }
     )
   );
 
   // zondag
   shifts.push(
     prisma.shift.create({
-        data: {
-          start: convertToAmsterdamTimezone("2023-04-23T11:45:00.000Z"),
-          end: convertToAmsterdamTimezone("2023-04-23T17:15:00.000Z")
-        },
-      }
+      data: {
+        start: convertToAmsterdamTimezone("2023-04-23T11:45:00.000Z"),
+        end: convertToAmsterdamTimezone("2023-04-23T17:15:00.000Z")
+      },
+    }
     )
   );
 
   const createdShifts = await Promise.all(shifts);
 
-// Genereer mockdata voor staff_required
+  // Genereer mockdata voor staff_required
   // willen we alleen balie rooster genereren of ook galerie (in het algemeen maar atm. voor demo)? Alles staat hier voorlopig op balie
   const staffRequiredList = [];
 

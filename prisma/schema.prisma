@@ -1,6 +1,6 @@
 generator client {
-  provider      = "prisma-client-js"
-  output = "../node_modules/.prisma/client"
+  provider = "prisma-client-js"
+  output   = "../node_modules/.prisma/client"
 }
 
 datasource db {
@@ -43,6 +43,7 @@ model User {
   emailVerified DateTime?
   image         String?
   role          String           @default("USER")
+  role_entity   Role             @relation(fields: [role], references: [name])
   preference    User_Preference?
   staffings     Staffing[]
   accounts      Account[]
@@ -52,14 +53,14 @@ model User {
 
 //THIS IS AN EXAMPLE OF A MODEL IT SHOULD BE REMOVED
 model Post {
-    id        String   @id @default(cuid())
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-    title     String
-    content   String?
-    user      User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
-    userId    String?
-    userName  String?
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  title     String
+  content   String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String?
+  userName  String?
 }
 
 model VerificationToken {
@@ -71,72 +72,74 @@ model VerificationToken {
 }
 
 model User_Preference {
-  id                    String        @id @default(cuid())
-  maxStaffings          Int
-  shift_type_id         String
-  user_id               String        @unique
-  shift_type            Shift_Type    @relation(fields: [shift_type_id], references: [id])
-  absence               Absence[]
-  availability          Availability[]
-  user                  User          @relation(fields: [user_id], references: [id])
+  id            String         @id @default(cuid())
+  maxStaffings  Int
+  shift_type_id String
+  user_id       String         @unique
+  shift_type    Shift_Type     @relation(fields: [shift_type_id], references: [id])
+  absence       Absence[]
+  availability  Availability[]
+  user          User           @relation(fields: [user_id], references: [id])
 }
 
 model Availability {
-  id                  String          @id @default(cuid())
-  sequence_week       Int             @default(0)
-  weekday             Int
-  preference_id       String
-  preference          User_Preference @relation(fields: [preference_id], references: [id])
-  shift_types         Shift_Type[]
+  id            String          @id @default(cuid())
+  sequence_week Int             @default(0)
+  weekday       Int
+  preference_id String
+  preference    User_Preference @relation(fields: [preference_id], references: [id])
+  shift_types   Shift_Type[]
+
   @@unique([preference_id, weekday, sequence_week])
 }
 
 model Absence {
-  id                  String          @id @default(cuid())
-  start               DateTime
-  end                 DateTime
-  preference_id       String
-  preference          User_Preference @relation(fields: [preference_id], references: [id])
+  id            String          @id @default(cuid())
+  start         DateTime
+  end           DateTime
+  preference_id String
+  preference    User_Preference @relation(fields: [preference_id], references: [id])
 }
 
 model Role {
-  Name                String          @id
-  Description         String
+  name        String @id
+  description String
+  users       User[]
 }
 
 model Shift {
-  id                  String          @id @default(cuid())
-  start               DateTime
-  end                 DateTime
-  staffings           Staffing[]
-  staff_required      Staff_Required[]
+  id             String           @id @default(cuid())
+  start          DateTime
+  end            DateTime
+  staffings      Staffing[]
+  staff_required Staff_Required[]
 }
 
 model Staffing {
-  id                  String          @id @default(cuid())
-  shift_id            String
-  shift_type_id       String
-  user_id             String
-  shift               Shift           @relation(fields: [shift_id], references: [id])
-  shift_type          Shift_Type      @relation(fields: [shift_type_id], references: [id])
-  user                User            @relation(fields: [user_id], references: [id])
+  id            String     @id @default(cuid())
+  shift_id      String
+  shift_type_id String
+  user_id       String
+  shift         Shift      @relation(fields: [shift_id], references: [id])
+  shift_type    Shift_Type @relation(fields: [shift_type_id], references: [id])
+  user          User       @relation(fields: [user_id], references: [id])
 }
 
 model Staff_Required {
-  id                  String          @id @default(cuid())
-  amount              Int
-  shift_id            String
-  shift_type_id       String
-  shift               Shift           @relation(fields: [shift_id], references: [id])
-  shift_type          Shift_Type      @relation(fields: [shift_type_id], references: [id])
+  id            String     @id @default(cuid())
+  amount        Int
+  shift_id      String
+  shift_type_id String
+  shift         Shift      @relation(fields: [shift_id], references: [id])
+  shift_type    Shift_Type @relation(fields: [shift_type_id], references: [id])
 }
 
 model Shift_Type {
-  id                    String        @id @default(cuid())
-  name                  String
-  description           String
-  availability          Availability[]
-  staffings             Staffing[]
-  staff_required        Staff_Required[]
-  user_preferences      User_Preference[]
+  id               String            @id @default(cuid())
+  name             String
+  description      String
+  availability     Availability[]
+  staffings        Staffing[]
+  staff_required   Staff_Required[]
+  user_preferences User_Preference[]
 }

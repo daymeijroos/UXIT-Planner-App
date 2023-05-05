@@ -1,7 +1,7 @@
 import React from 'react';
-import { StaffingCard } from "../../components/overview-components/staffing-card";
+import { StaffingCard } from "../overview-components/staffing-card";
 import { api } from '../../utils/api';
-import { StaffingWithColleagues } from '../../types/StaffingWithColleagues';
+import type { StaffingWithColleagues } from '../../types/StaffingWithColleagues';
 import { useAutoAnimate } from '@formkit/auto-animate/react'
 
 interface ScheduleProps {
@@ -9,13 +9,13 @@ interface ScheduleProps {
   weekStart: Date;
 }
 
-export const Schedule = ({selectedDate, weekStart}: ScheduleProps) => {
+export const Schedule = ({ selectedDate, weekStart }: ScheduleProps) => {
 
   const [parent, enableAnimations] = useAutoAnimate({
     duration: 150,
   })
 
-  const staffings = api.staffing.getStaffing.useQuery({from: weekStart});
+  const staffings = api.staffing.getStaffing.useQuery({ from: weekStart });
 
   if (staffings.isLoading) {
     return <div>loading...</div>;
@@ -48,23 +48,23 @@ export const Schedule = ({selectedDate, weekStart}: ScheduleProps) => {
     date.setHours(0, 0, 0, 0);
     return date.getTime() === selectedDate.getTime();
   });
-  
+
 
   return (
     <div ref={parent} className='overflow-y-auto h-[70vh]'>
-    {
-      filteredStaffings.length === 0 ? (
-        <p className='text-center m-4'>Er zijn geen vrijwilligers ingepland op deze datum.</p>
-      ) : (
-        filteredStaffings.map((get: StaffingWithColleagues) => {
-          const date = new Date(get.shift.start);
-          date.setHours(0, 0, 0, 0);
-          if (date.getTime() === selectedDate.getTime()) {
-            return <StaffingCard staffing={get} key={get.shift_id}/>;
-          }
-        })
-      )
-    }
+      {
+        filteredStaffings.length === 0 ? (
+          <p className='text-center m-4'>Er zijn geen vrijwilligers ingepland op deze datum.</p>
+        ) : (
+          filteredStaffings.map((get: StaffingWithColleagues) => {
+            const date = new Date(get.shift.start);
+            date.setHours(0, 0, 0, 0);
+            if (date.getTime() === selectedDate.getTime()) {
+              return <StaffingCard staffing={get} key={get.shift_id} />;
+            }
+          })
+        )
+      }
     </div>
   );
 

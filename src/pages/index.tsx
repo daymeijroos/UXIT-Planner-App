@@ -1,7 +1,7 @@
-import { NavigationBar } from "../components/aria/navigation-bar";
-import { DateSwitcher } from "../components/aria/date-switcher";
-import { Schedule } from "../components/aria/schedule";
-import { Button } from "../components/aria/button";
+import { NavigationBar } from "../components/elements/navigation-bar";
+import { DateSwitcher } from "../components/elements/date-switcher";
+import { Schedule } from "../components/elements/schedule";
+import { Button } from "../components/atoms/button";
 import { Zap } from "react-feather";
 import { useEffect, useState } from "react";
 import { api } from "../utils/api";

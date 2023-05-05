@@ -1,4 +1,4 @@
-import { StaffingWithColleagues } from "../../types/StaffingWithColleagues";
+import type { StaffingWithColleagues } from "../../types/StaffingWithColleagues";
 import { formatDate } from "../../utils/date/formatDate";
 import { formatTime } from "../../utils/date/formatTime";
 import { formatShiftStaffList } from "../../utils/formatShiftStaffList";
@@ -22,7 +22,7 @@ export function StaffingCard(props: StaffingCardProps) {
           `${formatDate(props.staffing.shift.start)[0].toUpperCase()}${formatDate(props.staffing.shift.start).slice(1)}`
         }
       </p>
-      <br/>
+      <br />
       <p>
         {
           formatShiftStaffList(props.staffing)

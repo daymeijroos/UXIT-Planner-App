@@ -1,4 +1,4 @@
-import { Button, ButtonProps } from "./button";
+import { Button, type ButtonProps } from "./button";
 
 interface CardProps {
   className?: string

@@ -3,6 +3,7 @@ import { api } from "../utils/api";
 import { useRouter } from "next/router";
 
 import { CornerUpLeft } from "react-feather";
+import { NavigationBar } from "../components/elements/navigation-bar";
 
 const Admin = () => {
   const router = useRouter();
@@ -39,9 +40,20 @@ const Admin = () => {
   return (
     <div className="flex flex-col items-center justify-center w-full h-full">
       <div className="flex m-4 space-x-4">
-        <Button onPress={() => { void router.push("/") }} title="Terug" aria-label="Terug"><CornerUpLeft /></Button>
         <Button color="success" onPress={() => { void generateSchedule() }} className="w-max">Genereer Rooster</Button>
         <Button color="error" onPress={() => { void removeStaffings() }} className="w-max">Verwijder Rooster</Button>
+      </div>
+      <div className="flex-col m-4 space-x-4">
+        <Button className="w-max">Handmatige wijzigingen</Button>
+      </div>
+      <div className="flex-col m-4 space-x-4">
+        <Button className="w-max">Vrijwilligers beheren</Button>
+      </div>
+      <div className="flex-col m-4 space-x-4">
+        <Button className="w-max">Uitbreiden taken</Button>
+      </div>
+      <div className="flex-col m-4 space-x-4">
+        <Button className="w-max">Nieuw account maken</Button>
       </div>
       {/*<p>*/}
       {/*  {unfulfilledShifts.data?.length} unfulfilled shifts*/}
@@ -58,6 +70,7 @@ const Admin = () => {
           </div>
         );
       })}
+      <NavigationBar />
     </div>
   );
 };

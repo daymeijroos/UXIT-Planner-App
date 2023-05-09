@@ -26,7 +26,7 @@ export const NavigationBar = () => {
       <Button color='success' onPress={() => router.push('/')} aria-label="Kalender" title='Kalender'>
         <Calendar className='stroke-2' color='#000' size="24" width="30" height="30" />
       </Button>
-      <Button onPress={() => router.push('/testGenerate')} aria-label="Account" title='Account'>
+      <Button onPress={() => router.push('/admin')} aria-label="Account" title='Account'>
         <User className='stroke-2' color='#000' size="24" width="30" height="30" />
       </Button>
     </nav>

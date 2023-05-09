@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 
 import { CornerUpLeft } from "react-feather";
 
-const TestGenerate = () => {
+const Admin = () => {
   const router = useRouter();
 
   const { mutateAsync: generateSchedule } = api.schedule.generate.useMutation({
@@ -50,4 +50,4 @@ const TestGenerate = () => {
   );
 };
 
-export default TestGenerate;
+export default Admin;

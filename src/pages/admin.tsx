@@ -29,7 +29,7 @@ const Admin = () => {
     <div className="flex flex-col items-center justify-center w-full h-full">
       <div className="flex m-4 space-x-4">
         <Button onPress={() => { void router.push("/") }} title="Terug" aria-label="Terug"><CornerUpLeft /></Button>
-        <Button color="success" onPress={() => { void generateSchedule() }} className="w-max">Generate Schedule</Button>
+        <Button color="success" onPress={() => { void generateSchedule() }} className="w-max">Genereer Rooster</Button>
       </div>
       <p>
         {unfulfilledShifts.data?.length} unfulfilled shifts

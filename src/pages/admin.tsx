@@ -43,10 +43,10 @@ const Admin = () => {
         <Button color="success" onPress={() => { void generateSchedule() }} className="w-max">Genereer Rooster</Button>
         <Button color="error" onPress={() => { void removeStaffings() }} className="w-max">Verwijder Rooster</Button>
       </div>
-      <p>
-        {unfulfilledShifts.data?.length} unfulfilled shifts
-        total staff required {unfulfilledShifts.data?.reduce((acc, curr) => acc + curr!.amount_required, 0)}
-      </p>
+      {/*<p>*/}
+      {/*  {unfulfilledShifts.data?.length} unfulfilled shifts*/}
+      {/*  total staff required {unfulfilledShifts.data?.reduce((acc, curr) => acc + curr!.amount_required, 0)}*/}
+      {/*</p>*/}
       {unfulfilledShifts.data?.map((request) => {
         const requestResolved = request
         return (

@@ -1,13 +1,8 @@
 import { Button } from "../components/atoms/button";
 import { api } from "../utils/api";
-import { useRouter } from "next/router";
-
-import { CornerUpLeft } from "react-feather";
 import { NavigationBar } from "../components/elements/navigation-bar";
 
 const Admin = () => {
-  const router = useRouter();
-
   const { mutateAsync: generateSchedule } = api.schedule.generate.useMutation({
     onSuccess: () => {
       context.schedule.getUnfulfilledShifts.invalidate().catch((error) => {
@@ -39,26 +34,16 @@ const Admin = () => {
 
   return (
     <div className="flex flex-col items-center justify-center w-full h-full">
-      <div className="flex m-4 space-x-4">
-        <Button color="success" onPress={() => { void generateSchedule() }} className="w-max">Genereer Rooster</Button>
-        <Button color="error" onPress={() => { void removeStaffings() }} className="w-max">Verwijder Rooster</Button>
+      <div className="flex mt-4 space-x-4 justify-center">
+        <Button color="success" onPress={() => { void generateSchedule() }} className="w-full">Genereer Rooster</Button>
+        <Button color="error" onPress={() => { void removeStaffings() }} className="w-full">Verwijder Rooster</Button>
       </div>
-      <div className="flex-col m-4 space-x-4">
-        <Button className="w-max">Handmatige wijzigingen</Button>
+      <div className="flex-col m-4 space-y-4 justify-center">
+        <Button className="w-full">Handmatige aanpassingen</Button>
+        <Button className="w-full">Vrijwilligers beheren</Button>
+        <Button className="w-full">Uitbreiden taken</Button>
+        <Button className="w-full">Accounts beheren</Button>
       </div>
-      <div className="flex-col m-4 space-x-4">
-        <Button className="w-max">Vrijwilligers beheren</Button>
-      </div>
-      <div className="flex-col m-4 space-x-4">
-        <Button className="w-max">Uitbreiden taken</Button>
-      </div>
-      <div className="flex-col m-4 space-x-4">
-        <Button className="w-max">Nieuw account maken</Button>
-      </div>
-      {/*<p>*/}
-      {/*  {unfulfilledShifts.data?.length} unfulfilled shifts*/}
-      {/*  total staff required {unfulfilledShifts.data?.reduce((acc, curr) => acc + curr!.amount_required, 0)}*/}
-      {/*</p>*/}
       {unfulfilledShifts.data?.map((request) => {
         const requestResolved = request
         return (

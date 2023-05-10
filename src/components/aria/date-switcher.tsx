@@ -1,6 +1,7 @@
 import { useButton } from "@react-aria/button";
 import { useFocusRing } from "@react-aria/focus";
 import React, { useState } from "react";
+import { getCurrentWeekNumber } from "../../utils/date";
 
 interface NavigationButtonProps {
   day: string;
@@ -38,42 +39,72 @@ const DateSwitcherButton = (props: NavigationButtonProps) => {
   );
 };
 
-interface DateSwitcherProps {
+type DateSwitcherProps = {
   setSelectedDate: (date: Date) => void;
   selectedDate: Date;
 }
 
-export const DateSwitcher = ({setSelectedDate, selectedDate}: DateSwitcherProps) => {
-  const tuesday = new Date(new Date('2023-04-18T00:00:00Z').setHours(0, 0, 0, 0))
-  const wednesday = new Date(new Date('2023-04-19T00:00:00Z').setHours(0, 0, 0, 0))
-  const thursday = new Date(new Date('2023-04-20T00:00:00Z').setHours(0, 0, 0, 0))
-  const friday = new Date(new Date('2023-04-21T00:00:00Z').setHours(0, 0, 0, 0))
-  const saturday = new Date(new Date('2023-04-22T00:00:00Z').setHours(0, 0, 0, 0))
-  const sunday = new Date(new Date('2023-04-23T00:00:00Z').setHours(0, 0, 0, 0))
 
-  
+export const DateSwitcher = ({ setSelectedDate, selectedDate }: DateSwitcherProps) => {
+  const [weekNumber, setWeekNumber] = useState(getCurrentWeekNumber());
+  const daysOfWeek = getDaysOfWeek(weekNumber);
+
+
+  function getCurrentWeekNumber() {
+    const today = new Date();
+    const firstDayOfTheYear = new Date(today.getFullYear(), 0, 1);
+    const daysPassedOfTheYear = (today.getTime() - firstDayOfTheYear.getTime()) / 86400000;
+    return Math.ceil((daysPassedOfTheYear + firstDayOfTheYear.getDay()) / 7);
+  }
+
+  function getDaysOfWeek(weekNumber: number) {
+    const year = new Date().getFullYear();
+    const firstDayOfWeek = new Date(year, 0, 1 + (weekNumber - 1) * 7);
+    const daysOfWeek: Date[] = [];
+    for (let i = 0; i < 7; i++) {
+      const date = new Date(firstDayOfWeek.getTime() - 0.01);
+      console.log(firstDayOfWeek.getTime())
+      date.setDate(date.getDate() + i);
+      daysOfWeek.push(date);
+    }
+    console.log(daysOfWeek);
+    return daysOfWeek;
+  }
+
+  function clickPreviousWeek() {
+    setWeekNumber(weekNumber - 1);
+    selectedDate.setDate(selectedDate.getDate() - 7);
+
+  }
+
+  function clickNextWeek() {
+    setWeekNumber(weekNumber + 1);
+    selectedDate.setDate(selectedDate.getDate() + 7);
+  }
+
   return (
     <nav className="bg-white py-2 px-4 rounded-lg flex flex-col space-x-2 justify-center">
       <div className="flex items-center justify-between border-black border-2 my-2">
-        <button
-          className="text-black rounded-full w-8 h-8 flex items-center justify-center focus:outline-none">
-          <span className="sr-only">Previous week</span>
-          &lt;
-        </button>
-        <div className="font-bold text-xl">{`Week 16`}</div>
-        <button
-          className="text-black rounded-full w-8 h-8 flex items-center justify-center focus:outline-none">
-          <span className="sr-only">Next week</span>
-          &gt;
-        </button>
+          <button
+            className="text-black rounded-full w-8 h-8 flex items-center justify-center focus:outline-none"
+            onClick={clickPreviousWeek}>&lt;
+            <span className="sr-only">Previous week</span>
+          </button>
+          <div className="font-bold text-xl">Week {weekNumber}</div>
+          <button className="text-black rounded-full w-8 h-8 flex items-center justify-center focus:outline-none" onClick={clickNextWeek}>&gt;
+            <span className="sr-only">Next week</span>
+          </button>
       </div>
       <div className="flex space-x-2 justify-center">
-        <DateSwitcherButton day="Dinsdag" date={"2023-04-18"} onClick={() => setSelectedDate(tuesday)} isSelected={selectedDate.getTime() === tuesday.getTime()} />
-        <DateSwitcherButton day="Woensdag" date={"2023-04-19"} onClick={() => setSelectedDate(wednesday)} isSelected={selectedDate.getTime() === wednesday.getTime()} />
-        <DateSwitcherButton day="Donderdag" date={"2023-04-20"} onClick={() => setSelectedDate(thursday)} isSelected={selectedDate.getTime() === thursday.getTime()} />
-        <DateSwitcherButton day="Vrijdag" date={"2023-04-21"} onClick={() => setSelectedDate(friday)} isSelected={selectedDate.getTime() === friday.getTime()} />
-        <DateSwitcherButton day="Zaterdag" date={"2023-04-22"} onClick={() => setSelectedDate(saturday)} isSelected={selectedDate.getTime() === saturday.getTime()} />
-        <DateSwitcherButton day="Zondag" date={"2023-04-23"} onClick={() => setSelectedDate(sunday)} isSelected={selectedDate.getTime() === sunday.getTime()} />
+        {daysOfWeek.map((date) => (
+          <DateSwitcherButton
+            key={date.toISOString().slice(0, 10)}
+            day={date.toLocaleString('default', { weekday: 'long' })}
+            date={date.toISOString().slice(0, 10)}
+            onClick={() => setSelectedDate(date)}
+            isSelected={selectedDate.getTime() === date.getTime()}
+          />
+        ))}
       </div>
     </nav>
   );

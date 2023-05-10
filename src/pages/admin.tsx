@@ -34,15 +34,34 @@ const Admin = () => {
 
   return (
     <div className="flex flex-col items-center justify-center w-full h-full">
+      <h1 className="mt-4 text-3xl font-bold text-center">Admin paneel</h1>
+      <h2 className="mt-4 text-xl font-bold text-center">Rooster</h2>
       <div className="flex mt-4 space-x-4 justify-center">
-        <Button color="success" onPress={() => { void generateSchedule() }} className="w-full">Genereer Rooster</Button>
-        <Button color="error" onPress={() => { void removeStaffings() }} className="w-full">Verwijder Rooster</Button>
+        <Button color="success" onPress={() => { void generateSchedule() }}>Genereer Rooster</Button>
+        <Button color="error" onPress={() => { void removeStaffings() }}>Verwijder Rooster</Button>
       </div>
-      <div className="flex-col m-4 space-y-4 justify-center">
-        <Button className="w-full">Handmatige aanpassingen</Button>
-        <Button className="w-full">Vrijwilligers beheren</Button>
-        <Button className="w-full">Uitbreiden taken</Button>
-        <Button className="w-full">Accounts beheren</Button>
+      <div className="flex mt-4 space-x-4 justify-center">
+        <Button>Handmatige aanpassingen</Button>
+        <Button>Openingsweekend aangeven</Button>
+      </div>
+      <div className="flex-col items-center m-4 space-y-4 justify-center">
+        <h2 className="mt-4 text-xl font-bold text-center">Vrijwilligers</h2>
+        <div className="flex mt-4 space-x-4 justify-center">
+          <Button>Voorkeur aanpassen</Button>
+          <Button>Beschikbaarheid aanpassen</Button>
+        </div>
+        <div className="flex mt-4 space-x-4 justify-center">
+          <Button>Werkuren aanpassen</Button>
+          <Button>Verlof aangeven</Button>
+        </div>
+        <Button>Inwerken inroosteren</Button>
+        <h2 className="mt-4 text-xl font-bold text-center">Uitbreiding</h2>
+        <Button>Nieuw shifttype toevoegen</Button>
+        <h2 className="mt-4 text-xl font-bold text-center">Accounts beheren</h2>
+        <div className="flex mt-4 space-x-4 justify-center">
+          <Button>Rollenbeheer</Button>
+          <Button>Account aanmaken</Button>
+        </div>
       </div>
       {unfulfilledShifts.data?.map((request) => {
         const requestResolved = request

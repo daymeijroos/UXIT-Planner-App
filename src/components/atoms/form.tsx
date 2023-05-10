@@ -77,9 +77,9 @@ export function FormPreset() {
       <div className="max-w-md mx-auto p-4">
         <h1 className="text-2xl font-bold text-gray-800 mb-4">Inwerken vrijwilliger</h1>
         <form onSubmit={handleSubmit}>
-          <TextField label="Voornaam" error={formErrors.firstName} onChange={handleFirstNameChange}></TextField>
-          <TextField label="Achternaam" error={formErrors.lastName} onChange={handleLastNameChange}></TextField>
-          <TextField label="E-mail" type= "email" error={formErrors.email} onChange={handleEmailChange}></TextField>
+          <TextField label="Voornaam" error={formErrors.firstName} onChange={handleFirstNameChange} placeholder="Jan"></TextField>
+          <TextField label="Achternaam" error={formErrors.lastName} onChange={handleLastNameChange} placeholder="Jansen"></TextField>
+          <TextField label="E-mail" type= "email" error={formErrors.email} onChange={handleEmailChange} placeholder="voorbeeld@voorbeeld.com"></TextField>
         <Button type="submit">Indienen</Button>
       </form>
       </div>

@@ -60,7 +60,7 @@ const Admin = () => {
         <h2 className="mt-4 text-xl font-bold text-center">Accounts beheren</h2>
         <div className="sm:flex flex-wrap mt-4 space-x-4 max-sm:space-x-0 justify-center">
           <Button className="w-64">Account aanmaken</Button>
-          <Button className="w-64 max-sm:mt-4 max-sm:mb-20">Rollenbeheer</Button>
+          <Button className="w-64 max-sm:mt-4 max-sm:mb-24">Rollenbeheer</Button>
         </div>
       </div>
   {unfulfilledShifts.data?.map((request) => {

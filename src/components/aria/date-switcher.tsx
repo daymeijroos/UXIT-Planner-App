@@ -1,7 +1,7 @@
 import { useButton } from "@react-aria/button";
 import { useFocusRing } from "@react-aria/focus";
 import React, { useState } from "react";
-import { getCurrentWeekNumber } from "../../utils/date";
+import { getCurrentWeekNumber } from "../../../shared/date/dateHelperFunctions";
 
 interface NavigationButtonProps {
   day: string;
@@ -46,29 +46,30 @@ type DateSwitcherProps = {
 
 
 export const DateSwitcher = ({ setSelectedDate, selectedDate }: DateSwitcherProps) => {
-  const [weekNumber, setWeekNumber] = useState(getCurrentWeekNumber());
-  const daysOfWeek = getDaysOfWeek(weekNumber);
+  const [weekNumber, setWeekNumber] = useState<number>(getCurrentWeekNumber(new Date()));
+  const daysOfWeek = getDaysOfTheWeek(weekNumber);
 
 
-  function getCurrentWeekNumber() {
-    const today = new Date();
-    const firstDayOfTheYear = new Date(today.getFullYear(), 0, 1);
-    const daysPassedOfTheYear = (today.getTime() - firstDayOfTheYear.getTime()) / 86400000;
-    return Math.ceil((daysPassedOfTheYear + firstDayOfTheYear.getDay()) / 7);
+  function getFirstDayOfTheWeek(year:number, weekNumber: number) {
+    const firstDayOfTheYear = new Date(year, 0, 1);
+    const daysToFirstDayOfWeek = (weekNumber - 1) * 7 - firstDayOfTheYear.getDay() + 1;
+
+    return new Date(year, 0, daysToFirstDayOfWeek);
   }
 
-  function getDaysOfWeek(weekNumber: number) {
+  function getDaysOfTheWeek(weekNumber: number): Date[] {
     const year = new Date().getFullYear();
-    const firstDayOfWeek = new Date(year, 0, 1 + (weekNumber - 1) * 7);
-    const daysOfWeek: Date[] = [];
-    for (let i = 0; i < 7; i++) {
-      const date = new Date(firstDayOfWeek.getTime() - 0.01);
-      console.log(firstDayOfWeek.getTime())
-      date.setDate(date.getDate() + i);
-      daysOfWeek.push(date);
+    const firstDayOfTheWeek = getFirstDayOfTheWeek(year, weekNumber);
+    const daysOfTheWeek: Date[] = [];
+
+    const daysInAWeek = 7;
+    const millisecondsInADay = 24 * 60 * 60 * 1000;
+
+    for (let i = 0; i < daysInAWeek; i++) {
+      const date = new Date(firstDayOfTheWeek.getTime() + (i + 1) * millisecondsInADay);
+      daysOfTheWeek.push(date);
     }
-    console.log(daysOfWeek);
-    return daysOfWeek;
+    return daysOfTheWeek;
   }
 
   function clickPreviousWeek() {
@@ -85,15 +86,15 @@ export const DateSwitcher = ({ setSelectedDate, selectedDate }: DateSwitcherProp
   return (
     <nav className="bg-white py-2 px-4 rounded-lg flex flex-col space-x-2 justify-center">
       <div className="flex items-center justify-between border-black border-2 my-2">
-          <button
-            className="text-black rounded-full w-8 h-8 flex items-center justify-center focus:outline-none"
-            onClick={clickPreviousWeek}>&lt;
-            <span className="sr-only">Previous week</span>
-          </button>
-          <div className="font-bold text-xl">Week {weekNumber}</div>
-          <button className="text-black rounded-full w-8 h-8 flex items-center justify-center focus:outline-none" onClick={clickNextWeek}>&gt;
-            <span className="sr-only">Next week</span>
-          </button>
+        <button
+          className="text-black rounded-full w-8 h-8 flex items-center justify-center focus:outline-none"
+          onClick={clickPreviousWeek}>&lt;
+          <span className="sr-only">Previous week</span>
+        </button>
+        <div className="font-bold text-xl">Week {weekNumber}</div>
+        <button className="text-black rounded-full w-8 h-8 flex items-center justify-center focus:outline-none" onClick={clickNextWeek}>&gt;
+          <span className="sr-only">Next week</span>
+        </button>
       </div>
       <div className="flex space-x-2 justify-center">
         {daysOfWeek.map((date) => (

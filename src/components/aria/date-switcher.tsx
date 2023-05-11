@@ -76,15 +76,27 @@ export const DateSwitcher = ({ setSelectedDate, selectedDate }: DateSwitcherProp
     setWeekNumber(weekNumber - 1);
     selectedDate.setDate(selectedDate.getDate() - 7);
 
+    if (weekNumber === 1) {
+      setWeekNumber(52);
+      selectedDate.setFullYear(selectedDate.getFullYear());
+    }
   }
 
   function clickNextWeek() {
     setWeekNumber(weekNumber + 1);
     selectedDate.setDate(selectedDate.getDate() + 7);
+
+    if (weekNumber === 52) {
+      setWeekNumber(1);
+      selectedDate.setFullYear(selectedDate.getFullYear());
+    }
   }
 
   return (
     <nav className="bg-white py-2 px-4 rounded-lg flex flex-col space-x-2 justify-center">
+      <div className="text-center">
+        <h2 className="font-bold text-2xl">{selectedDate.getFullYear()}</h2>
+      </div>
       <div className="flex items-center justify-between border-black border-2 my-2">
         <button
           className="text-black rounded-full w-8 h-8 flex items-center justify-center focus:outline-none"

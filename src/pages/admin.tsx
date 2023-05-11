@@ -33,7 +33,7 @@ const Admin = () => {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center w-full h-full">
+    <div className="flex flex-col items-center justify-center">
       <h1 className="mt-4 text-3xl font-bold text-center">Admin paneel</h1>
       <h2 className="mt-4 text-xl font-bold text-center">Rooster</h2>
       <div className="sm:flex flex-wrap mt-4 space-x-4 max-sm:space-x-0 justify-center">
@@ -44,7 +44,7 @@ const Admin = () => {
         <Button className="w-64">Handmatige aanpassingen</Button>
         <Button className="w-64 max-sm:mt-4">Openingsweekend aangeven</Button>
       </div>
-      <div className="sm:flex flex-col items-center m-4 space-y-4 justify-center">
+      <div className="flex-col items-center m-4 space-y-4 justify-center">
         <h2 className="text-xl font-bold text-center">Vrijwilligers</h2>
         <div className="sm:flex flex-wrap mt-4 space-x-4 max-sm:space-x-0 justify-center">
           <Button className="w-64">Voorkeur aanpassen</Button>
@@ -54,17 +54,13 @@ const Admin = () => {
           <Button className="w-64">Werkuren aanpassen</Button>
           <Button className="w-64 max-sm:mt-4">Verlof aangeven</Button>
         </div>
-        <div className="justify-center">
-          <Button className="w-64">Inwerken inroosteren</Button>
-        </div>
+        <Button className="w-64">Inwerken inroosteren</Button>
         <h2 className="mt-4 text-xl font-bold text-center">Uitbreiding</h2>
-        <div className="justify-center">
-          <Button className="w-64">Nieuw shifttype toevoegen</Button>
-        </div>
+        <Button className="w-64">Nieuw shifttype toevoegen</Button>
         <h2 className="mt-4 text-xl font-bold text-center">Accounts beheren</h2>
         <div className="sm:flex flex-wrap mt-4 space-x-4 max-sm:space-x-0 justify-center">
-          <Button className="w-64">Rollenbeheer</Button>
-          <Button className="w-64 max-sm:mt-4 max-sm:mb-20">Account aanmaken</Button>
+          <Button className="w-64">Account aanmaken</Button>
+          <Button className="w-64 max-sm:mt-4 max-sm:mb-20">Rollenbeheer</Button>
         </div>
       </div>
   {unfulfilledShifts.data?.map((request) => {

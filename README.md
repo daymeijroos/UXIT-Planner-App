@@ -4,7 +4,7 @@ You're gonna need an .env file. You can copy the example file and fill in the bl
 
 Run `npm install` to install all the dependencies.
 
-You will also need to push and seed the database. You can do this by running `npm seed`.
+You will also need to push and seed the database. You can do this by running `npm run seed`.
 
 After that you can run the project in developer mode with `npm run dev`.
 
@@ -19,6 +19,8 @@ After that you can run the project in developer mode with `npm run dev`.
 - [React-Aria](https://react-spectrum.adobe.com/react-aria/getting-started.html)
 - [Tailwind](https://tailwindcss.com/docs)
 - [AutoAnimate](https://auto-animate.formkit.com/#usage)
+- [React-feather](https://github.com/feathericons/react-feather#readme)
+  - [Icon names](https://feathericons.com/)
 
 
 

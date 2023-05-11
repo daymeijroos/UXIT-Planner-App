@@ -1,5 +1,5 @@
 import { signIn, signOut, useSession } from "next-auth/react";
-import { Button } from "../aria/button";
+import { Button } from "../atoms/button";
 
 const LoginExample: React.FC = () => {
   const { data: sessionData } = useSession();

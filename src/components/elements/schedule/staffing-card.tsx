@@ -1,7 +1,7 @@
-import type { StaffingWithColleagues } from "../../types/StaffingWithColleagues";
-import { formatDate } from "../../utils/date/formatDate";
-import { formatTime } from "../../utils/date/formatTime";
-import { formatShiftStaffList } from "../../utils/formatShiftStaffList";
+import type { StaffingWithColleagues } from "../../../types/StaffingWithColleagues";
+import { formatDate } from "../../../utils/date/formatDate";
+import { formatTime } from "../../../utils/date/formatTime";
+import { formatShiftStaffList } from "../../../utils/formatShiftStaffList";
 
 interface StaffingCardProps {
   staffing: StaffingWithColleagues

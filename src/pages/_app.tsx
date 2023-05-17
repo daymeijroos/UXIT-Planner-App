@@ -4,6 +4,7 @@ import type { AppType } from 'next/app'
 import { type Session } from "next-auth";
 import { api } from '../utils/api';
 import { SessionProvider } from 'next-auth/react';
+import { AssertLogin } from '../components/elements/assert-login';
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
@@ -41,8 +42,9 @@ const MyApp: AppType<{ session: Session | null }> = ({
         <link rel="apple-touch-icon" href="/apple-icon.png" />
         <meta name="theme-color" content="#5FC9BE" />
       </Head>
-      <Component {...pageProps} />
-
+      <AssertLogin enabled>
+        <Component {...pageProps} />
+      </AssertLogin>
     </SessionProvider>
   )
 }

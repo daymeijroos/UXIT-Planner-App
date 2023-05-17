@@ -42,7 +42,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
         <link rel="apple-touch-icon" href="/apple-icon.png" />
         <meta name="theme-color" content="#5FC9BE" />
       </Head>
-      <AssertLogin enabled>
+      <AssertLogin enabled={process.env.NODE_ENV !== "development"}>
         <Component {...pageProps} />
       </AssertLogin>
     </SessionProvider>

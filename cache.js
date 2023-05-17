@@ -153,13 +153,6 @@ module.exports = {
         return true
       },
       handler: 'NetworkOnly',
-      options: {
-        cacheName: 'others',
-        expiration: {
-          maxEntries: 32,
-          maxAgeSeconds: 1// 24 hours
-        }
-      }
     },
     {
       urlPattern: ({ url }) => {

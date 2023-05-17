@@ -1,6 +1,5 @@
 import { signIn, useSession } from "next-auth/react";
 import React from "react";
-import { Button } from "../atoms/button";
 import { LoadingMessage } from "./loading-message";
 import { useRouter } from "next/router";
 
@@ -8,7 +7,6 @@ export function AssertLogin({ children, enabled }: { children: React.ReactNode, 
   const router = useRouter();
   const { data: sessionData } = useSession();
   console.log(sessionData);
-
   if (sessionData === undefined) {
     return (
       <div className="min-h-screen">
@@ -16,8 +14,8 @@ export function AssertLogin({ children, enabled }: { children: React.ReactNode, 
       </div>
     );
   }
-  //exclude every path that is starts with /auth/... from the login check
-  if (!sessionData?.user && enabled && !router.pathname.startsWith("/auth/")) {
+  if (sessionData === null && enabled && !router.pathname.startsWith("/auth/")) {
+    console.log("redirecting");
     signIn();
   }
   return <>{children}</>;

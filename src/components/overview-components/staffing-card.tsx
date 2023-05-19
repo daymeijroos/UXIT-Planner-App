@@ -2,14 +2,24 @@ import type { StaffingWithColleagues } from "../../types/StaffingWithColleagues"
 import { formatDate } from "../../utils/date/formatDate";
 import { formatTime } from "../../utils/date/formatTime";
 import { formatShiftStaffList } from "../../utils/formatShiftStaffList";
+import {Button} from "../atoms/button";
+import {api} from "../../utils/api";
+import {useSession} from "next-auth/react";
+
 
 interface StaffingCardProps {
   staffing: StaffingWithColleagues
 }
 
 const cardStyle = `border-2 border-black py-4 px-4 m-4 text-black bg-white`;
+const showButton = false
+
 
 export function StaffingCard(props: StaffingCardProps) {
+    const { data: sessionData } = useSession();
+    const userId = sessionData?.user
+
+
   return (
     <div className={cardStyle}>
       <h1 className="text-2xl font-bold">
@@ -28,6 +38,9 @@ export function StaffingCard(props: StaffingCardProps) {
           formatShiftStaffList(props.staffing)
         }
       </p>
+        <div>
+            {showButton && <Button>Afmelden</Button>}
+        </div>
     </div>
   );
 }

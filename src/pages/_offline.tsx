@@ -1,4 +1,4 @@
-import { Card } from "../components/aria/card";
+import { Card } from "../components/atoms/card";
 import Image from "next/image";
 
 export default function Offline() {

@@ -137,7 +137,7 @@ const enforceRole = (role: string) => {
    */
   return enforceUserIsAuthed.unstable_pipe(({ ctx, next }) => {
     if (ctx.session?.user?.role !== role) {
-      throw new TRPCError({ code: "UNAUTHORIZED" });
+      throw new TRPCError({ code: "FORBIDDEN" });
     }
     return next();
   });

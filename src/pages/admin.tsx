@@ -1,8 +1,9 @@
 import { Button } from "../components/atoms/button";
 import { api } from "../utils/api";
 import { NavigationBar } from "../components/elements/navigation-bar";
+import { LoadingMessage } from "../components/elements/loading-message";
 
-const Admin = () => {
+export default function Admin() {
   const { mutateAsync: generateSchedule } = api.schedule.generate.useMutation({
     onSuccess: () => {
       context.schedule.getUnfulfilledShifts.invalidate().catch((error) => {
@@ -24,8 +25,8 @@ const Admin = () => {
     }
   });
 
-  if (unfulfilledShifts.isLoading) {
-    return <div>loading...</div>;
+  if (unfulfilledShifts.isLoading || status === "loading") {
+    return <LoadingMessage />;
   }
 
   if (unfulfilledShifts.error) {
@@ -37,8 +38,8 @@ const Admin = () => {
       <h1 className="mt-4 text-3xl font-bold text-center">Admin paneel</h1>
       <h2 className="mt-4 text-xl font-bold text-center">Rooster</h2>
       <div className="sm:flex flex-wrap mt-4 space-x-4 max-sm:space-x-0 justify-center">
-        <Button color="success" onPress={() => { void generateSchedule(); }} className="w-64">Genereer Rooster</Button>
-        <Button color="error" onPress={() => { void removeStaffings(); }} className="w-64 max-sm:mt-4">Verwijder Rooster</Button>
+        <Button color="success" onPress={() => { generateSchedule() }} className="w-64">Genereer Rooster</Button>
+        <Button color="error" onPress={() => { removeStaffings() }} className="w-64 max-sm:mt-4">Verwijder Rooster</Button>
       </div>
       <div className="sm:flex flex-wrap mt-4 space-x-4 max-sm:space-x-0 justify-center">
         <Button className="w-64">Handmatige aanpassingen</Button>
@@ -63,7 +64,7 @@ const Admin = () => {
           <Button className="w-64 max-sm:mt-4 max-sm:mb-24">Rollenbeheer</Button>
         </div>
       </div>
-  {unfulfilledShifts.data?.map((request) => {
+      {unfulfilledShifts.data?.map((request) => {
         const requestResolved = request;
         return (
           <div key={requestResolved?.shift_id}>
@@ -78,5 +79,3 @@ const Admin = () => {
     </div>
   );
 };
-
-export default Admin;

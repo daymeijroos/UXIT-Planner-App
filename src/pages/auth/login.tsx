@@ -16,14 +16,14 @@ export async function getServerSideProps() {
   };
 }
 
-function signin({ providers, csrfToken }: { providers: Provider[], csrfToken: string }) {
+export default function login({ providers, csrfToken }: { providers: Provider[], csrfToken: string }) {
   const router = useRouter();
   const { error } = router.query;
 
   return (
-    <div className="flex flex-col items-center justify-center gap-4">
+    <div className="flex flex-col items-center justify-center gap-4 min-h-screen">
       <Image src="/images/logo_linework.svg" alt="Logo" width={200} height={200} />
-      <h1 className="text-5xl font-bold text-teal">Sign in</h1>
+      <h1 className="text-5xl font-bold text-teal">Log in</h1>
       <div className="flex flex-col items-end">
         {Object.values(providers).map((provider) => {
           if (provider.name === "Email") {
@@ -46,8 +46,8 @@ function signin({ providers, csrfToken }: { providers: Provider[], csrfToken: st
 function emailSignIn(csrfToken: string, error?: boolean) {
   return (
     <form onSubmit={submitFunction} key="email">
-      <TextField type="email" id="email" name="email" label="Email Adress" placeholder="john@deere.nl" errorMessage={error ? "Email sign-in failed. Please try again." : undefined} />
-      <Button type="submit" fillWidth>Sign in with Email</Button>
+      <TextField type="email" id="email" name="email" label="E-mailadres" placeholder="john@deere.nl" errorMessage={error ? "Email sign-in failed. Please try again." : undefined} />
+      <Button type="submit" fillWidth>Log in met Email</Button>
     </form>
   )
 }
@@ -60,5 +60,3 @@ const submitFunction = async (event: FormEvent<HTMLFormElement>) => {
   const email = target.email.value;
   const response = await signIn("email", { email });
 };
-
-export default signin;

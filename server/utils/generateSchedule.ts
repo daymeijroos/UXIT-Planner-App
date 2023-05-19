@@ -60,13 +60,15 @@ const getShifts = async (fromDate?: Date, toDate?: Date) => {
       }
     };
   }
-  return await prisma.shift.findMany({...dateParams, include: { 
-    staff_required: {
-      include: {
-        shift_type: true,
-      },
-    } 
-  }});
+  return await prisma.shift.findMany({
+    ...dateParams, include: {
+      staff_required: {
+        include: {
+          shift_type: true,
+        },
+      }
+    }
+  });
 }
 
 export interface UserExtended extends User {
@@ -132,7 +134,7 @@ const checkStaffRequired = async (staff_required: Staff_Required): Promise<numbe
 const reachedMaxStaffings = async (user: UserExtended, startDate: Date): Promise<boolean> => {
   const startDateSplit = SplitDate.fromDate(startDate);
   const maxStaffings = user.preference?.maxStaffings || 0;
-  const amountStaffed  = await prisma.staffing.count({
+  const amountStaffed = await prisma.staffing.count({
     where: {
       user_id: user.id,
       shift: {

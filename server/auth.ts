@@ -21,10 +21,10 @@ import { LoginLink } from "./mail-templates/login-link";
  **/
 declare module "next-auth" {
   interface Session extends DefaultSession {
-    user: {
+    user: DefaultSession["user"] & {
       id: string;
       role: string;
-    } & DefaultSession["user"];
+    };
   }
 
   // interface User {

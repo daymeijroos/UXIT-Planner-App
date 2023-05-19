@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { createTRPCRouter, publicProcedure, protectedProcedure } from "../trpc";
+import { createTRPCRouter, publicProcedure, restrictedProcedure } from "../trpc";
 import { generateSchedule } from "../../utils/generateSchedule";
 import { getUnfulfilledShifts } from "../../utils/getUnfulfilledShifts";
 
@@ -10,7 +10,7 @@ export const scheduleRouter = createTRPCRouter({
     .query(() => {
       return getUnfulfilledShifts()
     }),
-  generate: publicProcedure
+  generate: restrictedProcedure('ADMIN')
     .input(z.object({
       start_date: z.date(),
       end_date: z.date(),

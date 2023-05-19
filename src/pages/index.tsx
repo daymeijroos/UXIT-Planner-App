@@ -1,5 +1,5 @@
 import { NavigationBar } from "../components/elements/navigation-bar";
-import { DateSwitcher } from "../components/elements/date-switcher";
+import { DateSwitcher } from "../components/elements/date-switcher/date-switcher";
 import { Schedule } from "../components/elements/schedule";
 import { Button } from "../components/atoms/button";
 import { Zap } from "react-feather";

@@ -38,8 +38,8 @@ export default function Admin() {
       <h1 className="mt-4 text-3xl font-bold text-center">Admin paneel</h1>
       <h2 className="mt-4 text-xl font-bold text-center">Rooster</h2>
       <div className="sm:flex flex-wrap mt-4 space-x-4 max-sm:space-x-0 justify-center">
-        <Button color="success" onPress={() => { generateSchedule() }} className="w-64">Genereer Rooster</Button>
-        <Button color="error" onPress={() => { removeStaffings() }} className="w-64 max-sm:mt-4">Verwijder Rooster</Button>
+        <Button color="success" onPress={() => { void generateSchedule() }} className="w-64">Genereer Rooster</Button>
+        <Button color="error" onPress={() => { void removeStaffings() }} className="w-64 max-sm:mt-4">Verwijder Rooster</Button>
       </div>
       <div className="sm:flex flex-wrap mt-4 space-x-4 max-sm:space-x-0 justify-center">
         <Button className="w-64">Handmatige aanpassingen</Button>
@@ -78,4 +78,4 @@ export default function Admin() {
       <NavigationBar />
     </div>
   );
-};
+}

@@ -1,5 +1,4 @@
-import { getProviders, signIn, getSession, getCsrfToken } from "next-auth/react";
-import { SignInResponse } from "next-auth/client";
+import { getProviders, signIn, getCsrfToken } from "next-auth/react";
 import { Provider } from "next-auth/providers";
 import { TextField } from "../../components/atoms/text-field";
 import { FormEvent } from "react";
@@ -16,7 +15,7 @@ export async function getServerSideProps() {
   };
 }
 
-export default function login({ providers, csrfToken }: { providers: Provider[], csrfToken: string }) {
+export default function Login({ providers }: { providers: Provider[] }) {
   const router = useRouter();
   const { error } = router.query;
 
@@ -27,11 +26,11 @@ export default function login({ providers, csrfToken }: { providers: Provider[],
       <div className="flex flex-col items-end">
         {Object.values(providers).map((provider) => {
           if (provider.name === "Email") {
-            return emailSignIn(csrfToken, error === "EmailSignin");
+            return <EmailSignIn error={error === "EmailSignin"} key={provider.name} />;
           }
           return (
             <div key={provider.name}>
-              <Button onPress={() => signIn(provider.id)}>
+              <Button onPress={() => void signIn(provider.id)}>
                 Sign in with {provider.name}
               </Button>
             </div>
@@ -43,9 +42,9 @@ export default function login({ providers, csrfToken }: { providers: Provider[],
 }
 
 
-function emailSignIn(csrfToken: string, error?: boolean) {
+function EmailSignIn({ error }: { error?: boolean }) {
   return (
-    <form onSubmit={submitFunction} key="email">
+    <form onSubmit={void submitFunction}>
       <TextField type="email" id="email" name="email" label="E-mailadres" placeholder="john@deere.nl" errorMessage={error ? "Email sign-in failed. Please try again." : undefined} />
       <Button type="submit" fillWidth>Log in met Email</Button>
     </form>
@@ -58,5 +57,5 @@ const submitFunction = async (event: FormEvent<HTMLFormElement>) => {
     email: { value: string };
   };
   const email = target.email.value;
-  const response = await signIn("email", { email });
+  await signIn("email", { email });
 };

@@ -10,7 +10,7 @@ import { createTransport } from "nodemailer";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { env } from "../env/server.mjs";
 import { prisma } from "./db";
-import { Role, User } from "@prisma/client";
+import { Role } from "@prisma/client";
 import { LoginLink } from "./mail-templates/login-link";
 
 /**

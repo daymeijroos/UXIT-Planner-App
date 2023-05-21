@@ -136,7 +136,7 @@ const enforceRole = (role: string) => {
    * @See https://trpc.io/docs/faq#unstable"
    */
   return enforceUserIsAuthed.unstable_pipe(({ ctx, next }) => {
-    if (ctx.session?.user?.role !== role) {
+    if (ctx.session?.user?.role?.name !== role) {
       throw new TRPCError({ code: "FORBIDDEN" });
     }
     return next();

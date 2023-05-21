@@ -4,7 +4,6 @@ import { NextRequest, NextResponse } from "next/server";
 
 export default withAuth(
   function middleware(req: NextRequestWithAuth) {
-    console.log(`auth ${req.nextauth}`)
     if (
       !(isAuthPage(req) || isApiEndpoint(req) || isAuthenticated(req))
     ) {
@@ -17,7 +16,6 @@ export default withAuth(
   {
     callbacks: {
       authorized: ({ token }) => {
-        console.log(`token ${token}`)
         return !!token
       }
     }

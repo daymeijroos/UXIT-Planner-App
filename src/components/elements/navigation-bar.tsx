@@ -2,11 +2,8 @@ import React from "react";
 import { Bell, Calendar, User, Tool } from "react-feather";
 import { useRouter } from "next/navigation";
 import { Button } from "../atoms/button";
-import { api } from "../../utils/api";
 
 export const NavigationBar = () => {
-
-
   const router = useRouter();
   return (
     <nav className="fixed bottom-0 bg-white text-black py-3 px-6 flex items-center w-screen justify-center space-x-4">

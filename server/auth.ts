@@ -10,7 +10,7 @@ import { createTransport } from "nodemailer";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { env } from "../env/server.mjs";
 import { prisma } from "./db";
-import { User } from "@prisma/client";
+import { Role, User } from "@prisma/client";
 import { LoginLink } from "./mail-templates/login-link";
 
 /**
@@ -19,13 +19,33 @@ import { LoginLink } from "./mail-templates/login-link";
  * and keep type safety
  * @see https://next-auth.js.org/getting-started/typescript#module-augmentation
  **/
-declare module "next-auth" {
-  interface Session extends DefaultSession {
-    user: DefaultSession["user"] & {
-      id: string;
-      role: string;
-    };
+
+declare module "next-auth/jwt" {
+  interface JWT {
+    role?: Role;
   }
+}
+
+
+declare module "next-auth" {
+
+  interface Session {
+    user?: {
+      role?: Role;
+    } & DefaultSession["user"];
+  }
+
+  // interface Session extends DefaultSession {
+  //   user: DefaultSession["user"] & {
+  //     id: string;
+  //     role: string;
+  //   };
+  // }
+
+  interface User {
+    role?: Role;
+  }
+
 
   // interface User {
   //   // ...other properties
@@ -40,13 +60,21 @@ declare module "next-auth" {
  **/
 export const authOptions: NextAuthOptions = {
   callbacks: {
-    session({ session, user }) {
+    jwt({ token, user }) {
+      if (user) {
+        token.role = user.role;
+      }
+      return token;
+    },
+    session({ session, token }) {
       if (session.user) {
-        session.user.id = user.id;
-        session.user.role = (user as User).role_name ?? 'USER'
+        session.user.role = token.role;
       }
       return session;
     },
+    redirect({ url, baseUrl }) {
+      return new URL('/', baseUrl).toString()
+    }
   },
   adapter: PrismaAdapter(prisma),
   providers: [
@@ -89,7 +117,10 @@ export const authOptions: NextAuthOptions = {
   ],
   pages: {
     signIn: "/auth/login",
-  }
+  },
+  session: {
+    strategy: "jwt",
+  },
 };
 
 /**

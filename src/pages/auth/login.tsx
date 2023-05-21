@@ -57,5 +57,5 @@ const submitFunction = (event: FormEvent<HTMLFormElement>) => {
     email: { value: string };
   };
   const email = target.email.value;
-  signIn("email", { email });
+  void signIn("email", { email });
 };

@@ -1,7 +1,5 @@
-import { useButton } from "@react-aria/button";
-import { useFocusRing } from "@react-aria/focus";
 import React, { useState } from "react";
-import { getCurrentWeekNumber, getDaysOfTheWeek, getFirstDayOfTheWeek } from "../../../../shared/date/dateHelperFunctions";
+import { getCurrentWeekNumber, getDaysOfTheWeek } from "../../../../shared/date/dateHelperFunctions";
 import { DateSwitcherButton } from "./date-switcher-button"
 
 type DateSwitcherProps = {

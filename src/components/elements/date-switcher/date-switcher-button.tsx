@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useButton } from "@react-aria/button";
 import { useFocusRing } from "@react-aria/focus";
-import { AriaButtonProps } from "@react-types/button";
+import type { AriaButtonProps } from "@react-types/button";
 
 interface NavigationButtonProps extends AriaButtonProps {
   date: Date;
@@ -16,7 +16,7 @@ const week: { [key: number]: string} = {
   4: "Do",
   5: "Vr",
   6: "Za",
-  0: "Zo",
+  0: "Zo"
 }
 
 export const DateSwitcherButton = (props: NavigationButtonProps) => {
@@ -24,15 +24,15 @@ export const DateSwitcherButton = (props: NavigationButtonProps) => {
   const { buttonProps, isPressed } = useButton(props, ref)
   const { isFocusVisible, focusProps } = useFocusRing(props);
 
-  let label = week[props.date.getDay()]
-  let date = props.date.getDate();
-  let isSelected = props.selectedDate.getTime() === props.date.getTime();
+  const [label, setLabel] = useState<string>(week[props.date.getDay()]);
+  const [date, setDate] = useState<number>(props.date.getDate());
+  const [isSelected, setIsSelected] = useState<boolean>(false);
 
   useEffect(() => {
-    label = week[props.date.getDay()]
-    date = props.date.getDate();
-    isSelected = props.selectedDate.getTime() === props.date.getTime();
-  }, [props.date])
+    setLabel(week[props.date.getDay()]);
+    setDate(props.date.getDate());
+    setIsSelected (props.selectedDate.getTime() === props.date.getTime());
+  }, [props.date, props.selectedDate])
 
   return (
     <div

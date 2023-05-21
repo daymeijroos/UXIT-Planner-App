@@ -1,4 +1,4 @@
-import { Shift, Shift_Type, Staffing } from "@prisma/client"
+import type { Shift, Shift_Type, Staffing } from "@prisma/client"
 
 export interface StaffingWithColleagues extends Staffing {
   shift: Shift & {

@@ -11,7 +11,7 @@ interface ScheduleProps {
 
 export const Schedule = ({ selectedDate, weekStart }: ScheduleProps) => {
 
-  const [parent, enableAnimations] = useAutoAnimate({
+  const [parent] = useAutoAnimate({
     duration: 150,
   })
 

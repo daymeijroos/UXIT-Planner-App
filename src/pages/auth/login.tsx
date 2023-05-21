@@ -1,7 +1,7 @@
 import { getProviders, signIn, getCsrfToken } from "next-auth/react";
-import { Provider } from "next-auth/providers";
+import type { Provider } from "next-auth/providers";
 import { TextField } from "../../components/atoms/text-field";
-import { FormEvent } from "react";
+import type { FormEvent } from "react";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import { Button } from "../../components/atoms/button";

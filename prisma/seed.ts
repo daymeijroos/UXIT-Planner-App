@@ -73,6 +73,49 @@ async function main() {
   // user 10, maria nellessen, vrijdag/zaterdag/zondag, max 3x
   const users = [];
 
+  const dayUser = await prisma.user.create({
+    data: {
+      first_name: "Day",
+      last_name: "Meijroos",
+      email: "daymeijroos@gmail.com",
+      role: {
+        connect: {
+          name: userRole.name
+        }
+      },
+      preference: {
+        create: {
+          maxStaffings: 2,
+          shift_type_id: shiftType1.id,
+          availability: {
+            create: [
+              {
+                weekday: 4,
+                shift_types: {
+                  connect: [{
+                    id: shiftType1.id
+                  },
+                  {
+                    id: shiftType2.id
+                  }]
+                }
+              },
+              {
+                weekday: 5,
+                shift_types: {
+                  connect: {
+                    id: shiftType1.id
+                  }
+                },
+              }
+            ]
+          }
+        }
+      }
+    }
+  });
+
+
   // user 1
   let availabilityId: string;
   availabilityId = cuid();

@@ -1,7 +1,7 @@
-import { Button } from "../components/atoms/button";
-import { api } from "../utils/api";
-import { NavigationBar } from "../components/elements/navigation-bar";
-import { LoadingMessage } from "../components/elements/loading-message";
+import { Button } from "../../components/atoms/button";
+import { api } from "../../utils/api";
+import { NavigationBar } from "../../components/elements/navigation-bar";
+import { LoadingMessage } from "../../components/elements/loading-message";
 
 export default function Admin() {
   const { mutateAsync: generateSchedule } = api.schedule.generate.useMutation({

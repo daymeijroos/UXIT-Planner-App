@@ -16,17 +16,17 @@ export default withAuth(
   {
     callbacks: {
       authorized: ({ token }) => {
-        return !!token
+        return !!token && token.role !== Role.RETIRED
       }
     }
   }
 )
 
 export const config = {
-  matcher: ["/", "/admin/:path*"],
+  matcher: ["/", "/api/:path*", "/admin/:path*"],
 }
 
 const isAuthPage = (req: NextRequestWithAuth) => req.nextUrl.pathname.startsWith("/auth")
 const isApiEndpoint = (req: NextRequestWithAuth) => req.nextUrl.pathname.startsWith("/api")
 const isAuthenticated = (req: NextRequestWithAuth) => (req.nextauth && req.nextauth.token)
-const adminPageNotAdmin = (req: NextRequestWithAuth) => req.nextUrl.pathname.startsWith("/admin") && req.nextauth.token?.role?.name == Role.ADMIN
+const adminPageNotAdmin = (req: NextRequestWithAuth) => req.nextUrl.pathname.startsWith("/admin") && req.nextauth.token?.role !== Role.ADMIN

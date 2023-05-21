@@ -10,8 +10,8 @@ import { createTransport } from "nodemailer";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { env } from "../env/server.mjs";
 import { prisma } from "./db";
-import { Role } from "@prisma/client";
 import { LoginLink } from "./mail-templates/login-link";
+import { Role, RoleType } from "../prisma/role";
 
 /**
  * Module augmentation for `next-auth` types
@@ -22,35 +22,27 @@ import { LoginLink } from "./mail-templates/login-link";
 
 declare module "next-auth/jwt" {
   interface JWT {
-    role?: Role;
+    role?: RoleType;
+    first_name?: string;
+    last_name?: string;
+    email?: string;
+    image?: string;
   }
 }
 
-
 declare module "next-auth" {
+  interface User {
+    first_name?: string;
+    last_name?: string;
+    email?: string;
+    image?: string;
+    role_name?: RoleType; //This is for database
+    role?: RoleType; //This is for JWT
+  }
 
   interface Session {
-    user?: {
-      role?: Role;
-    } & DefaultSession["user"];
+    user?: User;
   }
-
-  // interface Session extends DefaultSession {
-  //   user: DefaultSession["user"] & {
-  //     id: string;
-  //     role: string;
-  //   };
-  // }
-
-  interface User {
-    role?: Role;
-  }
-
-
-  // interface User {
-  //   // ...other properties
-  //   // role: UserRole;
-  // }
 }
 
 /**
@@ -62,13 +54,21 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     jwt({ token, user }) {
       if (user) {
-        token.role = user.role;
+        token.role = user.role_name
+        token.first_name = user.first_name
+        token.last_name = user.last_name
+        token.email = user.email
+        token.image = user.image
       }
       return token;
     },
     session({ session, token }) {
       if (session.user) {
         session.user.role = token.role;
+        session.user.first_name = token.first_name
+        session.user.last_name = token.last_name
+        session.user.email = token.email
+        session.user.image = token.image
       }
       return session;
     },
@@ -95,7 +95,7 @@ export const authOptions: NextAuthOptions = {
           where: {
             email: email,
             role_name: {
-              not: 'RETIRED'
+              not: Role.RETIRED
             }
           }
         })

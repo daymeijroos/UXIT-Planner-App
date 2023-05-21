@@ -3,6 +3,7 @@ import { z } from "zod";
 import { createTRPCRouter, publicProcedure, restrictedProcedure } from "../trpc";
 import { generateSchedule } from "../../utils/generateSchedule";
 import { getUnfulfilledShifts } from "../../utils/getUnfulfilledShifts";
+import { Role } from "../../../prisma/role";
 
 export const scheduleRouter = createTRPCRouter({
 
@@ -10,7 +11,7 @@ export const scheduleRouter = createTRPCRouter({
     .query(() => {
       return getUnfulfilledShifts()
     }),
-  generate: restrictedProcedure('ADMIN')
+  generate: restrictedProcedure(Role.ADMIN)
     .input(z.object({
       start_date: z.date(),
       end_date: z.date(),

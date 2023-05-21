@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import cuid from "cuid";
+import { Role } from "./role";
 
 const prisma = new PrismaClient();
 
@@ -7,7 +8,7 @@ async function main() {
   //create user role
   const userRole = await prisma.role.create({
     data: {
-      name: "USER",
+      name: Role.USER,
       description: "Dit zijn de standaard gebruikers van de app."
     }
   });
@@ -15,7 +16,7 @@ async function main() {
   //create admin role
   const adminRole = await prisma.role.create({
     data: {
-      name: "ADMIN",
+      name: Role.ADMIN,
       description: "Admin rol houd alle rechten om de planner te beheren."
     }
   });
@@ -23,7 +24,7 @@ async function main() {
   //create retired role
   const retiredRole = await prisma.role.create({
     data: {
-      name: "RETIRED",
+      name: Role.RETIRED,
       description: "Retired rol is voor gebruikers die niet meer actief zijn binnen pulchri en dus ook niet gebruik mogen maken van de planner."
     }
   });
@@ -36,7 +37,7 @@ async function main() {
       email: process.env.ADMIN_EMAIL,
       role: {
         connect: {
-          name: adminRole.name
+          name: Role.ADMIN
         }
       }
     }
@@ -80,7 +81,7 @@ async function main() {
       email: "daymeijroos@gmail.com",
       role: {
         connect: {
-          name: userRole.name
+          name: Role.USER
         }
       },
       preference: {

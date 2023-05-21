@@ -50,8 +50,8 @@ export const DateSwitcher = ({ setSelectedDate, selectedDate }: DateSwitcherProp
 
 
   return (
-    <nav className="bg-white py-2 px-4 rounded-lg flex flex-col space-x-2 justify-center">
-      <div className="flex items-center justify-between border-black border-2 my-2">
+    <nav className="bg-white rounded-lg flex flex-col space-x-2 justify-center">
+      <div className="flex items-center justify-between border-black border-2">
         <button
           className="text-black rounded-full w-8 h-8 flex items-center justify-center focus:outline-none">
           <span className="sr-only">Previous week</span>

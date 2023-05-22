@@ -1,6 +1,6 @@
 import { getCurrentWeekNumber, getDaysOfTheWeek } from "../../../../shared/date/dateHelperFunctions";
 import { DateSwitcherButton } from "./date-switcher-button"
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 
 type DateSwitcherProps = {
   setSelectedDate: (date: Date) => void;
@@ -12,6 +12,7 @@ const millisecondsPerWeek = 604800000;
 export const DateSwitcher = ({ setSelectedDate, selectedDate }: DateSwitcherProps) => {
 
   const daysOfTheWeek = getDaysOfTheWeek(selectedDate);
+  const [initialLoad, setInitialLoad] = useState(true);
 
   function clickPreviousWeek() {
     const date = new Date(selectedDate.getTime() - millisecondsPerWeek);
@@ -24,12 +25,20 @@ export const DateSwitcher = ({ setSelectedDate, selectedDate }: DateSwitcherProp
   }
 
   useEffect(() => {
-    const isDateInRangeOfTheWeek = daysOfTheWeek.some((date) => date.toDateString() === selectedDate.toDateString());
+    const currentWeekNumber = getCurrentWeekNumber(selectedDate);
+    const previousWeekDate = new Date(selectedDate.getTime() - millisecondsPerWeek);
 
-    if (!isDateInRangeOfTheWeek) {
-      setSelectedDate(daysOfTheWeek[0]);
+    if (
+      initialLoad &&
+      (currentWeekNumber === 12 || currentWeekNumber === 44) &&
+      selectedDate.getTime() !== previousWeekDate.getTime()
+    ) {
+      const previousDayOfWeek = previousWeekDate.getDay();
+      setSelectedDate(currentWeekNumber === 12 ? daysOfTheWeek[previousDayOfWeek] : daysOfTheWeek[previousDayOfWeek - 1]);
+      setInitialLoad(false);
     }
-  }, [selectedDate, daysOfTheWeek, setSelectedDate]);
+  }, [selectedDate, initialLoad]);
+
 
 
   return (

@@ -1,8 +1,6 @@
 import { NavigationBar } from "../components/elements/navigation-bar";
 import { DateSwitcher } from "../components/elements/schedule/date-switcher";
-import { Schedule } from "../components/elements/schedule";
-import { Button } from "../components/atoms/button";
-import { Zap } from "react-feather";
+import { Schedule } from "../components/elements/schedule/schedule";
 import { useEffect, useState } from "react";
 
 

@@ -16,12 +16,12 @@ const week: { [key: number]: string} = {
   4: "Do",
   5: "Vr",
   6: "Za",
-  0: "Zo"
+  0: "Zo",
 }
 
 export const DateSwitcherButton = (props: NavigationButtonProps) => {
   const ref = React.useRef(null);
-  const { buttonProps, isPressed } = useButton(props, ref)
+  const { buttonProps, isPressed } = useButton(props, ref);
   const { isFocusVisible, focusProps } = useFocusRing(props);
 
   const [label, setLabel] = useState<string>(week[props.date.getDay()]);
@@ -31,8 +31,11 @@ export const DateSwitcherButton = (props: NavigationButtonProps) => {
   useEffect(() => {
     setLabel(week[props.date.getDay()]);
     setDate(props.date.getDate());
-    setIsSelected (props.selectedDate.getTime() === props.date.getTime());
-  }, [props.date, props.selectedDate])
+  }, [props.date]);
+
+  useEffect(() => {
+    setIsSelected(props.selectedDate.toDateString() === props.date.toDateString());
+  }, [props.date, props.selectedDate]);
 
   return (
     <div
@@ -45,7 +48,8 @@ export const DateSwitcherButton = (props: NavigationButtonProps) => {
           : "bg-white"
       }`}
       {...buttonProps}
-      {...focusProps}>
+      {...focusProps}
+    >
       <span className="sr-only">{`${label}: ${date}`}</span>
       <span className="text-lg font-bold">{label}</span>
       <span className="text-sm">{date}</span>

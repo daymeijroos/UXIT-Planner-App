@@ -1,27 +1,36 @@
-import React, { useState } from "react";
 import { getCurrentWeekNumber, getDaysOfTheWeek } from "../../../../shared/date/dateHelperFunctions";
 import { DateSwitcherButton } from "./date-switcher-button"
+import {useEffect} from "react";
 
 type DateSwitcherProps = {
   setSelectedDate: (date: Date) => void;
   selectedDate: Date;
 }
 
-const milisecondsPerWeek = 604800000;
+const millisecondsPerWeek = 604800000;
 
 export const DateSwitcher = ({ setSelectedDate, selectedDate }: DateSwitcherProps) => {
-  const [daysOfWeek, setDaysOfWeek] = useState<Date[]>(getDaysOfTheWeek(selectedDate));
+
+  const daysOfTheWeek = getDaysOfTheWeek(selectedDate);
 
   function clickPreviousWeek() {
-    const date = new Date(selectedDate.getTime() - milisecondsPerWeek)
-    setSelectedDate(date)
+    const date = new Date(selectedDate.getTime() - millisecondsPerWeek);
+    setSelectedDate(date);
   }
 
   function clickNextWeek() {
-    const date = new Date(selectedDate.getTime() + milisecondsPerWeek)
-    setSelectedDate(date)
-    setDaysOfWeek(getDaysOfTheWeek(date))
+    const date = new Date(selectedDate.getTime() + millisecondsPerWeek);
+    setSelectedDate(date);
   }
+
+  useEffect(() => {
+    const isDateInRangeOfTheWeek = daysOfTheWeek.some((date) => date.toDateString() === selectedDate.toDateString());
+
+    if (!isDateInRangeOfTheWeek) {
+      setSelectedDate(daysOfTheWeek[0]);
+    }
+  }, [selectedDate, daysOfTheWeek, setSelectedDate]);
+
 
   return (
     <nav className="bg-white py-2 px-4 rounded-lg flex flex-col space-x-2 justify-center">

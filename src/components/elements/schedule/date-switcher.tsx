@@ -1,6 +1,6 @@
 import { getCurrentWeekNumber, getDaysOfTheWeek } from "../../../../shared/date/dateHelperFunctions";
 import { DateSwitcherButton } from "./date-switcher-button"
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 
 type DateSwitcherProps = {
   setSelectedDate: (date: Date) => void;
@@ -10,19 +10,27 @@ type DateSwitcherProps = {
 const millisecondsPerWeek = 604800000;
 
 export const DateSwitcher = ({ setSelectedDate, selectedDate }: DateSwitcherProps) => {
-
   const daysOfTheWeek = getDaysOfTheWeek(selectedDate);
   const [initialLoad, setInitialLoad] = useState(true);
+  const [dayButtonPressed, setDayButtonPressed] = useState(false);
+  const [onPressCount, setOnPressCount] = useState(0);
 
   function clickPreviousWeek() {
     const date = new Date(selectedDate.getTime() - millisecondsPerWeek);
     setSelectedDate(date);
+    setDayButtonPressed(false); // Reset dayButtonPressed when changing weeks
   }
 
   function clickNextWeek() {
     const date = new Date(selectedDate.getTime() + millisecondsPerWeek);
     setSelectedDate(date);
+    setDayButtonPressed(false);
   }
+
+  const handleDayButtonPress = (date: Date) => {
+    setSelectedDate(date);
+    setOnPressCount((count) => count + 1);
+  };
 
   useEffect(() => {
     const currentWeekNumber = getCurrentWeekNumber(selectedDate);
@@ -31,13 +39,14 @@ export const DateSwitcher = ({ setSelectedDate, selectedDate }: DateSwitcherProp
     if (
       initialLoad &&
       (currentWeekNumber === 12 || currentWeekNumber === 44) &&
-      selectedDate.getTime() !== previousWeekDate.getTime()
+      selectedDate.getTime() !== previousWeekDate.getTime() &&
+      onPressCount === 0
     ) {
       const previousDayOfWeek = previousWeekDate.getDay();
       setSelectedDate(currentWeekNumber === 12 ? daysOfTheWeek[previousDayOfWeek] : daysOfTheWeek[previousDayOfWeek - 1]);
       setInitialLoad(false);
     }
-  }, [selectedDate, initialLoad]);
+  }, [selectedDate, initialLoad, dayButtonPressed, daysOfTheWeek, onPressCount]);
 
 
 
@@ -64,7 +73,10 @@ export const DateSwitcher = ({ setSelectedDate, selectedDate }: DateSwitcherProp
           <DateSwitcherButton
             key={date.getDate()}
             date={date}
-            onPress={() => setSelectedDate(date)}
+            onPress={() => {
+              setSelectedDate(date);
+              handleDayButtonPress(date);
+            }}
             selectedDate={selectedDate}
           />
         ))}

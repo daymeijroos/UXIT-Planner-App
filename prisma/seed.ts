@@ -357,7 +357,7 @@ async function main() {
         email: "barbaradamme@pulchri.nl",
         preference: {
           create: {
-            maxStaffings: 1,
+            maxStaffings: 2,
             shift_type_id: shiftType1.id,
             availability: {
               create: [
@@ -376,12 +376,9 @@ async function main() {
                 {
                   weekday: 3,
                   shift_types: {
-                    connect: [{
+                    connect: {
                       id: shiftType3.id
-                    },
-                    {
-                      id: shiftType2.id
-                    }]
+                    }
                   }
                 },
                 {
@@ -763,7 +760,7 @@ async function main() {
   staffRequiredList.push(
     prisma.staff_Required.create({
       data: {
-        amount: 1,
+        amount: 2,
         shift_id: createdShifts[3].id,
         shift_type_id: shiftType3.id
       }

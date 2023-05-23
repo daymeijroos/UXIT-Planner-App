@@ -6,85 +6,192 @@ import { createTRPCRouter, publicProcedure } from "../trpc";
 
 export const requiredStaffing = createTRPCRouter({
 
-    // Get shift_type where name = "reserve"
-    getReserveType: publicProcedure
-    .query(async ({ ctx }) => {
-      return await ctx.prisma.shift_Type.findFirst({
-        where: {
-          name: "Reserve",
-        },
-      });
-    }),
-
-  // ( Ik probeer de function te testen op een random shift op donderdag om een reserve toe te voegen )
-  // Get shift.id where start = convertToAmsterdamTimezone("2023-04-18T11:45:00.000Z") 
-  getShift: publicProcedure
-    .query(async ({ ctx }) => {
-      return await ctx.prisma.shift.findFirst({
-        where: {
-          start: convertToAmsterdamTimezone("2023-04-20T11:45:00.000Z")
-        },
-      });
-    }),
-
-  // voeg een reserve required staff aan de gegeven shift
-  createRequiredStandByStaffing: publicProcedure
-  .input(
-    z.object({
-      shift_id: z.any(),
-      amountOfStaffRequired: z.number(),
-      shiftType_id:  z.any(),
-    }))
-  .mutation(async ({ctx, input}) => {
-    await ctx.prisma.staff_Required.create({
-      data: {
-        amount: input.amountOfStaffRequired,
-        shift_id: input.shift_id,
-        shift_type_id: input.shiftType_id
-      }
-    })
+  getReserveShiftType: publicProcedure
+  .query(async ({ ctx }) => {
+    return await ctx.prisma.shift_Type.findFirst({
+      where: {
+        name: "Reserve",
+      },
+    });
   }),
 
-  // change required staffing of a shift from type "reserve" to "Balie/Galarie"
-  ChangeRequiredStandByTo: publicProcedure
+  // create required_staffing
+  createRequiredStaffing: publicProcedure
+    .input(
+      z.object({
+        shift_id: z.any(),
+        amountOfStaffRequired: z.number(),
+        shift_type_id: z.string(),
+      }))
+    .mutation(async ({ ctx, input }) => {
+      const shift = await ctx.prisma.shift.findFirst({
+        where: {
+          id: input.shift_id,
+        },
+      });
+      if (!shift) {
+        throw new Error("Shift not found");
+      }
+      const shiftType = await ctx.prisma.shift_Type.findFirst({
+        where: {
+          name: input.shift_type_id
+        },
+      });
+      if (!shiftType) {
+        throw new Error("Shift Type name not found");
+      }
+      const requiredStaffing = await ctx.prisma.staff_Required.create({
+        data: {
+          shift_id: input.shift_id,
+          amount: input.amountOfStaffRequired,
+          shift_type_id: shiftType.id,
+        },
+      });
+      return requiredStaffing;
+    }),
+
+
+
+  // update required_staffing
+  updateRequiredStaffing: publicProcedure
   .input(
     z.object({
-      // shift_id
-      shift_id: z.string(),
-    }))
-  .query(async ({ctx, input}) => {
-    // find staffing with shift_type -> name = "reserve" 
-    const StandByStaff = await ctx.prisma.staff_Required.findFirst({
-      where: {
-        shift_id: input.shift_id,
-        shift_type: {
-          name: "Reserve"
-        }
-      }
-    })
-    // change staffing shift_type -> name = "Balie" 
-    const updatedStaffRequired = await ctx.prisma.staff_Required.update({
-      where: {
-        id: StandByStaff?.id
+      id: z.any(),
+      amountOfStaffRequired: z.any(),
+      shiftType_id: z.any(),
+      }))
+      .mutation(async ({ctx, input}) => {
+      await ctx.prisma.staff_Required.update({
+      where: { 
+        id: input.id
       },
       data: {
-        shift_type: {
-          connect: {
-            name: "Balie"
-          }
+          amount: input.amountOfStaffRequired,
+          shift_type_id: input.shiftType_id
         }
+      })
+    }),
+            
+
+  // Ceate new staffing
+  CreateStaffing: publicProcedure
+  .input(
+    z.object({
+      shift_id: z.string(),
+      user_id: z.string(),
+      shift_type_id: z.string(),
+    }))
+  .query(async ({ctx, input}) => {
+    const staffing = await ctx.prisma.staffing.create({
+      data: {
+        user_id: input.user_id,
+        shift_id: input.shift_id,
+        shift_type_id: input.shift_type_id,
+        }
+      });
+      return staffing;
+  }),
+
+
+  // Remove Staffing 
+  RemoveStaffing: publicProcedure
+  .input(
+    z.object({
+      shift_id: z.string(),
+      user_id: z.string()
+    }))
+  .query(async ({ctx, input}) => {
+    const staffing =
+    await
+    ctx
+    .prisma
+    .staffing
+    .findFirst({
+      where: {
+        shift_id: input.shift_id,
+        user_id: input.user_id
       }
     })
-    return updatedStaffRequired
-  } 
-  ),
+    if (staffing) {
+      const staffingDeleted =
+      await
+      ctx
+      .prisma
+      .staffing
+      .delete({
+        where: {
+          id: staffing.id
+          }
+        })
+        return staffingDeleted
+      }
+      console.log("Staffin not found")
+      return false
+    }),
+
+  // check if shift has reserve staffing 
+  ShiftHasReserve: publicProcedure
+  .input(
+    z.object({
+      shift_id: z.string()
+      }))
+      .query(async ({ctx, input}) => {
+        const staffing =
+        await
+        ctx
+        .prisma
+        .staffing
+        .findFirst({
+          where: {
+            shift_id: input.shift_id
+            }
+          })
+          if (staffing) {
+              return true
+          }
+            return false
+    }),
+              
+
+  // Alter shift_type 
+  ChangeStaffShiftType: publicProcedure
+  .input(
+    z.object({
+      staffing_id: z.string(),
+      shift_type_id: z.string()
+    }))
+  .query(async ({ctx, input}) => {
+    const staffing = 
+    await 
+    ctx
+    .prisma
+    .staffing
+    .findFirst({
+      where: {
+        id: input.staffing_id
+      }
+    })
+    // Change the shift_type of the staffing to new shift_type (ex: Balie => Galarie)
+    if (staffing) {
+    const updatedStaffing = 
+    await 
+    ctx
+    .prisma
+    .staffing
+    .update({
+        where: {
+          id: staffing?.id
+        },
+        data: {
+          shift_type_id: input.shift_type_id
+        }
+      })
+      return updatedStaffing
+    }
+  return null
+  }),
 });
 
 export type RequiredStaffingRouter = typeof requiredStaffing;
 
-function convertToAmsterdamTimezone(dateString: string) {
-  const date = new Date(dateString);
-  date.setUTCHours(date.getUTCHours() - 2);
-  return date.toISOString();
-}
 

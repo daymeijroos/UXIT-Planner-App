@@ -1,28 +1,40 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import { useMutation, useQuery } from 'react-query';
 import { api } from '../../utils/api';
+import { Button } from './button';
 
+interface AddRequiredStaffingProps {
+  RequiredStaffingProps: {
+    shift_id: string,
+    amountOfStaffRequired: number
+    shift_type_id: string
+  };
+}
 
-const { mutate: createRequiredStandByStaffing } = api.requiredStaffing.createRequiredStandByStaffing.useMutation();
-const TypeShift = api.requiredStaffing.getReserveType.useQuery();
-const ShiftTest = api.requiredStaffing.getShift.useQuery();
+export function AddRequiredStaffing({ RequiredStaffingProps }: AddRequiredStaffingProps ) {
+  const createRequiredStandByStaffing = api.requiredStaffing.createRequiredStaffing.useMutation();
+  const handleAddRequiredStaffing = async () => {
+    await createRequiredStandByStaffing.mutate({
+      shift_id: RequiredStaffingProps.shift_id,
+      amountOfStaffRequired: RequiredStaffingProps.amountOfStaffRequired,
+      shift_type_id: RequiredStaffingProps.shift_type_id,
+    });
+  };
 
+  // TODO
+  // Regenerate schedule!!
 
-export function AddRequiredStaffing() {
-    return (
-      <div>
-        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" 
-            onClick={
-                () => {
-                    createRequiredStandByStaffing({
-                        shift_id: ShiftTest.data?.id,
-                        amountOfStaffRequired: 1,
-                        shiftType_id: TypeShift.data?.id,
-                    });
-                }
-            }
-        />  
-      </div>
-    );
-  }
-  
+  return (
+    <div>
+      <Button
+        color="primary"
+        className="m-4 text-white"
+        onPress={handleAddRequiredStaffing}>
+        Reserve toevoegen
+      </Button>
+    </div>
+  );
+}
+
 export default AddRequiredStaffing;
+

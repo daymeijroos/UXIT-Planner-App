@@ -5,6 +5,7 @@ import { type Session } from "next-auth";
 import { api } from '../utils/api';
 import { SessionProvider } from 'next-auth/react';
 import { SSRProvider } from 'react-aria';
+import { NavigationBar } from '../components/elements/navigation-bar';
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
@@ -44,6 +45,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
           <meta name="theme-color" content="#5FC9BE" />
         </Head>
         <Component {...pageProps} />
+        <NavigationBar />
       </SessionProvider>
     </SSRProvider>
   )

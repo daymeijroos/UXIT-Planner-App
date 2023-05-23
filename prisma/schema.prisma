@@ -48,19 +48,6 @@ model User {
   staffings     Staffing[]
   accounts      Account[]
   sessions      Session[]
-  posts         Post[]
-}
-
-//THIS IS AN EXAMPLE OF A MODEL IT SHOULD BE REMOVED
-model Post {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  title     String
-  content   String?
-  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId    String?
-  userName  String?
 }
 
 model VerificationToken {
@@ -72,25 +59,35 @@ model VerificationToken {
 }
 
 model User_Preference {
-  id            String         @id @default(cuid())
-  maxStaffings  Int
-  shift_type_id String
-  user_id       String         @unique
-  shift_type    Shift_Type     @relation(fields: [shift_type_id], references: [id])
-  absence       Absence[]
+  id                String             @id @default(cuid())
+  maxStaffings      Int
+  shift_type_id     String
+  user_id           String             @unique
+  shift_type        Shift_Type         @relation(fields: [shift_type_id], references: [id])
+  absence           Absence[]
+  availability      Availability[]
+  availability_week AvailabilityWeek[]
+  user              User               @relation(fields: [user_id], references: [id])
+}
+
+model AvailabilityWeek {
+  id            String          @id @default(cuid())
+  sequence      Int
+  preference_id String
+  preference    User_Preference @relation(fields: [preference_id], references: [id])
   availability  Availability[]
-  user          User           @relation(fields: [user_id], references: [id])
 }
 
 model Availability {
-  id            String          @id @default(cuid())
-  sequence_week Int             @default(0)
-  weekday       Int
-  preference_id String
-  preference    User_Preference @relation(fields: [preference_id], references: [id])
-  shift_types   Shift_Type[]
+  id                   String           @id @default(cuid())
+  availability_week_id String
+  weekday              Int
+  preference_id        String
+  availability_week    AvailabilityWeek @relation(fields: [availability_week_id], references: [id])
+  preference           User_Preference  @relation(fields: [preference_id], references: [id])
+  shift_types          Shift_Type[]
 
-  @@unique([preference_id, weekday, sequence_week])
+  @@unique([preference_id, weekday, availability_week_id])
 }
 
 model Absence {
@@ -109,7 +106,7 @@ model Role {
 
 model Shift {
   id             String           @id @default(cuid())
-  start          DateTime
+  start          DateTime         @unique
   end            DateTime
   staffings      Staffing[]
   staff_required Staff_Required[]
@@ -123,6 +120,8 @@ model Staffing {
   shift         Shift      @relation(fields: [shift_id], references: [id])
   shift_type    Shift_Type @relation(fields: [shift_type_id], references: [id])
   user          User       @relation(fields: [user_id], references: [id])
+
+  @@unique([shift_id, user_id])
 }
 
 model Staff_Required {

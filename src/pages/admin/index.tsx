@@ -16,7 +16,7 @@ export default function Admin() {
 
   const { mutate: removeStaffings } = api.staffing.removeAllStaffing.useMutation({
     onSuccess: () => {
-      context.staffing.getStaffing.invalidate({ from: new Date(new Date("2023-04-18T00:00:00Z").setHours(0, 0, 0, 0)) }).catch((error) => {
+      context.staffing.getStaffing.invalidate({ fromDate: new Date(new Date("2023-04-18T00:00:00Z").setHours(0, 0, 0, 0)) }).catch((error) => {
         console.error(error);
       });
       context.schedule.getUnfulfilledShifts.invalidate().catch((error) => {

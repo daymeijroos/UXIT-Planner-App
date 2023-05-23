@@ -10,13 +10,13 @@ export const NavigationBar = () => {
       <Button aria-label="Notificaties" title="Notificaties">
         <Bell className="stroke-2" color="#000" size="24" width="30" height="30" />
       </Button>
-      <Button color="success" onPress={() => router.push("/")} aria-label="Kalender" title="Kalender">
+      <Button aria-label="Kalender" title="Kalender" color="success" onPress={() => router.push("/")}>
         <Calendar className="stroke-2" color="#000" size="24" width="30" height="30" />
       </Button>
-      <Button aria-label="Account" title="Account">
+      <Button aria-label="Account" title="Account" onPress={() => router.push("/test/login")}>
         <User className="stroke-2" color="#000" size="24" width="30" height="30" />
       </Button>
-      <Button onPress={() => router.push("/admin")} aria-label="Admin" title="Admin">
+      <Button aria-label="Admin" title="Admin" onPress={() => router.push("/admin")}>
         <Tool className="stroke-2" color="#000" size="24" width="30" height="30" />
       </Button>
     </nav>

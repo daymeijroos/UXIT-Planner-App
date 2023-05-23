@@ -18,7 +18,6 @@ export function Card(props: CardProps) {
   return (
     <div className={`${cardStyle ?? ''} ${props.className ?? ''}`}>
       {props.children}
-      {props.button && <Button color={props.buttonColor} {...buttonProps}>{props.buttonText}</Button>}
     </div>
   );
 }

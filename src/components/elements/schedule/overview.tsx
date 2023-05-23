@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import { Schedule } from "./schedule";
+import { TeamStaffingList } from "./team-staffing-list";
 import { DateSwitcher } from "./date-switcher";
 import { Tabs } from "../../atoms/tablist/tabs";
 import { Item } from "react-stately";
+import { PersonalStaffingList } from "./personal-staffings-list";
 
 export const Overview = () => {
   const [selectedDate, setSelectedDate] = useState<Date>();
@@ -18,18 +19,20 @@ export const Overview = () => {
 
 
   return (
-    <div className="m-4">
-      <Tabs>
-        <Item key="1" title="Team">
-          <div className="flex flex-col gap-2">
-            <DateSwitcher selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
-            <Schedule selectedDate={selectedDate} weekStart={weekStart} />
-          </div>
-        </Item>
-        <Item key="2" title="Personal">
-          <h1>Personal</h1>
-        </Item>
-      </Tabs>
+    <div className="m-4 flex justify-center">
+      <div className="max-w-4xl w-full">
+        <Tabs>
+          <Item key="1" title="Team">
+            <div className="flex flex-col gap-2">
+              <DateSwitcher selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
+              <TeamStaffingList selectedDate={selectedDate} weekStart={weekStart} />
+            </div>
+          </Item>
+          <Item key="2" title="Personal">
+            <PersonalStaffingList />
+          </Item>
+        </Tabs>
+      </div>
     </div>
   )
 }

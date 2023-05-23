@@ -9,13 +9,13 @@ interface ScheduleProps {
   weekStart: Date;
 }
 
-export const Schedule = ({ selectedDate, weekStart }: ScheduleProps) => {
+export const TeamStaffingList = ({ selectedDate, weekStart }: ScheduleProps) => {
 
   const [parent] = useAutoAnimate({
     duration: 150,
   })
 
-  const staffings = api.staffing.getStaffing.useQuery({ from: weekStart });
+  const staffings = api.staffing.getStaffing.useQuery({ fromDate: weekStart });
 
   if (staffings.isLoading) {
     return <div>loading...</div>;

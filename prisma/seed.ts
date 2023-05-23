@@ -29,20 +29,6 @@ async function main() {
     }
   });
 
-  // create admin user
-  const adminUser = await prisma.user.create({
-    data: {
-      first_name: "Admin",
-      last_name: "Admin",
-      email: process.env.ADMIN_EMAIL,
-      role: {
-        connect: {
-          name: Role.ADMIN
-        }
-      }
-    }
-  });
-
   // Create Shift Types
   // weet niet of dit de bedoeling was maar heb een 3e shifttype toegevoegd voor als de vrijwilliger bij beide kan staan
   const shiftType1 = await prisma.shift_Type.create({
@@ -73,6 +59,162 @@ async function main() {
   // user 9, marieke burckhard, donerdag/vrijdag/zaterdag, max 2x
   // user 10, maria nellessen, vrijdag/zaterdag/zondag, max 3x
   const users = [];
+
+
+  // create admin user
+  const adminUser = await prisma.user.create({
+    data: {
+      first_name: "Admin",
+      last_name: "Admin",
+      email: process.env.ADMIN_EMAIL,
+      role: {
+        connect: {
+          name: Role.ADMIN
+        }
+      },
+      preference: {
+        create: {
+          maxStaffings: 2,
+          shift_type_id: shiftType1.id,
+          availability: {
+            create: [
+              {
+                weekday: 0,
+                shift_types: {
+                  connect: {
+                    id: shiftType1.id
+                  }
+                }
+              },
+              {
+                weekday: 1,
+                shift_types: {
+                  connect: {
+                    id: shiftType1.id
+                  }
+                }
+              },
+              {
+                weekday: 2,
+                shift_types: {
+                  connect: {
+                    id: shiftType1.id
+                  }
+                }
+              },
+              {
+                weekday: 3,
+                shift_types: {
+                  connect: {
+                    id: shiftType1.id
+                  }
+                }
+              },
+              {
+                weekday: 4,
+                shift_types: {
+                  connect: {
+                    id: shiftType1.id
+                  }
+                }
+              },
+              {
+                weekday: 5,
+                shift_types: {
+                  connect: {
+                    id: shiftType1.id
+                  }
+                }
+              },
+              {
+                weekday: 6,
+                shift_types: {
+                  connect: {
+                    id: shiftType1.id
+                  }
+                }
+              },
+            ]
+          }
+        }
+      }
+    }
+  });
+
+  const adminTestShift = await prisma.shift.create({
+    data: {
+      start: convertToAmsterdamTimezone(new Date(new Date(new Date().setDate(new Date().getDate() + 1)).setHours(6)).toISOString()),
+      end: convertToAmsterdamTimezone(new Date(new Date(new Date().setDate(new Date().getDate() + 1)).setHours(10)).toISOString()),
+      staff_required: {
+        create: [
+          {
+            amount: 1,
+            shift_type_id: shiftType1.id
+          }
+        ]
+      }
+    }
+  });
+
+  const adminTestShift2 = await prisma.shift.create({
+    data: {
+      start: convertToAmsterdamTimezone(new Date(new Date(new Date().setDate(new Date().getDate() + 2)).setHours(6)).toISOString()),
+      end: convertToAmsterdamTimezone(new Date(new Date(new Date().setDate(new Date().getDate() + 2)).setHours(10)).toISOString()),
+      staff_required: {
+        create: [
+          {
+            amount: 1,
+            shift_type_id: shiftType1.id
+          }
+        ]
+      }
+    }
+  });
+
+  const adminTestShift3 = await prisma.shift.create({
+    data: {
+      start: convertToAmsterdamTimezone(new Date(new Date(new Date().setDate(new Date().getDate() + 3)).setHours(6)).toISOString()),
+      end: convertToAmsterdamTimezone(new Date(new Date(new Date().setDate(new Date().getDate() + 3)).setHours(10)).toISOString()),
+      staff_required: {
+        create: [
+          {
+            amount: 1,
+            shift_type_id: shiftType1.id
+          }
+        ]
+      }
+    }
+  });
+
+  const adminTestShift4 = await prisma.shift.create({
+    data: {
+      start: convertToAmsterdamTimezone(new Date(new Date(new Date().setDate(new Date().getDate() + 4)).setHours(6)).toISOString()),
+      end: convertToAmsterdamTimezone(new Date(new Date(new Date().setDate(new Date().getDate() + 4)).setHours(10)).toISOString()),
+      staff_required: {
+        create: [
+          {
+            amount: 1,
+            shift_type_id: shiftType1.id
+          }
+        ]
+      }
+    }
+  });
+
+  const adminTestShift5 = await prisma.shift.create({
+    data: {
+      start: convertToAmsterdamTimezone(new Date(new Date(new Date().setDate(new Date().getDate() + 5)).setHours(6)).toISOString()),
+      end: convertToAmsterdamTimezone(new Date(new Date(new Date().setDate(new Date().getDate() + 5)).setHours(10)).toISOString()),
+      staff_required: {
+        create: [
+          {
+            amount: 1,
+            shift_type_id: shiftType1.id
+          }
+        ]
+      }
+    }
+  });
 
   const dayUser = await prisma.user.create({
     data: {
@@ -115,7 +257,6 @@ async function main() {
       }
     }
   });
-
 
   // user 1
   let availabilityId: string;

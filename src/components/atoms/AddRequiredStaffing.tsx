@@ -17,7 +17,7 @@ export function AddRequiredStaffing({ RequiredStaffingProps }: AddRequiredStaffi
     await createRequiredStandByStaffing.mutate({
       shift_id: RequiredStaffingProps.shift_id,
       amountOfStaffRequired: RequiredStaffingProps.amountOfStaffRequired,
-      shift_type_id: RequiredStaffingProps.shift_type_id,
+      shift_type_id: RequiredStaffingProps.shift_type_id
     });
   };
 

@@ -3,6 +3,7 @@ import { api } from "../../../utils/api";
 import { formatDate } from "../../../utils/date/formatDate";
 import { formatTime } from "../../../utils/date/formatTime";
 import { formatShiftStaffList } from "../../../utils/formatShiftStaffList";
+import AddRequiredStaffing from "../../atoms/AddRequiredStaffing";
 
 interface StaffingCardProps {
   staffing: StaffingWithColleagues
@@ -11,7 +12,7 @@ interface StaffingCardProps {
 const cardStyle = `border-2 border-black py-4 px-4 m-4 text-black bg-white`;
 
 export function StaffingCard(props: StaffingCardProps) {
-  const shift_type_id = api.requiredStaffing.getReserveShiftType.useQuery();
+  // const shift_type_id = api.requiredStaffing.getReserveShiftType.useQuery();
   return (
     <div className={cardStyle}>
 

@@ -34,7 +34,7 @@ export const requiredStaffing = createTRPCRouter({
       }
       const shiftType = await ctx.prisma.shift_Type.findFirst({
         where: {
-          name: input.shift_type_id
+          id: input.shift_type_id
         },
       });
       if (!shiftType) {
@@ -49,7 +49,6 @@ export const requiredStaffing = createTRPCRouter({
       });
       return requiredStaffing;
     }),
-
 
 
   // update required_staffing

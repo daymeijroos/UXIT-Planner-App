@@ -1,6 +1,6 @@
-import {AriaButtonProps, useButton} from 'react-aria';
+import { type AriaButtonProps, useButton } from 'react-aria';
 import React from 'react';
-import {useFocusRing} from 'react-aria';
+import { useFocusRing } from 'react-aria';
 
 export interface ButtonProps extends AriaButtonProps {
   title?: string;
@@ -33,17 +33,16 @@ export function Button(props: ButtonProps) {
   const { isFocusVisible, focusProps } = useFocusRing();
 
   return (
-    <div className={props.fillWidth? containerStyles : ""}>
-      <button className={`${
-        props.color === "primary" ? buttonStyles.primary :
-        props.color === "error" ? buttonStyles.error :
-        props.color === "success" ? buttonStyles.success :
-        buttonStyles.default
-      } ${props.className ?? ''} 
+    <div className={props.fillWidth ? containerStyles : ""}>
+      <button className={`${props.color === "primary" ? buttonStyles.primary :
+          props.color === "error" ? buttonStyles.error :
+            props.color === "success" ? buttonStyles.success :
+              buttonStyles.default
+        } ${props.className ?? ''} 
       ${isFocusVisible ? focusStyles : ''}
       ${props.round ? 'rounded-full' : 'rounded-sm'}
-      ${props.fillWidth? 'w-full' : ''}`}
-      
+      ${props.fillWidth ? 'w-full' : ''}`}
+
         title={props.title}
         {...buttonProps}
         {...focusProps}

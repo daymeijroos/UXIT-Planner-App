@@ -1,8 +1,8 @@
 import { useSession } from "next-auth/react";
 import React from "react";
 import { api } from "../../utils/api";
-import { Button } from "../aria/button";
-import { TextField } from "../aria/text-field";
+import { Button } from "../atoms/button";
+import { TextField } from "../atoms/text-field";
 
 let title = "";
 let content = "";
@@ -25,9 +25,9 @@ const AuthExample: React.FC = () => {
       {sessionData?.user && (
         <>
           <form className="flex flex-col items-end">
-            <TextField label="title" onChange={(change) => {title = change}}></TextField>
-            <TextField label="content" onChange={(change) => {content = change}}></TextField>
-            <Button onPress={() => mutate({title: title, content: content})}>Post</Button>
+            <TextField label="title" onChange={(change) => { title = change }}></TextField>
+            <TextField label="content" onChange={(change) => { content = change }}></TextField>
+            <Button onPress={() => mutate({ title: title, content: content })}>Post</Button>
           </form>
         </>
       )}

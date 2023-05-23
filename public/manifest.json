@@ -1,6 +1,6 @@
 {
-  "name": "Next.JS Progressive Web App",
-  "short_name": "Next PWA",
+  "name": "Pulchri Planner",
+  "short_name": "Planner",
   "display": "fullscreen",
   "orientation": "portrait",
   "theme_color": "#ffffff",

@@ -33,7 +33,7 @@ export function StaffingCard(props: StaffingCardProps) {
           `${formatDate(props.staffing.shift.start)[0].toUpperCase()}${formatDate(props.staffing.shift.start).slice(1)}`
         }
       </p>
-      <br/>
+      <br />
       <p>
         {
           formatShiftStaffList(props.staffing)

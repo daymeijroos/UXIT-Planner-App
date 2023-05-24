@@ -13,6 +13,9 @@ const Gebruikers = () => {
     return <div>{users.error.message}</div>;
   }
 
+  const handleUserClick = (userId) => {
+    console.log(userId);
+  };
 
   return (
     <div className="bg-gray-100 p-4">

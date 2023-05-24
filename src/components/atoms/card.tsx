@@ -9,8 +9,7 @@ interface CardProps {
   children?: React.ReactNode
 }
 
-const cardStyle = `border-2 border-black py-4 px-4 m-4 text-black bg-white`;
-
+const cardStyle = `border-2 border-black py-4 px-4 m-4 text-black bg-white dark:border-steel`;
 export function Card(props: CardProps) {
   const buttonProps = props.buttonProps || {};
   buttonProps.className = `${buttonProps.className ?? ''} m-0 mt-4`;

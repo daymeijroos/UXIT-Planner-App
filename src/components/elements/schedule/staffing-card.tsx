@@ -11,7 +11,7 @@ const cardStyle = `border-2 border-black py-4 px-4 m-4 text-black bg-white`;
 
 export function StaffingCard(props: StaffingCardProps) {
   return (
-    <div className={cardStyle}>
+    <div className={cardStyle + "dark:bg-[#2B303C] dark:text-white dark:border-steel"}>
       <h1 className="text-2xl font-bold">
         {
           `${formatTime(props.staffing.shift.start)}-${formatTime(props.staffing.shift.end)}`

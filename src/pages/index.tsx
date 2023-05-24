@@ -17,9 +17,9 @@ const Index = () => {
   )
 
   return (
-    <div>
+    <div className="dark:bg-[#2B303C] dark:text-white">
       <DateSwitcher selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
-      <Schedule selectedDate={selectedDate} weekStart={weekStart} />
+      <Schedule selectedDate={selectedDate} weekStart={weekStart}  />
       <NavigationBar />
     </div>
   );

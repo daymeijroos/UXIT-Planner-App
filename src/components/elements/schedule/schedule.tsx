@@ -3,9 +3,10 @@ import { StaffingCard } from "./staffing-card";
 import { api } from '../../../utils/api';
 import type { StaffingWithColleagues } from '../../../types/StaffingWithColleagues';
 import { useAutoAnimate } from '@formkit/auto-animate/react'
+import { getLocalTimeZone, parseDate, CalendarDate } from "@internationalized/date";
 
 interface ScheduleProps {
-  selectedDate: Date;
+  selectedDate: CalendarDate;
   weekStart: Date;
 }
 
@@ -46,7 +47,7 @@ export const Schedule = ({ selectedDate, weekStart }: ScheduleProps) => {
   const filteredStaffings = sortedStaffings.filter((get: StaffingWithColleagues) => {
     const date = new Date(get.shift.start);
     date.setHours(0, 0, 0, 0);
-    return date.getTime() === selectedDate.getTime();
+    return date.getTime() === selectedDate.toDate(getLocalTimeZone()).getTime();
   });
 
 
@@ -59,7 +60,7 @@ export const Schedule = ({ selectedDate, weekStart }: ScheduleProps) => {
           filteredStaffings.map((get: StaffingWithColleagues) => {
             const date = new Date(get.shift.start);
             date.setHours(0, 0, 0, 0);
-            if (date.getTime() === selectedDate.getTime()) {
+            if (date.getTime() === selectedDate.toDate(getLocalTimeZone()).getTime()) {
               return <StaffingCard staffing={get} key={get.shift_id} />;
             }
           })

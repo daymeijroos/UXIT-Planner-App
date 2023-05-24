@@ -43,10 +43,19 @@ export const DateSwitcher = ({ setSelectedDate, selectedDate }: DateSwitcherProp
       onPressCount === 0
     ) {
       const previousDayOfWeek = previousWeekDate.getDay();
-      setSelectedDate(currentWeekNumber === 12 ? daysOfTheWeek[previousDayOfWeek] : daysOfTheWeek[previousDayOfWeek - 1]);
+      setSelectedDate(
+        currentWeekNumber === 12
+          ? daysOfTheWeek[previousDayOfWeek]
+          : daysOfTheWeek[previousDayOfWeek - 1]
+      );
+      setInitialLoad(false);
+    } else if (initialLoad) {
+      // Select the current date when initialLoad is true
+      setSelectedDate(new Date());
       setInitialLoad(false);
     }
   }, [selectedDate, initialLoad, dayButtonPressed, daysOfTheWeek, onPressCount]);
+
 
 
 

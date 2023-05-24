@@ -41,7 +41,7 @@ export const generateBackupSchedule = async (fromDate: Date, toDate: Date) => {
       const isDefaultAvailable = checkUserAvailability(user, dayStart)
       const isAbsent = checkUserAbsent(user, dayStart, dayEnd)
       const reachedMax = checkReachedMaxStaffings(user, dayStart)
-      if (await enoughBackup || await alreadyStaffed || await isDefaultAvailable || await isAbsent || await reachedMax) continue
+      if (await alreadyStaffed || !await isDefaultAvailable || await isAbsent || await reachedMax || await userIsBackup) continue
 
       await createBackup(user, dayStart);
     }

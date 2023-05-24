@@ -135,11 +135,11 @@ model Staff_Required {
 }
 
 model Shift_Type {
-  id               String            @id @default(cuid())
-  name             String
-  description      String
-  availability     Availability[]
-  staffings        Staffing[]
-  staff_required   Staff_Required[]
-  user_preferences User_Preference[]
+  id                    String        @id @default(cuid())
+  name                  String        @unique
+  description           String
+  availability          Availability[]
+  staffings             Staffing[]
+  staff_required        Staff_Required[]
+  user_preferences      User_Preference[]
 }

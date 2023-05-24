@@ -51,7 +51,7 @@ export const TeamStaffingList = ({ selectedDate, weekStart }: ScheduleProps) => 
 
 
   return (
-    <div ref={parent} className='overflow-y-auto h-[70vh]'>
+    <div ref={parent} className='overflow-y-auto h-[70vh] dark:text-white]'>
       {
         filteredStaffings.length === 0 ? (
           <p className='text-center m-4'>Er zijn geen vrijwilligers ingepland op deze datum.</p>

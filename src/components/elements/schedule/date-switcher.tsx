@@ -25,7 +25,7 @@ const DateSwitcherButton = (props: NavigationButtonProps) => {
           : isPressed
             ? "bg-teal"
             : "bg-white"
-        }`}
+        } dark:bg-[#2B303C] dark:text-white dark:border-teal  hover:cursor-pointer`}
       {...buttonProps}
       {...focusProps}>
       <span className="sr-only">{props.day}</span>
@@ -50,10 +50,10 @@ export const DateSwitcher = ({ setSelectedDate, selectedDate }: DateSwitcherProp
 
 
   return (
-    <nav className="bg-white rounded-lg flex flex-col space-x-2 justify-center">
-      <div className="flex items-center justify-between border-black border-2">
+    <nav className="bg-white rounded-lg flex flex-col space-x-2 justify-center dark:bg-[#2B303C] dark:text-white ">
+      <div className="flex items-center justify-between border-black border-2 dark:border-steel">
         <button
-          className="text-black rounded-full w-8 h-8 flex items-center justify-center focus:outline-none">
+          className="text-black rounded-full w-8 h-8 flex items-center justify-center focus:outline-none ">
           <span className="sr-only">Previous week</span>
           &lt;
         </button>

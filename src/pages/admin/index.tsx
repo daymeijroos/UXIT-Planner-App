@@ -34,7 +34,7 @@ export default function Admin() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center">
+    <div className="flex flex-col items-center justify-center dark:bg-[#2B303C] dark:text-[#4E8B88]" >
       <h1 className="mt-4 text-3xl font-bold text-center">Admin paneel</h1>
       <h2 className="mt-4 text-xl font-bold text-center">Rooster</h2>
       <div className="sm:flex flex-wrap mt-4 space-x-4 max-sm:space-x-0 justify-center">

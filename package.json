@@ -28,6 +28,7 @@
     "react-aria": "^3.23.1",
     "react-dom": "^18.2.0",
     "react-feather": "^2.0.10",
+    "react-query": "^3.39.3",
     "react-stately": "^3.22.0",
     "superjson": "^1.12.2",
     "zod": "^3.21.4"

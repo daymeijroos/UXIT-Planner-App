@@ -21,7 +21,7 @@ const Gebruikers = () => {
     <div className="bg-gray-100 p-4">
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-xl font-bold">Gebruikers</h1>
-        <p className="text-sm text-gray-500">{users.data?.length} Users</p>
+        <p className="text-sm text-gray-500">{users.data?.length} Gebruikers</p>
       </div>
       <div className="flex justify-center items-center">
         <table className="w-full md:max-w-2xl divide-y divide-gray-200">

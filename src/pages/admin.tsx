@@ -1,6 +1,7 @@
 import { Button } from "../components/atoms/button";
 import { api } from "../utils/api";
 import { NavigationBar } from "../components/elements/navigation-bar";
+import { useRouter } from "next/navigation";
 
 const Admin = () => {
   const { mutateAsync: generateSchedule } = api.schedule.generate.useMutation({
@@ -32,6 +33,7 @@ const Admin = () => {
     return <div>{unfulfilledShifts.error.message}</div>;
   }
 
+  const router = useRouter();
   return (
     <div className="flex flex-col items-center justify-center">
       <h1 className="mt-4 text-3xl font-bold text-center">Admin paneel</h1>
@@ -47,7 +49,7 @@ const Admin = () => {
       <div className="flex-col items-center m-4 space-y-4 justify-center">
         <h2 className="text-xl font-bold text-center">Vrijwilligers</h2>
         <div className="sm:flex flex-wrap mt-4 space-x-4 max-sm:space-x-0 justify-center">
-          <Button className="w-64">Voorkeur aanpassen</Button>
+          <Button onPress={() => router.push("/admin/gebruikers")} className="w-64">Voorkeur aanpassen</Button>
           <Button className="w-64 max-sm:mt-4">Beschikbaarheid aanpassen</Button>
         </div>
         <div className="sm:flex flex-wrap mt-4 space-x-4 max-sm:space-x-0 justify-center">

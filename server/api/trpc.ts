@@ -105,6 +105,7 @@ const enforceUserIsAuthed = t.middleware(({ ctx, next }) => {
   if (!ctx.session || !ctx.session.user) {
     throw new TRPCError({ code: "UNAUTHORIZED" });
   }
+  console.log(ctx.session.user);
   return next({
     ctx: {
       // infers the `session` as non-nullable
@@ -140,7 +141,9 @@ const enforceRole = (role: string) => {
     if (ctx.session?.user?.role !== role) {
       throw new TRPCError({ code: "FORBIDDEN" });
     }
-    return next();
+    return next({
+      ctx: ctx,
+    });
   });
 }
 

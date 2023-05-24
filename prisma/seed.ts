@@ -1,6 +1,8 @@
 import { PrismaClient } from "@prisma/client";
 import cuid from "cuid";
 import { Role } from "./role";
+import { Weekday } from "./weekday";
+import { convertToAmsterdamTimezone } from "../shared/functions/convertToAmsterdamTimezone";
 
 const prisma = new PrismaClient();
 
@@ -64,7 +66,7 @@ async function main() {
   // create admin user
   const adminUser = await prisma.user.create({
     data: {
-      first_name: "Admin",
+      name: "Admin",
       last_name: "Admin",
       email: process.env.ADMIN_EMAIL,
       role: {
@@ -75,66 +77,75 @@ async function main() {
       preference: {
         create: {
           maxStaffings: 2,
-          shift_type_id: shiftType1.id,
-          availability: {
-            create: [
-              {
-                weekday: 0,
-                shift_types: {
-                  connect: {
-                    id: shiftType1.id
-                  }
-                }
-              },
-              {
-                weekday: 1,
-                shift_types: {
-                  connect: {
-                    id: shiftType1.id
-                  }
-                }
-              },
-              {
-                weekday: 2,
-                shift_types: {
-                  connect: {
-                    id: shiftType1.id
-                  }
-                }
-              },
-              {
-                weekday: 3,
-                shift_types: {
-                  connect: {
-                    id: shiftType1.id
-                  }
-                }
-              },
-              {
-                weekday: 4,
-                shift_types: {
-                  connect: {
-                    id: shiftType1.id
-                  }
-                }
-              },
-              {
-                weekday: 5,
-                shift_types: {
-                  connect: {
-                    id: shiftType1.id
-                  }
-                }
-              },
-              {
-                weekday: 6,
-                shift_types: {
-                  connect: {
-                    id: shiftType1.id
-                  }
-                }
-              },
-            ]
+          shift_type: {
+            connect: {
+              id: shiftType1.id
+            }
+          },
+          availability_week: {
+            create: {
+              sequence: 0,
+              availability: {
+                create: [
+                  {
+                    weekday: Weekday.MONDAY,
+                    shift_types: {
+                      connect: {
+                        id: shiftType1.id
+                      }
+                    }
+                  },
+                  {
+                    weekday: Weekday.TUESDAY,
+                    shift_types: {
+                      connect: {
+                        id: shiftType1.id
+                      }
+                    }
+                  },
+                  {
+                    weekday: Weekday.WEDNESDAY,
+                    shift_types: {
+                      connect: {
+                        id: shiftType1.id
+                      }
+                    }
+                  },
+                  {
+                    weekday: Weekday.THURSDAY,
+                    shift_types: {
+                      connect: {
+                        id: shiftType1.id
+                      }
+                    }
+                  },
+                  {
+                    weekday: Weekday.FRIDAY,
+                    shift_types: {
+                      connect: {
+                        id: shiftType1.id
+                      }
+                    }
+                  },
+                  {
+                    weekday: Weekday.SATURDAY,
+                    shift_types: {
+                      connect: {
+                        id: shiftType1.id
+                      }
+                    }
+                  },
+                  {
+                    weekday: Weekday.SUNDAY,
+                    shift_types: {
+                      connect: {
+                        id: shiftType1.id
+                      }
+                    }
+                  },
+                ]
+              }
+            }
           }
         }
       }
@@ -218,7 +229,7 @@ async function main() {
 
   const dayUser = await prisma.user.create({
     data: {
-      first_name: "Day",
+      name: "Day",
       last_name: "Meijroos",
       email: "daymeijroos@gmail.com",
       role: {
@@ -229,29 +240,35 @@ async function main() {
       preference: {
         create: {
           maxStaffings: 2,
-          shift_type_id: shiftType1.id,
-          availability: {
-            create: [
-              {
-                weekday: 4,
-                shift_types: {
-                  connect: [{
-                    id: shiftType1.id
+          shift_type: {
+            connect: {
+              id: shiftType1.id
+            }
+          },
+          availability_week: {
+            create: {
+              sequence: 0,
+              availability: {
+                create: [
+                  {
+                    weekday: Weekday.FRIDAY,
+                    shift_types: {
+                      connect: {
+                        id: shiftType1.id
+                      }
+                    }
                   },
                   {
-                    id: shiftType2.id
-                  }]
-                }
-              },
-              {
-                weekday: 5,
-                shift_types: {
-                  connect: {
-                    id: shiftType1.id
-                  }
-                },
+                    weekday: Weekday.SATURDAY,
+                    shift_types: {
+                      connect: {
+                        id: shiftType1.id
+                      }
+                    }
+                  },
+                ]
               }
-            ]
+            }
           }
         }
       }
@@ -264,64 +281,65 @@ async function main() {
   users.push(
     prisma.user.create({
       data: {
-        first_name: "Robert",
+        name: "Robert",
         last_name: "Swarts",
         email: "robertswarts@pulchri.nl",
         preference: {
           create: {
             maxStaffings: 2,
-            shift_type_id: shiftType1.id,
-            availability: {
-              create: [
-                {
-                  weekday: 2,
-                  shift_types: {
-                    connect: {
-                      id: shiftType1.id
-                    }
-                  }
-                },
-                {
-                  weekday: 3,
-                  shift_types: {
-                    connect: {
-                      id: shiftType1.id
-                    }
-                  },
-                },
-                {
-                  weekday: 4,
-                  shift_types: {
-                    connect: {
-                      id: shiftType1.id
-                    }
-                  },
-                },
-                {
-                  weekday: 5,
-                  shift_types: {
-                    connect: {
-                      id: shiftType1.id
-                    }
-                  },
-                },
-                {
-                  weekday: 6,
-                  shift_types: {
-                    connect: {
-                      id: shiftType1.id
-                    }
-                  },
-                },
-                {
-                  weekday: 7,
-                  shift_types: {
-                    connect: {
-                      id: shiftType1.id
-                    }
-                  },
+            shift_type: {
+              connect: {
+                id: shiftType1.id
+              }
+            },
+            availability_week: {
+              create: {
+                sequence: 0,
+                availability: {
+                  create: [
+                    {
+                      weekday: Weekday.TUESDAY,
+                      shift_types: {
+                        connect: {
+                          id: shiftType1.id
+                        }
+                      }
+                    },
+                    {
+                      weekday: Weekday.WEDNESDAY,
+                      shift_types: {
+                        connect: {
+                          id: shiftType1.id
+                        }
+                      },
+                    },
+                    {
+                      weekday: Weekday.THURSDAY,
+                      shift_types: {
+                        connect: {
+                          id: shiftType1.id
+                        }
+                      },
+                    },
+                    {
+                      weekday: Weekday.FRIDAY,
+                      shift_types: {
+                        connect: {
+                          id: shiftType1.id
+                        }
+                      },
+                    },
+                    {
+                      weekday: Weekday.SATURDAY,
+                      shift_types: {
+                        connect: {
+                          id: shiftType1.id
+                        }
+                      },
+                    },
+                  ]
                 }
-              ]
+              }
             }
           }
         }
@@ -334,32 +352,41 @@ async function main() {
   users.push(
     prisma.user.create({
       data: {
-        first_name: "Lars",
+        name: "Lars",
         last_name: "Baer",
         email: "larsbaer@pulchri.nl",
         preference: {
           create: {
             maxStaffings: 2,
-            shift_type_id: shiftType1.id,
-            availability: {
-              create: [
-                {
-                  weekday: 2,
-                  shift_types: {
-                    connect: {
-                      id: shiftType1.id
-                    }
-                  }
-                },
-                {
-                  weekday: 3,
-                  shift_types: {
-                    connect: {
-                      id: shiftType1.id
-                    }
-                  },
+            shift_type: {
+              connect: {
+                id: shiftType1.id
+              }
+            },
+            availability_week: {
+              create: {
+                sequence: 0,
+                availability: {
+                  create: [
+                    {
+                      weekday: Weekday.TUESDAY,
+                      shift_types: {
+                        connect: {
+                          id: shiftType1.id
+                        }
+                      }
+                    },
+                    {
+                      weekday: Weekday.WEDNESDAY,
+                      shift_types: {
+                        connect: {
+                          id: shiftType1.id
+                        }
+                      },
+                    },
+                  ]
                 }
-              ]
+              }
             }
           }
         }
@@ -372,35 +399,41 @@ async function main() {
   users.push(
     prisma.user.create({
       data: {
-        first_name: "Manuel",
+        name: "Manuel",
         last_name: "Vermeer",
         email: "manuelvermeer@pulchri.nl",
         preference: {
           create: {
             maxStaffings: 2,
-            shift_type_id: shiftType1.id,
-            availability: {
-              create: [
-                {
-                  weekday: 4,
-                  shift_types: {
-                    connect: [{
-                      id: shiftType1.id
+            shift_type: {
+              connect: {
+                id: shiftType1.id
+              }
+            },
+            availability_week: {
+              create: {
+                sequence: 0,
+                availability: {
+                  create: [
+                    {
+                      weekday: Weekday.THURSDAY,
+                      shift_types: {
+                        connect: {
+                          id: shiftType1.id
+                        }
+                      }
                     },
                     {
-                      id: shiftType2.id
-                    }]
-                  }
-                },
-                {
-                  weekday: 5,
-                  shift_types: {
-                    connect: {
-                      id: shiftType1.id
-                    }
-                  },
+                      weekday: Weekday.FRIDAY,
+                      shift_types: {
+                        connect: {
+                          id: shiftType1.id
+                        }
+                      },
+                    },
+                  ]
                 }
-              ]
+              }
             }
           }
         }
@@ -413,24 +446,33 @@ async function main() {
   users.push(
     prisma.user.create({
       data: {
-        first_name: "David",
+        name: "David",
         last_name: "Sprong",
         email: "davidsprong@pulchri.nl",
         preference: {
           create: {
             maxStaffings: 1,
-            shift_type_id: shiftType1.id,
-            availability: {
-              create: [
-                {
-                  weekday: 6,
-                  shift_types: {
-                    connect: {
-                      id: shiftType1.id
+            shift_type: {
+              connect: {
+                id: shiftType1.id
+              }
+            },
+            availability_week: {
+              create: {
+                sequence: 0,
+                availability: {
+                  create: [
+                    {
+                      weekday: Weekday.SATURDAY,
+                      shift_types: {
+                        connect: {
+                          id: shiftType1.id
+                        }
+                      }
                     }
-                  }
+                  ]
                 }
-              ]
+              }
             }
           }
         }
@@ -443,24 +485,33 @@ async function main() {
   users.push(
     prisma.user.create({
       data: {
-        first_name: "Olivier",
+        name: "Olivier",
         last_name: "Verbeten",
         email: "olivierverbeten@pulchri.nl",
         preference: {
           create: {
             maxStaffings: 1,
-            shift_type_id: shiftType1.id,
-            availability: {
-              create: [
-                {
-                  weekday: 7,
-                  shift_types: {
-                    connect: {
-                      id: shiftType1.id
+            shift_type: {
+              connect: {
+                id: shiftType1.id
+              }
+            },
+            availability_week: {
+              create: {
+                sequence: 0,
+                availability: {
+                  create: [
+                    {
+                      weekday: Weekday.SUNDAY,
+                      shift_types: {
+                        connect: {
+                          id: shiftType1.id
+                        }
+                      }
                     }
-                  }
+                  ]
                 }
-              ]
+              }
             }
           }
         }
@@ -473,64 +524,81 @@ async function main() {
   users.push(
     prisma.user.create({
       data: {
-        first_name: "Emma",
+        name: "Emma",
         last_name: "Beil",
         email: "emmabeil@pulchri.nl",
         preference: {
           create: {
             maxStaffings: 4,
-            shift_type_id: shiftType1.id,
-            availability: {
-              create: [
-                {
-                  weekday: 2,
-                  shift_types: {
-                    connect: {
-                      id: shiftType1.id
-                    }
-                  }
-                },
-                {
-                  weekday: 3,
-                  shift_types: {
-                    connect: {
-                      id: shiftType1.id
-                    }
-                  },
-                },
-                {
-                  weekday: 4,
-                  shift_types: {
-                    connect: {
-                      id: shiftType1.id
-                    }
-                  },
-                },
-                {
-                  weekday: 5,
-                  shift_types: {
-                    connect: {
-                      id: shiftType1.id
-                    }
-                  },
-                },
-                {
-                  weekday: 6,
-                  shift_types: {
-                    connect: {
-                      id: shiftType1.id
-                    }
-                  },
-                },
-                {
-                  weekday: 7,
-                  shift_types: {
-                    connect: {
-                      id: shiftType1.id
-                    }
-                  },
+            shift_type: {
+              connect: {
+                id: shiftType1.id
+              }
+            },
+            availability_week: {
+              create: {
+                sequence: 0,
+                availability: {
+                  create: [
+                    {
+                      weekday: Weekday.MONDAY,
+                      shift_types: {
+                        connect: {
+                          id: shiftType1.id
+                        }
+                      }
+                    },
+                    {
+                      weekday: Weekday.TUESDAY,
+                      shift_types: {
+                        connect: {
+                          id: shiftType1.id
+                        }
+                      },
+                    },
+                    {
+                      weekday: Weekday.WEDNESDAY,
+                      shift_types: {
+                        connect: {
+                          id: shiftType1.id
+                        }
+                      },
+                    },
+                    {
+                      weekday: Weekday.THURSDAY,
+                      shift_types: {
+                        connect: {
+                          id: shiftType1.id
+                        }
+                      },
+                    },
+                    {
+                      weekday: Weekday.FRIDAY,
+                      shift_types: {
+                        connect: {
+                          id: shiftType1.id
+                        }
+                      },
+                    },
+                    {
+                      weekday: Weekday.SATURDAY,
+                      shift_types: {
+                        connect: {
+                          id: shiftType1.id
+                        }
+                      },
+                    },
+                    {
+                      weekday: Weekday.SUNDAY,
+                      shift_types: {
+                        connect: {
+                          id: shiftType1.id
+                        }
+                      },
+                    },
+                  ]
                 }
-              ]
+              }
             }
           }
         }
@@ -543,40 +611,49 @@ async function main() {
   users.push(
     prisma.user.create({
       data: {
-        first_name: "Barbara",
+        name: "Barbara",
         last_name: "Damme",
         email: "barbaradamme@pulchri.nl",
         preference: {
           create: {
             maxStaffings: 1,
-            shift_type_id: shiftType1.id,
-            availability: {
-              create: [
-                {
-                  weekday: 3,
-                  shift_types: {
-                    connect: {
-                      id: shiftType1.id
+            shift_type: {
+              connect: {
+                id: shiftType1.id
+              }
+            },
+            availability_week: {
+              create: {
+                sequence: 0,
+                availability: {
+                  create: [
+                    {
+                      weekday: Weekday.WEDNESDAY,
+                      shift_types: {
+                        connect: {
+                          id: shiftType1.id
+                        }
+                      }
+                    },
+                    {
+                      weekday: Weekday.SATURDAY,
+                      shift_types: {
+                        connect: {
+                          id: shiftType1.id
+                        }
+                      },
+                    },
+                    {
+                      weekday: Weekday.SUNDAY,
+                      shift_types: {
+                        connect: {
+                          id: shiftType1.id
+                        }
+                      },
                     }
-                  }
-                },
-                {
-                  weekday: 6,
-                  shift_types: {
-                    connect: {
-                      id: shiftType1.id
-                    }
-                  },
-                },
-                {
-                  weekday: 7,
-                  shift_types: {
-                    connect: {
-                      id: shiftType1.id
-                    }
-                  },
+                  ]
                 }
-              ]
+              }
             }
           }
         }
@@ -589,32 +666,41 @@ async function main() {
   users.push(
     prisma.user.create({
       data: {
-        first_name: "Isabella",
+        name: "Isabella",
         last_name: "Host",
         email: "isabellahost@pulchri.nl",
         preference: {
           create: {
             maxStaffings: 2,
-            shift_type_id: shiftType1.id,
-            availability: {
-              create: [
-                {
-                  weekday: 2,
-                  shift_types: {
-                    connect: {
-                      id: shiftType1.id
+            shift_type: {
+              connect: {
+                id: shiftType1.id
+              }
+            },
+            availability_week: {
+              create: {
+                sequence: 0,
+                availability: {
+                  create: [
+                    {
+                      weekday: Weekday.TUESDAY,
+                      shift_types: {
+                        connect: {
+                          id: shiftType1.id
+                        }
+                      }
+                    },
+                    {
+                      weekday: Weekday.WEDNESDAY,
+                      shift_types: {
+                        connect: {
+                          id: shiftType1.id
+                        }
+                      },
                     }
-                  }
-                },
-                {
-                  weekday: 3,
-                  shift_types: {
-                    connect: {
-                      id: shiftType1.id
-                    }
-                  },
+                  ]
                 }
-              ]
+              }
             }
           }
         }
@@ -627,40 +713,41 @@ async function main() {
   users.push(
     prisma.user.create({
       data: {
-        first_name: "Marieke",
+        name: "Marieke",
         last_name: "Burckhard",
         email: "mariekeburckhard@pulchri.nl",
         preference: {
           create: {
             maxStaffings: 2,
-            shift_type_id: shiftType1.id,
-            availability: {
-              create: [
-                {
-                  weekday: 4,
-                  shift_types: {
-                    connect: {
-                      id: shiftType1.id
+            shift_type: {
+              connect: {
+                id: shiftType1.id
+              }
+            },
+            availability_week: {
+              create: {
+                sequence: 0,
+                availability: {
+                  create: [
+                    {
+                      weekday: Weekday.THURSDAY,
+                      shift_types: {
+                        connect: {
+                          id: shiftType1.id
+                        }
+                      }
+                    },
+                    {
+                      weekday: Weekday.FRIDAY,
+                      shift_types: {
+                        connect: {
+                          id: shiftType1.id
+                        }
+                      },
                     }
-                  }
-                },
-                {
-                  weekday: 5,
-                  shift_types: {
-                    connect: {
-                      id: shiftType1.id
-                    }
-                  },
-                },
-                {
-                  weekday: 6,
-                  shift_types: {
-                    connect: {
-                      id: shiftType1.id
-                    }
-                  },
+                  ]
                 }
-              ]
+              }
             }
           }
         }
@@ -673,41 +760,49 @@ async function main() {
   users.push(
     prisma.user.create({
       data: {
-        first_name: "Maria",
+        name: "Maria",
         last_name: "Nellessen",
         email: "marianellessen@pulchri.nl",
         preference: {
           create: {
             maxStaffings: 3,
-            shift_type_id: shiftType1.id,
-            availability: {
-              create: [
-                {
-                  weekday: 5,
-                  shift_types: {
-                    connect: {
-                      id: shiftType1.id
+            shift_type: {
+              connect: {
+                id: shiftType1.id
+              }
+            },
+            availability_week: {
+              create: {
+                sequence: 0,
+                availability: {
+                  create: [
+                    {
+                      weekday: Weekday.MONDAY,
+                      shift_types: {
+                        connect: {
+                          id: shiftType1.id
+                        }
+                      }
+                    },
+                    {
+                      weekday: Weekday.TUESDAY,
+                      shift_types: {
+                        connect: {
+                          id: shiftType1.id
+                        }
+                      },
+                    },
+                    {
+                      weekday: Weekday.THURSDAY,
+                      shift_types: {
+                        connect: {
+                          id: shiftType1.id
+                        }
+                      },
                     }
-                  }
-                },
-                {
-                  weekday: 6,
-                  shift_types: {
-                    connect: {
-                      id: shiftType1.id
-                    }
-                  },
-                },
-                {
-                  id: availabilityId + "3",
-                  weekday: 7,
-                  shift_types: {
-                    connect: {
-                      id: shiftType1.id
-                    }
-                  },
+                  ]
                 }
-              ]
+              }
             }
           }
         }
@@ -716,12 +811,6 @@ async function main() {
   );
 
   await Promise.all(users);
-
-  function convertToAmsterdamTimezone(dateString: string) {
-    const date = new Date(dateString);
-    date.setUTCHours(date.getUTCHours() - 2);
-    return date.toISOString();
-  }
 
   // mockdata voor shifts
   const shifts = [];
@@ -955,3 +1044,4 @@ main()
   .finally(async () => {
     await prisma.$disconnect();
   });
+

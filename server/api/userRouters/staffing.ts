@@ -30,7 +30,7 @@ export const staffingRouter = createTRPCRouter({
                   user: {
                     select: {
                       id: true,
-                      first_name: true,
+                      name: true,
                     }
                   },
                   shift_type: true,
@@ -72,7 +72,7 @@ export const staffingRouter = createTRPCRouter({
                   user: {
                     select: {
                       id: true,
-                      first_name: true,
+                      name: true,
                     }
                   },
                   shift_type: true,

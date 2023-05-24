@@ -17,7 +17,6 @@ export const Overview = () => {
     <div>Loading...</div>
   )
 
-
   return (
     <div className="m-4 flex justify-center">
       <div className="max-w-4xl w-full">

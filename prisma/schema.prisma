@@ -37,7 +37,7 @@ model Session {
 
 model User {
   id            String           @id @default(cuid())
-  first_name    String?
+  name          String?
   last_name     String?
   email         String?          @unique
   emailVerified DateTime?
@@ -46,6 +46,7 @@ model User {
   role_name     String           @default("USER")
   preference    User_Preference?
   staffings     Staffing[]
+  backups       Backup[]
   accounts      Account[]
   sessions      Session[]
 }
@@ -65,7 +66,6 @@ model User_Preference {
   user_id           String             @unique
   shift_type        Shift_Type         @relation(fields: [shift_type_id], references: [id])
   absence           Absence[]
-  availability      Availability[]
   availability_week AvailabilityWeek[]
   user              User               @relation(fields: [user_id], references: [id])
 }
@@ -76,18 +76,18 @@ model AvailabilityWeek {
   preference_id String
   preference    User_Preference @relation(fields: [preference_id], references: [id])
   availability  Availability[]
+
+  @@unique([sequence, preference_id])
 }
 
 model Availability {
   id                   String           @id @default(cuid())
-  availability_week_id String
   weekday              Int
-  preference_id        String
+  availability_week_id String
   availability_week    AvailabilityWeek @relation(fields: [availability_week_id], references: [id])
-  preference           User_Preference  @relation(fields: [preference_id], references: [id])
   shift_types          Shift_Type[]
 
-  @@unique([preference_id, weekday, availability_week_id])
+  @@unique([weekday, availability_week_id])
 }
 
 model Absence {
@@ -110,6 +110,7 @@ model Shift {
   end            DateTime
   staffings      Staffing[]
   staff_required Staff_Required[]
+  Backup         Backup[]
 }
 
 model Staffing {
@@ -124,6 +125,18 @@ model Staffing {
   @@unique([shift_id, user_id])
 }
 
+model Backup {
+  id       String   @id @default(cuid())
+  user_id  String
+  date     DateTime @unique
+  user     User     @relation(fields: [user_id], references: [id])
+  shift_id String?
+  shift    Shift?   @relation(fields: [shift_id], references: [id])
+
+  @@unique([user_id, date])
+  @@unique([user_id, shift_id])
+}
+
 model Staff_Required {
   id            String     @id @default(cuid())
   amount        Int
@@ -131,6 +144,8 @@ model Staff_Required {
   shift_type_id String
   shift         Shift      @relation(fields: [shift_id], references: [id])
   shift_type    Shift_Type @relation(fields: [shift_type_id], references: [id])
+
+  @@unique([shift_id, shift_type_id])
 }
 
 model Shift_Type {

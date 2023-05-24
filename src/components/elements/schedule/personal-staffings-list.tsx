@@ -25,11 +25,14 @@ export function PersonalStaffingList({ fromDate }: { fromDate?: Date }) {
   const staffings = personalStaffings.data?.pages.flatMap((page) => page.items);
   return (
     <div className="flex flex-col gap-2 items-center">
-      <h1 className="text-4xl font-bold">Mijn diensten</h1>
+      <h1 className="text-4xl font-bold w-full">Mijn diensten</h1>
       <CardList<StaffingWithColleagues> objects={staffings} CardLayout={
-        (staffing) => <StaffingCard staffing={staffing} />
+        (staffing) => {
+          return <StaffingCard staffing={staffing} />
+        }
       } />
-      {personalStaffings.hasNextPage && <Button onPress={() => personalStaffings.fetchNextPage()}>Load more</Button>}
+      {personalStaffings.hasNextPage && <Button onPress={() => void personalStaffings.fetchNextPage()}>Load more</Button>}
+      {staffings?.length === 0 && <p className="text-center m-4">Je hebt nog geen toekomstige diensten staan.</p>}
     </div>
   )
 }

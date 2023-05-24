@@ -22,6 +22,7 @@ import { Role, RoleType } from "../prisma/role";
 
 declare module "next-auth/jwt" {
   interface JWT {
+    id?: string;
     role?: RoleType;
     first_name?: string;
     last_name?: string;
@@ -32,6 +33,7 @@ declare module "next-auth/jwt" {
 
 declare module "next-auth" {
   interface User {
+    id?: string;
     first_name?: string;
     last_name?: string;
     email?: string;
@@ -54,8 +56,9 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     jwt({ token, user }) {
       if (user) {
+        token.id = user.id;
         token.role = user.role_name
-        token.first_name = user.first_name
+        token.name = user.name
         token.last_name = user.last_name
         token.email = user.email
         token.image = user.image
@@ -64,8 +67,9 @@ export const authOptions: NextAuthOptions = {
     },
     session({ session, token }) {
       if (session.user) {
+        session.user.id = token.id;
         session.user.role = token.role;
-        session.user.first_name = token.first_name
+        session.user.name = token.name
         session.user.last_name = token.last_name
         session.user.email = token.email
         session.user.image = token.image

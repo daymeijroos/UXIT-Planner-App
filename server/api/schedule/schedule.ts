@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure, restrictedProcedure } from "../trpc";
-import { generateSchedule } from "../../utils/generateSchedule";
+import { generateSchedule } from "../../utils/schedule-generator-functions/generate-functions";
 import { getUnfulfilledShifts } from "../../utils/getUnfulfilledShifts";
 import { Role } from "../../../prisma/role";
 
@@ -13,18 +13,16 @@ export const scheduleRouter = createTRPCRouter({
     }),
   generate: restrictedProcedure(Role.ADMIN)
     .input(z.object({
-      start_date: z.date(),
-      end_date: z.date(),
-    }).optional())
+      from: z.date(),
+      to: z.date(),
+    }))
     .mutation(({ input }) => {
       return new Promise((resolve, reject) => {
-        generateSchedule(input?.start_date, input?.end_date)
+        generateSchedule(input.from, input.to)
           .then(() => {
-            console.log("Alle shifts zijn verwerkt.");
             resolve('Success');
           })
           .catch((error) => {
-            console.error("Er is een fout opgetreden:", error);
             reject(error);
           });
       });

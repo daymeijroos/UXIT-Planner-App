@@ -18,7 +18,7 @@ export const staffingRouter = createTRPCRouter({
               gte: input?.from || new Date(new Date().setHours(0, 0, 0, 0)),
             },
             end: {
-              lte: new Date(new Date().setDate(new Date().getDate() + (input?.days || 7))),
+              lte: new Date(new Date().setDate(new Date(input?.from).getDate() + (input?.days || 7))),
             }
           }
         },

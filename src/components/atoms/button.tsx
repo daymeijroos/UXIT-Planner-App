@@ -12,12 +12,15 @@ export interface ButtonProps extends AriaButtonProps {
 
 const containerStyles = `m-4`;
 
+
+
+
 const buttonStyles = {
-  primary: `border-2 border-black py-4 px-4 text-black bg-blue-grey drop-shadow-lg hover:bg-steel active:bg-slate active:drop-shadow-none flex items-center justify-center`,
-  success: `border-2 border-black py-4 px-4 text-black bg-teal drop-shadow-lg hover:bg-light-teal active:bg-dark-teal active:drop-shadow-none flex items-center justify-center`,
-  error: `border-2 border-black py-4 px-4 text-black bg-coral drop-shadow-lg hover:bg-salmon active:bg-red-orange active:drop-shadow-none flex items-center justify-center`,
-  default: `border-2 border-black py-4 px-4 text-black bg-white drop-shadow-lg hover:bg-light-grey active:bg-medium-grey active:drop-shadow-none flex items-center justify-center`,
-};
+  primary: `dark:bg-steel border-2 border-black py-4 px-4 text-black bg-blue-grey dark: bg-87FFF8 drop-shadow-lg hover:bg-steel active:bg-slate active:drop-shadow-none flex items-center justify-center`,
+  success: `dark:bg-tail border-2 border-black py-4 px-4 text-black bg-teal drop-shadow-lg hover:bg-light-teal active:bg-dark-teal active:drop-shadow-none flex items-center justify-center`,
+  error: `dark:bg-red-orange dark:text-white border-2 border-black py-4 px-4 text-black bg-coral drop-shadow-lg hover:bg-salmon active:bg-red-orange active:drop-shadow-none flex items-center justify-center`,
+  default: `dark:border-steel dark:bg-[#00000000] dark:text-light-grey dark:hover:bg-steel  border-2 border-black py-4 px-4 text-black bg-white drop-shadow-lg hover:bg-light-grey active:bg-medium-grey active:drop-shadow-none flex items-center justify-center`,
+}
 
 const focusStyles = 'outline-none ring-4 ring-pale-yellow'
 

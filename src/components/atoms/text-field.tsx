@@ -16,7 +16,7 @@ export function TextField(props: TextFieldProps) {
     const { labelProps, inputProps, descriptionProps, errorMessageProps } = useTextField(props, ref);
 
     return (
-        <div className="mb-4">
+        <div className="mb-4 dark:bg-[#00000000] dark:text-white dark:border-steel">
             <label htmlFor="label" className="block text-gray-700 font-medium mb-1" {...labelProps}>{props.label}
             </label>
             <input {...inputProps}

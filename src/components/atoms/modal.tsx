@@ -14,7 +14,7 @@ export function Modal({ state, children, ...props }: ModalProps) {
 
   return (
     <Overlay>
-      <div className='fixed z-100 top-0 left-0 bottom-0 right-0 bg-black bg-opacity-50 flex items-center justify-center'
+      <div className='dark:bg-[#2B303C] dark:text-white dark:border-[#4E8B88] fixed z-100 top-0 left-0 bottom-0 right-0 bg-black bg-opacity-50 flex items-center justify-center'
         {...underlayProps}
       >
         <div className='bg-white rounded-lg shadow-lg p-4'

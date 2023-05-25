@@ -1,6 +1,7 @@
 import React from 'react';
 import { api } from '../../utils/api';
 import { User } from "@prisma/client";
+import { NavigationBar } from "../../components/elements/navigation-bar";
 
 const Gebruikers = () => {
   const users = api.user.getAllUsers.useQuery();
@@ -18,22 +19,22 @@ const Gebruikers = () => {
   };
 
   return (
-    <div className="bg-gray-100 p-4">
+    <div className="p-4">
       <div className="flex justify-between items-center mb-4">
-        <h1 className="text-xl font-bold">Gebruikers</h1>
-        <p className="text-sm text-gray-500">{users.data?.length} Gebruikers</p>
+        <h1 className="text-xl font-bold mx-auto">Gebruikers</h1>
+        <p className="text-sm">{users.data?.length} Gebruikers</p>
       </div>
       <div className="flex justify-center items-center">
-        <table className="w-full md:max-w-2xl divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+        <table className="w-full md:max-w-2xl divide-y divide-gray-200 border-2 border-black">
+          <thead className="bg-gray-50 border-2 border-black">
           <tr>
-            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-              Achternaam
-            </th>
-            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            <th scope="col" className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider border-2 border-black">
               Voornaam
             </th>
-            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            <th scope="col" className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider border-2 border-black">
+              Achternaam
+            </th>
+            <th scope="col" className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider border-2 border-black">
               Email
             </th>
           </tr>
@@ -42,13 +43,13 @@ const Gebruikers = () => {
           {
             users.data?.map((user) => (
               <tr key={user.id} className="hover:bg-gray-200 cursor-pointer" onClick={() => handleUserClick(user.id)}>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-900">{user.last_name}</div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
+                <td className="px-6 py-4 whitespace-nowrap border border-black">
                   <div className="text-sm text-gray-900">{user.first_name}</div>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap">
+                <td className="px-6 py-4 whitespace-nowrap border border-black">
+                  <div className="text-sm text-gray-900">{user.last_name}</div>
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap border border-black">
                   <div className="text-sm text-gray-900">{user.email}</div>
                 </td>
               </tr>
@@ -57,6 +58,7 @@ const Gebruikers = () => {
           </tbody>
         </table>
       </div>
+      <NavigationBar />
     </div>
   );
 }

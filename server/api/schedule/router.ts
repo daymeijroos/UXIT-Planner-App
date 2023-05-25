@@ -3,7 +3,7 @@ import { z } from "zod"
 import { createTRPCRouter, publicProcedure, restrictedProcedure } from "../trpc"
 import { getUnfulfilledShifts } from "../../utils/getUnfulfilledShifts"
 import { Role } from "../../../prisma/role"
-import { generateSchedule } from "./schedule-generate-functions"
+import { generateSchedule } from "./generate-functions"
 
 export const router = createTRPCRouter({
   getUnfulfilledShifts: publicProcedure

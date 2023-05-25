@@ -102,7 +102,7 @@ export const staffingRouter = createTRPCRouter({
     .mutation(async ({ ctx }) => {
       return ctx.prisma.staffing.deleteMany()
     }),
-  CreateStaffing: publicProcedure
+  createStaffing: publicProcedure
     .input(
       z.object({
         shift_id: z.string(),
@@ -119,7 +119,7 @@ export const staffingRouter = createTRPCRouter({
       })
       return staffing
     }),
-  RemoveStaffing: publicProcedure
+  removeStaffing: publicProcedure
     .input(
       z.object({
         shift_id: z.string(),
@@ -152,5 +152,21 @@ export const staffingRouter = createTRPCRouter({
       }
       console.log("Staffin not found")
       return false
+    }),
+  changeShiftType: publicProcedure
+    .input(
+      z.object({
+        staffing_id: z.string(),
+        shift_type_id: z.string()
+      }))
+    .mutation(async ({ ctx, input }) => {
+      return ctx.prisma.staffing.update({
+        where: {
+          id: input.staffing_id
+        },
+        data: {
+          shift_type_id: input.shift_type_id
+        }
+      })
     }),
 })

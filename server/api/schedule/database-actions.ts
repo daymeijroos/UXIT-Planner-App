@@ -1,6 +1,6 @@
 import { Shift, Staff_Required, User } from '@prisma/client'
-import { prisma } from "../../db";
-import { SplitDate } from '../../../shared/types/splitDate';
+import { prisma } from "../../db"
+import { SplitDate } from '../../../shared/types/splitDate'
 
 export const getShifts = async (fromDate?: Date, toDate?: Date) => {
   return prisma.shift.findMany({
@@ -16,10 +16,15 @@ export const getShifts = async (fromDate?: Date, toDate?: Date) => {
       staff_required: {
         include: {
           shift_type: true,
+          shift: {
+            include: {
+              staffings: true,
+            }
+          }
         },
       }
     }
-  });
+  })
 }
 
 export const getUsersWithPreferencesAndStaffings = async () => {
@@ -41,7 +46,7 @@ export const getUsersWithPreferencesAndStaffings = async () => {
       },
       staffings: true,
     },
-  });
+  })
 }
 
 export const getStaffingsOnStaffRequired = async (staffRequired: Staff_Required) => {
@@ -50,7 +55,7 @@ export const getStaffingsOnStaffRequired = async (staffRequired: Staff_Required)
       shift_id: staffRequired.shift_id,
       shift_type_id: staffRequired.shift_type_id,
     },
-  });
+  })
 }
 
 export const getUserStaffingsForWeek = async (user: User, start: SplitDate) => {
@@ -66,14 +71,13 @@ export const getUserStaffingsForWeek = async (user: User, start: SplitDate) => {
         },
       },
     },
-  });
+  })
 }
 
 export const getUserStaffings = async (user: User, from: Date, to: Date) => {
   return prisma.staffing.findMany({
     where: {
       user_id: user.id,
-      // filter by date, from beginning of the day to end of the day
       shift: {
         start: {
           gte: from
@@ -83,41 +87,5 @@ export const getUserStaffings = async (user: User, from: Date, to: Date) => {
         },
       },
     },
-  });
-}
-
-export const createStaffing = async (user: User, shift: Shift, staff_required: Staff_Required) => {
-  return prisma.staffing.create({
-    data: {
-      shift_id: shift.id,
-      shift_type_id: staff_required.shift_type_id,
-      user_id: user.id,
-    },
-  });
-}
-
-export const checkUserIsBackup = async (user: User, date: Date) => {
-  return prisma.backup.findFirst({
-    where: {
-      user_id: user.id,
-      date: date,
-    },
-  });
-}
-
-export const createBackup = async (user: User, date: Date) => {
-  return prisma.backup.create({
-    data: {
-      user_id: user.id,
-      date: date,
-    },
-  });
-}
-
-export const getBackupForDate = async (date: Date) => {
-  return prisma.backup.findMany({
-    where: {
-      date: date,
-    },
-  });
+  })
 }

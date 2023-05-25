@@ -1,7 +1,7 @@
-import { z } from "zod";
-import { createTRPCRouter, publicProcedure } from "../trpc";
+import { z } from "zod"
+import { createTRPCRouter, publicProcedure } from "../trpc"
 
-export const requiredStaffingRouter = createTRPCRouter({
+export const staffRequiredRouter = createTRPCRouter({
   createRequiredStaffing: publicProcedure
     .input(
       z.object({
@@ -24,7 +24,7 @@ export const requiredStaffingRouter = createTRPCRouter({
             }
           }
         },
-      });
+      })
     }),
   updateRequiredStaffing: publicProcedure
     .input(
@@ -48,20 +48,4 @@ export const requiredStaffingRouter = createTRPCRouter({
         }
       })
     }),
-  ChangeStaffShiftType: publicProcedure
-    .input(
-      z.object({
-        staffing_id: z.string(),
-        shift_type_id: z.string()
-      }))
-    .mutation(async ({ ctx, input }) => {
-      return ctx.prisma.staffing.update({
-        where: {
-          id: input.staffing_id
-        },
-        data: {
-          shift_type_id: input.shift_type_id
-        }
-      })
-    }),
-});
+})

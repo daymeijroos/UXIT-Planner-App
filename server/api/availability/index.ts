@@ -1,2 +1,2 @@
-export * from './availability-helper-functions'
-export { availabilityRouter } from './availability-router'
+export * from './helper-functions'
+export { availabilityRouter } from './router'

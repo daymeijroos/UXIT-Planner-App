@@ -1,5 +1,5 @@
-import { router } from "./schedule-router"
-import { generateSchedule } from "./schedule-generate-functions"
+import { router } from "./router"
+import { generateSchedule } from "./generate-functions"
 
 export const scheduleRouter = router
 export const generate = generateSchedule

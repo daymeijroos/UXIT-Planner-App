@@ -1,9 +1,9 @@
 import { Shift, Shift_Type, Staff_Required } from "@prisma/client"
-import { UserWithPreferenceAndStaffings } from "../../types/user"
 import { SplitDate } from "../../../shared/types/splitDate"
 import { getAvailabilityForDate } from "../availability"
-import { getStaffingsOnStaffRequired, getUserStaffings, getUserStaffingsForWeek } from "./schedule-database-actions"
+import { getStaffingsOnStaffRequired, getUserStaffings, getUserStaffingsForWeek } from "./database-actions"
 import { getBackupsOnDate } from "../backup"
+import { UserWithPreferenceAndStaffings } from "../../types/user"
 
 export const checkUserAvailability = async (user: UserWithPreferenceAndStaffings, on: Date) => {
   if (!user.preference) return false

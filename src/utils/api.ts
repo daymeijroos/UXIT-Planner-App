@@ -5,10 +5,9 @@
  *
  * We also create a few inference helpers for input and output types
  */
-import { createWSClient, httpBatchLink, loggerLink, wsLink } from "@trpc/client";
+import { httpBatchLink, loggerLink } from "@trpc/client";
 import { createTRPCNext } from "@trpc/next";
 import { type inferRouterInputs, type inferRouterOutputs } from "@trpc/server";
-import { NextPageContext } from "next";
 import superjson from "superjson";
 
 import { type AppRouter } from "../../server/api/root";

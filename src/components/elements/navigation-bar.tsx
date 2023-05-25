@@ -2,25 +2,22 @@ import React from "react";
 import { Bell, Calendar, User, Tool } from "react-feather";
 import { useRouter } from "next/navigation";
 import { Button } from "../atoms/button";
-import { api } from "../../utils/api";
 
 export const NavigationBar = () => {
-
-
   const router = useRouter();
   return (
-    <nav className="fixed bottom-0 bg-white text-black py-3 px-6 flex items-center w-screen justify-center space-x-4">
+    <nav className=" dark:bg-slate dark:text-white dark:border-steel fixed bottom-0 bg-white text-black py-3 px-6 flex items-center w-screen justify-center space-x-4">
       <Button aria-label="Notificaties" title="Notificaties">
-        <Bell className="stroke-2" color="#000" size="24" width="30" height="30" />
+        <Bell className="stroke-5/4 dark:stroke-white" color="#000" size="24" width="30" height="30" />
       </Button>
-      <Button color="success" onPress={() => router.push("/")} aria-label="Kalender" title="Kalender">
-        <Calendar className="stroke-2" color="#000" size="24" width="30" height="30" />
+      <Button aria-label="Kalender" title="Kalender" color="success" onPress={() => router.push("/")}>
+        <Calendar className="stroke-5/4 dark:stroke-black" color="#000" size="24" width="30" height="30" />
       </Button>
-      <Button aria-label="Account" title="Account">
-        <User className="stroke-2" color="#000" size="24" width="30" height="30" />
+      <Button aria-label="Account" title="Account" onPress={() => router.push("/test/login")}>
+        <User className="stroke-5/4 dark:stroke-white" color="#000" size="24" width="30" height="30" />
       </Button>
-      <Button onPress={() => router.push("/admin")} aria-label="Admin" title="Admin">
-        <Tool className="stroke-2" color="#000" size="24" width="30" height="30" />
+      <Button aria-label="Admin" title="Admin" onPress={() => router.push("/admin")}>
+        <Tool className="stroke-5/4 dark:stroke-white" color="#000" size="24" width="30" height="30" />
       </Button>
     </nav>
   );

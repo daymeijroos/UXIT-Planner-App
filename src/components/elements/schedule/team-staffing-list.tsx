@@ -3,6 +3,8 @@ import { StaffingCard } from "./staffing-card";
 import { api } from '../../../utils/api';
 import type { StaffingWithColleagues } from '../../../types/StaffingWithColleagues';
 import { useAutoAnimate } from '@formkit/auto-animate/react'
+import Loading from '../../../pages/test/loading';
+import { LoadingMessage } from '../loading-message';
 import type { CalendarDate } from "@internationalized/date";
 import { getLocalTimeZone } from "@internationalized/date";
 import { getFirstDayOfTheWeek } from "../../../../shared/date/dateHelperFunctions";
@@ -11,6 +13,7 @@ interface ScheduleProps {
   selectedDate: CalendarDate;
 }
 
+export const TeamStaffingList = ({ selectedDate, weekStart }: ScheduleProps) => {
 export const Schedule = ({ selectedDate }: ScheduleProps) => {
   const weekStart = getFirstDayOfTheWeek(selectedDate.toDate(getLocalTimeZone()));
 
@@ -18,10 +21,14 @@ export const Schedule = ({ selectedDate }: ScheduleProps) => {
     duration: 150,
   })
 
-  const staffings = api.staffing.getStaffing.useQuery({ from: weekStart });
+  const staffings = api.staffing.getStaffing.useQuery({ fromDate: weekStart });
 
   if (staffings.isLoading) {
-    return <div>loading...</div>;
+    return (
+      <div className='flex justify-center h-64'>
+        <LoadingMessage />
+      </div>
+    );
   }
 
   if (staffings.error) {
@@ -54,7 +61,7 @@ export const Schedule = ({ selectedDate }: ScheduleProps) => {
 
 
   return (
-    <div ref={parent} className='overflow-y-auto h-[70vh]'>
+    <div ref={parent} className='overflow-y-auto h-[70vh] dark:text-white]'>
       {
         filteredStaffings.length === 0 ? (
           <p className='text-center m-4'>Er zijn geen vrijwilligers ingepland op deze datum.</p>

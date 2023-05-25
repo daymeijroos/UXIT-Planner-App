@@ -1,5 +1,5 @@
-import toast, { Toast } from "react-hot-toast";
-import { CheckSquare, X } from 'react-feather';
+import toast, { type Toast } from "react-hot-toast"
+import { CheckSquare, X } from 'react-feather'
 
 export const successToast = (message: string) => {
 
@@ -12,7 +12,7 @@ export const successToast = (message: string) => {
           </div>
           <div
             onClick={() => {
-              toast.remove(t.id);
+              toast.remove(t.id)
             }}
             className="cursor-pointer absolute top-1 right-2"
           >

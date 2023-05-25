@@ -1,7 +1,7 @@
-import { Shift, Shift_Type, Staff_Required } from "@prisma/client"
+import { Shift, Shift_Type } from "@prisma/client"
 import { SplitDate } from "../../../shared/types/splitDate"
 import { getAvailabilityForDate } from "../availability"
-import { getStaffingsOnStaffRequired, getUserStaffings, getUserStaffingsForWeek } from "./database-actions"
+import { getUserStaffings, getUserStaffingsForWeek } from "../user/database-actions"
 import { getBackupsOnDate } from "../backup"
 import { UserWithPreferenceAndStaffings } from "../../types/user"
 
@@ -37,11 +37,6 @@ export const checkUserAbsentDuringShift = async (user: UserWithPreferenceAndStaf
   return checkUserAbsent(user, shift.start, shift.end)
 }
 
-export const checkStaffRequired = async (staff_required: Staff_Required) => {
-  const staffingsForShift = await getStaffingsOnStaffRequired(staff_required)
-  return staff_required.amount - staffingsForShift.length
-}
-
 export const checkReachedMaxStaffings = async (user: UserWithPreferenceAndStaffings, start: Date) => {
   const startSplit = SplitDate.fromDate(start)
   const maxStaffings = user.preference?.maxStaffings || 0
@@ -64,4 +59,3 @@ export const checkUserAlreadyStaffedDuringShift = async (user: UserWithPreferenc
 export const checkEnoughBackupStaff = async (date: Date) => {
   return (await getBackupsOnDate(date)).length >= 2
 }
-

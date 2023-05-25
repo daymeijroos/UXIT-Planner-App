@@ -1,5 +1,5 @@
-import toast, { Toast } from "react-hot-toast";
-import { AlertOctagon, X } from 'react-feather';
+import toast, { type Toast } from "react-hot-toast"
+import { AlertOctagon, X } from 'react-feather'
 
 export const errorToast = (message: string) => {
   toast.custom((t: Toast) => (
@@ -11,7 +11,7 @@ export const errorToast = (message: string) => {
           </div>
           <div
             onClick={() => {
-              toast.remove(t.id);
+              toast.remove(t.id)
             }}
             className="cursor-pointer absolute top-1 right-2"
           >

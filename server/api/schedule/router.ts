@@ -5,7 +5,7 @@ import { getUnfulfilledShifts } from "../../utils/getUnfulfilledShifts"
 import { Role } from "../../../prisma/role"
 import { generateSchedule } from "./generate-functions"
 
-export const router = createTRPCRouter({
+export const scheduleRouter = createTRPCRouter({
   getUnfulfilledShifts: publicProcedure
     .query(() => {
       return getUnfulfilledShifts()

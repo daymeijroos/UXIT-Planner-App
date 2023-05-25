@@ -1,31 +1,6 @@
-import { Shift, Staff_Required, User } from '@prisma/client'
+import { User } from '@prisma/client'
 import { prisma } from "../../db"
 import { SplitDate } from '../../../shared/types/splitDate'
-
-export const getShifts = async (fromDate?: Date, toDate?: Date) => {
-  return prisma.shift.findMany({
-    where: {
-      start: {
-        gte: fromDate,
-      },
-      end: {
-        lte: toDate,
-      },
-    },
-    include: {
-      staff_required: {
-        include: {
-          shift_type: true,
-          shift: {
-            include: {
-              staffings: true,
-            }
-          }
-        },
-      }
-    }
-  })
-}
 
 export const getUsersWithPreferencesAndStaffings = async () => {
   return prisma.user.findMany({
@@ -45,15 +20,6 @@ export const getUsersWithPreferencesAndStaffings = async () => {
         },
       },
       staffings: true,
-    },
-  })
-}
-
-export const getStaffingsOnStaffRequired = async (staffRequired: Staff_Required) => {
-  return prisma.staffing.findMany({
-    where: {
-      shift_id: staffRequired.shift_id,
-      shift_type_id: staffRequired.shift_type_id,
     },
   })
 }

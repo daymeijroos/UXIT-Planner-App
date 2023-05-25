@@ -1,16 +1,15 @@
-import { type ReactElement, useRef } from "react";
-import { Orientation, useTab } from "react-aria";
-import { TabListState } from "react-stately";
-import { Node } from "@react-types/shared"
+import { useRef } from "react"
+import { useTab } from "react-aria"
+import type { TabListState } from "react-stately"
+import type { Node } from "@react-types/shared"
 
-export function Tab<T extends object>({ item, state, orientation }: {
-  item: Node<T>;
-  state: TabListState<T>;
-  orientation?: Orientation;
+export function Tab<T extends object>({ item, state }: {
+  item: Node<T>
+  state: TabListState<T>
 }) {
-  const { key, rendered } = item;
-  const ref = useRef(null);
-  const { tabProps, isSelected } = useTab({ key }, state, ref);
+  const { key, rendered } = item
+  const ref = useRef(null)
+  const { tabProps, isSelected } = useTab({ key }, state, ref)
   return (
     <div {...tabProps} className={`
     ${isSelected ? "bg-teal dark:text-black" : ""}
@@ -19,5 +18,5 @@ export function Tab<T extends object>({ item, state, orientation }: {
     `} ref={ref}>
       {rendered}
     </div>
-  );
+  )
 }

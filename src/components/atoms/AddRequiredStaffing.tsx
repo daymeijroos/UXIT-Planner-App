@@ -1,24 +1,24 @@
-import React from 'react';
-import { api } from '../../utils/api';
-import { Button } from './button';
+import React from 'react'
+import { api } from '../../utils/api'
+import { Button } from './button'
 
 interface AddRequiredStaffingProps {
   RequiredStaffingProps: {
     shift_id: string,
     amountOfStaffRequired: number
     shift_type_id: string
-  };
+  }
 }
 
 export function AddRequiredStaffing({ RequiredStaffingProps }: AddRequiredStaffingProps) {
-  const createRequiredStandByStaffing = api.requiredStaffing.createRequiredStaffing.useMutation();
+  const createRequiredStandByStaffing = api.staffRequired.createRequiredStaffing.useMutation()
   const handleAddRequiredStaffing = () => {
     createRequiredStandByStaffing.mutate({
       shift_id: RequiredStaffingProps.shift_id,
       amountOfStaffRequired: RequiredStaffingProps.amountOfStaffRequired,
       shift_type_id: RequiredStaffingProps.shift_type_id
-    });
-  };
+    })
+  }
 
   // TODO
   // Regenerate schedule!!
@@ -32,7 +32,7 @@ export function AddRequiredStaffing({ RequiredStaffingProps }: AddRequiredStaffi
         Reserve toevoegen
       </Button>
     </div>
-  );
+  )
 }
 
 export default AddRequiredStaffing;

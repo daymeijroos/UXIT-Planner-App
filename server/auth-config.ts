@@ -9,9 +9,9 @@ import { createTransport } from "nodemailer"
 
 import { PrismaAdapter } from "@next-auth/prisma-adapter"
 import { env } from "../env/server.mjs"
-import { prisma } from "./db.js"
-import { LoginLink } from "./mail/templates/login-link.js"
-import { Role, RoleType } from "../prisma/role.js"
+import { prisma } from "./db"
+import { LoginLink } from "./mail/templates/login-link"
+import { Role, RoleType } from "../prisma/role"
 
 /**
  * Module augmentation for `next-auth` types

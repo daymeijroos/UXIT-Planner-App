@@ -4,6 +4,7 @@ import { DateSwitcher } from "./date-switcher";
 import { Tabs } from "../../atoms/tablist/tabs";
 import { Item } from "react-stately";
 import { PersonalStaffingList } from "./personal-staffings-list";
+import { LoadingMessage } from "../loading-message";
 
 export const Overview = () => {
   const [selectedDate, setSelectedDate] = useState<Date>();
@@ -14,7 +15,7 @@ export const Overview = () => {
   }, [])
 
   if (!selectedDate) return (
-    <div>Loading...</div>
+    <LoadingMessage />
   )
 
   return (

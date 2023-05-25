@@ -11,7 +11,7 @@ export function Tabs<T extends object>(props: AriaTabListProps<T>) {
   const { tabListProps } = useTabList(props, state, ref);
   return (
     <div className={`tabs ${props.orientation || ''} flex flex-col gap-4`}>
-      <div {...tabListProps} ref={ref} className="flex justify-center border border-black text-center">
+      <div {...tabListProps} ref={ref} className="flex justify-center border border-black dark:border-steel text-center">
         {[...state.collection].map((item) => (
           <Tab
             key={item.key}

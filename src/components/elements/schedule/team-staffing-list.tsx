@@ -3,6 +3,8 @@ import { StaffingCard } from "./staffing-card";
 import { api } from '../../../utils/api';
 import type { StaffingWithColleagues } from '../../../types/StaffingWithColleagues';
 import { useAutoAnimate } from '@formkit/auto-animate/react'
+import Loading from '../../../pages/test/loading';
+import { LoadingMessage } from '../loading-message';
 
 interface ScheduleProps {
   selectedDate: Date;
@@ -18,7 +20,11 @@ export const TeamStaffingList = ({ selectedDate, weekStart }: ScheduleProps) => 
   const staffings = api.staffing.getStaffing.useQuery({ fromDate: weekStart });
 
   if (staffings.isLoading) {
-    return <div>loading...</div>;
+    return (
+      <div className='flex justify-center h-64'>
+        <LoadingMessage />
+      </div>
+    );
   }
 
   if (staffings.error) {

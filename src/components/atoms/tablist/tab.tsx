@@ -13,9 +13,9 @@ export function Tab<T extends object>({ item, state, orientation }: {
   const { tabProps, isSelected } = useTab({ key }, state, ref);
   return (
     <div {...tabProps} className={`
-    ${isSelected ? "bg-teal shadow-lg" : ""}
-    hover:bg-dark-teal
-    p-4 w-full border border-black text-center
+    ${isSelected ? "bg-teal dark:text-black" : ""}
+    hover:bg-dark-teal dark:hover:bg-light-teal dark:active:bg-dark-teal shadow-lg
+    p-4 w-full border border-black dark:border-steel text-center
     `} ref={ref}>
       {rendered}
     </div>

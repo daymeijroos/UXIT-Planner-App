@@ -44,7 +44,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
           <link rel="apple-touch-icon" href="/apple-icon.png" />
           <meta name="theme-color" content="#5FC9BE" />
         </Head>
-        <div className='dark:bg-slate min-h-screen '>
+        <div className='dark:bg-slate min-h-screen p-4 text-black dark:text-white'>
           <Component {...pageProps} />
         </div>
         <NavigationBar />

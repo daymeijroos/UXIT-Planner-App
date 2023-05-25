@@ -28,7 +28,7 @@ const TestGenerate = () => {
   return (
 
     <div className="flex flex-col items-center justify-center w-full h-full">
-      <button onClick={() => {ToastService.error("The quick brown fox jumps over the lazy dog.", false)}}>Make me a toast</button>
+      <button onClick={() => {ToastService.success("The quick brown fox jumps over the lazy dog.", false)}}>Make me a toast</button>
 
       <div className= "flex m-4 space-x-4">
         <Button onPress={() => {void router.push("/")}} title="Terug" aria-label="Terug"><CornerUpLeft/></Button>

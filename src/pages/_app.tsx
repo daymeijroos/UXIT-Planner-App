@@ -4,11 +4,17 @@ import type { AppType } from 'next/app'
 import { type Session } from "next-auth";
 import { api } from '../utils/api';
 import { SessionProvider } from 'next-auth/react';
+import {I18nProvider, SSRProvider, useLocale} from 'react-aria';
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
   pageProps: { session, ...pageProps },
+
+
+
 }) => {
+  const locale = "nl-NL";
+  const direction = "ltr";
   return (
     <SessionProvider session={session}>
       <Head>
@@ -41,10 +47,14 @@ const MyApp: AppType<{ session: Session | null }> = ({
         <link rel="apple-touch-icon" href="/apple-icon.png" />
         <meta name="theme-color" content="#5FC9BE" />
       </Head>
-      <Component {...pageProps} />
+      <SSRProvider>
+        <I18nProvider locale={locale}>
+          <Component {...pageProps} />
+        </I18nProvider>
+      </SSRProvider>
 
     </SessionProvider>
-  )
+  );
 }
 
 export default api.withTRPC(MyApp)

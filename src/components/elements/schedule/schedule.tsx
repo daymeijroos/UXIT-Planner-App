@@ -3,16 +3,17 @@ import { StaffingCard } from "./staffing-card";
 import { api } from '../../../utils/api';
 import type { StaffingWithColleagues } from '../../../types/StaffingWithColleagues';
 import { useAutoAnimate } from '@formkit/auto-animate/react'
-import { getLocalTimeZone, parseDate, CalendarDate } from "@internationalized/date";
+import { getLocalTimeZone, CalendarDate } from "@internationalized/date";
+import { getFirstDayOfTheWeek } from "../../../../shared/date/dateHelperFunctions";
 
 interface ScheduleProps {
   selectedDate: CalendarDate;
-  weekStart: Date;
 }
 
-export const Schedule = ({ selectedDate, weekStart }: ScheduleProps) => {
+export const Schedule = ({ selectedDate }: ScheduleProps) => {
+  const weekStart = getFirstDayOfTheWeek(selectedDate.toDate(getLocalTimeZone()));
 
-  const [parent, enableAnimations] = useAutoAnimate({
+  const [parent] = useAutoAnimate({
     duration: 150,
   })
 

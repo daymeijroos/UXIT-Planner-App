@@ -6,8 +6,7 @@ import { mergeProps } from "@react-aria/utils";
 import type { CalendarState } from "@react-stately/calendar";
 import { CalendarDate } from "@internationalized/date";
 
-export function CalendarCell(props) {
-  const { locale } = useLocale("nl-NL");
+export function CalendarCell(props: {date: CalendarDate, state: CalendarState}) {
   const ref = useRef(null);
   const { cellProps, buttonProps } = useCalendarCell(props, props.state, ref);
 

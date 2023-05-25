@@ -2,14 +2,14 @@ import { NavigationBar } from "../components/elements/navigation-bar";
 import { Schedule } from "../components/elements/schedule/schedule";
 import { useEffect, useState } from "react";
 import { WeekView } from "../components/elements/schedule/weekView";
-import { CalendarDate, parseDate, toCalendarDateTime } from "@internationalized/date";
+import { CalendarDate, parseDate, toCalendarDate, toCalendarDateTime } from "@internationalized/date";
 
 
 const Index = () => {
-  const [selectedDate, setSelectedDate] = useState<typeof CalendarDate>(null);
+  const [selectedDate, setSelectedDate] = useState<CalendarDate>();
 
   useEffect(() => {
-    setSelectedDate(parseDate(new Date(new Date().setHours(2, 0, 0, 0)).toISOString().slice(0, 10)))
+    setSelectedDate(parseDate(new Date(new Date().setHours(2, 0, 0, 0)).toISOString().slice(0, 10)));
   }, [])
 
   if (!selectedDate) return (
@@ -19,7 +19,7 @@ const Index = () => {
   return (
     <div>
       <WeekView value={selectedDate} onChange={setSelectedDate} />
-      <Schedule selectedDate={toCalendarDateTime(selectedDate)} />
+      <Schedule selectedDate={toCalendarDate(selectedDate)} />
       <NavigationBar />
     </div>
   );

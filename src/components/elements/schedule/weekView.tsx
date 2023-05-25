@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { useCalendarState } from "@react-stately/calendar";
 import { useCalendar, useCalendarGrid } from "@react-aria/calendar";
 import { useLocale, useDateFormatter } from "@react-aria/i18n";
-import { CalendarDate, createCalendar } from "@internationalized/date";
+import { CalendarDate, createCalendar, DateValue } from "@internationalized/date";
 import { Button } from "./button";
 import { CalendarCell } from "./calenderCell";
 import { AriaCalendarGridProps, AriaCalendarProps } from "react-aria";
@@ -12,7 +12,7 @@ const Title = styled.h3`
   grid-area: 1 / span 3;
 `;
 
-export function WeekView<T extends object>(props: AriaCalendarProps<T> & AriaCalendarGridProps) {
+export function WeekView<T extends DateValue>(props: AriaCalendarProps<T> & AriaCalendarGridProps) {
   const { locale } = useLocale();
   const state = useCalendarState({
     ...props,
@@ -29,7 +29,6 @@ export function WeekView<T extends object>(props: AriaCalendarProps<T> & AriaCal
   const startDate = state.visibleRange.start;
 
   const dateFormatter = useDateFormatter({
-    lang: locale,
     dateStyle: "long",
     calendar: startDate.calendar.identifier
   });
@@ -43,17 +42,18 @@ export function WeekView<T extends object>(props: AriaCalendarProps<T> & AriaCal
             state.visibleRange.end.toDate(state.timeZone)
           )}
         </h3>
-        <Button
-          className="rounded-full flex items-center justify-center outline-none hover:bg-green-200 active:bg-green-500"
-          {...prevButtonProps}>
-          <ChevronLeft/>
-        </Button>
+        <div className="rounded-full flex items-center justify-center outline-none hover:bg-green-200 active:bg-green-500">
+          <Button
+            {...prevButtonProps}>
+            <ChevronLeft/>
+          </Button>
+        </div>
         <table {...gridProps}>
           <tbody>
           <tr lang={locale}>
             {state
               .getDatesInWeek(0)
-              .map((date: CalendarDate, i: number) =>
+              .map((date: CalendarDate | null, i: number) =>
                 date ? (
                   <CalendarCell key={i} state={state} date={date}/>
                 ) : (
@@ -63,11 +63,12 @@ export function WeekView<T extends object>(props: AriaCalendarProps<T> & AriaCal
           </tr>
           </tbody>
         </table>
-        <Button
-          className="rounded-full flex items-center justify-center outline-none hover:bg-green-200 active:bg-green-500"
-          {...nextButtonProps}>
-          <ChevronRight/>
-        </Button>
+        <div className="rounded-full flex items-center justify-center outline-none hover:bg-green-200 active:bg-green-500">
+          <Button
+            {...nextButtonProps}>
+            <ChevronRight/>
+          </Button>
+        </div>
       </div>
     </div>
   );

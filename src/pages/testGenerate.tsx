@@ -5,10 +5,10 @@ import { api } from "../utils/api";
 import { useRouter } from "next/router";
 
 import { CornerUpLeft  } from "react-feather";
+import { ToastService } from '../utils/toast/toastService'
 
 const TestGenerate = () => {
   const router = useRouter();
-
   const { mutateAsync: generateSchedule } = api.schedule.generate.useMutation({onSuccess: () => {
       context.schedule.getUnfulfilledShifts.invalidate().catch((error) => {
       console.error(error);
@@ -26,7 +26,10 @@ const TestGenerate = () => {
   }
 
   return (
+
     <div className="flex flex-col items-center justify-center w-full h-full">
+      <button onClick={() => {ToastService.error("yes")}}>Make me a toast</button>
+
       <div className= "flex m-4 space-x-4">
         <Button onPress={() => {void router.push("/")}} title="Terug" aria-label="Terug"><CornerUpLeft/></Button>
         <Button color="success" onPress={() => {void generateSchedule()}} className="w-max">Generate Schedule</Button>

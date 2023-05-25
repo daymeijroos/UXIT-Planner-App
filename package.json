@@ -27,6 +27,7 @@
     "react-aria": "^3.23.1",
     "react-dom": "^18.2.0",
     "react-feather": "^2.0.10",
+    "react-hot-toast": "^2.4.1",
     "react-stately": "^3.22.0",
     "superjson": "^1.12.2",
     "zod": "^3.21.4"

@@ -1,9 +1,6 @@
 import React from 'react';
 import {useState} from "react";
 import { AlertOctagon, X } from 'react-feather';
-import { useFocusRing } from "@react-aria/focus";
-import fa from "@faker-js/faker/locales/fa";
-import { set } from "zod";
 
 interface ToastProps {
   title: string;
@@ -12,8 +9,6 @@ interface ToastProps {
 
   seconds?: number;
 }
-
-
 
 const Toast: React.FC<ToastProps> = ({children, title ,msg, type, seconds}) => {
 
@@ -62,7 +57,4 @@ const Toast: React.FC<ToastProps> = ({children, title ,msg, type, seconds}) => {
 };
 
 export default Toast;
-export const myFunction = (param: any) => {
-
-};
 

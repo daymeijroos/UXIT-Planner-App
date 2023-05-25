@@ -29,6 +29,10 @@ module.exports = {
         'red-orange': '#C02E1D',
       },
     },
+    strokeWidth:{
+      "4":"4",
+      "5":"5"
+    }
   },
   plugins: [],
 }

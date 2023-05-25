@@ -1,5 +1,4 @@
 import React from 'react';
-import { useMutation, useQuery } from 'react-query';
 import { api } from '../../utils/api';
 import { Button } from './button';
 
@@ -11,10 +10,10 @@ interface AddRequiredStaffingProps {
   };
 }
 
-export function AddRequiredStaffing({ RequiredStaffingProps }: AddRequiredStaffingProps ) {
+export function AddRequiredStaffing({ RequiredStaffingProps }: AddRequiredStaffingProps) {
   const createRequiredStandByStaffing = api.requiredStaffing.createRequiredStaffing.useMutation();
-  const handleAddRequiredStaffing = async () => {
-    await createRequiredStandByStaffing.mutate({
+  const handleAddRequiredStaffing = () => {
+    createRequiredStandByStaffing.mutate({
       shift_id: RequiredStaffingProps.shift_id,
       amountOfStaffRequired: RequiredStaffingProps.amountOfStaffRequired,
       shift_type_id: RequiredStaffingProps.shift_type_id

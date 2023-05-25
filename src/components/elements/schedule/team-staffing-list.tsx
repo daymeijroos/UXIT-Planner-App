@@ -3,7 +3,6 @@ import { StaffingCard } from "./staffing-card";
 import { api } from '../../../utils/api';
 import type { StaffingWithColleagues } from '../../../types/StaffingWithColleagues';
 import { useAutoAnimate } from '@formkit/auto-animate/react'
-import Loading from '../../../pages/test/loading';
 import { LoadingMessage } from '../loading-message';
 import type { CalendarDate } from "@internationalized/date";
 import { getLocalTimeZone } from "@internationalized/date";
@@ -13,8 +12,7 @@ interface ScheduleProps {
   selectedDate: CalendarDate;
 }
 
-export const TeamStaffingList = ({ selectedDate, weekStart }: ScheduleProps) => {
-export const Schedule = ({ selectedDate }: ScheduleProps) => {
+export const TeamStaffingList = ({ selectedDate }: ScheduleProps) => {
   const weekStart = getFirstDayOfTheWeek(selectedDate.toDate(getLocalTimeZone()));
 
   const [parent] = useAutoAnimate({
@@ -78,4 +76,4 @@ export const Schedule = ({ selectedDate }: ScheduleProps) => {
     </div>
   );
 
-};
+}

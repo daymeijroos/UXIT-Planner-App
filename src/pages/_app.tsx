@@ -4,7 +4,7 @@ import type { AppType } from 'next/app'
 import { type Session } from "next-auth";
 import { api } from '../utils/api';
 import { SessionProvider } from 'next-auth/react';
-import {I18nProvider, SSRProvider, useLocale} from 'react-aria';
+import {I18nProvider, SSRProvider} from 'react-aria';
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
@@ -14,7 +14,6 @@ const MyApp: AppType<{ session: Session | null }> = ({
 
 }) => {
   const locale = "nl-NL";
-  const direction = "ltr";
   return (
     <SessionProvider session={session}>
       <Head>

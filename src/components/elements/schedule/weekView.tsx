@@ -1,16 +1,12 @@
-import styled from "styled-components";
 import { useCalendarState } from "@react-stately/calendar";
 import { useCalendar, useCalendarGrid } from "@react-aria/calendar";
 import { useLocale, useDateFormatter } from "@react-aria/i18n";
-import { CalendarDate, createCalendar, DateValue } from "@internationalized/date";
+import type { CalendarDate, DateValue } from "@internationalized/date";
+import { createCalendar } from "@internationalized/date";
 import { Button } from "./button";
 import { CalendarCell } from "./calenderCell";
-import { AriaCalendarGridProps, AriaCalendarProps } from "react-aria";
+import type { AriaCalendarGridProps, AriaCalendarProps } from "react-aria";
 import { ChevronLeft, ChevronRight } from "react-feather";
-
-const Title = styled.h3`
-  grid-area: 1 / span 3;
-`;
 
 export function WeekView<T extends DateValue>(props: AriaCalendarProps<T> & AriaCalendarGridProps) {
   const { locale } = useLocale();

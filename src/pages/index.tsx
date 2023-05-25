@@ -2,7 +2,7 @@ import { NavigationBar } from "../components/elements/navigation-bar";
 import { Schedule } from "../components/elements/schedule/schedule";
 import { useEffect, useState } from "react";
 import { WeekView } from "../components/elements/schedule/weekView";
-import { CalendarDate, parseDate, toCalendarDate, toCalendarDateTime } from "@internationalized/date";
+import { CalendarDate, parseDate, toCalendarDate } from "@internationalized/date";
 
 
 const Index = () => {

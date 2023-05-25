@@ -3,7 +3,8 @@ import { StaffingCard } from "./staffing-card";
 import { api } from '../../../utils/api';
 import type { StaffingWithColleagues } from '../../../types/StaffingWithColleagues';
 import { useAutoAnimate } from '@formkit/auto-animate/react'
-import { getLocalTimeZone, CalendarDate } from "@internationalized/date";
+import type { CalendarDate } from "@internationalized/date";
+import { getLocalTimeZone } from "@internationalized/date";
 import { getFirstDayOfTheWeek } from "../../../../shared/date/dateHelperFunctions";
 
 interface ScheduleProps {

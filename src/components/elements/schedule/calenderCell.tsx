@@ -1,10 +1,10 @@
 import { useRef } from "react";
 import { useCalendarCell } from "@react-aria/calendar";
-import { useDateFormatter, useLocale } from "@react-aria/i18n";
+import { useDateFormatter } from "@react-aria/i18n";
 import { useFocusRing } from "@react-aria/focus";
 import { mergeProps } from "@react-aria/utils";
 import type { CalendarState } from "@react-stately/calendar";
-import { CalendarDate } from "@internationalized/date";
+import type { CalendarDate } from "@internationalized/date";
 
 export function CalendarCell(props: {date: CalendarDate, state: CalendarState}) {
   const ref = useRef(null);

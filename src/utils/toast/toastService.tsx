@@ -38,7 +38,7 @@
 
 import {errorToast} from "./errorToast";
 
-const displayErrorToast = (message:string) => {errorToast(message)}
+const displayErrorToast = (message:string, darkmode:boolean) => {errorToast(message, darkmode)}
 
 export const ToastService = {
   error: displayErrorToast

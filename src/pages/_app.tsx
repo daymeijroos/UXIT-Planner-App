@@ -4,6 +4,7 @@ import type { AppType } from 'next/app'
 import { type Session } from "next-auth";
 import { api } from '../utils/api';
 import { SessionProvider } from 'next-auth/react';
+import { Toaster } from 'react-hot-toast';
 import { SSRProvider } from 'react-aria';
 import { NavigationBar } from '../components/elements/navigation-bar';
 
@@ -47,6 +48,9 @@ const MyApp: AppType<{ session: Session | null }> = ({
         <div className='dark:bg-slate min-h-screen p-4 text-black dark:text-white'>
           <Component {...pageProps} />
         </div>
+        <Toaster
+          position="bottom-right"
+          reverseOrder={false}/>
       </SessionProvider>
     </SSRProvider>
   )

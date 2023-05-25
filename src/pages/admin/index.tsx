@@ -2,13 +2,17 @@ import { Button } from "../../components/atoms/button";
 import { api } from "../../utils/api";
 import { NavigationBar } from "../../components/elements/navigation-bar";
 import { LoadingMessage } from "../../components/elements/loading-message";
+import {ToastService} from "../../utils/toast/toastService";
 
 export default function Admin() {
   const { mutateAsync: generateSchedule } = api.schedule.generate.useMutation({
     onSuccess: () => {
+      ToastService.success("Het is gelukt!")
       context.schedule.getUnfulfilledShifts.invalidate().catch((error) => {
         console.error(error);
       });
+    }, onError: (error) => {
+      ToastService.error(error.message)
     }
   });
   const unfulfilledShifts = api.schedule.getUnfulfilledShifts.useQuery();
@@ -16,12 +20,15 @@ export default function Admin() {
 
   const { mutate: removeStaffings } = api.staffing.removeAllStaffing.useMutation({
     onSuccess: () => {
+      ToastService.success("Het is gelukt!")
       context.staffing.getStaffing.invalidate({ fromDate: new Date(new Date("2023-04-18T00:00:00Z").setHours(0, 0, 0, 0)) }).catch((error) => {
         console.error(error);
       });
       context.schedule.getUnfulfilledShifts.invalidate().catch((error) => {
         console.error(error);
       });
+    }, onError: (error) => {
+      ToastService.error(error.message)
     }
   });
 

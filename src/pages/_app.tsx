@@ -47,7 +47,6 @@ const MyApp: AppType<{ session: Session | null }> = ({
         <div className='dark:bg-slate min-h-screen p-4 text-black dark:text-white'>
           <Component {...pageProps} />
         </div>
-        <NavigationBar />
       </SessionProvider>
     </SSRProvider>
   )

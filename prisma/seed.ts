@@ -163,6 +163,22 @@ async function main() {
     data: {
       start: convertToAmsterdamTimezone(new Date(new Date(new Date().setDate(new Date().getDate() + 1)).setHours(6)).toISOString()),
       end: convertToAmsterdamTimezone(new Date(new Date(new Date().setDate(new Date().getDate() + 1)).setHours(10)).toISOString()),
+      staffings: {
+        create: [
+          {
+            shift_type: {
+              connect: {
+                id: shiftType1.id
+              }
+            },
+            user: {
+              connect: {
+                id: adminUser.id
+              }
+            }
+          }
+        ]
+      },
       staff_required: {
         create: [
           {
@@ -178,6 +194,22 @@ async function main() {
     data: {
       start: convertToAmsterdamTimezone(new Date(new Date(new Date().setDate(new Date().getDate() + 2)).setHours(6)).toISOString()),
       end: convertToAmsterdamTimezone(new Date(new Date(new Date().setDate(new Date().getDate() + 2)).setHours(10)).toISOString()),
+      staffings: {
+        create: [
+          {
+            shift_type: {
+              connect: {
+                id: shiftType1.id
+              }
+            },
+            user: {
+              connect: {
+                id: adminUser.id
+              }
+            }
+          }
+        ]
+      },
       staff_required: {
         create: [
           {
@@ -193,6 +225,22 @@ async function main() {
     data: {
       start: convertToAmsterdamTimezone(new Date(new Date(new Date().setDate(new Date().getDate() + 3)).setHours(6)).toISOString()),
       end: convertToAmsterdamTimezone(new Date(new Date(new Date().setDate(new Date().getDate() + 3)).setHours(10)).toISOString()),
+      staffings: {
+        create: [
+          {
+            shift_type: {
+              connect: {
+                id: shiftType1.id
+              }
+            },
+            user: {
+              connect: {
+                id: adminUser.id
+              }
+            }
+          }
+        ]
+      },
       staff_required: {
         create: [
           {

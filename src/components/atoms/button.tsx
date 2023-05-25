@@ -12,9 +12,6 @@ export interface ButtonProps extends AriaButtonProps {
 
 const containerStyles = `m-4`;
 
-
-
-
 const buttonStyles = {
   primary: `dark:bg-blue-grey dark:border-steel border-2 border-black py-4 px-4 text-black bg-blue-grey drop-shadow-lg hover:bg-steel active:bg-slate dark:active:bg-charcoal active:drop-shadow-none flex items-center justify-center`,
   success: `dark:bg-teal dark:border-light-teal border-2 border-black py-4 px-4 text-black bg-teal drop-shadow-lg hover:bg-light-teal active:bg-dark-teal dark:active:dark-teal active:drop-shadow-none flex items-center justify-center`,
@@ -36,7 +33,7 @@ export function Button(props: ButtonProps) {
   const { isFocusVisible, focusProps } = useFocusRing();
 
   return (
-    <div className={props.fillWidth ? containerStyles : ""}>
+    <div>
       <button className={`${props.color === "primary" ? buttonStyles.primary :
         props.color === "error" ? buttonStyles.error :
           props.color === "success" ? buttonStyles.success :

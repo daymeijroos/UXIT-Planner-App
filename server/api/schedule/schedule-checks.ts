@@ -1,7 +1,7 @@
 import { Shift, Shift_Type, Staff_Required } from "@prisma/client"
 import { UserWithPreferenceAndStaffings } from "../../types/user"
 import { SplitDate } from "../../../shared/types/splitDate"
-import { getAvailabilityForDate } from "../availibility"
+import { getAvailabilityForDate } from "../availability"
 import { getStaffingsOnStaffRequired, getUserStaffings, getUserStaffingsForWeek } from "./schedule-database-actions"
 import { getBackupsOnDate } from "../backup"
 

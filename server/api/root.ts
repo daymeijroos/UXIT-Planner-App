@@ -3,6 +3,7 @@ import { exampleRouter } from "./example/exampleRouter";
 import { scheduleRouter } from "./schedule/schedule";
 import { staffingRouter } from "./userRouters/staffing";
 import { userRouter } from "./userRouters/user";
+import { requiredStaffing } from "./requiredStaffing/standBy";
 
 /**
  * This is the primary router for your server.
@@ -14,6 +15,7 @@ export const appRouter = createTRPCRouter({
   schedule: scheduleRouter,
   staffing: staffingRouter,
   user: userRouter,
+  requiredStaffing: requiredStaffing
 });
 
 // export type definition of API

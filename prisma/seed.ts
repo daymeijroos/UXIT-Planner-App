@@ -58,6 +58,13 @@ async function main() {
     }
   });
 
+  const shiftType3 = await prisma.shift_Type.create({
+    data: {
+      name: "Reserve",
+      description: "De vrijwilliger wordt automatisch ingeroosterd indien nodig."
+    }
+  });
+
   console.log("Shift Types created: ", shiftType1, shiftType2);
 
   // mockdata voor gebruikers, voorkeuren en standaard beschikbaarheid
@@ -91,16 +98,24 @@ async function main() {
                 {
                   weekday: 2,
                   shift_types: {
-                    connect: {
+                    connect: [
+                      {
                       id: shiftType1.id
-                    }
+                      },
+                      {
+                        id: shiftType2.id
+                      },
+                      {
+                      id: shiftType3.id
+                      }
+                    ]
                   }
                 },
                 {
                   weekday: 3,
                   shift_types: {
                     connect: {
-                      id: shiftType1.id
+                      id: shiftType2.id
                     }
                   },
                 },
@@ -133,7 +148,7 @@ async function main() {
                   shift_types: {
                     connect: {
                       id: shiftType1.id
-                    }
+                    },
                   },
                 }
               ]
@@ -161,9 +176,14 @@ async function main() {
                 {
                   weekday: 2,
                   shift_types: {
-                    connect: {
-                      id: shiftType1.id
-                    }
+                    connect: [
+                      {
+                      id: shiftType2.id
+                      },
+                      {
+                      id: shiftType3.id
+                      }
+                    ]
                   }
                 },
                 {
@@ -210,9 +230,12 @@ async function main() {
                 {
                   weekday: 5,
                   shift_types: {
-                    connect: {
+                    connect: [{
                       id: shiftType1.id
-                    }
+                    },
+                    {
+                      id: shiftType3.id
+                    }]
                   },
                 }
               ]
@@ -294,22 +317,22 @@ async function main() {
         preference: {
           create: {
             maxStaffings: 4,
-            shift_type_id: shiftType1.id,
+            shift_type_id: shiftType2.id,
             availability: {
               create: [
                 {
                   weekday: 2,
                   shift_types: {
                     connect: {
-                      id: shiftType1.id
-                    }
+                      id: shiftType2.id
+                      }
                   }
                 },
                 {
                   weekday: 3,
                   shift_types: {
                     connect: {
-                      id: shiftType1.id
+                      id: shiftType3.id
                     }
                   },
                 },
@@ -317,32 +340,41 @@ async function main() {
                   weekday: 4,
                   shift_types: {
                     connect: {
-                      id: shiftType1.id
+                      id: shiftType3.id
                     }
                   },
                 },
                 {
                   weekday: 5,
                   shift_types: {
-                    connect: {
+                    connect: [{
                       id: shiftType1.id
-                    }
+                    },
+                    {
+                      id: shiftType3.id
+                    }]
                   },
                 },
                 {
                   weekday: 6,
                   shift_types: {
-                    connect: {
+                    connect: [{
                       id: shiftType1.id
-                    }
+                    },
+                    {
+                      id: shiftType3.id
+                    }]
                   },
                 },
                 {
                   weekday: 7,
                   shift_types: {
-                    connect: {
+                    connect: [{
                       id: shiftType1.id
-                    }
+                    },
+                    {
+                      id: shiftType3.id
+                    }]
                   },
                 }
               ]
@@ -363,15 +395,27 @@ async function main() {
         email: "barbaradamme@pulchri.nl",
         preference: {
           create: {
-            maxStaffings: 1,
+            maxStaffings: 2,
             shift_type_id: shiftType1.id,
             availability: {
               create: [
                 {
+                  weekday: 2,
+                  shift_types: {
+                    connect: [{
+                      id: shiftType2.id
+                    },
+                    {
+                      id: shiftType3.id
+                    }
+                  ]
+                  }
+                },
+                {
                   weekday: 3,
                   shift_types: {
                     connect: {
-                      id: shiftType1.id
+                      id: shiftType3.id
                     }
                   }
                 },
@@ -379,7 +423,7 @@ async function main() {
                   weekday: 6,
                   shift_types: {
                     connect: {
-                      id: shiftType1.id
+                      id: shiftType3.id
                     }
                   },
                 },
@@ -416,9 +460,13 @@ async function main() {
                 {
                   weekday: 2,
                   shift_types: {
-                    connect: {
+                    connect: [{
                       id: shiftType1.id
+                    },
+                    {
+                      id: shiftType2.id
                     }
+                  ]
                   }
                 },
                 {
@@ -454,17 +502,23 @@ async function main() {
                 {
                   weekday: 4,
                   shift_types: {
-                    connect: {
+                    connect: [{
                       id: shiftType1.id
-                    }
+                    },
+                    {
+                      id: shiftType3.id
+                    }]
                   }
                 },
                 {
                   weekday: 5,
                   shift_types: {
-                    connect: {
+                    connect: [{
                       id: shiftType1.id
-                    }
+                    },
+                    {
+                      id: shiftType3.id
+                    }]
                   },
                 },
                 {
@@ -660,7 +714,7 @@ async function main() {
         amount: 1,
         shift_id: createdShifts[0].id,
         shift_type_id: shiftType1.id
-      }
+      },
     })
   );
 
@@ -668,8 +722,42 @@ async function main() {
     prisma.staff_Required.create({
       data: {
         amount: 1,
+        shift_id: createdShifts[0].id,
+        shift_type_id: shiftType2.id
+      },
+    })
+  );
+
+  // dinsdag - reserve - shift 1
+  staffRequiredList.push(
+    prisma.staff_Required.create({
+      data: {
+        amount: 1,
+        shift_id: createdShifts[0].id,
+        shift_type_id: shiftType3.id
+      }
+    })
+  );
+
+  staffRequiredList.push(
+    prisma.staff_Required.create({
+      data: {
+        amount: 2,
         shift_id: createdShifts[1].id,
         shift_type_id: shiftType1.id
+      }
+    })
+  );
+
+
+
+  // dinsdag - reserve - shift 2
+  staffRequiredList.push(
+    prisma.staff_Required.create({
+      data: {
+        amount: 1,
+        shift_id: createdShifts[1].id,
+        shift_type_id: shiftType3.id
       }
     })
   );
@@ -685,6 +773,17 @@ async function main() {
     })
   );
 
+  // woensdag - reserve - shift 2
+  staffRequiredList.push(
+    prisma.staff_Required.create({
+      data: {
+        amount: 1,
+        shift_id: createdShifts[2].id,
+        shift_type_id: shiftType3.id
+      }
+    })
+  );
+
   staffRequiredList.push(
     prisma.staff_Required.create({
       data: {
@@ -694,6 +793,21 @@ async function main() {
       }
     })
   );
+
+  // woensdag - reserve - shift 3
+  staffRequiredList.push(
+    prisma.staff_Required.create({
+      data: {
+        amount: 2,
+        shift_id: createdShifts[3].id,
+        shift_type_id: shiftType3.id
+      }
+    })
+  );
+
+  
+
+
 
   // donderdag
   staffRequiredList.push(

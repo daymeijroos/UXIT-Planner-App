@@ -38,13 +38,16 @@
 
 import {errorToast} from "./errorToast";
 import {successToast} from "./successToast";
+import {infoToast} from "./infoToast";
 
 const displayErrorToast = (message:string, darkmode:boolean) => {errorToast(message, darkmode)}
 const displaySuccessToast = (message:string, darkmode:boolean) => {successToast(message, darkmode)}
+const displayInfoToast = (message:string, darkmode:boolean) => {infoToast(message, darkmode)}
 
 export const ToastService = {
   error: displayErrorToast,
-  success: displaySuccessToast
+  success: displaySuccessToast,
+  info:displayInfoToast
 }
 
 

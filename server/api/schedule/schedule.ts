@@ -4,6 +4,7 @@ import { createTRPCRouter, publicProcedure, restrictedProcedure } from "../trpc"
 import { generateSchedule } from "../../utils/schedule-generator-functions/generate-functions";
 import { getUnfulfilledShifts } from "../../utils/getUnfulfilledShifts";
 import { Role } from "../../../prisma/role";
+import { prisma } from "../../db";
 
 export const scheduleRouter = createTRPCRouter({
 
@@ -26,5 +27,16 @@ export const scheduleRouter = createTRPCRouter({
             reject(error);
           });
       });
-    })
+    }),
+
+    getShiftTypes: publicProcedure
+    .query(() => {
+        return prisma.shift_Type.findMany({
+            select: {
+                name: true
+            }
+        })
+    }
+    ),
+
 });

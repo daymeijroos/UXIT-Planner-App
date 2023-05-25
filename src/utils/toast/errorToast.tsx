@@ -1,9 +1,8 @@
-import toast from "react-hot-toast";
+import toast, { Toast } from "react-hot-toast";
 import { AlertOctagon, X } from 'react-feather';
 
-export const errorToast = (message:string) => {
-
-  toast.custom((t) => (
+export const errorToast = (message: string) => {
+  toast.custom((t: Toast) => (
     <>
       {(
         <div className="bg-red-400 w-1/4 h-40 drop-shadow-xl border-black border-2 dark:bg-red-600 dark:border-red-400">
@@ -24,9 +23,7 @@ export const errorToast = (message:string) => {
           <p className="text-ellipsis p-3 ml-4 text-lg font-bold dark:text-white">{message}</p>
         </div>
       )}
-
     </>
-
   ))
 }
 

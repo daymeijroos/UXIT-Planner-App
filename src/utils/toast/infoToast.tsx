@@ -1,9 +1,8 @@
-import toast from "react-hot-toast";
+import toast, { Toast } from "react-hot-toast";
 import { Info, X } from 'react-feather';
 
-export const infoToast = (message:string) => {
-
-  toast.custom((t) => (
+export const infoToast = (message: string) => {
+  toast.custom((t: Toast) => (
     <>
       {(
         <div className="bg-zinc-50 w-1/4 h-40 drop-shadow-xl border-black border-2 dark:bg-zinc-900 dark:border-zinc-400">

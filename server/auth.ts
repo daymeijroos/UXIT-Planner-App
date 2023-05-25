@@ -4,14 +4,14 @@ import {
   type NextAuthOptions,
   type DefaultSession,
 } from "next-auth";
-import GitHubProvider from "next-auth/providers/github";
-import GoogleProvider from "next-auth/providers/google";
-import DiscordProvider from "next-auth/providers/discord";
+import EmailProvider from "next-auth/providers/email";
+import { createTransport } from "nodemailer";
 
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { env } from "../env/server.mjs";
 import { prisma } from "./db";
-import { User } from "@prisma/client";
+import { LoginLink } from "./mail-templates/login-link";
+import { Role, RoleType } from "../prisma/role";
 
 /**
  * Module augmentation for `next-auth` types
@@ -19,18 +19,32 @@ import { User } from "@prisma/client";
  * and keep type safety
  * @see https://next-auth.js.org/getting-started/typescript#module-augmentation
  **/
+
+declare module "next-auth/jwt" {
+  interface JWT {
+    id?: string;
+    role?: RoleType;
+    first_name?: string;
+    last_name?: string;
+    email?: string;
+    image?: string;
+  }
+}
+
 declare module "next-auth" {
-  interface Session extends DefaultSession {
-    user: {
-      id: string;
-      role: string;
-    } & DefaultSession["user"];
+  interface User {
+    id?: string;
+    first_name?: string;
+    last_name?: string;
+    email?: string;
+    image?: string;
+    role_name?: RoleType; //This is for database
+    role?: RoleType; //This is for JWT
   }
 
-  // interface User {
-  //   // ...other properties
-  //   // role: UserRole;
-  // }
+  interface Session {
+    user?: User;
+  }
 }
 
 /**
@@ -40,29 +54,77 @@ declare module "next-auth" {
  **/
 export const authOptions: NextAuthOptions = {
   callbacks: {
-    session({ session, user }) {
+    jwt({ token, user }) {
+      if (user) {
+        token.id = user.id;
+        token.role = user.role_name
+        token.name = user.name
+        token.last_name = user.last_name
+        token.email = user.email
+        token.image = user.image
+      }
+      return token;
+    },
+    session({ session, token }) {
       if (session.user) {
-        session.user.id = user.id;
-        session.user.role = (user as User).role ?? 'customer'
+        session.user.id = token.id;
+        session.user.role = token.role;
+        session.user.name = token.name
+        session.user.last_name = token.last_name
+        session.user.email = token.email
+        session.user.image = token.image
       }
       return session;
     },
+    redirect({ url, baseUrl }) {
+      return new URL('/', baseUrl).toString()
+    }
   },
   adapter: PrismaAdapter(prisma),
   providers: [
-    GitHubProvider({
-      clientId: env.GITHUB_CLIENT_ID,
-      clientSecret: env.GITHUB_CLIENT_SECRET,
-    }),
-    DiscordProvider({
-      clientId: env.DISCORD_CLIENT_ID,
-      clientSecret: env.DISCORD_CLIENT_SECRET,
-    }),
-    GoogleProvider({
-      clientId: env.GOOGLE_CLIENT_ID,
-      clientSecret: env.GOOGLE_CLIENT_SECRET,
+    EmailProvider({
+      server: {
+        host: env.EMAIL_SERVER_HOST,
+        port: parseInt(env.EMAIL_SERVER_PORT),
+        auth: {
+          user: env.EMAIL_SERVER_USER,
+          pass: env.EMAIL_SERVER_PASSWORD
+        }
+      },
+      from: env.EMAIL_FROM,
+      sendVerificationRequest: async ({ identifier: email, url, provider: { server, from }, theme }) => {
+        const { host } = new URL(url);
+        // Place your whitelisted emails below
+        const emailWhitelist = await prisma.user.findMany({
+          where: {
+            email: email,
+            role_name: {
+              not: Role.RETIRED
+            }
+          }
+        })
+        if (emailWhitelist.length <= 0) throw new Error('Email not found');
+        const transport = createTransport(server);
+        const result = await transport.sendMail({
+          to: email,
+          from: from,
+          subject: `My Project - Sign in to ${host}`,
+          html: LoginLink({ url, host, theme }),
+          text: `Sign in to ${host}: ${url}\n\n`,
+        });
+        const failed = result.rejected.concat(result.pending).filter(Boolean);
+        if (failed.length) {
+          throw new Error(`Email(s) (${failed.join(', ')}) could not be sent`);
+        }
+      },
     }),
   ],
+  pages: {
+    signIn: "/auth/login",
+  },
+  session: {
+    strategy: "jwt",
+  },
 };
 
 /**

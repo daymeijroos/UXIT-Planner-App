@@ -1,6 +1,6 @@
 import { useButton } from "@react-aria/button";
 import { useFocusRing } from "@react-aria/focus";
-import React, { useState } from "react";
+import React from "react";
 
 interface NavigationButtonProps {
   day: string;
@@ -18,17 +18,14 @@ const DateSwitcherButton = (props: NavigationButtonProps) => {
 
   return (
     <div
-      className={`${
-        isPressed ? "bg-teal" : "bg-teal"
-      } text-black rounded-full h-12 w-12 flex flex-col items-center justify-center focus:outline-none focus:ring-4 ${
-        isFocusVisible ? "ring-blue-300" : ""
-      } ${
-        props.isSelected
+      className={`${isPressed ? "bg-teal" : "bg-teal"
+        } text-black rounded-full h-12 w-12 flex flex-col items-center justify-center focus:outline-none focus:ring-4 ${isFocusVisible ? "ring-blue-300" : ""
+        } ${props.isSelected
           ? "bg-teal border-black border-2"
           : isPressed
             ? "bg-teal"
             : "bg-white"
-      }`}
+        } dark:bg-[#2B303C] dark:text-white dark:border-teal  hover:cursor-pointer`}
       {...buttonProps}
       {...focusProps}>
       <span className="sr-only">{props.day}</span>
@@ -43,7 +40,7 @@ interface DateSwitcherProps {
   selectedDate: Date;
 }
 
-export const DateSwitcher = ({setSelectedDate, selectedDate}: DateSwitcherProps) => {
+export const DateSwitcher = ({ setSelectedDate, selectedDate }: DateSwitcherProps) => {
   const tuesday = new Date(new Date('2023-04-18T00:00:00Z').setHours(0, 0, 0, 0))
   const wednesday = new Date(new Date('2023-04-19T00:00:00Z').setHours(0, 0, 0, 0))
   const thursday = new Date(new Date('2023-04-20T00:00:00Z').setHours(0, 0, 0, 0))
@@ -51,12 +48,12 @@ export const DateSwitcher = ({setSelectedDate, selectedDate}: DateSwitcherProps)
   const saturday = new Date(new Date('2023-04-22T00:00:00Z').setHours(0, 0, 0, 0))
   const sunday = new Date(new Date('2023-04-23T00:00:00Z').setHours(0, 0, 0, 0))
 
-  
+
   return (
-    <nav className="bg-white py-2 px-4 rounded-lg flex flex-col space-x-2 justify-center">
-      <div className="flex items-center justify-between border-black border-2 my-2">
+    <nav className="bg-white rounded-lg flex flex-col space-x-2 justify-center dark:bg-[#2B303C] dark:text-white ">
+      <div className="flex items-center justify-between border-black border-2 dark:border-steel">
         <button
-          className="text-black rounded-full w-8 h-8 flex items-center justify-center focus:outline-none">
+          className="text-black rounded-full w-8 h-8 flex items-center justify-center focus:outline-none ">
           <span className="sr-only">Previous week</span>
           &lt;
         </button>

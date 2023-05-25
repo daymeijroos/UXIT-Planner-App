@@ -4,12 +4,11 @@ import { z } from "zod";
 import {publicProcedure, createTRPCRouter, protectedProcedure} from "../trpc";
 
 export const absenceRouter = createTRPCRouter({
-    createAbsence: protectedProcedure
+    createAbsence: publicProcedure
 
         .input(
             z.object({
                 shift_id: z.string(),
-                user_id: z.string(),
                 reason: z.string()
             }))
         .mutation(async ({ ctx, input }) => {
@@ -31,9 +30,11 @@ export const absenceRouter = createTRPCRouter({
             if (!user) {
                 throw new Error("User not found");
             }
-            const preferenceId = user.preference.id
+            const preferenceId = user.preference?.id;
 
-
+            if (!preferenceId) {
+                throw new Error("Preference not found");
+            }
 
 
                 const absence = await ctx.prisma.absence.create({

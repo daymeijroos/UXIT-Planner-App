@@ -1,6 +1,5 @@
 import Head from "next/head"
-import { NavigationBar } from "../components/elements/navigation-bar"
-import { Overview } from "../components/elements/schedule/overview"
+import { NavigationBar, Overview } from "../components"
 
 const Index = () => {
   return (

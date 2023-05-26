@@ -2,7 +2,7 @@ import type { StaffingWithColleagues } from "../../../types/StaffingWithColleagu
 import { formatDate } from "../../../utils/date/formatDate"
 import { formatTime } from "../../../utils/date/formatTime"
 import { formatShiftStaffList } from "../../../utils/formatShiftStaffList"
-import { Card } from "../../atoms/card"
+import { Card } from "../../atoms"
 
 export function StaffingCard(props: { staffing: StaffingWithColleagues }) {
   return (

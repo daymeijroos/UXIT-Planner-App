@@ -3,7 +3,7 @@ import { StaffingCard } from "./staffing-card"
 import { api } from '../../../utils/api'
 import type { StaffingWithColleagues } from '../../../types/StaffingWithColleagues'
 import { useAutoAnimate } from '@formkit/auto-animate/react'
-import { LoadingMessage } from '../loading-message'
+import { LoadingMessage } from '../generic/loading-message'
 
 interface ScheduleProps {
   selectedDate: Date

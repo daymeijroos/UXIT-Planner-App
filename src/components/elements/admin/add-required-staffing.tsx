@@ -1,6 +1,6 @@
 import React from 'react'
-import { api } from '../../utils/api'
-import { Button } from './button'
+import { api } from '../../../utils/api'
+import { Button } from '../../atoms/input/button'
 
 interface AddRequiredStaffingProps {
   RequiredStaffingProps: {

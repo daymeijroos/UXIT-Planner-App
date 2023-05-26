@@ -1,8 +1,8 @@
-import { signIn, signOut, useSession } from "next-auth/react";
-import { Button } from "../atoms/button";
+import { signIn, signOut, useSession } from "next-auth/react"
+import { Button } from "../atoms/input/button"
 
 const LoginExample: React.FC = () => {
-  const { data: sessionData, status } = useSession();
+  const { data: sessionData, status } = useSession()
 
   //make it with an unstyled Button element
   return (

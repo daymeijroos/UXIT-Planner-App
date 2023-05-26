@@ -1,10 +1,10 @@
-import React from "react";
-import { Bell, Calendar, User, Tool } from "react-feather";
-import { useRouter } from "next/navigation";
-import { Button } from "../atoms/button";
+import React from "react"
+import { Bell, Calendar, User, Tool } from "react-feather"
+import { useRouter } from "next/navigation"
+import { Button } from "../../atoms/input/button"
 
 export const NavigationBar = () => {
-  const router = useRouter();
+  const router = useRouter()
   return (
     <nav className=" dark:bg-slate dark:text-white dark:border-steel fixed bottom-0 bg-white text-black py-3 px-6 flex items-center w-screen justify-center space-x-4">
       <Button aria-label="Notificaties" title="Notificaties">
@@ -20,6 +20,6 @@ export const NavigationBar = () => {
         <Tool className="stroke-5/4 dark:stroke-white" color="#000" size="24" width="30" height="30" />
       </Button>
     </nav>
-  );
+  )
 };
 

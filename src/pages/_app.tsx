@@ -13,9 +13,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
   return (
     <SSRProvider>
       <SessionProvider session={session}>
-        <div className='dark:bg-slate min-h-screen p-4 text-black dark:text-white'>
-          <Component {...pageProps} />
-        </div>
+        <Component {...pageProps} />
         <Toaster
           position="bottom-right"
           reverseOrder={false} />

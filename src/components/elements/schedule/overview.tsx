@@ -1,13 +1,11 @@
-import { useEffect, useState } from "react";
-import { TeamStaffingList } from "./team-staffing-list";
-import { DateSwitcher } from "./date-switcher";
-import { Tabs } from "../../atoms/tablist/tabs";
-import { Item } from "react-stately";
-import { PersonalStaffingList } from "./personal-staffings-list";
-import { LoadingMessage } from "../loading-message";
+import { useEffect, useState } from "react"
+import { Item } from "react-stately"
+import { DateSwitcher, TeamStaffingList, PersonalStaffingList } from "."
+import { Tabs } from "../../atoms"
+import { LoadingMessage } from "../generic/loading-message"
 
 export const Overview = () => {
-  const [selectedDate, setSelectedDate] = useState<Date>();
+  const [selectedDate, setSelectedDate] = useState<Date>()
   const weekStart = new Date(new Date('2023-04-18T00:00:00Z').setHours(0, 0, 0, 0))
 
   useEffect(() => {
@@ -19,8 +17,8 @@ export const Overview = () => {
   )
 
   return (
-    <div className="m-4 flex justify-center">
-      <div className="max-w-4xl w-full">
+    <div className="flex justify-center m-4">
+      <div className="w-full max-w-4xl">
         <Tabs>
           <Item key="1" title="Team">
             <div className="flex flex-col gap-2">

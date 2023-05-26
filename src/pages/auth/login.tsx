@@ -1,11 +1,10 @@
 import { getProviders, signIn, getCsrfToken } from "next-auth/react"
 import type { Provider } from "next-auth/providers"
-import { TextField } from "../../components/atoms/text-field"
 import type { FormEvent } from "react"
 import { useRouter } from "next/router"
 import Image from "next/image"
-import { Button } from "../../components/atoms/button"
 import Head from "next/head"
+import { TextField, Button } from "../../components"
 
 export async function getServerSideProps() {
   return {
@@ -25,9 +24,9 @@ export default function Login({ providers }: { providers: Provider[] }) {
       <Head>
         <title>Login | Pulchri Planner</title>
       </Head>
-      <div className="flex flex-col items-center justify-center gap-4 min-h-screen">
+      <div className="flex flex-col items-center justify-center min-h-screen gap-4">
         <Image src="/images/logo_linework.svg" alt="Logo" width={200} height={200} className="filter brightness-0 dark:brightness-50 dark:filter-blue dark:invert" />
-        <h1 className="text-5xl font-bold text-teal dark:text-white">Log in</h1>
+        <h1 className="text-5xl font-bold text-teal-500dark:text-white">Log in</h1>
         <div className="flex flex-col items-end w-96">
           {Object.values(providers).map((provider) => {
             if (provider.name === "Email") {

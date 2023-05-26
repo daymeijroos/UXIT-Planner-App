@@ -1,43 +1,43 @@
-import { useButton } from "@react-aria/button";
-import { useFocusRing } from "@react-aria/focus";
-import React from "react";
+import { useButton } from "@react-aria/button"
+import { useFocusRing } from "@react-aria/focus"
+import React from "react"
 
 interface NavigationButtonProps {
-  day: string;
-  date: string;
-  onClick: () => void;
-  isSelected: boolean;
+  day: string
+  date: string
+  onClick: () => void
+  isSelected: boolean
 }
 
 const DateSwitcherButton = (props: NavigationButtonProps) => {
-  const ref = React.useRef(null);
+  const ref = React.useRef(null)
   const { buttonProps, isPressed } = useButton({
     onPress: props.onClick,
   }, ref)
-  const { isFocusVisible, focusProps } = useFocusRing();
+  const { isFocusVisible, focusProps } = useFocusRing()
 
   return (
     <div
       className={`${isPressed ? "bg-teal" : "bg-teal"
         } text-black rounded-full h-12 w-12 flex flex-col items-center justify-center focus:outline-none focus:ring-4 ${isFocusVisible ? "ring-blue-300" : ""
         } ${props.isSelected
-          ? "bg-teal border-black border-2"
+          ? "bg-teal-500border-black border-2"
           : isPressed
             ? "bg-teal"
             : "bg-white"
-        } dark:bg-[#2B303C] dark:text-white dark:border-teal  hover:cursor-pointer`}
+        } dark:bg-[#2B303C] dark:text-white dark:border-teal-500 hover:cursor-pointer`}
       {...buttonProps}
       {...focusProps}>
       <span className="sr-only">{props.day}</span>
       <span className="text-lg font-bold">{props.day.slice(0, 2)}</span>
       <span className="text-sm">{new Date(props.date).getDate()}</span>
     </div>
-  );
-};
+  )
+}
 
 interface DateSwitcherProps {
-  setSelectedDate: (date: Date) => void;
-  selectedDate: Date;
+  setSelectedDate: (date: Date) => void
+  selectedDate: Date
 }
 
 export const DateSwitcher = ({ setSelectedDate, selectedDate }: DateSwitcherProps) => {
@@ -73,5 +73,5 @@ export const DateSwitcher = ({ setSelectedDate, selectedDate }: DateSwitcherProp
         <DateSwitcherButton day="Zondag" date={"2023-04-23"} onClick={() => setSelectedDate(sunday)} isSelected={selectedDate.getTime() === sunday.getTime()} />
       </div>
     </nav>
-  );
-};
+  )
+}

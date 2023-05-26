@@ -1,9 +1,9 @@
 import { api } from "../../../utils/api"
-import { LoadingMessage } from "../loading-message"
-import { CardList } from "../../atoms/card-list"
+import { LoadingMessage } from "../generic/loading-message"
+import { CardList } from "../../atoms/layout/card/card-list"
 import { StaffingCard } from "./staffing-card"
 import type { StaffingWithColleagues } from "../../../types/StaffingWithColleagues"
-import { Button } from "../../atoms/button"
+import { Button } from "../../atoms/input/button"
 
 export function PersonalStaffingList({ fromDate }: { fromDate?: Date }) {
   const personalStaffings = api.staffing.getPersonalStaffing.useInfiniteQuery({ fromDate, limit: 1 }, {
@@ -24,15 +24,15 @@ export function PersonalStaffingList({ fromDate }: { fromDate?: Date }) {
 
   const staffings = personalStaffings.data?.pages.flatMap((page) => page.items)
   return (
-    <div className="flex flex-col gap-2 items-center">
-      <h1 className="text-4xl font-bold w-full dark:text-white">Mijn diensten</h1>
+    <div className="flex flex-col items-center gap-2">
+      <h1 className="w-full text-4xl font-bold dark:text-white">Mijn diensten</h1>
       <CardList<StaffingWithColleagues> objects={staffings} CardLayout={
         (staffing) => {
           return <StaffingCard staffing={staffing} />
         }
       } />
       {personalStaffings.hasNextPage && <Button onPress={() => void personalStaffings.fetchNextPage()}>Load more</Button>}
-      {staffings?.length === 0 && <p className="text-center m-4">Je hebt nog geen toekomstige diensten staan.</p>}
+      {staffings?.length === 0 && <p className="m-4 text-center">Je hebt nog geen toekomstige diensten staan.</p>}
     </div>
   )
 }

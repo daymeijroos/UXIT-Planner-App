@@ -1,9 +1,7 @@
-import { Button } from "../../components/atoms/button"
-import { api } from "../../utils/api"
-import { NavigationBar } from "../../components/elements/navigation-bar"
-import { LoadingMessage } from "../../components/elements/loading-message"
-import { ToastService } from "../../utils/toast/toastService"
 import Head from "next/head"
+import { Button, NavigationBar, LoadingMessage } from "../../components"
+import { api } from "../../utils/api"
+import { ToastService } from "../../components"
 
 export default function Admin() {
   const { mutateAsync: generateSchedule } = api.schedule.generate.useMutation({
@@ -49,7 +47,7 @@ export default function Admin() {
       <div className="flex flex-col items-center justify-center dark:bg-[#2B303C]" >
         <h1 className="mt-4 text-3xl font-bold text-center">Admin paneel</h1>
         <h2 className="mt-4 text-xl font-bold text-center">Rooster</h2>
-        <div className="sm:flex flex-wrap mt-4 space-x-4 max-sm:space-x-0 justify-center">
+        <div className="flex-wrap justify-center mt-4 space-x-4 sm:flex max-sm:space-x-0">
           <Button color="success" onPress={() => {
             void generateSchedule({
               from: new Date(),
@@ -58,17 +56,17 @@ export default function Admin() {
           }} className="w-64">Genereer Rooster</Button>
           <Button color="error" onPress={() => { void removeStaffings() }} className="w-64 max-sm:mt-4">Verwijder Rooster</Button>
         </div>
-        <div className="sm:flex flex-wrap mt-4 space-x-4 max-sm:space-x-0 justify-center">
+        <div className="flex-wrap justify-center mt-4 space-x-4 sm:flex max-sm:space-x-0">
           <Button className="w-64">Handmatige aanpassingen</Button>
           <Button className="w-64 max-sm:mt-4">Openingsweekend aangeven</Button>
         </div>
-        <div className="flex-col items-center m-4 space-y-4 justify-center">
+        <div className="flex-col items-center justify-center m-4 space-y-4">
           <h2 className="text-xl font-bold text-center">Vrijwilligers</h2>
-          <div className="sm:flex flex-wrap mt-4 space-x-4 max-sm:space-x-0 justify-center">
+          <div className="flex-wrap justify-center mt-4 space-x-4 sm:flex max-sm:space-x-0">
             <Button className="w-64">Voorkeur aanpassen</Button>
             <Button className="w-64 max-sm:mt-4">Beschikbaarheid aanpassen</Button>
           </div>
-          <div className="sm:flex flex-wrap mt-4 space-x-4 max-sm:space-x-0 justify-center">
+          <div className="flex-wrap justify-center mt-4 space-x-4 sm:flex max-sm:space-x-0">
             <Button className="w-64">Werkuren aanpassen</Button>
             <Button className="w-64 max-sm:mt-4">Verlof aangeven</Button>
           </div>
@@ -76,7 +74,7 @@ export default function Admin() {
           <h2 className="mt-4 text-xl font-bold text-center">Uitbreiding</h2>
           <Button className="w-64">Nieuw shifttype toevoegen</Button>
           <h2 className="mt-4 text-xl font-bold text-center">Accounts beheren</h2>
-          <div className="sm:flex flex-wrap mt-4 space-x-4 max-sm:space-x-0 justify-center">
+          <div className="flex-wrap justify-center mt-4 space-x-4 sm:flex max-sm:space-x-0">
             <Button className="w-64">Account aanmaken</Button>
             <Button className="w-64 max-sm:mt-4 max-sm:mb-24">Rollenbeheer</Button>
           </div>

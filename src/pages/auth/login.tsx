@@ -26,7 +26,7 @@ export default function Login({ providers }: { providers: Provider[] }) {
       </Head>
       <div className="flex flex-col items-center justify-center min-h-screen gap-4">
         <Image src="/images/logo_linework.svg" alt="Logo" width={200} height={200} className="filter brightness-0 dark:brightness-50 dark:filter-blue dark:invert" />
-        <h1 className="font-bold text-teal-500  dark:text-white">Log in</h1>
+        <h1 className="font-bold text-teal-500 dark:text-white">Log in</h1>
         <div className="flex flex-col items-end w-96">
           {Object.values(providers).map((provider) => {
             if (provider.name === "Email") {

@@ -19,7 +19,7 @@ export function Button(props: { title?: string, color?: "gray" | "teal" | "red" 
       props.className)}
       {...buttonProps}
       {...focusProps}
-      title={props.title}
+      {...props}
       ref={ref}>
       {children}
     </button>

@@ -4,48 +4,16 @@ import { CheckSquare, X } from 'react-feather'
 export const successToast = (message: string) => {
 
   toast.custom((t: Toast) => (
-    <>
-      {(
-        <div className="bg-green-400 w-1/4 h-40 drop-shadow-xl border-black border-2 dark:bg-green-600 dark:border-green-400">
-          <div className="h-full absolute top-2 left-5">
-            <CheckSquare className="w-12 h-12 text-black p-1 stroke-3 dark:text-white" />
-          </div>
-          <div
-            onClick={() => {
-              toast.remove(t.id)
-            }}
-            className="cursor-pointer absolute top-1 right-2"
-          >
-            <X className="w-10 h-10 text-black p-1 stroke-1 dark:text-white" />
-          </div>
-          <div className="p-3 ml-16 mt-0.5">
-            <h2 className="font-bold text-3xl dark:text-white">Success</h2>
-          </div>
-          <p className="text-ellipsis p-3 ml-4 text-lg font-bold dark:text-white">{message}</p>
-        </div>
-        // ) : (
-        //   <div className="bg-green-600 w-1/4 h-40 drop-shadow-xl border-green-400 border-2">
-        //     <div className="h-full absolute top-2 left-5">
-        //       <CheckSquare className="w-12 h-12 text-white p-1 stroke-3" />
-        //     </div>
-        //     <div
-        //       onClick={() => {
-        //         toast.remove(t.id);
-        //       }}
-        //       className="cursor-pointer absolute top-1 right-2"
-        //     >
-        //       <X className="w-10 h-10 text-white p-1 stroke-1" />
-        //     </div>
-        //     <div className="p-3 ml-16 mt-0.5">
-        //       <h2 className="font-bold text-white text-3xl">Success</h2>
-        //     </div>
-        //     <p className="text-white text-ellipsis p-3 ml-4 text-lg font-bold">{message}</p>
-        //   </div>
-        // )}
-      )}
-
-    </>
-
+    <div className="flex flex-col w-full max-w-sm gap-4 p-4 bg-teal-500 border-2 border-black dark:bg-teal-300 dark:border-teal-400 drop-shadow-xl">
+      <div className="flex justify-between">
+        <span className="flex items-center gap-4">
+          <CheckSquare size={30} />
+          <h2>Gelukt!</h2>
+        </span>
+        <X size={30} className="cursor-pointer" onClick={() => { toast.remove(t.id) }} />
+      </div>
+      <p className="text-ellipsis">{message}</p>
+    </div>
   ))
 }
 

@@ -26,7 +26,7 @@ export function AddRequiredStaffing({ RequiredStaffingProps }: AddRequiredStaffi
   return (
     <div>
       <Button
-        color="primary"
+        color="gray"
         className="m-4 text-white"
         onPress={handleAddRequiredStaffing}>
         Reserve toevoegen

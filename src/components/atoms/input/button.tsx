@@ -1,5 +1,5 @@
 import { type AriaButtonProps, useButton } from 'react-aria'
-import { HTMLProps, useRef } from 'react'
+import { type HTMLProps, useRef } from 'react'
 import { useFocusRing } from 'react-aria'
 import classNames from 'classnames'
 //button react element props

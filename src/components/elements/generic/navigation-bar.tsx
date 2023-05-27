@@ -3,7 +3,6 @@
 import { Bell, Calendar, User, Tool } from "react-feather"
 import { useRouter, usePathname } from "next/navigation"
 import { Button } from "../../atoms/input/button"
-import classNames from "classnames"
 
 export const NavigationBar = () => {
   const router = useRouter()

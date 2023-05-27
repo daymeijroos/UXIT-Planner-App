@@ -1,8 +1,6 @@
-import { useEffect, useState } from "react"
 import { Item } from "react-stately"
-import { DateSwitcher, TeamStaffingList, PersonalStaffingList } from "."
+import { TeamStaffingList, PersonalStaffingList } from "."
 import { Tabs } from "../../atoms"
-import { LoadingMessage } from "../generic/loading-message"
 
 export const Overview = () => {
   return (
@@ -12,7 +10,7 @@ export const Overview = () => {
           <Item key="1" title="Team">
             <TeamStaffingList />
           </Item>
-          <Item key="2" title="Personal">
+          <Item key="2" title="Persoonlijk">
             <PersonalStaffingList />
           </Item>
         </Tabs>

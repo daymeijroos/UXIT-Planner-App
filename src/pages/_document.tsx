@@ -31,7 +31,7 @@ export default function Document() {
         <link rel="apple-touch-icon" href="/apple-icon.png" />
         <meta name="theme-color" content="#5FC9BE" />
       </Head>
-      <body className='min-h-screen p-4 prose prose-gray dark:bg-blue-gray-400 dark:prose-invert'>
+      <body className='min-h-screen p-4 text-black dark:bg-blue-gray-400 dark:text-white'>
         <Main />
         <NextScript />
       </body>

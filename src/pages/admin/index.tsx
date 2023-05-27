@@ -44,39 +44,37 @@ export default function Admin() {
       <Head>
         <title>Home | Pulchri Planner</title>
       </Head>
-      <div className="flex flex-col items-center justify-center dark:bg-[#2B303C]" >
-        <h1 className="mt-4 text-3xl font-bold text-center">Admin paneel</h1>
-        <h2 className="mt-4 text-xl font-bold text-center">Rooster</h2>
-        <div className="flex-wrap justify-center mt-4 space-x-4 sm:flex max-sm:space-x-0">
-          <Button color="success" onPress={() => {
-            void generateSchedule({
-              from: new Date(),
-              to: new Date(new Date().setDate(new Date().getDate() + 7))
-            })
-          }} className="w-64">Genereer Rooster</Button>
-          <Button color="error" onPress={() => { void removeStaffings() }} className="w-64 max-sm:mt-4">Verwijder Rooster</Button>
-        </div>
-        <div className="flex-wrap justify-center mt-4 space-x-4 sm:flex max-sm:space-x-0">
-          <Button className="w-64">Handmatige aanpassingen</Button>
-          <Button className="w-64 max-sm:mt-4">Openingsweekend aangeven</Button>
-        </div>
-        <div className="flex-col items-center justify-center m-4 space-y-4">
-          <h2 className="text-xl font-bold text-center">Vrijwilligers</h2>
-          <div className="flex-wrap justify-center mt-4 space-x-4 sm:flex max-sm:space-x-0">
-            <Button className="w-64">Voorkeur aanpassen</Button>
-            <Button className="w-64 max-sm:mt-4">Beschikbaarheid aanpassen</Button>
+      <div className="flex flex-col items-center gap-5">
+        <h1>Admin paneel</h1>
+        <div className="flex flex-col w-full max-w-screen-md gap-4">
+          <h2>Rooster</h2>
+          <div className="grid w-full grid-cols-2 gap-4">
+            <Button color="teal" onPress={() => {
+              void generateSchedule({
+                from: new Date(),
+                to: new Date(new Date().setDate(new Date().getDate() + 7))
+              })
+            }}>Genereer Rooster</Button>
+            <Button color="red" onPress={() => { void removeStaffings() }}>Verwijder Rooster</Button>
+            <Button>Handmatige aanpassingen</Button>
+            <Button>Openingsweekend aangeven</Button>
           </div>
-          <div className="flex-wrap justify-center mt-4 space-x-4 sm:flex max-sm:space-x-0">
-            <Button className="w-64">Werkuren aanpassen</Button>
-            <Button className="w-64 max-sm:mt-4">Verlof aangeven</Button>
+          <h2>Vrijwilligers</h2>
+          <div className="grid w-full grid-cols-2 gap-4">
+            <Button>Voorkeur aanpassen</Button>
+            <Button>Beschikbaarheid aanpassen</Button>
+            <Button>Werkuren aanpassen</Button>
+            <Button>Verlof aangeven</Button>
+            <Button>Inwerken inroosteren</Button>
           </div>
-          <Button className="w-64">Inwerken inroosteren</Button>
-          <h2 className="mt-4 text-xl font-bold text-center">Uitbreiding</h2>
-          <Button className="w-64">Nieuw shifttype toevoegen</Button>
-          <h2 className="mt-4 text-xl font-bold text-center">Accounts beheren</h2>
-          <div className="flex-wrap justify-center mt-4 space-x-4 sm:flex max-sm:space-x-0">
-            <Button className="w-64">Account aanmaken</Button>
-            <Button className="w-64 max-sm:mt-4 max-sm:mb-24">Rollenbeheer</Button>
+          <h2>Uitbreiding</h2>
+          <div className="grid w-full grid-cols-2 gap-4">
+            <Button>Nieuw shifttype toevoegen</Button>
+          </div>
+          <h2>Accounts beheren</h2>
+          <div className="grid w-full grid-cols-2 gap-4">
+            <Button>Account aanmaken</Button>
+            <Button>Rollenbeheer</Button>
           </div>
         </div>
         {unfulfilledShifts.data?.map((request) => {
@@ -90,8 +88,8 @@ export default function Admin() {
             </div>
           )
         })}
-        <NavigationBar />
-      </div>
+      </div >
+      <NavigationBar />
     </>
   )
 }

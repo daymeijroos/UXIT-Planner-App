@@ -51,20 +51,20 @@ export const DateSwitcher = ({ setSelectedDate, selectedDate }: DateSwitcherProp
 
   return (
     <nav className="bg-white rounded-lg flex flex-col space-x-2 justify-center dark:bg-[#2B303C] dark:text-white ">
-      <div className="flex items-center justify-between border-black border-2 dark:border-steel">
+      <div className="flex items-center justify-between border-2 border-black dark:border-blue-gray-600">
         <button
-          className="text-black rounded-full w-8 h-8 flex items-center justify-center focus:outline-none ">
+          className="flex items-center justify-center w-8 h-8 text-black dark:text-blue-gray-600 focus:outline-none ">
           <span className="sr-only">Previous week</span>
           &lt;
         </button>
-        <div className="font-bold text-xl">{`Week 16`}</div>
+        <div className="text-xl font-bold">{`Week 16`}</div>
         <button
-          className="text-black rounded-full w-8 h-8 flex items-center justify-center focus:outline-none">
+          className="flex items-center justify-center w-8 h-8 text-black dark:text-blue-gray-600 focus:outline-none">
           <span className="sr-only">Next week</span>
           &gt;
         </button>
       </div>
-      <div className="flex space-x-2 justify-center">
+      <div className="flex justify-center space-x-2">
         <DateSwitcherButton day="Dinsdag" date={"2023-04-18"} onClick={() => setSelectedDate(tuesday)} isSelected={selectedDate.getTime() === tuesday.getTime()} />
         <DateSwitcherButton day="Woensdag" date={"2023-04-19"} onClick={() => setSelectedDate(wednesday)} isSelected={selectedDate.getTime() === wednesday.getTime()} />
         <DateSwitcherButton day="Donderdag" date={"2023-04-20"} onClick={() => setSelectedDate(thursday)} isSelected={selectedDate.getTime() === thursday.getTime()} />

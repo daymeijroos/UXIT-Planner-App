@@ -1,30 +1,28 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { StaffingCard } from "./staffing-card"
 import { api } from '../../../utils/api'
 import type { StaffingWithColleagues } from '../../../types/StaffingWithColleagues'
 import { useAutoAnimate } from '@formkit/auto-animate/react'
 import { LoadingMessage } from '../generic/loading-message'
+import { DateSwitcher } from './date-switcher'
 
-interface ScheduleProps {
-  selectedDate: Date
-  weekStart: Date
-}
+export const TeamStaffingList = () => {
+  const [selectedDate, setSelectedDate] = useState<Date>()
+  const weekStart = new Date(new Date('2023-04-18T00:00:00Z').setHours(0, 0, 0, 0))
 
-export const TeamStaffingList = ({ selectedDate, weekStart }: ScheduleProps) => {
+  const staffings = api.staffing.getStaffing.useQuery({ fromDate: weekStart })
+
+  useEffect(() => {
+    setSelectedDate(new Date(new Date().setHours(0, 0, 0, 0)))
+  }, [])
 
   const [parent] = useAutoAnimate({
     duration: 150,
   })
 
-  const staffings = api.staffing.getStaffing.useQuery({ fromDate: weekStart })
-
-  if (staffings.isLoading) {
-    return (
-      <div className='flex justify-center h-64'>
-        <LoadingMessage />
-      </div>
-    )
-  }
+  if (staffings.isLoading || !selectedDate) return (
+    <LoadingMessage />
+  )
 
   if (staffings.error) {
     return <div>{staffings.error.message}</div>
@@ -56,10 +54,12 @@ export const TeamStaffingList = ({ selectedDate, weekStart }: ScheduleProps) => 
 
 
   return (
-    <div ref={parent} className='overflow-y-auto h-[70vh] dark:text-white]'>
+    <div ref={parent} className='flex flex-col gap-4 overflow-y-auto dark:text-white'>
+      <h1>Team overzicht</h1>
+      <DateSwitcher selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
       {
         filteredStaffings.length === 0 ? (
-          <p className='text-center m-4'>Er zijn geen vrijwilligers ingepland op deze datum.</p>
+          <p className='m-4 text-center'>Er zijn geen vrijwilligers ingepland op deze datum.</p>
         ) : (
           filteredStaffings.map((get: StaffingWithColleagues) => {
             const date = new Date(get.shift.start)

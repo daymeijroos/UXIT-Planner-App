@@ -11,6 +11,11 @@ import {Button} from "../../atoms/button";
 import {useSession} from "next-auth/react";
 import {TextField} from "../../atoms/text-field";
 
+import type { StaffingWithColleagues } from "../../../types/StaffingWithColleagues"
+import { formatDate } from "../../../utils/date/formatDate"
+import { formatTime } from "../../../utils/date/formatTime"
+import { formatShiftStaffList } from "../../../utils/formatShiftStaffList"
+import { Card } from "../../atoms"
 
 interface StaffingCardProps {
     staffing: StaffingWithColleagues;
@@ -77,6 +82,7 @@ export function StaffingCard(props: StaffingCardProps) {
             )}
         </div>
     );
+export function StaffingCard(props: { staffing: StaffingWithColleagues }) {
   return (
     <Card>
       <h1 className="text-2xl font-bold">
@@ -96,5 +102,5 @@ export function StaffingCard(props: StaffingCardProps) {
         }
       </p>
     </Card>
-  );
+  )
 }

@@ -150,6 +150,7 @@ module.exports = {
         if (!isSameOrigin) return false
         const pathname = url.pathname
         if (pathname.startsWith('/api/')) return false
+        if (pathname.startsWith('/auth/')) return false
         return true
       },
       handler: 'NetworkOnly',

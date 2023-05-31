@@ -1,7 +1,7 @@
-import { StaffingWithColleagues } from "../types/StaffingWithColleagues";
+import type { StaffingWithColleagues } from "../types/StaffingWithColleagues";
 
 export function formatShiftStaffList(staffing: StaffingWithColleagues) {
-  const shifts: {[key: string]: string[]} = {};
+  const shifts: { [key: string]: string[] } = {};
 
   staffing.shift.staffings.forEach(nestedStaffing => {
     const shiftTypeName = nestedStaffing.shift_type.name;
@@ -10,7 +10,7 @@ export function formatShiftStaffList(staffing: StaffingWithColleagues) {
       shifts[shiftTypeName] = [];
     }
 
-    const staffName = `${nestedStaffing.user.first_name ?? 'Onbekende naam'}`;
+    const staffName = `${nestedStaffing.user.name ?? 'Onbekende naam'}`;
 
     shifts[shiftTypeName].push(staffName);
   });
@@ -19,7 +19,7 @@ export function formatShiftStaffList(staffing: StaffingWithColleagues) {
     const formattedStaffNames = staffNames.join(', ');
     return `${shiftTypeName}: ${formattedStaffNames}`;
   }).join('\n').split('\n')
-  .map((line, index) => <span key={index}>{line}<br/></span>);
+    .map((line, index) => <span key={index}>{line}<br /></span>);
 
   return formattedShifts;
 }

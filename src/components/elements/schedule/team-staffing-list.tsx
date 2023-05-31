@@ -3,22 +3,28 @@ import { StaffingCard } from "./staffing-card";
 import { api } from '../../../utils/api';
 import type { StaffingWithColleagues } from '../../../types/StaffingWithColleagues';
 import { useAutoAnimate } from '@formkit/auto-animate/react'
+import Loading from '../../../pages/test/loading';
+import { LoadingMessage } from '../loading-message';
 
 interface ScheduleProps {
   selectedDate: Date;
   weekStart: Date;
 }
 
-export const Schedule = ({ selectedDate, weekStart }: ScheduleProps) => {
+export const TeamStaffingList = ({ selectedDate, weekStart }: ScheduleProps) => {
 
-  const [parent, enableAnimations] = useAutoAnimate({
+  const [parent] = useAutoAnimate({
     duration: 150,
   })
 
-  const staffings = api.staffing.getStaffing.useQuery({ from: weekStart });
+  const staffings = api.staffing.getStaffing.useQuery({ fromDate: weekStart });
 
   if (staffings.isLoading) {
-    return <div>loading...</div>;
+    return (
+      <div className='flex justify-center h-64'>
+        <LoadingMessage />
+      </div>
+    );
   }
 
   if (staffings.error) {

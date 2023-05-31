@@ -1,7 +1,6 @@
 import React from 'react';
 import { api } from '../../utils/api';
-import { User } from "@prisma/client";
-import { NavigationBar } from "../../components/elements/navigation-bar";
+import { NavigationBar } from "../../components";
 
 const Gebruikers = () => {
   const users = api.user.getAllUsers.useQuery();
@@ -44,7 +43,7 @@ const Gebruikers = () => {
             users.data?.map((user) => (
               <tr key={user.id} className="hover:bg-gray-200 cursor-pointer" onClick={() => handleUserClick(user.id)}>
                 <td className="px-6 py-4 whitespace-nowrap border border-black">
-                  <div className="text-sm text-gray-900">{user.first_name}</div>
+                  <div className="text-sm text-gray-900">{user.name}</div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap border border-black">
                   <div className="text-sm text-gray-900">{user.last_name}</div>

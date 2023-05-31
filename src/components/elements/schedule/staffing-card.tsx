@@ -1,17 +1,12 @@
-import type { StaffingWithColleagues } from "../../../types/StaffingWithColleagues";
-import { formatDate } from "../../../utils/date/formatDate";
-import { formatTime } from "../../../utils/date/formatTime";
-import { formatShiftStaffList } from "../../../utils/formatShiftStaffList";
+import type { StaffingWithColleagues } from "../../../types/StaffingWithColleagues"
+import { formatDate } from "../../../utils/date/formatDate"
+import { formatTime } from "../../../utils/date/formatTime"
+import { formatShiftStaffList } from "../../../utils/formatShiftStaffList"
+import { Card } from "../../atoms"
 
-interface StaffingCardProps {
-  staffing: StaffingWithColleagues
-}
-
-const cardStyle = `border-2 border-black py-4 px-4 m-4 text-black bg-white`;
-
-export function StaffingCard(props: StaffingCardProps) {
+export function StaffingCard(props: { staffing: StaffingWithColleagues }) {
   return (
-    <div className={cardStyle}>
+    <Card>
       <h1 className="text-2xl font-bold">
         {
           `${formatTime(props.staffing.shift.start)}-${formatTime(props.staffing.shift.end)}`
@@ -28,6 +23,6 @@ export function StaffingCard(props: StaffingCardProps) {
           formatShiftStaffList(props.staffing)
         }
       </p>
-    </div>
-  );
+    </Card>
+  )
 }

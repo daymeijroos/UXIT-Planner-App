@@ -61,7 +61,7 @@ export default function Admin() {
           </div>
           <h2>Vrijwilligers</h2>
           <div className="grid w-full grid-cols-2 gap-4">
-            <Button>Voorkeur aanpassen</Button>
+            <Button onPress={() => router.push("/admin/gebruikers")}>Voorkeur aanpassen</Button>
             <Button>Beschikbaarheid aanpassen</Button>
             <Button>Werkuren aanpassen</Button>
             <Button>Verlof aangeven</Button>

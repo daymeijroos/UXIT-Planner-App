@@ -3,7 +3,7 @@ import { scheduleRouter } from "./schedule/"
 import { staffingRouter } from "./staffing"
 import { staffRequiredRouter } from "./staff-required"
 import { availabilityRouter } from "./availability"
-import { userRouter } from "./userRouters"
+import { userRouter } from "./user"
 
 export const appRouter = createTRPCRouter({
   schedule: scheduleRouter,

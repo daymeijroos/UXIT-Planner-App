@@ -2,6 +2,7 @@ import Head from "next/head"
 import { Button, NavigationBar, LoadingMessage } from "../../components"
 import { api } from "../../utils/api"
 import { ToastService } from "../../components"
+import { useRouter } from "next/navigation";
 
 export default function Admin() {
   const { mutateAsync: generateSchedule } = api.schedule.generate.useMutation({
@@ -39,6 +40,7 @@ export default function Admin() {
     return <div>{unfulfilledShifts.error.message}</div>
   }
 
+  const router = useRouter();
   return (
     <>
       <Head>
@@ -56,7 +58,7 @@ export default function Admin() {
               })
             }}>Genereer Rooster</Button>
             <Button color="red" onPress={() => { void removeStaffings() }}>Verwijder Rooster</Button>
-            <Button>Handmatige aanpassingen</Button>
+            <Button onPress={() => router.push("/admin/aanpassen")}>Handmatige aanpassingen</Button>
             <Button>Openingsweekend aangeven</Button>
           </div>
           <h2>Vrijwilligers</h2>

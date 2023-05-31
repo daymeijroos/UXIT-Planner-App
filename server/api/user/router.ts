@@ -1,8 +1,7 @@
-import { createTRPCRouter, publicProcedure } from "../trpc";
+import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const userRouter = createTRPCRouter({
-  //TODO: protectedProcedure
-  getAllUsers: publicProcedure
+  getAllUsers: protectedProcedure
     .query(({ ctx }) => {
       return ctx.prisma.user.findMany({})
     })

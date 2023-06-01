@@ -50,9 +50,9 @@ export function WeekView<T extends DateValue>(props: AriaCalendarProps<T> & Aria
         </h3>
         <div className="rounded-full flex items-center justify-center outline-none hover:bg-green-200 active:bg-green-500">
           <Button
-            {...prevButtonProps} onPress={() => {
+            {...prevButtonProps} onPress={(e) => {
             prevWeek()
-            prevButtonProps.onPress()
+            if (prevButtonProps.onPress) prevButtonProps.onPress(e)
             }}>
             <ChevronLeft />
           </Button>
@@ -83,9 +83,9 @@ export function WeekView<T extends DateValue>(props: AriaCalendarProps<T> & Aria
         </table>
         <div className="rounded-full flex items-center justify-center outline-none hover:bg-green-200 active:bg-green-500">
           <Button
-            {...nextButtonProps} onPress={() => {
+            {...nextButtonProps} onPress={(e) => {
             nextWeek()
-            nextButtonProps.onPress()
+            if (nextButtonProps.onPress) nextButtonProps.onPress(e)
             }}>
             <ChevronRight />
           </Button>

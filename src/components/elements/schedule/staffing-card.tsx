@@ -1,43 +1,31 @@
-import { StaffingWithColleagues } from "../../../types/StaffingWithColleagues";
 import { api } from "../../../utils/api";
-import { formatDate } from "../../../utils/date/formatDate";
-import { formatTime } from "../../../utils/date/formatTime";
-import { formatShiftStaffList } from "../../../utils/formatShiftStaffList";
-import { Card } from "../../atoms/card";
-import {formatDate} from "../../../utils/date/formatDate";
-import {formatShiftStaffList} from "../../../utils/formatShiftStaffList";
-import {useState} from "react";
-import {Button} from "../../atoms/button";
+import {FormEvent, useState} from "react";
 import {useSession} from "next-auth/react";
-import {TextField} from "../../atoms/text-field";
 
 import type { StaffingWithColleagues } from "../../../types/StaffingWithColleagues"
 import { formatDate } from "../../../utils/date/formatDate"
 import { formatTime } from "../../../utils/date/formatTime"
 import { formatShiftStaffList } from "../../../utils/formatShiftStaffList"
-import { Card } from "../../atoms"
+import {Button, Card, TextField} from "../../atoms"
+import {errorToast} from "../generic/toast/errorToast";
 
 interface StaffingCardProps {
     staffing: StaffingWithColleagues;
 }
 
-const cardStyle = 'border-2 border-black py-4 px-4 m-4 text-black bg-white';
+
 
 export function StaffingCard(props: StaffingCardProps) {
   // const shift_type_id = api.requiredStaffing.getReserveShiftType.useQuery();
 
-    const { data: sessionData, status } = useSession();
+    const { data: sessionData} = useSession();
     const userName = sessionData?.user?.name;
-
     const [showForm, setShowForm] = useState(false);
-    const [reason, setReason] = useState('');
 
     const determineShowButton = (staffing: StaffingWithColleagues): boolean => {
-        let result = true;
+        let result = false;
         staffing.shift.staffings.forEach((nestedStaffing) => {
-            const staffName = nestedStaffing.user.first_name ?? 'Onbekende naam';
-
-            if (staffName === userName) {
+            if (nestedStaffing.user.name == userName) {
                 result = true;
             }
         });
@@ -50,39 +38,40 @@ export function StaffingCard(props: StaffingCardProps) {
         setShowForm(true);
     };
 
+    const context = api.useContext()
 
     const { mutate: handleFormSubmit } = api.absence.createAbsence.useMutation()
+    const { mutate: handleRemoveStaffing } = api.staffing.removeStaffing.useMutation({
+        onSuccess: () => {
+            context.staffing.getStaffing.invalidate().catch((error) => {
+                throw error
+            })
+        }
+    })
 
-    return (
-        <div className={cardStyle + "dark:bg-[#2B303C] dark:text-white dark:border-steel"}>
-            <h1 className="text-2xl font-bold">
-                {
-                    `${formatTime(props.staffing.shift.start)}-${formatTime(props.staffing.shift.end)}`
-                }
-            </h1>
-            <p>
-                {
-                    `${formatDate(props.staffing.shift.start)[0].toUpperCase()}${formatDate(props.staffing.shift.start).slice(1)}`
-                }
-            </p>
-            <br />
-            <p>
-                {
-                    formatShiftStaffList(props.staffing)
-                }
-            </p>
-            {determineShowButton(props.staffing)  && !showForm && (
-                <Button onPress={handleButtonClick}>Afmelden</Button>
-            )}
-            {showForm && (<div>
-                    <TextField onChange={setReason}/>
-                    <Button onPress={() => {handleFormSubmit({ shift_id: props.staffing.shift.id,
-                        reason: reason})}}>Submit</Button>
-                </div>
-            )}
-        </div>
-    );
-export function StaffingCard(props: { staffing: StaffingWithColleagues }) {
+    const handleFormAndStaffingSubmit = (event: FormEvent<HTMLFormElement>) => {
+        event.preventDefault()
+        const target = event.target as typeof event.target& {
+            reasonForAbsence: { value: string }
+        }
+        const reason = target.reasonForAbsence.value
+        const formData = {
+            shift_id: props.staffing.shift.id,
+            reason: reason,
+        };
+        const removeStaffingData = {
+            shift_id: props.staffing.shift.id,
+        }
+        Promise.all([
+            handleFormSubmit(formData),
+            handleRemoveStaffing(removeStaffingData),
+        ]).catch(() => {
+            errorToast("There has been an error")
+        })
+    };
+
+
+
   return (
     <Card>
       <h1 className="text-2xl font-bold">
@@ -101,6 +90,14 @@ export function StaffingCard(props: { staffing: StaffingWithColleagues }) {
           formatShiftStaffList(props.staffing)
         }
       </p>
+        {determineShowButton(props.staffing)  && !showForm && (
+            <Button onPress={handleButtonClick}>Afmelden</Button>
+        )}
+        {showForm && (<form onSubmit={handleFormAndStaffingSubmit}>
+                <TextField type="text" id="reasonForAbsence" name="reasonForAbsence" placeholder="Vul hier uw reden in:"/>
+                <Button type="submit" id="reason" name="reason" >Submit</Button>
+            </form>
+        )}
     </Card>
   )
 }

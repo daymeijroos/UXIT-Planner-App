@@ -4,8 +4,7 @@ import { z } from "zod";
 import {publicProcedure, createTRPCRouter, protectedProcedure} from "../trpc";
 
 export const absenceRouter = createTRPCRouter({
-    createAbsence: publicProcedure
-
+    createAbsence: protectedProcedure
         .input(
             z.object({
                 shift_id: z.string(),
@@ -15,11 +14,7 @@ export const absenceRouter = createTRPCRouter({
             const shift = await ctx.prisma.shift.findUnique({
                 where: { id: input.shift_id }
             });
-            if (!shift) {
-                throw new Error("Shift not found");
-            }
-            const startDateShift = shift.start;
-            const endDateShift = shift.end;
+            if (!shift) throw new Error("Shift not found");
 
             const user = await ctx.prisma.user.findUnique({
                 where: { id: ctx.session.user.id },
@@ -27,25 +22,18 @@ export const absenceRouter = createTRPCRouter({
                     preference: true
                 }
             });
-            if (!user) {
-                throw new Error("User not found");
-            }
-            const preferenceId = user.preference?.id;
+            if (!user) throw new Error("User not found");
 
-            if (!preferenceId) {
-                throw new Error("Preference not found");
-            }
+            if (!user.preference) throw new Error("Preference not found");
+            return ctx.prisma.absence.create({
+                data: {
+                    start: shift.start,
+                    end: shift.end,
+                    reason: input.reason,
+                    preference_id: user.preference.id,
+                },
+            });
+        }),
 
 
-                const absence = await ctx.prisma.absence.create({
-                    data: {
-                        start: startDateShift,
-                        end: endDateShift,
-                        reason: input.reason,
-                        preference_id: preferenceId,
-                    },
-                });
-                return absence;
-            }
-        ),
 });

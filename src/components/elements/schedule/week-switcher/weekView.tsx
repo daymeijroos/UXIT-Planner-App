@@ -31,6 +31,14 @@ export function WeekView<T extends DateValue>(props: AriaCalendarProps<T> & Aria
 
   const weekdays = ["Ma", "Di", "Wo", "Do", "Vr", "Za", "Zo"];
 
+  function nextWeek() {
+    state.selectDate(state.value.add({ weeks: 1 }));
+  }
+
+  function prevWeek() {
+    state.selectDate(state.value.subtract({ weeks: 1 }));
+  }
+
   return (
     <div className="flex justify-center">
       <div className="relative bottom-3 inline-grid grid-cols-[auto,1fr,auto] items-center text-center">
@@ -42,15 +50,18 @@ export function WeekView<T extends DateValue>(props: AriaCalendarProps<T> & Aria
         </h3>
         <div className="rounded-full flex items-center justify-center outline-none hover:bg-green-200 active:bg-green-500">
           <Button
-            {...prevButtonProps}>
+            {...prevButtonProps} onPress={() => {
+            prevWeek()
+            prevButtonProps.onPress()
+            }}>
             <ChevronLeft />
           </Button>
         </div>
         <table {...gridProps} className="mb-5">
           <thead>
           <tr>
-            {weekdays.map((weekday, i) => (
-              <th key={i} scope="col">
+            {weekdays.map((weekday, dayOfWeek) => (
+              <th key={dayOfWeek} scope="col">
                 {weekday}
               </th>
             ))}
@@ -72,7 +83,10 @@ export function WeekView<T extends DateValue>(props: AriaCalendarProps<T> & Aria
         </table>
         <div className="rounded-full flex items-center justify-center outline-none hover:bg-green-200 active:bg-green-500">
           <Button
-            {...nextButtonProps}>
+            {...nextButtonProps} onPress={() => {
+            nextWeek()
+            nextButtonProps.onPress()
+            }}>
             <ChevronRight />
           </Button>
         </div>

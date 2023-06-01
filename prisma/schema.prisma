@@ -94,6 +94,7 @@ model Absence {
   id            String          @id @default(cuid())
   start         DateTime
   end           DateTime
+  reason        String
   preference_id String
   preference    User_Preference @relation(fields: [preference_id], references: [id])
 }

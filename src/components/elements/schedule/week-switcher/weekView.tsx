@@ -16,7 +16,7 @@ export function WeekView<T extends DateValue>(props: AriaCalendarProps<T> & Aria
     locale,
     createCalendar
   });
-  const { prevButtonProps, nextButtonProps} = useCalendar(
+  const { prevButtonProps, nextButtonProps } = useCalendar(
     props,
     state
   );
@@ -28,6 +28,8 @@ export function WeekView<T extends DateValue>(props: AriaCalendarProps<T> & Aria
     dateStyle: "long",
     calendar: startDate.calendar.identifier
   });
+
+  const weekdays = ["Ma", "Di", "Wo", "Do", "Vr", "Za", "Zo"];
 
   return (
     <div className="flex align-middle justify-center">
@@ -41,19 +43,28 @@ export function WeekView<T extends DateValue>(props: AriaCalendarProps<T> & Aria
         <div className="rounded-full flex items-center justify-center outline-none hover:bg-green-200 active:bg-green-500">
           <Button
             {...prevButtonProps}>
-            <ChevronLeft/>
+            <ChevronLeft />
           </Button>
         </div>
         <table {...gridProps}>
+          <thead>
+          <tr>
+            {weekdays.map((weekday, i) => (
+              <th key={i} scope="col">
+                {weekday}
+              </th>
+            ))}
+          </tr>
+          </thead>
           <tbody>
           <tr lang={locale}>
             {state
               .getDatesInWeek(0)
               .map((date: CalendarDate | null, i: number) =>
                 date ? (
-                  <CalendarCell key={i} state={state} date={date}/>
+                  <CalendarCell key={i} state={state} date={date} />
                 ) : (
-                  <td key={i}/>
+                  <td key={i} />
                 )
               )}
           </tr>
@@ -62,7 +73,7 @@ export function WeekView<T extends DateValue>(props: AriaCalendarProps<T> & Aria
         <div className="rounded-full flex items-center justify-center outline-none hover:bg-green-200 active:bg-green-500">
           <Button
             {...nextButtonProps}>
-            <ChevronRight/>
+            <ChevronRight />
           </Button>
         </div>
       </div>

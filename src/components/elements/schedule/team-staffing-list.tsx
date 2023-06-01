@@ -55,7 +55,7 @@ export const TeamStaffingList = () => {
 
 
   return (
-    <div ref={parent} className='flex flex-col gap-4 overflow-y-auto dark:text-white'>
+    <div ref={parent} className='flex flex-col gap-4 dark:text-white'>
       <WeekView value={selectedDate} onChange={setSelectedDate}/>
       {
         filteredStaffings.length === 0 ? (

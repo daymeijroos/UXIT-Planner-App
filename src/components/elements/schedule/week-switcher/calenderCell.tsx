@@ -23,8 +23,8 @@ export function CalendarCell(props: {date: CalendarDate, state: CalendarState}) 
       <span
         ref={ref}
         className={`${
-          isSelected ? "accent-blue-700 bg-teal border-2 border-black" : ""
-        }  relative flex items-center justify-center cursor-default h-12 w-12 rounded-full outline-none hover:bg-green-200${
+          isSelected ? "accent-blue-700 bg-teal-500 border-2 border-black" : ""
+        } relative flex items-center justify-center cursor-default h-12 w-12 rounded-full outline-none hover:bg-green-200${
           isFocusVisible ? "shadow-outline-seagreen" : ""
         }`}
         {...mergeProps(buttonProps, focusProps)}

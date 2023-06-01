@@ -32,9 +32,9 @@ export function WeekView<T extends DateValue>(props: AriaCalendarProps<T> & Aria
   const weekdays = ["Ma", "Di", "Wo", "Do", "Vr", "Za", "Zo"];
 
   return (
-    <div className="flex align-middle justify-center">
-      <div className="inline-grid grid-cols-[auto,1fr,auto] items-center text-center mt-5">
-        <h3 className="col-span-3">
+    <div className="flex justify-center">
+      <div className="relative bottom-3 inline-grid grid-cols-[auto,1fr,auto] items-center text-center">
+        <h3 className="col-span-3 p-2">
           {dateFormatter.formatRange(
             state.visibleRange.start.toDate(state.timeZone),
             state.visibleRange.end.toDate(state.timeZone)
@@ -46,7 +46,7 @@ export function WeekView<T extends DateValue>(props: AriaCalendarProps<T> & Aria
             <ChevronLeft />
           </Button>
         </div>
-        <table {...gridProps}>
+        <table {...gridProps} className="mb-5">
           <thead>
           <tr>
             {weekdays.map((weekday, i) => (

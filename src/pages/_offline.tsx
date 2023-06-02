@@ -1,10 +1,10 @@
-import { Card } from "../components/atoms/card";
-import Image from "next/image";
+import Image from "next/image"
+import { Card } from "../components"
 
 export default function Offline() {
   //create a you are offline screen styled with TailwindCSS
   return (
-    <div className="flex flex-col lg:flex-row justify-around min-h-screen bg-white items-center">
+    <div className="flex flex-col items-center justify-around min-h-screen bg-white lg:flex-row">
       <div className="flex flex-col gap-2 w-72">
         <Image src="/images/logo.svg" width={200} height={200} alt="logo" />
         <Card className="border-red-orange drop-shadow-md">

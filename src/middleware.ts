@@ -1,16 +1,16 @@
 import { type NextRequestWithAuth, withAuth } from "next-auth/middleware"
-import { Role } from "../prisma/role";
-import { NextResponse } from "next/server";
+import { Role } from "../prisma/role"
+import { NextResponse } from "next/server"
 
 export default withAuth(
   function middleware(req: NextRequestWithAuth) {
     if (
-      !(isAuthPage(req) || isApiEndpoint(req) || isAuthenticated(req))
+      !(req.nextUrl.pathname.startsWith("/auth") || req.nextUrl.pathname.startsWith("/api") || (req.nextauth && req.nextauth.token))
     ) {
-      return NextResponse.redirect(new URL("/auth/login", req.url));
+      return NextResponse.redirect(new URL("/auth/login", req.url))
     }
-    if (adminPageNotAdmin(req)) {
-      return NextResponse.redirect(new URL("/", req.url));
+    if (req.nextUrl.pathname.startsWith("/admin") && req.nextauth.token?.role !== Role.ADMIN) {
+      return NextResponse.redirect(new URL("/", req.url))
     }
   },
   {
@@ -25,8 +25,3 @@ export default withAuth(
 export const config = {
   matcher: ["/", "/api/:path*", "/admin/:path*"],
 }
-
-const isAuthPage = (req: NextRequestWithAuth) => req.nextUrl.pathname.startsWith("/auth")
-const isApiEndpoint = (req: NextRequestWithAuth) => req.nextUrl.pathname.startsWith("/api")
-const isAuthenticated = (req: NextRequestWithAuth) => (req.nextauth && req.nextauth.token)
-const adminPageNotAdmin = (req: NextRequestWithAuth) => req.nextUrl.pathname.startsWith("/admin") && req.nextauth.token?.role !== Role.ADMIN

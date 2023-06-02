@@ -1,5 +1,5 @@
-import { NavigationBar } from "../../components/elements/navigation-bar";
-import LoginExample from "../../components/example/login.example";
+import { NavigationBar } from "../../components"
+import LoginExample from "../../components/example/login.example"
 
 const Index = () => {
   return (
@@ -7,7 +7,7 @@ const Index = () => {
       <LoginExample />
       <NavigationBar />
     </>
-  );
-};
+  )
+}
 
-export default Index;
+export default Index

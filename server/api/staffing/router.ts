@@ -162,26 +162,15 @@ export const staffingRouter = createTRPCRouter({
         }
       });
     }),
-  removeSelectedStaffing: protectedProcedure
-    .mutation(({ ctx }) => {
-      return async ({ shift_id, staffing_id }: { shift_id: string; staffing_id: string }) => {
-        const shift = await ctx.prisma.shift.findUnique({
-          where: { id: shift_id },
-          include: { staffings: true },
-        });
-
-        if (!shift) {
-          throw new Error(`Shift with ID ${shift_id} not found.`);
+  removeStaffingAdmin: publicProcedure
+    .input(z.object({
+      staffing_id: z.string()
+    }))
+    .mutation(async ({ ctx, input }) => {
+      return ctx.prisma.staffing.delete({
+        where: {
+          id: input.staffing_id
         }
-
-        const updatedStaffings = shift.staffings.filter((staffing) => staffing.id !== staffing_id);
-
-        const updatedShift = await ctx.prisma.shift.update({
-          where: { id: shift_id },
-          data: { staffings: { set: updatedStaffings } },
-        });
-
-        return updatedShift;
-      };
+      });
     }),
 });

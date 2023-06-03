@@ -1,6 +1,6 @@
-import { z } from "zod"
+import { z } from "zod";
 
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc"
+import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 
 //get all shifts from the start of today onwards until a set amount of days after that
 
@@ -8,61 +8,61 @@ export const staffingRouter = createTRPCRouter({
   getStaffing: publicProcedure
     .input(z.object({
       fromDate: z.date().optional(),
-      days: z.number().optional(),
+      days: z.number().optional()
     }).optional())
     .query(({ ctx, input }) => {
-      return ctx.prisma.staffing.findMany({
-        where: {
-          shift: {
-            start: {
-              gte: input?.fromDate || new Date(new Date().setHours(0, 0, 0, 0)),
-            },
-            end: {
-              lte: new Date(new Date().setDate(new Date().getDate() + (input?.days || 7))),
-            }
-          }
-        },
-        include: {
-          shift: {
-            include: {
-              staffings: {
-                include: {
-                  user: {
-                    select: {
-                      id: true,
-                      name: true,
-                    }
-                  },
-                  shift_type: true,
-                }
+        return ctx.prisma.staffing.findMany({
+          where: {
+            shift: {
+              start: {
+                gte: input?.fromDate || new Date(new Date().setHours(0, 0, 0, 0))
+              },
+              end: {
+                lte: new Date(new Date().setDate(new Date().getDate() + (input?.days || 7)))
               }
             }
           },
-          shift_type: true,
-        },
-      })
-    }
+          include: {
+            shift: {
+              include: {
+                staffings: {
+                  include: {
+                    user: {
+                      select: {
+                        id: true,
+                        name: true
+                      }
+                    },
+                    shift_type: true
+                  }
+                }
+              }
+            },
+            shift_type: true
+          }
+        });
+      }
     ),
   getPersonalStaffing: protectedProcedure
     .input(z.object({
       fromDate: z.date().optional(),
       limit: z.number().min(1).max(20).nullish(),
-      cursor: z.string().nullish(),
+      cursor: z.string().nullish()
     }))
     .query(async ({ ctx, input }) => {
-      const limit = input?.limit || 10
+      const limit = input?.limit || 10;
       const items = await ctx.prisma.staffing.findMany({
         take: limit + 1,
         where: {
           user_id: ctx.session.user.id,
           shift: {
             start: {
-              gte: input?.fromDate || new Date(new Date().setHours(0, 0, 0, 0)),
-            },
-          },
+              gte: input?.fromDate || new Date(new Date().setHours(0, 0, 0, 0))
+            }
+          }
         },
         cursor: input?.cursor ? {
-          id: input.cursor,
+          id: input.cursor
         } : undefined,
         include: {
           shift: {
@@ -72,80 +72,80 @@ export const staffingRouter = createTRPCRouter({
                   user: {
                     select: {
                       id: true,
-                      name: true,
+                      name: true
                     }
                   },
-                  shift_type: true,
+                  shift_type: true
                 }
               }
             }
           },
-          shift_type: true,
+          shift_type: true
         },
         orderBy: {
           shift: {
-            start: 'asc',
+            start: "asc"
           }
         }
-      })
-      let nextCursor: string | undefined = undefined
+      });
+      let nextCursor: string | undefined = undefined;
       if (items.length > limit) {
-        const nextItem = items.pop()
-        nextCursor = nextItem?.id
+        const nextItem = items.pop();
+        nextCursor = nextItem?.id;
       }
       return {
         items,
         nextCursor
-      }
+      };
     }),
   removeAllStaffing: publicProcedure
     .mutation(async ({ ctx }) => {
-      return ctx.prisma.staffing.deleteMany()
+      return ctx.prisma.staffing.deleteMany();
     }),
   createStaffing: publicProcedure
     .input(
       z.object({
         shift_id: z.string(),
         user_id: z.string(),
-        shift_type_id: z.string(),
+        shift_type_id: z.string()
       }))
     .query(async ({ ctx, input }) => {
       const staffing = await ctx.prisma.staffing.create({
         data: {
           user_id: input.user_id,
           shift_id: input.shift_id,
-          shift_type_id: input.shift_type_id,
+          shift_type_id: input.shift_type_id
         }
-      })
-      return staffing
+      });
+      return staffing;
     }),
-    removeStaffing: publicProcedure
-        .input(z.object({
-            shift_id: z.string()
-        }))
-        .mutation(async ({ ctx, input }) => {
-            const userId = ctx.session?.user?.id;
-            if (!userId) {
-                throw new Error("User not found");
-            }
+  removeStaffing: publicProcedure
+    .input(z.object({
+      shift_id: z.string()
+    }))
+    .mutation(async ({ ctx, input }) => {
+      const userId = ctx.session?.user?.id;
+      if (!userId) {
+        throw new Error("User not found");
+      }
 
-            const staffing = await ctx.prisma.staffing.findUnique({
-                where: {
-                    shift_id: input.shift_id,
-                    user_id: userId
-                }
-            });
+      const staffing = await ctx.prisma.staffing.findUnique({
+        where: {
+          shift_id: input.shift_id,
+          user_id: userId
+        }
+      });
 
-            if (!staffing) {
-                throw new Error("Staffing not found")
-            }
+      if (!staffing) {
+        throw new Error("Staffing not found");
+      }
 
-            return ctx.prisma.staffing.delete({
-                where: {
-                    id: staffing.id
-                }
-            });
-        }),
+      return ctx.prisma.staffing.delete({
+        where: {
+          id: staffing.id
+        }
+      });
+    }),
   changeShiftType: publicProcedure
     .input(
       z.object({
@@ -160,6 +160,28 @@ export const staffingRouter = createTRPCRouter({
         data: {
           shift_type_id: input.shift_type_id
         }
-      })
+      });
     }),
-})
+  removeSelectedStaffing: protectedProcedure
+    .mutation(({ ctx }) => {
+      return async ({ shift_id, staffing_id }: { shift_id: string; staffing_id: string }) => {
+        const shift = await ctx.prisma.shift.findUnique({
+          where: { id: shift_id },
+          include: { staffings: true },
+        });
+
+        if (!shift) {
+          throw new Error(`Shift with ID ${shift_id} not found.`);
+        }
+
+        const updatedStaffings = shift.staffings.filter((staffing) => staffing.id !== staffing_id);
+
+        const updatedShift = await ctx.prisma.shift.update({
+          where: { id: shift_id },
+          data: { staffings: { set: updatedStaffings } },
+        });
+
+        return updatedShift;
+      };
+    }),
+});

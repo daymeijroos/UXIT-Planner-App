@@ -1,16 +1,16 @@
-import { api } from "../../../utils/api";
-import {FormEvent, useState} from "react";
-import {useSession} from "next-auth/react";
+import { api } from "../../../utils/api"
+import { type FormEvent, useState } from "react"
+import { useSession } from "next-auth/react"
 
 import type { StaffingWithColleagues } from "../../../types/StaffingWithColleagues"
 import { formatDate } from "../../../utils/date/formatDate"
 import { formatTime } from "../../../utils/date/formatTime"
 import { formatShiftStaffList } from "../../../utils/formatShiftStaffList"
-import {Button, Card, TextField} from "../../atoms"
-import {errorToast} from "../generic/toast/errorToast";
+import { Button, Card, TextField } from "../../atoms"
+import { errorToast } from "../generic/toast/errorToast"
 
 interface StaffingCardProps {
-    staffing: StaffingWithColleagues;
+  staffing: StaffingWithColleagues
 }
 
 
@@ -18,57 +18,57 @@ interface StaffingCardProps {
 export function StaffingCard(props: StaffingCardProps) {
   // const shift_type_id = api.requiredStaffing.getReserveShiftType.useQuery();
 
-    const { data: sessionData} = useSession();
-    const userName = sessionData?.user?.name;
-    const [showForm, setShowForm] = useState(false);
+  const { data: sessionData } = useSession()
+  const userName = sessionData?.user?.name
+  const [showForm, setShowForm] = useState(false)
 
-    const determineShowButton = (staffing: StaffingWithColleagues): boolean => {
-        let result = false;
-        staffing.shift.staffings.forEach((nestedStaffing) => {
-            if (nestedStaffing.user.name == userName) {
-                result = true;
-            }
-        });
-
-        return result;
-    };
-
-
-    const handleButtonClick = () => {
-        setShowForm(true);
-    };
-
-    const context = api.useContext()
-
-    const { mutate: handleFormSubmit } = api.absence.createAbsence.useMutation()
-    const { mutate: handleRemoveStaffing } = api.staffing.removeStaffing.useMutation({
-        onSuccess: () => {
-            context.staffing.getStaffing.invalidate().catch((error) => {
-                throw error
-            })
-        }
+  const determineShowButton = (staffing: StaffingWithColleagues): boolean => {
+    let result = false
+    staffing.shift.staffings.forEach((nestedStaffing) => {
+      if (nestedStaffing.user.name == userName) {
+        result = true
+      }
     })
 
-    const handleFormAndStaffingSubmit = (event: FormEvent<HTMLFormElement>) => {
-        event.preventDefault()
-        const target = event.target as typeof event.target& {
-            reasonForAbsence: { value: string }
-        }
-        const reason = target.reasonForAbsence.value
-        const formData = {
-            shift_id: props.staffing.shift.id,
-            reason: reason,
-        };
-        const removeStaffingData = {
-            shift_id: props.staffing.shift.id,
-        }
-        Promise.all([
-            handleFormSubmit(formData),
-            handleRemoveStaffing(removeStaffingData),
-        ]).catch(() => {
-            errorToast("There has been an error")
-        })
-    };
+    return result
+  }
+
+
+  const handleButtonClick = () => {
+    setShowForm(true)
+  }
+
+  const context = api.useContext()
+
+  const { mutate: handleFormSubmit } = api.absence.createAbsence.useMutation()
+  const { mutate: handleRemoveStaffing } = api.staffing.removeStaffing.useMutation({
+    onSuccess: () => {
+      context.staffing.getStaffing.invalidate().catch((error) => {
+        throw error
+      })
+    }
+  })
+
+  const handleFormAndStaffingSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    const target = event.target as typeof event.target & {
+      reasonForAbsence: { value: string }
+    }
+    const reason = target.reasonForAbsence.value
+    const formData = {
+      shift_id: props.staffing.shift.id,
+      reason: reason,
+    }
+    const removeStaffingData = {
+      shift_id: props.staffing.shift.id,
+    }
+    Promise.all([
+      handleFormSubmit(formData),
+      handleRemoveStaffing(removeStaffingData),
+    ]).catch(() => {
+      errorToast("There has been an error")
+    })
+  }
 
 
 
@@ -90,14 +90,14 @@ export function StaffingCard(props: StaffingCardProps) {
           formatShiftStaffList(props.staffing)
         }
       </p>
-        {determineShowButton(props.staffing)  && !showForm && (
-            <Button onPress={handleButtonClick}>Afmelden</Button>
-        )}
-        {showForm && (<form onSubmit={handleFormAndStaffingSubmit}>
-                <TextField type="text" id="reasonForAbsence" name="reasonForAbsence" placeholder="Vul hier uw reden in:"/>
-                <Button type="submit" id="reason" name="reason" >Submit</Button>
-            </form>
-        )}
+      {determineShowButton(props.staffing) && !showForm && (
+        <Button onPress={handleButtonClick}>Afmelden</Button>
+      )}
+      {showForm && (<form onSubmit={handleFormAndStaffingSubmit}>
+        <TextField type="text" id="reasonForAbsence" name="reasonForAbsence" placeholder="Vul hier uw reden in:" />
+        <Button type="submit" id="reason" name="reason" >Submit</Button>
+      </form>
+      )}
     </Card>
   )
 }

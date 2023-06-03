@@ -4,17 +4,17 @@ import { api } from '../../../utils/api'
 import type { StaffingWithColleagues } from '../../../types/StaffingWithColleagues'
 import { useAutoAnimate } from '@formkit/auto-animate/react'
 import { LoadingMessage } from "../generic"
-import { WeekView } from "./week-switcher";
-import { CalendarDate, getLocalTimeZone, parseDate } from "@internationalized/date";
+import { WeekView } from "./week-switcher"
+import { type CalendarDate, getLocalTimeZone, parseDate } from "@internationalized/date"
 
 export const TeamStaffingList = () => {
-  const [selectedDate, setSelectedDate] = useState<CalendarDate>();
+  const [selectedDate, setSelectedDate] = useState<CalendarDate>()
   const weekStart = new Date(new Date('2023-04-18T00:00:00Z').setHours(0, 0, 0, 0))
 
   const staffings = api.staffing.getStaffing.useQuery({ fromDate: weekStart })
 
   useEffect(() => {
-    setSelectedDate(parseDate(new Date(new Date().setHours(2, 0, 0, 0)).toISOString().slice(0, 10)));
+    setSelectedDate(parseDate(new Date(new Date().setHours(2, 0, 0, 0)).toISOString().slice(0, 10)))
   }, [])
 
   const [parent] = useAutoAnimate({
@@ -56,7 +56,7 @@ export const TeamStaffingList = () => {
 
   return (
     <div ref={parent} className='flex flex-col gap-4 dark:text-white'>
-      <WeekView value={selectedDate} onChange={setSelectedDate}/>
+      <WeekView value={selectedDate} onChange={setSelectedDate} />
       {
         filteredStaffings.length === 0 ? (
           <p className='m-4 text-center'>Er zijn geen vrijwilligers ingepland op deze datum.</p>

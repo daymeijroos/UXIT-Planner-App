@@ -1,0 +1,23 @@
+sequenceDiagram
+    participant User
+    participant StaffingCard
+    participant api
+    participant errorToast
+
+    User->>StaffingCard: Afmelden knop klik
+    StaffingCard->>StaffingCard: ShowForm op true zetten
+    StaffingCard->>User: Render formulier
+
+    User->>StaffingCard: Formulier invullen en verzenden
+    StaffingCard->>api.staffing.removeStaffing: handleFormAndStaffingSubmit aanroepen met formulierdata
+    api.staffing.removeStaffing->>api: Verzoek om aanmelding verwijderen
+    alt Succesvolle aanmelding verwijderen
+        api-->>StaffingCard: Succesvolle aanmelding verwijderen
+        StaffingCard->>api.staffing.getStaffing: Aanmeldingen opnieuw ophalen
+        api.staffing.getStaffing-->>StaffingCard: Aanmeldingen ontvangen
+    else Fout bij het verwijderen van de aanmelding
+        api.staffing.removeStaffing-->>errorToast: Foutmelding tonen
+        errorToast-->>StaffingCard: Foutmelding tonen
+    end
+
+    StaffingCard->>User: Succesvolle afmelding

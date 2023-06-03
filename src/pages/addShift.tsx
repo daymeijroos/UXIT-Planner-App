@@ -1,8 +1,8 @@
 import { useRouter } from "next/router";
 import { SetStateAction, useState } from "react";
-import { Button } from "../components/atoms/button";
-import { Selector } from "../components/atoms/selector";
-import { TextField } from "../components/atoms/text-field";
+import { Button } from "../components";
+import { Selector } from "../components";
+import { TextField } from "../components";
 import { api } from "../utils/api";
 
 

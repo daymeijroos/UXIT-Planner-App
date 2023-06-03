@@ -1,7 +1,7 @@
 import { z } from "zod"
 
 import { createTRPCRouter, publicProcedure, restrictedProcedure } from "../trpc";
-import { generateSchedule } from "../../utils/schedule-generator-functions/generate-functions";
+import { generateSchedule } from "./generate-functions";
 import { getUnfulfilledShifts } from "../../utils/getUnfulfilledShifts";
 import { Role } from "../../../prisma/role";
 import { prisma } from "../../db";

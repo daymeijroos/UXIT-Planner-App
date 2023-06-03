@@ -1,28 +1,42 @@
-import React, { useState } from "react";
-import { Button, NavigationBar, ToastService } from "../../components";
-import { api } from "../../utils/api";
-import { useMutation } from "react-query";
+import React, { useState } from "react"
+import { Button, NavigationBar, ToastService } from "../../components"
+import { api } from "../../utils/api"
+import { useMutation } from "react-query"
+import { Shift } from "@prisma/client"
+import { string } from "zod"
 
 export default function Aanpassen() {
-  const context = api.useContext();
-  const shifts = api.shift.getAllShifts.useQuery();
-  const [expandedRow, setExpandedRow] = useState(null);
+  const context = api.useContext()
+  const shifts = api.shift.getAllShifts.useQuery()
+  const [expandedRow, setExpandedRow] = useState(null)
 
   if (shifts.isLoading) {
-    return <div>loading...</div>;
+    return <div>loading...</div>
   }
 
   if (shifts.error) {
-    return <div>{shifts.error.message}</div>;
+    return <div>{shifts.error.message}</div>
   }
 
   const expandRow = (shiftId: string) => {
     if (expandedRow === shiftId) {
-      setExpandedRow(null);
+      setExpandedRow(null)
     } else {
-      setExpandedRow(shiftId);
+      setExpandedRow(shiftId)
     }
-  };
+  }
+  
+  const handleRemoveStaffing = async (shiftId: string, staffingId: string) => {
+    // try {
+    //   const response = await mutation.mutate({ shiftId: shiftId, staffingId: staffingId });
+    //
+    //   console.log(response.data)
+    // } catch (error) {
+    //   console.error(error)
+    // }
+    console.log(shiftId)
+    console.log(staffingId)
+  }
 
   return (
     <div className="p-4">
@@ -92,7 +106,7 @@ export default function Aanpassen() {
                         {shift.staffings.map((staffing) => (
                           <div key={staffing.id} className="flex items-center mb-2">
                             <p>{staffing.user.name} {staffing.user.last_name}</p>
-                            <button className="px-2 py-1 bg-gray-200 rounded">Verwijder</button>
+                            <button className="px-2 py-1 bg-gray-200 rounded" onClick={() => handleRemoveStaffing(shift.id, staffing.id)}>Verwijder</button>
                           </div>
                         ))}
                       </div>
@@ -110,5 +124,5 @@ export default function Aanpassen() {
       </div>
       <NavigationBar />
     </div>
-  );
+  )
 }

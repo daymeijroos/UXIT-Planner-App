@@ -6,7 +6,7 @@ import { createCalendar } from "@internationalized/date"
 import { CalendarCell } from "./calenderCell"
 import type { AriaCalendarGridProps, AriaCalendarProps } from "react-aria"
 import { ChevronLeft, ChevronRight } from "react-feather"
-import { ButtonRound } from "../../../atoms/input/button"
+import { ButtonRound } from "../../../atoms"
 
 export function WeekView<T extends DateValue>(props: AriaCalendarProps<T> & AriaCalendarGridProps) {
   const { locale } = useLocale()

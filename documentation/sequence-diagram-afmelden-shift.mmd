@@ -1,7 +1,7 @@
 sequenceDiagram
     participant User
     participant StaffingCard
-    participant api
+    participant prisma
     participant errorToast
 
     User->>StaffingCard: Afmelden knop klik
@@ -10,9 +10,8 @@ sequenceDiagram
 
     User->>StaffingCard: Formulier invullen en verzenden
     StaffingCard->>api.staffing.removeStaffing: handleFormAndStaffingSubmit aanroepen met formulierdata
-    api.staffing.removeStaffing->>api: Verzoek om aanmelding verwijderen
     alt Succesvolle aanmelding verwijderen
-        api-->>StaffingCard: Succesvolle aanmelding verwijderen
+        api.staffing.removeStaffing-->>StaffingCard: Succesvolle aanmelding verwijderen
         StaffingCard->>api.staffing.getStaffing: Aanmeldingen opnieuw ophalen
         api.staffing.getStaffing-->>StaffingCard: Aanmeldingen ontvangen
     else Fout bij het verwijderen van de aanmelding

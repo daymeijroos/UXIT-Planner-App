@@ -1,9 +1,7 @@
 import React, { useState } from "react"
 import { Button, NavigationBar, ToastService } from "../../components"
 import { api } from "../../utils/api"
-import { useMutation } from "react-query"
-import { Shift } from "@prisma/client"
-import { string } from "zod"
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 export default function Aanpassen() {
   const context = api.useContext()
@@ -17,6 +15,8 @@ export default function Aanpassen() {
   })
   const shifts = api.shift.getAllShifts.useQuery()
   const [expandedRow, setExpandedRow] = useState(null)
+  const [staffingList] = useAutoAnimate()
+  const [tableRow] = useAutoAnimate()
 
   if (shifts.isLoading) {
     return <div>loading...</div>

@@ -1,2 +1,2 @@
-export { Button } from './button'
+export * from './button'
 export { TextField } from './text-field'

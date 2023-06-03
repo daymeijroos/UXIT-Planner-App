@@ -1,11 +1,11 @@
-import Head from "next/head"
-import { NavigationBar, Overview } from "../components"
+import Head from "next/head";
+import { Overview, NavigationBar } from "../components";
 
 const Index = () => {
   return (
     <>
       <Head>
-        <title>Home | Pulchri Planner</title>
+        <title>Rooster</title>
       </Head>
       <Overview />
       <NavigationBar />

@@ -2,7 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import cuid from "cuid";
 import { Role } from "./role";
 import { Weekday } from "./weekday";
-import { convertToAmsterdamTimezone } from "../shared/functions/convertToAmsterdamTimezone";
+import { convertAmsterdamTimezoneToUTC } from "../shared/date/dateHelperFunctions";
 
 const prisma = new PrismaClient();
 
@@ -161,8 +161,8 @@ async function main() {
 
   const adminTestShift = await prisma.shift.create({
     data: {
-      start: convertToAmsterdamTimezone(new Date(new Date(new Date().setDate(new Date().getDate() + 1)).setHours(6)).toISOString()),
-      end: convertToAmsterdamTimezone(new Date(new Date(new Date().setDate(new Date().getDate() + 1)).setHours(10)).toISOString()),
+      start: convertAmsterdamTimezoneToUTC(new Date(new Date(new Date().setDate(new Date().getDate() + 1)).setHours(6)).toISOString()),
+      end: convertAmsterdamTimezoneToUTC(new Date(new Date(new Date().setDate(new Date().getDate() + 1)).setHours(10)).toISOString()),
       staffings: {
         create: [
           {
@@ -192,8 +192,8 @@ async function main() {
 
   const adminTestShift2 = await prisma.shift.create({
     data: {
-      start: convertToAmsterdamTimezone(new Date(new Date(new Date().setDate(new Date().getDate() + 2)).setHours(6)).toISOString()),
-      end: convertToAmsterdamTimezone(new Date(new Date(new Date().setDate(new Date().getDate() + 2)).setHours(10)).toISOString()),
+      start: convertAmsterdamTimezoneToUTC(new Date(new Date(new Date().setDate(new Date().getDate() + 2)).setHours(6)).toISOString()),
+      end: convertAmsterdamTimezoneToUTC(new Date(new Date(new Date().setDate(new Date().getDate() + 2)).setHours(10)).toISOString()),
       staffings: {
         create: [
           {
@@ -223,8 +223,8 @@ async function main() {
 
   const adminTestShift3 = await prisma.shift.create({
     data: {
-      start: convertToAmsterdamTimezone(new Date(new Date(new Date().setDate(new Date().getDate() + 3)).setHours(6)).toISOString()),
-      end: convertToAmsterdamTimezone(new Date(new Date(new Date().setDate(new Date().getDate() + 3)).setHours(10)).toISOString()),
+      start: convertAmsterdamTimezoneToUTC(new Date(new Date(new Date().setDate(new Date().getDate() + 3)).setHours(6)).toISOString()),
+      end: convertAmsterdamTimezoneToUTC(new Date(new Date(new Date().setDate(new Date().getDate() + 3)).setHours(10)).toISOString()),
       staffings: {
         create: [
           {
@@ -254,8 +254,8 @@ async function main() {
 
   const adminTestShift4 = await prisma.shift.create({
     data: {
-      start: convertToAmsterdamTimezone(new Date(new Date(new Date().setDate(new Date().getDate() + 4)).setHours(6)).toISOString()),
-      end: convertToAmsterdamTimezone(new Date(new Date(new Date().setDate(new Date().getDate() + 4)).setHours(10)).toISOString()),
+      start: convertAmsterdamTimezoneToUTC(new Date(new Date(new Date().setDate(new Date().getDate() + 4)).setHours(6)).toISOString()),
+      end: convertAmsterdamTimezoneToUTC(new Date(new Date(new Date().setDate(new Date().getDate() + 4)).setHours(10)).toISOString()),
       staff_required: {
         create: [
           {
@@ -269,8 +269,8 @@ async function main() {
 
   const adminTestShift5 = await prisma.shift.create({
     data: {
-      start: convertToAmsterdamTimezone(new Date(new Date(new Date().setDate(new Date().getDate() + 5)).setHours(6)).toISOString()),
-      end: convertToAmsterdamTimezone(new Date(new Date(new Date().setDate(new Date().getDate() + 5)).setHours(10)).toISOString()),
+      start: convertAmsterdamTimezoneToUTC(new Date(new Date(new Date().setDate(new Date().getDate() + 5)).setHours(6)).toISOString()),
+      end: convertAmsterdamTimezoneToUTC(new Date(new Date(new Date().setDate(new Date().getDate() + 5)).setHours(10)).toISOString()),
       staff_required: {
         create: [
           {
@@ -874,8 +874,8 @@ async function main() {
   shifts.push(
     prisma.shift.create({
       data: {
-        start: convertToAmsterdamTimezone("2023-04-18T11:45:00.000Z"),
-        end: convertToAmsterdamTimezone("2023-04-18T15:00:00.000Z")
+        start: convertAmsterdamTimezoneToUTC("2023-04-18T11:45:00.000Z"),
+        end: convertAmsterdamTimezoneToUTC("2023-04-18T15:00:00.000Z")
       }
     }
     )
@@ -884,8 +884,8 @@ async function main() {
   shifts.push(
     prisma.shift.create({
       data: {
-        start: convertToAmsterdamTimezone("2023-04-18T14:00:00.000Z"),
-        end: convertToAmsterdamTimezone("2023-04-18T17:15:00.000Z")
+        start: convertAmsterdamTimezoneToUTC("2023-04-18T14:00:00.000Z"),
+        end: convertAmsterdamTimezoneToUTC("2023-04-18T17:15:00.000Z")
       }
     }
     )
@@ -895,8 +895,8 @@ async function main() {
   shifts.push(
     prisma.shift.create({
       data: {
-        start: convertToAmsterdamTimezone("2023-04-19T11:45:00.000Z"),
-        end: convertToAmsterdamTimezone("2023-04-19T15:00:00.000Z")
+        start: convertAmsterdamTimezoneToUTC("2023-04-19T11:45:00.000Z"),
+        end: convertAmsterdamTimezoneToUTC("2023-04-19T15:00:00.000Z")
       }
     }
     )
@@ -905,8 +905,8 @@ async function main() {
   shifts.push(
     prisma.shift.create({
       data: {
-        start: convertToAmsterdamTimezone("2023-04-19T14:00:00.000Z"),
-        end: convertToAmsterdamTimezone("2023-04-19T17:15:00.000Z")
+        start: convertAmsterdamTimezoneToUTC("2023-04-19T14:00:00.000Z"),
+        end: convertAmsterdamTimezoneToUTC("2023-04-19T17:15:00.000Z")
       }
     }
     )
@@ -916,8 +916,8 @@ async function main() {
   shifts.push(
     prisma.shift.create({
       data: {
-        start: convertToAmsterdamTimezone("2023-04-20T11:45:00.000Z"),
-        end: convertToAmsterdamTimezone("2023-04-20T15:00:00.000Z")
+        start: convertAmsterdamTimezoneToUTC("2023-04-20T11:45:00.000Z"),
+        end: convertAmsterdamTimezoneToUTC("2023-04-20T15:00:00.000Z")
       }
     }
     )
@@ -926,8 +926,8 @@ async function main() {
   shifts.push(
     prisma.shift.create({
       data: {
-        start: convertToAmsterdamTimezone("2023-04-20T14:00:00.000Z"),
-        end: convertToAmsterdamTimezone("2023-04-20T17:15:00.000Z")
+        start: convertAmsterdamTimezoneToUTC("2023-04-20T14:00:00.000Z"),
+        end: convertAmsterdamTimezoneToUTC("2023-04-20T17:15:00.000Z")
       }
     }
     )
@@ -937,8 +937,8 @@ async function main() {
   shifts.push(
     prisma.shift.create({
       data: {
-        start: convertToAmsterdamTimezone("2023-04-21T11:45:00.000Z"),
-        end: convertToAmsterdamTimezone("2023-04-21T15:00:00.000Z")
+        start: convertAmsterdamTimezoneToUTC("2023-04-21T11:45:00.000Z"),
+        end: convertAmsterdamTimezoneToUTC("2023-04-21T15:00:00.000Z")
       }
     }
     )
@@ -947,8 +947,8 @@ async function main() {
   shifts.push(
     prisma.shift.create({
       data: {
-        start: convertToAmsterdamTimezone("2023-04-21T14:00:00.000Z"),
-        end: convertToAmsterdamTimezone("2023-04-21T17:15:00.000Z")
+        start: convertAmsterdamTimezoneToUTC("2023-04-21T14:00:00.000Z"),
+        end: convertAmsterdamTimezoneToUTC("2023-04-21T17:15:00.000Z")
       }
     }
     )
@@ -958,8 +958,8 @@ async function main() {
   shifts.push(
     prisma.shift.create({
       data: {
-        start: convertToAmsterdamTimezone("2023-04-22T11:45:00.000Z"),
-        end: convertToAmsterdamTimezone("2023-04-22T17:15:00.000Z")
+        start: convertAmsterdamTimezoneToUTC("2023-04-22T11:45:00.000Z"),
+        end: convertAmsterdamTimezoneToUTC("2023-04-22T17:15:00.000Z")
       }
     }
     )
@@ -969,8 +969,8 @@ async function main() {
   shifts.push(
     prisma.shift.create({
       data: {
-        start: convertToAmsterdamTimezone("2023-04-23T11:45:00.000Z"),
-        end: convertToAmsterdamTimezone("2023-04-23T17:15:00.000Z")
+        start: convertAmsterdamTimezoneToUTC("2023-04-23T11:45:00.000Z"),
+        end: convertAmsterdamTimezoneToUTC("2023-04-23T17:15:00.000Z")
       },
     }
     )

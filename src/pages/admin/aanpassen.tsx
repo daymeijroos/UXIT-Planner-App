@@ -14,11 +14,11 @@ const Aanpassen = () => {
     return <div>{shifts.error.message}</div>;
   }
 
-  const handleUserClick = (shiftId) => {
+  const expandRow = (shiftId: string) => {
     if (expandedRow === shiftId) {
-      setExpandedRow(null);
+      setExpandedRow(null)
     } else {
-      setExpandedRow(shiftId);
+      setExpandedRow(shiftId)
     }
   };
 

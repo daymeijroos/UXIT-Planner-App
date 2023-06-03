@@ -7,6 +7,14 @@ import { string } from "zod"
 
 export default function Aanpassen() {
   const context = api.useContext()
+  const { mutate : removeSelectedStaffing } = api.staffing.removeStaffingAdmin.useMutation({
+    onSuccess: () => {
+      context.shift.getAllShifts.invalidate().catch((reason) => {
+        console.log(reason);
+        ToastService.success("Het is gelukt!")
+      })
+    }
+  })
   const shifts = api.shift.getAllShifts.useQuery()
   const [expandedRow, setExpandedRow] = useState(null)
 
@@ -26,15 +34,13 @@ export default function Aanpassen() {
     }
   }
   
-  const handleRemoveStaffing = async (shiftId: string, staffingId: string) => {
-    // try {
-    //   const response = await mutation.mutate({ shiftId: shiftId, staffingId: staffingId });
-    //
-    //   console.log(response.data)
-    // } catch (error) {
-    //   console.error(error)
-    // }
-    console.log(shiftId)
+  const handleRemoveStaffing = (staffingId: string) => {
+    try {
+      removeSelectedStaffing({ staffing_id: staffingId })
+
+    } catch (error) {
+      console.error(error)
+    }
     console.log(staffingId)
   }
 
@@ -59,7 +65,7 @@ export default function Aanpassen() {
             </th>
           </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody className="bg-white divide-y divide-gray-200" ref={tableRow}>
           {shifts.data?.map((shift) => (
             <React.Fragment key={shift.id}>
               {expandedRow !== shift.id && (
@@ -102,11 +108,13 @@ export default function Aanpassen() {
                         </div>
                         <Button className="px-4 py-2 bg-red-500 text-white rounded">Verwijder shift</Button>
                       </div>
-                      <div className="flex flex-col mb-4">
+                      <div className="flex flex-col mb-4" ref={parent}>
                         {shift.staffings.map((staffing) => (
-                          <div key={staffing.id} className="flex items-center mb-2">
+                          <div key={staffing.id} className="flex justify-between max-w-xs mb-2">
                             <p>{staffing.user.name} {staffing.user.last_name}</p>
-                            <button className="px-2 py-1 bg-gray-200 rounded" onClick={() => handleRemoveStaffing(shift.id, staffing.id)}>Verwijder</button>
+                            <div className="w-24">
+                              <Button color="red" onPress={() => handleRemoveStaffing(staffing.id)}>Verwijder</Button>
+                            </div>
                           </div>
                         ))}
                       </div>

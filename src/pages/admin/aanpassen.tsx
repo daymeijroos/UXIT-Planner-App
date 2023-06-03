@@ -1,39 +1,28 @@
-import React, { useState } from "react"
+import React, { useState } from "react";
 import { Button, NavigationBar, ToastService } from "../../components";
-import { api } from "../../utils/api"
+import { api } from "../../utils/api";
 import { useMutation } from "react-query";
 
 export default function Aanpassen() {
-  const context = api.useContext()
-  const shifts = api.shift.getAllShifts.useQuery()
-  const [expandedRow, setExpandedRow] = useState(null)
+  const context = api.useContext();
+  const shifts = api.shift.getAllShifts.useQuery();
+  const [expandedRow, setExpandedRow] = useState(null);
 
   if (shifts.isLoading) {
-    return <div>loading...</div>
+    return <div>loading...</div>;
   }
 
   if (shifts.error) {
-    return <div>{shifts.error.message}</div>
+    return <div>{shifts.error.message}</div>;
   }
 
   const expandRow = (shiftId: string) => {
     if (expandedRow === shiftId) {
-      setExpandedRow(null)
+      setExpandedRow(null);
     } else {
-      setExpandedRow(shiftId)
+      setExpandedRow(shiftId);
     }
-  }
-
-  const { mutate: handleRemoveStaffing } = api.staffing.removeStaffing.useMutation({
-    onSuccess: () => {
-      ToastService.success("Het is gelukt!")
-      context.staffing.getStaffing.invalidate().catch((error) => {
-        throw error
-      })
-    }, onError: (error) => {
-      ToastService.error(error.message)
-    }
-  })
+  };
 
   return (
     <div className="p-4">
@@ -85,28 +74,30 @@ export default function Aanpassen() {
               {expandedRow === shift.id && (
                 <tr>
                   <td colSpan="3">
-                    <div className="bg-white p-4 border border-black">
-                      <div className="flex justify-between items-center mb-4">
-                        <div className="text-sm text-gray-900">
-                          {shift.start.toString().slice(3, 15)} {shift.start.toString().slice(16, 21)}
-                        </div>
-                        <div className="text-sm text-gray-900">
-                          {shift.end.toString().slice(3, 15)} {shift.end.toString().slice(16, 21)}
-                        </div>
-                        <Button color="red" className="w-40">Verwijder shift</Button>
-                      </div>
-                      <div className="items-center">
+                    <div className="p-4">
+                      <div className="flex items-start justify-between mb-4">
                         <div>
-                          {shift.staffings.map((staffing) => (
-                            <div key={staffing.id} className="flex items-center">
-                              <div
-                                className="text-sm text-gray-900">{staffing.user.name} {staffing.user.last_name}</div>
-                              <Button onPress={() => handleRemoveStaffing(shift.id)}
-                                      color="red" className="ml-2">Verwijder staffing</Button>
-                            </div>
-                          ))}
+                          <div className="flex items-center">
+                            <p>{shift.start.toString().slice(8, 10)} {shift.start.toString().slice(3, 7)} {shift.start.toString().slice(11, 15)}</p>
+                            <button className="px-2 py-1 bg-gray-200 rounded">Wijzig startijd</button>
+                          </div>
+                          <div className="flex items-center mt-2">
+                            <p>{shift.end.toString().slice(8, 10)} {shift.end.toString().slice(3, 7)} {shift.end.toString().slice(11, 15)}</p>
+                            <button className="px-2 py-1 bg-gray-200 rounded">Wijzig eindtijd</button>
+                          </div>
                         </div>
-                        <Button>Voeg staffing toe</Button>
+                        <Button className="px-4 py-2 bg-red-500 text-white rounded">Verwijder shift</Button>
+                      </div>
+                      <div className="flex flex-col mb-4">
+                        {shift.staffings.map((staffing) => (
+                          <div key={staffing.id} className="flex items-center mb-2">
+                            <p>{staffing.user.name} {staffing.user.last_name}</p>
+                            <button className="px-2 py-1 bg-gray-200 rounded">Verwijder</button>
+                          </div>
+                        ))}
+                      </div>
+                      <div className="flex justify-start">
+                        <button className="px-4 py-2 bg-blue-500 text-white rounded">Voeg staffing toe</button>
                       </div>
                     </div>
                   </td>
@@ -119,5 +110,5 @@ export default function Aanpassen() {
       </div>
       <NavigationBar />
     </div>
-  )
+  );
 }

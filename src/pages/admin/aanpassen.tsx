@@ -79,7 +79,7 @@ export default function Aanpassen() {
                         <div>
                           <div className="flex items-center">
                             <p>{shift.start.toString().slice(8, 10)} {shift.start.toString().slice(3, 7)} {shift.start.toString().slice(11, 15)}</p>
-                            <button className="px-2 py-1 bg-gray-200 rounded">Wijzig startijd</button>
+                            <button className="px-2 py-1 bg-gray-200 rounded">Wijzig starttijd</button>
                           </div>
                           <div className="flex items-center mt-2">
                             <p>{shift.end.toString().slice(8, 10)} {shift.end.toString().slice(3, 7)} {shift.end.toString().slice(11, 15)}</p>

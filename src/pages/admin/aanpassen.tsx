@@ -129,7 +129,7 @@ export default function Aanpassen() {
                             </div>
                           </div>
                           <div className="flex justify-between items-center max-w-xs mb-2">
-                            <p className="mr-6">{shift.end.toString().slice(8, 10)} {shift.end.toString().slice(3, 7)} {shift.end.toString().slice(11, 15)} {shift.start.toString().slice(16, 21)}</p>
+                            <p className="mr-6">{shift.end.toString().slice(8, 10)} {shift.end.toString().slice(3, 7)} {shift.end.toString().slice(11, 15)} {shift.end.toString().slice(16, 21)}</p>
                             <div className="w-40">
                               <Button color="gray">Wijzig eindtijd</Button>
                             </div>

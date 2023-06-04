@@ -21,6 +21,13 @@ export default function Aanpassen() {
       })
     }
   })
+  let users = api.user.getUsersWithPreferencesAndStaffings.useQuery()
+  const getAvailableUsersForStaffing = (shiftId: string) => {
+    users = ""
+
+  }
+
+
   const shifts = api.shift.getAllShifts.useQuery()
   const [expandedRow, setExpandedRow] = useState(null)
   const [addStaffing, setAddStaffing] = useState(null)
@@ -38,6 +45,7 @@ export default function Aanpassen() {
   const expandRow = (shiftId: string) => {
     if (expandedRow === shiftId) {
       setExpandedRow(null)
+      setAddStaffing(null)
     } else {
       setExpandedRow(shiftId)
     }
@@ -122,12 +130,14 @@ export default function Aanpassen() {
                     <div className="p-4">
                       <div className="flex items-start justify-between mb-4">
                         <div className="flex flex-col">
+                          <p className="mr-6">Starttijd</p>
                           <div className="flex justify-between items-center max-w-xs mb-2">
                             <p className="mr-6">{shift.start.toString().slice(8, 10)} {shift.start.toString().slice(3, 7)} {shift.start.toString().slice(11, 15)} {shift.start.toString().slice(16, 21)}</p>
                             <div className="w-40">
                               <Button color="gray">Wijzig starttijd</Button>
                             </div>
                           </div>
+                          <p className="mr-6">Eindtijd</p>
                           <div className="flex justify-between items-center max-w-xs mb-2">
                             <p className="mr-6">{shift.end.toString().slice(8, 10)} {shift.end.toString().slice(3, 7)} {shift.end.toString().slice(11, 15)} {shift.end.toString().slice(16, 21)}</p>
                             <div className="w-40">
@@ -164,14 +174,16 @@ export default function Aanpassen() {
                     <div className="p-4">
                       <div className="flex items-start justify-between mb-4">
                         <div className="flex flex-col">
+                          <p className="mr-6">Starttijd</p>
                           <div className="flex justify-between items-center max-w-xs mb-2">
                             <p className="mr-6">{shift.start.toString().slice(8, 10)} {shift.start.toString().slice(3, 7)} {shift.start.toString().slice(11, 15)} {shift.start.toString().slice(16, 21)}</p>
                             <div className="w-40">
                               <Button color="gray">Wijzig starttijd</Button>
                             </div>
                           </div>
+                          <p className="mr-6">Eindtijd</p>
                           <div className="flex justify-between items-center max-w-xs mb-2">
-                            <p className="mr-6">{shift.end.toString().slice(8, 10)} {shift.end.toString().slice(3, 7)} {shift.end.toString().slice(11, 15)} {shift.start.toString().slice(16, 21)}</p>
+                            <p className="mr-6">{shift.end.toString().slice(8, 10)} {shift.end.toString().slice(3, 7)} {shift.end.toString().slice(11, 15)} {shift.end.toString().slice(16, 21)}</p>
                             <div className="w-40">
                               <Button color="gray">Wijzig eindtijd</Button>
                             </div>
@@ -188,6 +200,13 @@ export default function Aanpassen() {
                             <div className="w-32">
                               <Button color="red" onPress={() => handleRemoveStaffing(staffing.id)}>Verwijder</Button>
                             </div>
+                          </div>
+                        ))}
+                      </div>
+                      <div className="flex flex-col mb-4">
+                        {users.data?.map((user) => (
+                          <div key={user.id} className="flex justify-between items-center max-w-xs mb-2">
+                            <p>{user.name} {user.last_name}</p>
                           </div>
                         ))}
                       </div>

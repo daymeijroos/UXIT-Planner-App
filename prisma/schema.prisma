@@ -119,7 +119,7 @@ model Staffing {
   shift_id      String
   shift_type_id String
   user_id       String
-  shift         Shift      @relation(fields: [shift_id], references: [id])
+  shift         Shift      @relation(fields: [shift_id], references: [id], onDelete: Cascade)
   shift_type    Shift_Type @relation(fields: [shift_type_id], references: [id])
   user          User       @relation(fields: [user_id], references: [id])
 
@@ -132,7 +132,7 @@ model Backup {
   date     DateTime @unique
   user     User     @relation(fields: [user_id], references: [id])
   shift_id String?
-  shift    Shift?   @relation(fields: [shift_id], references: [id])
+  shift    Shift?   @relation(fields: [shift_id], references: [id], onDelete: Cascade)
 
   @@unique([user_id, date])
   @@unique([user_id, shift_id])
@@ -143,7 +143,7 @@ model Staff_Required {
   amount        Int
   shift_id      String
   shift_type_id String
-  shift         Shift      @relation(fields: [shift_id], references: [id])
+  shift         Shift      @relation(fields: [shift_id], references: [id], onDelete: Cascade)
   shift_type    Shift_Type @relation(fields: [shift_type_id], references: [id])
 
   @@unique([shift_id, shift_type_id])

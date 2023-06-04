@@ -5,6 +5,11 @@ export const shiftRouter = createTRPCRouter({
   getAllShifts: protectedProcedure
     .query(({ ctx }) => {
       return ctx.prisma.shift.findMany({
+        where: {
+          start: {
+            gte: new Date()
+          },
+        },
         include: {
           staffings: {
             include: {

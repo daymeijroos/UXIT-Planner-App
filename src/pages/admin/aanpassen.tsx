@@ -23,6 +23,7 @@ export default function Aanpassen() {
   })
   const shifts = api.shift.getAllShifts.useQuery()
   const [expandedRow, setExpandedRow] = useState(null)
+  const [addStaffing, setAddStaffing] = useState(null)
   const [staffingList] = useAutoAnimate()
   const [tableRow] = useAutoAnimate()
 
@@ -39,6 +40,14 @@ export default function Aanpassen() {
       setExpandedRow(null)
     } else {
       setExpandedRow(shiftId)
+    }
+  }
+
+  const expandRowStaffing = (shiftId: string) => {
+    if (addStaffing === shiftId) {
+      setAddStaffing(null)
+    } else {
+      setAddStaffing(shiftId)
     }
   }
 
@@ -107,7 +116,7 @@ export default function Aanpassen() {
                   </td>
                 </tr>
               )}
-              {expandedRow === shift.id && (
+              {(expandedRow === shift.id) && !(addStaffing === shift.id) && (
                 <tr>
                   <td colSpan="3">
                     <div className="p-4">
@@ -142,9 +151,46 @@ export default function Aanpassen() {
                       </div>
                       {/*<div className="flex justify-center">*/}
                         <div className="">
-                        <Button color="teal">Voeg staffing toe</Button>
+                        <Button color="teal" onPress={() => expandRowStaffing(shift.id)}>Voeg staffing toe</Button>
                         </div>
                       {/*</div>*/}
+                    </div>
+                  </td>
+                </tr>
+              )}
+              {(expandedRow === shift.id) && (addStaffing === shift.id) && (
+                <tr>
+                  <td colSpan="3">
+                    <div className="p-4">
+                      <div className="flex items-start justify-between mb-4">
+                        <div className="flex flex-col">
+                          <div className="flex justify-between items-center max-w-xs mb-2">
+                            <p className="mr-6">{shift.start.toString().slice(8, 10)} {shift.start.toString().slice(3, 7)} {shift.start.toString().slice(11, 15)} {shift.start.toString().slice(16, 21)}</p>
+                            <div className="w-40">
+                              <Button color="gray">Wijzig starttijd</Button>
+                            </div>
+                          </div>
+                          <div className="flex justify-between items-center max-w-xs mb-2">
+                            <p className="mr-6">{shift.end.toString().slice(8, 10)} {shift.end.toString().slice(3, 7)} {shift.end.toString().slice(11, 15)} {shift.start.toString().slice(16, 21)}</p>
+                            <div className="w-40">
+                              <Button color="gray">Wijzig eindtijd</Button>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="w-40 ml-4">
+                          <Button color="red" onPress={() => handleRemoveShift(shift.id)}>Verwijder shift</Button>
+                        </div>
+                      </div>
+                      <div className="flex flex-col mb-4" ref={staffingList}>
+                        {shift.staffings.map((staffing) => (
+                          <div key={staffing.id} className="flex justify-between items-center max-w-xs mb-2">
+                            <p>{staffing.user.name} {staffing.user.last_name}</p>
+                            <div className="w-32">
+                              <Button color="red" onPress={() => handleRemoveStaffing(staffing.id)}>Verwijder</Button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   </td>
                 </tr>

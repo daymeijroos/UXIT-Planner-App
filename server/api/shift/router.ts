@@ -1,4 +1,5 @@
 import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { z } from "zod";
 
 export const shiftRouter = createTRPCRouter({
   getAllShifts: protectedProcedure
@@ -12,5 +13,40 @@ export const shiftRouter = createTRPCRouter({
           }
         }
       });
-    })
+    }),
+  removeShiftAdmin: protectedProcedure
+    .input(z.object({
+      shift_id: z.string()
+    }))
+    .mutation(async ({ ctx, input }) => {
+      await ctx.prisma.staffing.deleteMany({
+        where: {
+          shift: {
+            id: input.shift_id,
+          },
+        },
+      });
+
+      await ctx.prisma.staff_required.deleteMany({
+        where: {
+          shift: {
+            id: input.shift_id,
+          },
+        },
+      });
+
+      // await ctx.prisma.backup.deleteMany({
+      //   where: {
+      //     shift: {
+      //       id: shift_id,
+      //     },
+      //   },
+      // });
+
+      return ctx.prisma.shift.delete({
+        where: {
+          id: input.shift_id
+        }
+      });
+    }),
 });

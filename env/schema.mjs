@@ -25,6 +25,9 @@ export const serverSchema = z.object({
   EMAIL_SERVER_PORT: z.string(),
   EMAIL_FROM: z.string().email(),
   ADMIN_EMAIL: z.string().email(),
+  ONESIGNAL_APP_ID: z.string(),
+  ONESIGNAL_USER_KEY: z.string(),
+  ONESIGNAL_APP_API_KEY: z.string(),
 });
 
 /**
@@ -43,6 +46,9 @@ export const serverEnv = {
   EMAIL_SERVER_PORT: process.env.EMAIL_SERVER_PORT,
   EMAIL_FROM: process.env.EMAIL_FROM,
   ADMIN_EMAIL: process.env.ADMIN_EMAIL,
+  ONESIGNAL_APP_ID: process.env.NEXT_PUBLIC_ONESIGNAL_APP_ID,
+  ONESIGNAL_USER_KEY: process.env.ONESIGNAL_USER_KEY,
+  ONESIGNAL_APP_API_KEY: process.env.ONESIGNAL_APP_API_KEY,
 };
 
 /**
@@ -53,6 +59,7 @@ export const serverEnv = {
 export const clientSchema = z.object({
   NEXT_PUBLIC_APP_URL: z.string().url(),
   NEXT_PUBLIC_APP_PORT: z.string(),
+  NEXT_PUBLIC_ONESIGNAL_APP_ID: z.string(),
 });
 
 /**
@@ -64,4 +71,5 @@ export const clientSchema = z.object({
 export const clientEnv = {
   NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
   NEXT_PUBLIC_APP_PORT: process.env.NEXT_PUBLIC_APP_PORT,
+  NEXT_PUBLIC_ONESIGNAL_APP_ID: process.env.NEXT_PUBLIC_ONESIGNAL_APP_ID,
 };

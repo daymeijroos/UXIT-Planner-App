@@ -5,6 +5,7 @@ const withPWA = require('next-pwa')({
   runtimeCaching,
   cacheStartUrl: false,
   cleanupOutdatedCaches: true,
+  customWorkerDir: 'serviceworker'
 })
 
 module.exports = withPWA({

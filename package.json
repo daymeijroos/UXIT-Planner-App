@@ -20,6 +20,7 @@
     "@types/prettier": "^2.7.2",
     "classnames": "^2.3.2",
     "cuid": "^3.0.0",
+    "dayjs": "^1.11.8",
     "feather-icons": "^4.29.0",
     "next": "latest",
     "next-auth": "^4.20.1",
@@ -32,6 +33,7 @@
     "react-hot-toast": "^2.4.1",
     "react-query": "^3.39.3",
     "react-stately": "^3.22.0",
+    "react-tailwindcss-datepicker": "^1.6.1",
     "superjson": "^1.12.2",
     "zod": "^3.21.4"
   },

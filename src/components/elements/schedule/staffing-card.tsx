@@ -40,8 +40,8 @@ export function StaffingCard(props: StaffingCardProps) {
 
   const context = api.useContext()
 
-  const { mutate: handleFormSubmit } = api.absence.createAbsence.useMutation()
-  const { mutate: handleRemoveStaffing } = api.staffing.removeStaffing.useMutation({
+
+  const { mutate: handleCheckOut} = api.absence.checkOut.useMutation({
     onSuccess: () => {
       context.staffing.getStaffing.invalidate().catch((error) => {
         throw error
@@ -59,12 +59,10 @@ export function StaffingCard(props: StaffingCardProps) {
       shift_id: props.staffing.shift.id,
       reason: reason,
     }
-    const removeStaffingData = {
-      shift_id: props.staffing.shift.id,
-    }
+
     Promise.all([
-      handleFormSubmit(formData),
-      handleRemoveStaffing(removeStaffingData),
+      handleCheckOut(formData)
+
     ]).catch(() => {
       errorToast("There has been an error")
     })

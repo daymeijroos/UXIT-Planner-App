@@ -25,7 +25,6 @@ export function PersonalStaffingList({ fromDate }: { fromDate?: Date }) {
   const staffings = personalStaffings.data?.pages.flatMap((page) => page.items)
   return (
     <div className="flex flex-col items-center gap-4">
-      <h1 className="w-full text-4xl font-bold dark:text-white">Mijn diensten</h1>
       <CardList<StaffingWithColleagues> objects={staffings} CardLayout={
         (staffing) => {
           return <StaffingCard staffing={staffing} />

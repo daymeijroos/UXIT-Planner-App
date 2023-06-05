@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
+import { Staff_Required } from "@prisma/client";
 
 //get all shifts from the start of today onwards until a set amount of days after that
 
@@ -118,6 +119,26 @@ export const staffingRouter = createTRPCRouter({
         }
       });
       return staffing;
+    }),
+  addStaffing: protectedProcedure
+    .input(
+      z.object({
+        shift_id: z.string(),
+        user_id: z.string()
+      }))
+    .mutation(async ({ ctx, input }) => {
+      const shiftType: Staff_Required = await ctx.prisma.shift_Type.findUnique({
+        where: {
+            name: "Balie"
+        }
+      })
+      return await ctx.prisma.staffing.create({
+        data: {
+          user_id: input.user_id,
+          shift_id: input.shift_id,
+          shift_type_id: shiftType.id
+        }
+      });
     }),
   removeStaffing: publicProcedure
     .input(z.object({

@@ -15,6 +15,11 @@ export const shiftRouter = createTRPCRouter({
             include: {
               user: true
             }
+          },
+          staff_required: {
+            include: {
+              shift_type: true
+            }
           }
         }
       });

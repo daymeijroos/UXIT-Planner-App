@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react";
 import { Button, NavigationBar, ToastService } from "../../components"
 import { api } from "../../utils/api"
 import { useAutoAnimate } from "@formkit/auto-animate/react"
@@ -21,16 +21,21 @@ export default function Aanpassen() {
       })
     }
   })
-  let users = api.user.getUsersWithPreferencesAndStaffings.useQuery()
-  const getAvailableUsersForStaffing = (shiftId: string) => {
-    users = ""
-
-  }
+  const { mutate: addStaffing } = api.staffing.addStaffing.useMutation({
+    onSuccess: () => {
+      context.shift.getAllShifts.invalidate().catch((reason) => {
+        console.log(reason)
+        ToastService.success("Het is gelukt!")
+      })
+    }
+  })
+  let selectedShiftId: string
+  const availableUsers = api.user.getAllUsers.useQuery()
 
 
   const shifts = api.shift.getAllShifts.useQuery()
   const [expandedRow, setExpandedRow] = useState(null)
-  const [addStaffing, setAddStaffing] = useState(null)
+  const [staffingDisplay, setStaffingDisplay] = useState(null)
   const [staffingList] = useAutoAnimate()
   const [tableRow] = useAutoAnimate()
 
@@ -45,17 +50,18 @@ export default function Aanpassen() {
   const expandRow = (shiftId: string) => {
     if (expandedRow === shiftId) {
       setExpandedRow(null)
-      setAddStaffing(null)
+      setStaffingDisplay(null)
     } else {
       setExpandedRow(shiftId)
     }
   }
 
   const expandRowStaffing = (shiftId: string) => {
-    if (addStaffing === shiftId) {
-      setAddStaffing(null)
+    selectedShiftId = shiftId
+    if (staffingDisplay === shiftId) {
+      setStaffingDisplay(null)
     } else {
-      setAddStaffing(shiftId)
+      setStaffingDisplay(shiftId)
     }
   }
 
@@ -74,6 +80,15 @@ export default function Aanpassen() {
 
     } catch (error) {
       console.error(error)
+    }
+  }
+
+  const handleAddStaffing = (userId: string, shiftId: string) => {
+    try {
+      addStaffing({ user_id: userId, shift_id: shiftId})
+
+    } catch (error) {
+      console.log(error)
     }
   }
 
@@ -124,7 +139,7 @@ export default function Aanpassen() {
                   </td>
                 </tr>
               )}
-              {(expandedRow === shift.id) && !(addStaffing === shift.id) && (
+              {(expandedRow === shift.id) && !(staffingDisplay === shift.id) && (
                 <tr>
                   <td colSpan="3">
                     <div className="p-4">
@@ -150,6 +165,7 @@ export default function Aanpassen() {
                         </div>
                       </div>
                       <div className="flex flex-col mb-4" ref={staffingList}>
+                        <p>Ingeroosterde vrijwilligers</p>
                         {shift.staffings.map((staffing) => (
                           <div key={staffing.id} className="flex justify-between items-center max-w-xs mb-2">
                             <p>{staffing.user.name} {staffing.user.last_name}</p>
@@ -161,14 +177,14 @@ export default function Aanpassen() {
                       </div>
                       {/*<div className="flex justify-center">*/}
                         <div className="">
-                        <Button color="teal" onPress={() => expandRowStaffing(shift.id)}>Voeg staffing toe</Button>
+                        <Button color="teal" onPress={() => void expandRowStaffing(shift.id)}>Voeg staffing toe</Button>
                         </div>
                       {/*</div>*/}
                     </div>
                   </td>
                 </tr>
               )}
-              {(expandedRow === shift.id) && (addStaffing === shift.id) && (
+              {(expandedRow === shift.id) && (staffingDisplay === shift.id) && (
                 <tr>
                   <td colSpan="3">
                     <div className="p-4">
@@ -194,6 +210,7 @@ export default function Aanpassen() {
                         </div>
                       </div>
                       <div className="flex flex-col mb-4" ref={staffingList}>
+                        <p>Ingeroosterde vrijwilligers</p>
                         {shift.staffings.map((staffing) => (
                           <div key={staffing.id} className="flex justify-between items-center max-w-xs mb-2">
                             <p>{staffing.user.name} {staffing.user.last_name}</p>
@@ -203,12 +220,17 @@ export default function Aanpassen() {
                           </div>
                         ))}
                       </div>
-                      <div className="flex flex-col mb-4">
-                        {users.data?.map((user) => (
-                          <div key={user.id} className="flex justify-between items-center max-w-xs mb-2">
-                            <p>{user.name} {user.last_name}</p>
-                          </div>
-                        ))}
+                      <div>
+                      {availableUsers.data?.map((user) => (
+                        <div
+                          key={user.id}
+                          className="cursor-pointer hover:bg-gray-100"
+                          onClick={() => handleAddStaffing(user.id, shift.id)}
+                        >
+                          <td className="py-2 px-4">{user.name}</td>
+                          <td className="py-2 px-4">{user.last_name}</td>
+                        </div>
+                      ))}
                       </div>
                     </div>
                   </td>

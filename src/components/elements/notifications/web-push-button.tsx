@@ -4,11 +4,6 @@ import { initializeOneSignalClient } from '../../../utils/notification-service'
 import { Button } from '../../atoms'
 import { useSession } from 'next-auth/react'
 
-interface SubscriptionState {
-  isPushEnabled: boolean
-  isOptedOut: boolean
-}
-
 declare global {
   interface Window {
     OneSignal: any

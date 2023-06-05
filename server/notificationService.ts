@@ -31,7 +31,7 @@ const globalForNotifications = globalThis as unknown as { client: OneSignal.Defa
 
 export const notificationService = {
   client: globalForNotifications.client || new OneSignal.DefaultApi(configuration),
-  sendNotification: ({ user_ids, message }: { user_ids: string[], message: string }) => {
+  sendNotification: ({ user_ids, message, callbackURL }: { user_ids: string[], message: string, callbackURL?: string }) => {
     const notification = new OneSignal.Notification()
     notification.app_id = env.ONESIGNAL_APP_ID
     notification.channel_for_external_user_ids = "push"
@@ -43,6 +43,9 @@ export const notificationService = {
     notification.include_external_user_ids = user_ids
     notification.contents = {
       en: message
+    }
+    if (callbackURL) {
+      notification.web_url = callbackURL
     }
 
     return notificationService.client.createNotification(notification)

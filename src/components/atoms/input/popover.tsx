@@ -11,10 +11,10 @@ interface PopoverProps extends Omit<AriaPopoverProps, "popoverRef"> {
 }
 
 export function Popover(props: PopoverProps) {
-  let ref = React.useRef<HTMLDivElement>(null);
-  let { popoverRef = ref, state, children, className, isNonModal } = props;
+  const ref = React.useRef<HTMLDivElement>(null);
+  const { popoverRef = ref, state, children, isNonModal } = props;
 
-  let { popoverProps, underlayProps } = usePopover(
+  const { popoverProps, underlayProps } = usePopover(
     {
       ...props,
       popoverRef
@@ -28,10 +28,12 @@ export function Popover(props: PopoverProps) {
       <div
         {...popoverProps}
         ref={popoverRef}
-        className={`z-10 shadow-lg border border-gray-300 dark:bg-gray-700 bg-white rounded-sm mt-2 ${className}`}
+        className={`z-10 shadow-lg border border-gray-300 dark:bg-gray-700 bg-white rounded-sm mt-2`}
       >
+        {/* eslint-disable-next-line @typescript-eslint/unbound-method */}
         {!isNonModal && <DismissButton onDismiss={state.close} />}
         {children}
+        {/* eslint-disable-next-line @typescript-eslint/unbound-method */}
         <DismissButton onDismiss={state.close} />
       </div>
     </Overlay>

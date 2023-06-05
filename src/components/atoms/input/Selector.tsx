@@ -12,7 +12,7 @@ import {
 } from "react-aria";
 
 import { ListBox } from "./ListBox";
-import { Popover } from "./Popover";
+import { Popover } from "./popover";
 
 export { Item } from "react-stately";
 
@@ -20,20 +20,20 @@ export { Item } from "react-stately";
 
 export function Select<T extends object>(props: AriaSelectProps<T>) {
   // Create state based on the incoming props
-  let state = useSelectState(props);
+  const state = useSelectState(props);
 
   // Get props for child elements from useSelect
-  let ref = React.useRef(null);
-  let { labelProps, triggerProps, valueProps, menuProps } = useSelect(
+  const ref = React.useRef(null);
+  const { labelProps, triggerProps, valueProps, menuProps } = useSelect(
     props,
     state,
     ref
   );
 
   // Get props for the button based on the trigger props from useSelect
-  let { buttonProps } = useButton(triggerProps, ref);
+  const { buttonProps } = useButton(triggerProps, ref);
 
-  let { focusProps, isFocusVisible } = useFocusRing();
+  const { focusProps, isFocusVisible } = useFocusRing();
 
   return (
     <div className="flex-col w-full mt-4">

@@ -5,19 +5,20 @@ import { useComboBox, useFilter, useButton, useSearchField } from "react-aria";
 // import { SearchIcon, XIcon } from "@heroicons/react/solid";
 
 import { ListBox } from "./ListBox";
-import { Popover } from "./Popover";
+import { Popover } from "./popover";
 
 export { Item } from "react-stately";
 
 export function SearchAutocomplete<T extends object>(props: ComboBoxProps<T>) {
-  let { contains } = useFilter({ sensitivity: "base" });
-  let state = useComboBoxState({ ...props, defaultFilter: contains });
+  // eslint-disable-next-line @typescript-eslint/unbound-method
+  const { contains } = useFilter({ sensitivity: "base" });
+  const state = useComboBoxState({ ...props, defaultFilter: contains });
 
-  let inputRef = React.useRef(null);
-  let listBoxRef = React.useRef(null);
-  let popoverRef = React.useRef(null);
+  const inputRef = React.useRef(null);
+  const listBoxRef = React.useRef(null);
+  const popoverRef = React.useRef(null);
 
-  let { inputProps, listBoxProps, labelProps } = useComboBox(
+  const { inputProps, listBoxProps, labelProps } = useComboBox(
     {
       ...props,
       inputRef,
@@ -28,17 +29,17 @@ export function SearchAutocomplete<T extends object>(props: ComboBoxProps<T>) {
   );
 
   // Get props for the clear button from useSearchField
-  let searchProps = {
+  const searchProps = {
     label: props.label,
     value: state.inputValue,
     onChange: (v: string) => state.setInputValue(v)
   };
 
-  let searchState = useSearchFieldState(searchProps);
-  let { clearButtonProps } = useSearchField(searchProps, searchState, inputRef);
-  let clearButtonRef = React.useRef(null);
-  let { buttonProps } = useButton(clearButtonProps, clearButtonRef);
-  let outerRef = React.useRef(null);
+  const searchState = useSearchFieldState(searchProps);
+  const { clearButtonProps } = useSearchField(searchProps, searchState, inputRef);
+  const clearButtonRef = React.useRef(null);
+  const { buttonProps } = useButton(clearButtonProps, clearButtonRef);
+  const outerRef = React.useRef(null);
 
   return (
     <div className="inline-flex flex-col relative mt-4 w-52">
@@ -54,7 +55,6 @@ export function SearchAutocomplete<T extends object>(props: ComboBoxProps<T>) {
           state.isFocused ? "border-pink-500" : "border-gray-300"
         }`}
       >
-        <SearchIcon aria-hidden="true" className="w-5 h-5 text-gray-500" />
         <input
           {...inputProps}
           ref={inputRef}
@@ -66,7 +66,6 @@ export function SearchAutocomplete<T extends object>(props: ComboBoxProps<T>) {
           style={{ visibility: state.inputValue !== "" ? "visible" : "hidden" }}
           className="cursor-default text-gray-500 hover:text-gray-600"
         >
-          <XIcon aria-hidden="true" className="w-4 h-4" />
         </button>
       </div>
       {state.isOpen && (

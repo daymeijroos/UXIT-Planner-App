@@ -6,21 +6,22 @@ import { Button } from "../../components";
 import { api } from "../../utils/api";
 
 export default function Absence() {
-
-  const users = api.user.getAllUsers.useQuery({})
+  const users = api.user.getAllUsers.useQuery();
 
   const [value, setValue] = useState({
     startDate: new Date(),
-    endDate: new Date().setMonth(11)
+    endDate: new Date(),
   });
 
-  const handleValueChange = (newValue) => {
-    console.log("newValue:", newValue);
+  const handleValueChange = (newValue: any) => {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     setValue(newValue);
+  };
+
+  if (users.isLoading) {
+    return <div>Loading...</div>;
   }
-  if (users.isLoading) return (
-    <div>Loading...</div>
-  )
+
   return (
     <div className={"text-center pt-10 h-screen flex justify-center mx-auto"}>
       <div>
@@ -32,20 +33,15 @@ export default function Absence() {
           </Select>
         </div>
         <div className={"mt-5"}>
-          <span className={"flex text-left w-full"}>Kies een date tussen</span>
+          <span className={"flex text-left w-full"}>Kies een datum tussen</span>
           <Datepicker
             primaryColor={"teal"}
-            // container
             containerClassName="flex w-full"
             displayFormat={"DD-MM-YYYY"}
-            // text input
-            inputClassName="p-4 dark:bg-gray-700 dark:text-white dark:border-gray-500 text-black w-full text-left border-2 border-black border-r-0"// Pas de primaire kleur
-            // calendar icon
-            toggleClassName="pr-4 dark:text-white dark:bg-gray-700 p-2 dark:border-gray-500 border-black border-2 border-l-0"  // Pas de dagklasse toe
+            inputClassName="p-4 dark:bg-gray-700 dark:text-white dark:border-gray-500 text-black w-full text-left border-2 border-black border-r-0"
+            toggleClassName="pr-4 dark:text-white dark:bg-gray-700 p-2 dark:border-gray-500 border-black border-2 border-l-0"
             showShortcuts={false}
             showFooter={false}
-            popoverDirection={"bottom"}
-
             value={value}
             onChange={handleValueChange}
           />
@@ -55,5 +51,5 @@ export default function Absence() {
         </div>
       </div>
     </div>
-  )
+  );
 }

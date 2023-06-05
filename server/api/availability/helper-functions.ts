@@ -1,8 +1,8 @@
 
 import { SplitDate } from "../../../shared/types/splitDate"
-import { AvailabilityWeekWithAvailibilityWithShiftTypes, AvailabilityWithShiftTypes } from "../../types/availibility"
+import { AvailabilityWeekWithAvailabilityWithShiftTypes, AvailabilityWithShiftTypes } from "../../types/availability"
 
-export const getAvailabilityForDate = (availabilityWeeks: AvailabilityWeekWithAvailibilityWithShiftTypes[], date: SplitDate): AvailabilityWithShiftTypes | undefined => {
+export const getAvailabilityForDate = (availabilityWeeks: AvailabilityWeekWithAvailabilityWithShiftTypes[], date: SplitDate): AvailabilityWithShiftTypes | undefined => {
   if (!availabilityWeeks || availabilityWeeks.length <= 0) return undefined
 
   const remainder = date.week % availabilityWeeks.length

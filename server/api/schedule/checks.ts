@@ -9,17 +9,17 @@ export const checkUserAvailability = async (user: UserWithPreferenceAndStaffings
   if (!user.preference) return false
   const onSplit = SplitDate.fromDate(on)
 
-  const availibility = await getAvailabilityForDate(user.preference.availability_week, onSplit)
-  return !!availibility
+  const availability = await getAvailabilityForDate(user.preference.availability_week, onSplit)
+  return !!availability
 }
 
 export const checkUserAvailabilityForShiftType = async (user: UserWithPreferenceAndStaffings, shiftType: Shift_Type, on: Date) => {
   if (!user.preference) return false
   const onSplit = SplitDate.fromDate(on)
 
-  const availibility = await getAvailabilityForDate(user.preference.availability_week, onSplit)
-  if (!availibility) return false
-  if (!availibility.shift_types.find((st) => st.id === shiftType.id)) return false
+  const availability = await getAvailabilityForDate(user.preference.availability_week, onSplit)
+  if (!availability) return false
+  if (!availability.shift_types.find((st) => st.id === shiftType.id)) return false
   return true
 }
 

@@ -36,7 +36,7 @@ export function Select<T extends object>(props: AriaSelectProps<T>) {
   let { focusProps, isFocusVisible } = useFocusRing();
 
   return (
-    <div className="inline-flex flex-col relative w-72 mt-4">
+    <div className="flex-col w-full mt-4">
       <div
         {...labelProps}
         className="block text-sm font-medium text-gray-700 dark:text-white text-left cursor-default mb-1"
@@ -52,7 +52,7 @@ export function Select<T extends object>(props: AriaSelectProps<T>) {
       <button
         {...mergeProps(buttonProps, focusProps)}
         ref={ref}
-        className={`p-1 pl-3 py-1 relative inline-flex flex-row items-center justify-between rounded-sm overflow-hidden cursor-default shadow-sm border-r-2 border-l-2 border-t-2 border-b-4 outline-none ${
+        className={`p-4 w-full relative inline-flex flex-row items-center justify-between overflow-hidden cursor-default shadow-sm border-r-2 border-l-2 border-t-2 border-b-4 outline-none ${
           isFocusVisible ? "dark:border-gray-400 border-black ring-4 ring-yellow-500" : "dark:border-gray-400 border-black"
         } ${state.isOpen ? "bg-gray-100 dark:bg-gray-600" : "dark:bg-gray-700 bg-white"}`}
       >

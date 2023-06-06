@@ -174,109 +174,108 @@ async function main() {
             }
           },
           availability_week: {
-            create: {
-              sequence: 0,
-              availability: {
-                create: [
-
-                  {
-                    weekday: Weekday.TUESDAY,
-                    shift_types: {
-                      connect: {
-                        id: shiftType1.id
+            create: [
+              {
+                sequence: 0,
+                availability: {
+                  create: [
+                    {
+                      weekday: Weekday.TUESDAY,
+                      shift_types: {
+                        connect: {
+                          id: shiftType1.id
+                        }
+                      }
+                    },
+                    {
+                      weekday: Weekday.WEDNESDAY,
+                      shift_types: {
+                        connect: {
+                          id: shiftType1.id
+                        }
+                      }
+                    },
+                    {
+                      weekday: Weekday.FRIDAY,
+                      shift_types: {
+                        connect: {
+                          id: shiftType1.id
+                        }
+                      }
+                    },
+                    {
+                      weekday: Weekday.SATURDAY,
+                      shift_types: {
+                        connect: {
+                          id: shiftType1.id
+                        }
+                      }
+                    },
+                    {
+                      weekday: Weekday.SUNDAY,
+                      shift_types: {
+                        connect: {
+                          id: shiftType1.id
+                        }
                       }
                     }
-                  },
-                  {
-                    weekday: Weekday.WEDNESDAY,
-                    shift_types: {
-                      connect: {
-                        id: shiftType1.id
+                  ]
+                }
+              },
+              {
+                sequence: 1,
+                availability: {
+                  create: [
+                    {
+                      weekday: Weekday.TUESDAY,
+                      shift_types: {
+                        connect: {
+                          id: shiftType1.id
+                        }
+                      }
+                    },
+                    {
+                      weekday: Weekday.WEDNESDAY,
+                      shift_types: {
+                        connect: {
+                          id: shiftType1.id
+                        }
+                      }
+                    },
+                    {
+                      weekday: Weekday.FRIDAY,
+                      shift_types: {
+                        connect: {
+                          id: shiftType1.id
+                        }
+                      }
+                    },
+                    {
+                      weekday: Weekday.SATURDAY,
+                      shift_types: {
+                        connect: {
+                          id: shiftType1.id
+                        }
+                      }
+                    },
+                    {
+                      weekday: Weekday.THURSDAY,
+                      shift_types: {
+                        connect: {
+                          id: shiftType1.id
+                        }
                       }
                     }
-                  },
-                  {
-                    weekday: Weekday.FRIDAY,
-                    shift_types: {
-                      connect: {
-                        id: shiftType1.id
-                      }
-                    }
-                  },
-                  {
-                    weekday: Weekday.SATURDAY,
-                    shift_types: {
-                      connect: {
-                        id: shiftType1.id
-                      }
-                    }
-                  },
-                  {
-                    weekday: Weekday.SUNDAY,
-                    shift_types: {
-                      connect: {
-                        id: shiftType1.id
-                      }
-                    }
-                  },
-                ]
+                  ]
+                }
               }
-            }
-          },
-          availability_week: {
-            create: {
-              sequence: 1,
-              availability: {
-                create: [
-
-                  {
-                    weekday: Weekday.TUESDAY,
-                    shift_types: {
-                      connect: {
-                        id: shiftType1.id
-                      }
-                    }
-                  },
-                  {
-                    weekday: Weekday.WEDNESDAY,
-                    shift_types: {
-                      connect: {
-                        id: shiftType1.id
-                      }
-                    }
-                  },
-                  {
-                    weekday: Weekday.FRIDAY,
-                    shift_types: {
-                      connect: {
-                        id: shiftType1.id
-                      }
-                    }
-                  },
-                  {
-                    weekday: Weekday.SATURDAY,
-                    shift_types: {
-                      connect: {
-                        id: shiftType1.id
-                      }
-                    }
-                  },
-                  {
-                    weekday: Weekday.THURSDAY,
-                    shift_types: {
-                      connect: {
-                        id: shiftType1.id
-                      }
-                    }
-                  },
-                ]
-              }
-            }
+            ]
           }
         }
       }
     }
   });
+
 
 
   const mockUser2 = await prisma.user.create({
@@ -563,67 +562,68 @@ async function main() {
             }
           },
           availability_week: {
-            create: {
-              sequence: 0,
-              availability: {
-                create: [
-                  {
-                    weekday: Weekday.TUESDAY,
-                    shift_types: {
-                      connect: {
-                        id: shiftType1.id
+            create: [
+              {
+                sequence: 0,
+                availability: {
+                  create: [
+                    {
+                      weekday: Weekday.TUESDAY,
+                      shift_types: {
+                        connect: {
+                          id: shiftType1.id
+                        }
+                      }
+                    },
+                    {
+                      weekday: Weekday.WEDNESDAY,
+                      shift_types: {
+                        connect: {
+                          id: shiftType1.id
+                        }
+                      }
+                    },
+                    {
+                      weekday: Weekday.SATURDAY,
+                      shift_types: {
+                        connect: {
+                          id: shiftType1.id
+                        }
                       }
                     }
-                  },
-                  {
-                    weekday: Weekday.WEDNESDAY,
-                    shift_types: {
-                      connect: {
-                        id: shiftType1.id
+                  ]
+                }
+              },
+              {
+                sequence: 1,
+                availability: {
+                  create: [
+                    {
+                      weekday: Weekday.TUESDAY,
+                      shift_types: {
+                        connect: {
+                          id: shiftType1.id
+                        }
+                      }
+                    },
+                    {
+                      weekday: Weekday.SATURDAY,
+                      shift_types: {
+                        connect: {
+                          id: shiftType1.id
+                        }
                       }
                     }
-                  },
-                  {
-                    weekday: Weekday.SATURDAY,
-                    shift_types: {
-                      connect: {
-                        id: shiftType1.id
-                      }
-                    }
-                  },
-                ]
+                  ]
+                }
               }
-            }
-          },
-          availability_week: {
-            create: {
-              sequence: 1,
-              availability: {
-                create: [
-                  {
-                    weekday: Weekday.TUESDAY,
-                    shift_types: {
-                      connect: {
-                        id: shiftType1.id
-                      }
-                    }
-                  },
-                  {
-                    weekday: Weekday.SATURDAY,
-                    shift_types: {
-                      connect: {
-                        id: shiftType1.id
-                      }
-                    }
-                  },
-                ]
-              }
-            }
+            ]
           }
         }
       }
     }
   });
+
 
   const mockUser7 = await prisma.user.create({
     data: {
@@ -724,83 +724,84 @@ async function main() {
             }
           },
           availability_week: {
-            create: {
-              sequence: 0,
-              availability: {
-                create: [
-                  {
-                    weekday: Weekday.TUESDAY,
-                    shift_types: {
-                      connect: {
-                        id: shiftType1.id
+            create: [
+              {
+                sequence: 0,
+                availability: {
+                  create: [
+                    {
+                      weekday: Weekday.TUESDAY,
+                      shift_types: {
+                        connect: {
+                          id: shiftType1.id
+                        }
+                      }
+                    },
+                    {
+                      weekday: Weekday.SATURDAY,
+                      shift_types: {
+                        connect: {
+                          id: shiftType1.id
+                        }
+                      }
+                    },
+                    {
+                      weekday: Weekday.SUNDAY,
+                      shift_types: {
+                        connect: {
+                          id: shiftType1.id
+                        }
                       }
                     }
-                  },
-                  {
-                    weekday: Weekday.SATURDAY,
-                    shift_types: {
-                      connect: {
-                        id: shiftType1.id
+                  ]
+                }
+              },
+              {
+                sequence: 1,
+                availability: {
+                  create: [
+                    {
+                      weekday: Weekday.TUESDAY,
+                      shift_types: {
+                        connect: {
+                          id: shiftType1.id
+                        }
+                      }
+                    },
+                    {
+                      weekday: Weekday.WEDNESDAY,
+                      shift_types: {
+                        connect: {
+                          id: shiftType1.id
+                        }
+                      }
+                    },
+                    {
+                      weekday: Weekday.SATURDAY,
+                      shift_types: {
+                        connect: {
+                          id: shiftType1.id
+                        }
+                      }
+                    },
+                    {
+                      weekday: Weekday.SUNDAY,
+                      shift_types: {
+                        connect: {
+                          id: shiftType1.id
+                        }
                       }
                     }
-                  },
-                  {
-                    weekday: Weekday.SUNDAY,
-                    shift_types: {
-                      connect: {
-                        id: shiftType1.id
-                      }
-                    }
-                  }
-                ]
+                  ]
+                }
               }
-            }
-          },
-          availability_week: {
-            create: {
-              sequence: 1,
-              availability: {
-                create: [
-                  {
-                    weekday: Weekday.TUESDAY,
-                    shift_types: {
-                      connect: {
-                        id: shiftType1.id
-                      }
-                    }
-                  },
-                  {
-                    weekday: Weekday.WEDNESDAY,
-                    shift_types: {
-                      connect: {
-                        id: shiftType1.id
-                      }
-                    }
-                  },
-                  {
-                    weekday: Weekday.SATURDAY,
-                    shift_types: {
-                      connect: {
-                        id: shiftType1.id
-                      }
-                    }
-                  },
-                  {
-                    weekday: Weekday.SUNDAY,
-                    shift_types: {
-                      connect: {
-                        id: shiftType1.id
-                      }
-                    }
-                  }
-                ]
-              }
-            }
+            ]
           }
         }
       }
     }
   });
+
 
   const mockUser9 = await prisma.user.create({
     data: {
@@ -821,51 +822,52 @@ async function main() {
             }
           },
           availability_week: {
-            create: {
-              sequence: 0,
-              availability: {
-                create: [
-                  {
-                    weekday: Weekday.WEDNESDAY,
-                    shift_types: {
-                      connect: {
-                        id: shiftType1.id
+            create: [
+              {
+                sequence: 0,
+                availability: {
+                  create: [
+                    {
+                      weekday: Weekday.WEDNESDAY,
+                      shift_types: {
+                        connect: {
+                          id: shiftType1.id
+                        }
                       }
                     }
-                  }
-                ]
+                  ]
+                }
+              },
+              {
+                sequence: 1,
+                availability: {
+                  create: [
+                    {
+                      weekday: Weekday.WEDNESDAY,
+                      shift_types: {
+                        connect: {
+                          id: shiftType1.id
+                        }
+                      }
+                    },
+                    {
+                      weekday: Weekday.THURSDAY,
+                      shift_types: {
+                        connect: {
+                          id: shiftType1.id
+                        }
+                      }
+                    }
+                  ]
+                }
               }
-            }
-          },
-          availability_week: {
-            create: {
-              sequence: 1,
-              availability: {
-                create: [
-                  {
-                    weekday: Weekday.WEDNESDAY,
-                    shift_types: {
-                      connect: {
-                        id: shiftType1.id
-                      }
-                    }
-                  },
-                  {
-                    weekday: Weekday.THURSDAY,
-                    shift_types: {
-                      connect: {
-                        id: shiftType1.id
-                      }
-                    }
-                  }
-                ]
-              }
-            }
+            ]
           }
         }
       }
     }
   });
+
 
   const mockUser10 = await prisma.user.create({
     data: {
@@ -1364,34 +1366,35 @@ async function main() {
             }
           },
           availability_week: {
-            create: {
-              sequence: 0,
-              availability: {
-                create: []
-              }
-            }
-          },
-          availability_week: {
-            create: {
-              sequence: 1,
-              availability: {
-                create: [
-                  {
-                    weekday: Weekday.SATURDAY,
-                    shift_types: {
-                      connect: {
-                        id: shiftType1.id
+            create: [
+              {
+                sequence: 0,
+                availability: {
+                  create: []
+                }
+              },
+              {
+                sequence: 1,
+                availability: {
+                  create: [
+                    {
+                      weekday: Weekday.SATURDAY,
+                      shift_types: {
+                        connect: {
+                          id: shiftType1.id
+                        }
                       }
                     }
-                  }
-                ]
+                  ]
+                }
               }
-            }
+            ]
           }
         }
       }
     }
   });
+
 
   const mockUser19 = await prisma.user.create({
     data: {
@@ -1452,34 +1455,35 @@ async function main() {
             }
           },
           availability_week: {
-            create: {
-              sequence: 0,
-              availability: {
-                create: [
-                  {
-                    weekday: Weekday.SUNDAY,
-                    shift_types: {
-                      connect: {
-                        id: shiftType1.id
+            create: [
+              {
+                sequence: 0,
+                availability: {
+                  create: [
+                    {
+                      weekday: Weekday.SUNDAY,
+                      shift_types: {
+                        connect: {
+                          id: shiftType1.id
+                        }
                       }
                     }
-                  }
-                ]
+                  ]
+                }
+              },
+              {
+                sequence: 1,
+                availability: {
+                  create: []
+                }
               }
-            }
-          },
-          availability_week: {
-            create: {
-              sequence: 1,
-              availability: {
-                create: []
-              }
-            }
+            ]
           }
         }
       }
     }
   });
+
 
   const mockUser21 = await prisma.user.create({
     data: {
@@ -1540,34 +1544,35 @@ async function main() {
             }
           },
           availability_week: {
-            create: {
-              sequence: 0,
-              availability: {
-                create: [
-                  {
-                    weekday: Weekday.FRIDAY,
-                    shift_types: {
-                      connect: {
-                        id: shiftType1.id
+            create: [
+              {
+                sequence: 0,
+                availability: {
+                  create: [
+                    {
+                      weekday: Weekday.FRIDAY,
+                      shift_types: {
+                        connect: {
+                          id: shiftType1.id
+                        }
                       }
                     }
-                  }
-                ]
+                  ]
+                }
+              },
+              {
+                sequence: 1,
+                availability: {
+                  create: []
+                }
               }
-            }
-          },
-          availability_week: {
-            create: {
-              sequence: 1,
-              availability: {
-                create: []
-              }
-            }
+            ]
           }
         }
       }
     }
   });
+
 
   const mockUser23 = await prisma.user.create({
     data: {
@@ -1588,34 +1593,35 @@ async function main() {
             }
           },
           availability_week: {
-            create: {
-              sequence: 0,
-              availability: {
-                create: []
-              }
-            }
-          },
-          availability_week: {
-            create: {
-              sequence: 1,
-              availability: {
-                create: [
-                  {
-                    weekday: Weekday.SUNDAY,
-                    shift_types: {
-                      connect: {
-                        id: shiftType1.id
+            create: [
+              {
+                sequence: 0,
+                availability: {
+                  create: []
+                }
+              },
+              {
+                sequence: 1,
+                availability: {
+                  create: [
+                    {
+                      weekday: Weekday.SUNDAY,
+                      shift_types: {
+                        connect: {
+                          id: shiftType1.id
+                        }
                       }
                     }
-                  }
-                ]
+                  ]
+                }
               }
-            }
+            ]
           }
         }
       }
     }
   });
+
 
   const mockUser24 = await prisma.user.create({
     data: {
@@ -1676,34 +1682,35 @@ async function main() {
             }
           },
           availability_week: {
-            create: {
-              sequence: 0,
-              availability: {
-                create: [
-                  {
-                    weekday: Weekday.THURSDAY,
-                    shift_types: {
-                      connect: {
-                        id: shiftType1.id
+            create: [
+              {
+                sequence: 0,
+                availability: {
+                  create: [
+                    {
+                      weekday: Weekday.THURSDAY,
+                      shift_types: {
+                        connect: {
+                          id: shiftType1.id
+                        }
                       }
                     }
-                  }
-                ]
+                  ]
+                }
+              },
+              {
+                sequence: 1,
+                availability: {
+                  create: []
+                }
               }
-            }
-          },
-          availability_week: {
-            create: {
-              sequence: 1,
-              availability: {
-                create: []
-              }
-            }
+            ]
           }
         }
       }
     }
   });
+
 
   const mockUser26 = await prisma.user.create({
     data: {
@@ -1724,34 +1731,35 @@ async function main() {
             }
           },
           availability_week: {
-            create: {
-              sequence: 0,
-              availability: {
-                create: [
-                  {
-                    weekday: Weekday.FRIDAY,
-                    shift_types: {
-                      connect: {
-                        id: shiftType1.id
+            create: [
+              {
+                sequence: 0,
+                availability: {
+                  create: [
+                    {
+                      weekday: Weekday.FRIDAY,
+                      shift_types: {
+                        connect: {
+                          id: shiftType1.id
+                        }
                       }
                     }
-                  }
-                ]
+                  ]
+                }
+              },
+              {
+                sequence: 1,
+                availability: {
+                  create: []
+                }
               }
-            }
-          },
-          availability_week: {
-            create: {
-              sequence: 1,
-              availability: {
-                create: []
-              }
-            }
+            ]
           }
         }
       }
     }
   });
+
 
 
   let startDate = new CalendarDate(2023, 1, 1)

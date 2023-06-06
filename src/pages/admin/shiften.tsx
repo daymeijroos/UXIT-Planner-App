@@ -2,10 +2,12 @@ import React, { useState } from "react"
 import { Button, NavigationBar, ToastService } from "../../components"
 import { api } from "../../utils/api"
 import { useAutoAnimate } from "@formkit/auto-animate/react"
-import { Trash2 } from "react-feather"
+import { Edit, Trash2 } from "react-feather";
 import { Select } from "../../components/atoms/input/Selector"
 import { Item } from "react-stately"
 import type { User } from "@prisma/client"
+import type { Shift } from "@prisma/client";
+import { Staffing } from "@prisma/client";
 
 export default function Shiften() {
   const context = api.useContext()
@@ -41,7 +43,6 @@ export default function Shiften() {
 
   const shifts = api.shift.getAllShifts.useQuery()
   const [expandedRow, setExpandedRow] = useState(null)
-  const [staffingDisplay, setStaffingDisplay] = useState(null)
   const [staffingList] = useAutoAnimate()
   const [tableRow] = useAutoAnimate()
 
@@ -53,12 +54,21 @@ export default function Shiften() {
     return <div>{shifts.error.message}</div>
   }
 
-  const expandRow = (shiftId: string) => {
-    if (expandedRow === shiftId) {
+  const expandRow = (shift: Shift) => {
+    if (expandedRow === shift.id) {
       setExpandedRow(null)
     } else {
-      setExpandedRow(shiftId)
-      setStaffingDisplay(null)
+      setExpandedRow(shift.id)
+      // logic here
+      const staffedUsers = []
+      shift.staffings?.map((staffing: Staffing) => {
+        staffedUsers.push(staffing.user)
+      })
+      users.data?.map((user: User) => {
+        if (!staffedUsers.includes(user)) {
+          availableUsers.push(user.name);
+        }
+      })
     }
   }
 
@@ -121,7 +131,7 @@ export default function Shiften() {
               {expandedRow !== shift.id && (
                 <tr
                   className="hover:bg-gray-200 cursor-pointer"
-                  onClick={() => expandRow(shift.id)}
+                  onClick={() => expandRow(shift)}
                 >
                   <td className="px-6 py-4 whitespace-nowrap border-2 border-black">
                     <div
@@ -141,26 +151,36 @@ export default function Shiften() {
                   </td>
                 </tr>
               )}
-              {(expandedRow === shift.id) && !(staffingDisplay === shift.id) && (
+              {(expandedRow === shift.id) && (
                 <tr onClick={() => expandRow(shift.id)}>
                   <td colSpan="3">
                     <div className="p-4">
                       <div className="flex items-start justify-between mb-4">
-                        <div className="flex flex-col">
-                          <p className="mr-6">Starttijd</p>
+                        <div className="flex flex-col mx-auto">
+                          <p className="mb-2 font-bold text-center">Starttijd</p>
                           <div className="flex justify-between items-center max-w-xs mb-2">
-                            <p
-                              className="mr-6">{shift.start.toString().slice(8, 10)} {shift.start.toString().slice(3, 7)} {shift.start.toString().slice(11, 15)} {shift.start.toString().slice(16, 21)}</p>
+                            <div className="flex-grow">
+                              <p className="border-b-2 border-l-2 border-t-2 border-black p-4 text-center">
+                                {shift.start.toString().slice(8, 10)} {shift.start.toString().slice(3, 7)} {shift.start.toString().slice(11, 15)} {shift.start.toString().slice(16, 21)}
+                              </p>
+                            </div>
                             <div className="w-30">
-                              <Button color="gray">Wijzig starttijd</Button>
+                              <Button aria-label="Wijzig starttijd" title="Wijzig starttijd" color="gray">
+                                <Edit size="24" className="stroke-5/4" />
+                              </Button>
                             </div>
                           </div>
-                          <p className="mr-6">Eindtijd</p>
+                          <p className="mb-2 font-bold text-center">Eindtijd</p>
                           <div className="flex justify-between items-center max-w-xs mb-2">
-                            <p
-                              className="mr-6">{shift.end.toString().slice(8, 10)} {shift.end.toString().slice(3, 7)} {shift.end.toString().slice(11, 15)} {shift.end.toString().slice(16, 21)}</p>
+                            <div className="flex-grow">
+                              <p className="border-b-2 border-l-2 border-t-2 border-black p-4 text-center">
+                                {shift.end.toString().slice(8, 10)} {shift.end.toString().slice(3, 7)} {shift.end.toString().slice(11, 15)} {shift.end.toString().slice(16, 21)}
+                              </p>
+                            </div>
                             <div className="w-30">
-                              <Button color="gray">Wijzig eindtijd</Button>
+                              <Button aria-label="Wijzig eindtijd" title="Wijzig eindtijd" color="gray">
+                                <Edit size="24" className="stroke-5/4" />
+                              </Button>
                             </div>
                           </div>
                         </div>
@@ -170,21 +190,34 @@ export default function Shiften() {
                           </Button>
                         </div>
                       </div>
-                      <div className="flex flex-col mb-4" ref={staffingList}>
-                        <p>Ingeroosterde vrijwilligers</p>
+                      <div className="flex flex-col max-w-xs mx-auto">
+                        <p className="mb-4 font-bold text-center">Ingeroosterde vrijwilligers</p>
                         {shift.staffings.map((staffing) => (
-                          <div key={staffing.id} className="flex justify-between items-center max-w-xs mb-2">
-                            <p>{staffing.user.name} {staffing.user.last_name}</p>
-                            <div className="w-32">
-                              <Button color="red" onPress={() => handleRemoveStaffing(staffing.id)}>Verwijder</Button>
+                          <div key={staffing.id} className="flex items-center mb-2">
+                            <div className="flex-grow">
+                              <p className="border-b-2 border-l-2 border-t-2 border-black p-4">{staffing.user.name} {staffing.user.last_name}</p>
+                            </div>
+                            <div>
+                              <Button
+                                aria-label="Verwijder"
+                                title="Verwijder"
+                                color="red"
+                                onPress={() => handleRemoveStaffing(staffing.id)}>
+                                <Trash2 size="24" className="stroke-5/4" />
+                              </Button>
                             </div>
                           </div>
                         ))}
                       </div>
+
                       <div className="mb-4">
                         <Select label="Medewerker / Vrijwilliger"
-                                items={users.data}>
-                          {(item) => <Item>{item.name}</Item>}
+                                items={availableUsers}>
+                          {availableUsers.map((user: User) => {
+                            <div>
+                              <Item>{user.name}</Item>
+                            </div>
+                          })}
                         </Select>
                       </div>
                       <Button onPress={() => handleAddStaffing(shift.id)} color="teal">Voeg vrijwilliger toe</Button>

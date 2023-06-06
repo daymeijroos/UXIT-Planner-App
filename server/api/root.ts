@@ -4,6 +4,7 @@ import { staffingRouter } from "./staffing"
 import { staffRequiredRouter } from "./staff-required"
 import { availabilityRouter } from "./availability"
 import {absenceRouter} from "./absence/absence";
+import { userRouter } from "./user"
 
 
 export const appRouter = createTRPCRouter({
@@ -11,7 +12,8 @@ export const appRouter = createTRPCRouter({
   staffing: staffingRouter,
   staffRequired: staffRequiredRouter,
   availability: availabilityRouter,
-  absence: absenceRouter
+  absence: absenceRouter,
+  user: userRouter,
 })
 
 export type AppRouter = typeof appRouter

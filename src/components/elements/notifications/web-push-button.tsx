@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from 'react'
+'use client'
+
+import React, { use, useEffect, useState } from 'react'
 import OneSignal from 'react-onesignal'
-import { initializeOneSignalClient } from '../../../utils/notification-service'
 import { Button } from '../../atoms'
 import { useSession } from 'next-auth/react'
+import { env } from '../../../../env/client.mjs'
 
 declare global {
   interface Window {
@@ -10,41 +12,54 @@ declare global {
   }
 }
 
-// welcome to await hell, there is so much async code that it is hard to grasp whats happening, the desired behavior is subscribe to notifications if not subscribed, and unsubscribe if subscribed
-// also if permissions are not set, the user should be prompted to allow notifications
-// if permissions are denied then it should not subscribe to notifications
-export const WebPushButton: React.FC = () => {
-  const [pushNotEnabled, setPushNotEnabled] = useState<boolean>(true)
-  const session = useSession()
-  const oneSignalState = useState<boolean>(false)
+export const WebPushButton = () => {
+  const [pushEnabled, setPushEnabled] = useState<boolean>(false)
+  const { data: sessionData, status } = useSession()
+  const [oneSignalInitialized, setOneSignalInitialized] = useState<boolean>(false)
 
   useEffect(() => {
-    if (session.status === "authenticated") {
-      initializeOneSignalClient(session, oneSignalState).then(() => {
-        OneSignal.isPushNotificationsEnabled().then((isPushEnabled: boolean) => {
-          setPushNotEnabled(!isPushEnabled)
-        })
+    if (!oneSignalInitialized) {
+      OneSignal.init({
+        appId: env.NEXT_PUBLIC_ONESIGNAL_APP_ID,
+        safari_web_id: env.NEXT_PUBLIC_ONESIGNAL_SAFARI_KEY,
+        allowLocalhostAsSecureOrigin: true,
+      }).then(() => {
+        setOneSignalInitialized(true)
       })
     }
-  }, [session.status, pushNotEnabled])
+  }, [])
+
+  useEffect(() => {
+    if (oneSignalInitialized && status === "authenticated" && sessionData?.user?.id) {
+      OneSignal.setExternalUserId(sessionData?.user?.id)
+      OneSignal.isPushNotificationsEnabled((isEnabled) => {
+        setPushEnabled(isEnabled)
+      })
+    }
+  }, [oneSignalInitialized, status])
+
+  useEffect(() => {
+    if (oneSignalInitialized) {
+      OneSignal.isPushNotificationsEnabled((isEnabled) => {
+        setPushEnabled(isEnabled)
+      })
+    }
+  }, [oneSignalInitialized])
 
   const toggleNotifications = async () => {
-    if (pushNotEnabled) {
-      try {
-        await OneSignal.registerForPushNotifications()
-        await OneSignal.setSubscription(true)
-        setPushNotEnabled(false)
-      } catch (error) {
-        console.log('Error registering for push notifications:', error)
-      }
+    if (pushEnabled == false) {
+      await OneSignal.registerForPushNotifications()
+      await OneSignal.setSubscription(true)
     } else {
       await OneSignal.setSubscription(false)
-      setPushNotEnabled(true)
     }
+    OneSignal.isPushNotificationsEnabled((isEnabled) => {
+      setPushEnabled(isEnabled)
+    })
   }
 
 
   return (
-    <Button onPress={toggleNotifications} color={pushNotEnabled ? "teal" : "red"}>{pushNotEnabled ? 'Subscribe to Notifications' : 'Unsubscribe from Notifications'}</Button>
+    <Button onPress={toggleNotifications} color={!pushEnabled ? "teal" : "red"}>{!pushEnabled ? 'Subscribe to Notifications' : 'Unsubscribe from Notifications'}</Button>
   )
 }

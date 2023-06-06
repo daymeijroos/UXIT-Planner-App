@@ -60,6 +60,7 @@ export const clientSchema = z.object({
   NEXT_PUBLIC_APP_URL: z.string().url(),
   NEXT_PUBLIC_APP_PORT: z.string(),
   NEXT_PUBLIC_ONESIGNAL_APP_ID: z.string(),
+  NEXT_PUBLIC_ONESIGNAL_SAFARI_KEY: z.string(),
 });
 
 /**
@@ -72,4 +73,5 @@ export const clientEnv = {
   NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
   NEXT_PUBLIC_APP_PORT: process.env.NEXT_PUBLIC_APP_PORT,
   NEXT_PUBLIC_ONESIGNAL_APP_ID: process.env.NEXT_PUBLIC_ONESIGNAL_APP_ID,
+  NEXT_PUBLIC_ONESIGNAL_SAFARI_KEY: process.env.NEXT_PUBLIC_ONESIGNAL_SAFARI_KEY,
 };

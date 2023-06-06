@@ -4,7 +4,7 @@ import { staffingRouter } from "./staffing"
 import { staffRequiredRouter } from "./staff-required"
 import { availabilityRouter } from "./availability"
 import { absenceRouter } from "./absence/absence"
-import { notificationRouter } from "./notificationTest"
+import { notificationRouter } from "./notification"
 
 
 export const appRouter = createTRPCRouter({

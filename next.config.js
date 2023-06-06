@@ -5,11 +5,10 @@ const withPWA = require('next-pwa')({
   runtimeCaching,
   cacheStartUrl: false,
   cleanupOutdatedCaches: true,
-  customWorkerDir: 'serviceworker'
 })
 
 module.exports = withPWA({
-  reactStrictMode: true,
+  //reactStrictMode: true, 
   /* If trying out the experimental appDir, comment the i18n config out
    * @see https://github.com/vercel/next.js/issues/41980 */
 })

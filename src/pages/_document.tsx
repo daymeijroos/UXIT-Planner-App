@@ -6,10 +6,6 @@ export default function Document() {
       <Head>
         <meta charSet="utf-8" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-        <meta
-          name="viewport"
-          content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"
-        />
         <meta name="description" content="Description" />
         <meta name="keywords" content="Keywords" />
         <link rel="manifest" href="/manifest.json" />
@@ -31,7 +27,7 @@ export default function Document() {
         <link rel="apple-touch-icon" href="/apple-icon.png" />
         <meta name="theme-color" content="#5FC9BE" />
       </Head>
-      <body className='min-h-screen p-4 text-black dark:bg-blue-gray-400 dark:text-white'>
+      <body className='min-h-screen text-black dark:bg-blue-gray-400 dark:text-white'>
         <Main />
         <NextScript />
       </body>

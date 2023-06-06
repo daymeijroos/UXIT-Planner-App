@@ -5,23 +5,25 @@ import { api } from '../utils/api'
 import { SessionProvider } from 'next-auth/react'
 import { I18nProvider, SSRProvider } from 'react-aria'
 
+
+
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
   pageProps: { session, ...pageProps },
-
-
-
 }) => {
+
+
   const locale = "nl-NL"
   return (
-    <SessionProvider session={session}>
-      <SSRProvider>
-        <I18nProvider locale={locale}>
-          <Component {...pageProps} />
-        </I18nProvider>
-      </SSRProvider>
-
-    </SessionProvider>
+    <>
+      <SessionProvider session={session}>
+        <SSRProvider>
+          <I18nProvider locale={locale}>
+            <Component {...pageProps} />
+          </I18nProvider>
+        </SSRProvider>
+      </SessionProvider>
+    </>
   )
 }
 

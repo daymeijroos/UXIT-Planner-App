@@ -23,7 +23,8 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "server/apollo/types.graphql"
+    "server/apollo/types.graphql",
+    "src/components/serviceworker/index.js"
   ],
   "exclude": [
     "node_modules"

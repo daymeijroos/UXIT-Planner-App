@@ -1,6 +1,6 @@
 'use client'
 
-import React, { use, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import OneSignal from 'react-onesignal'
 import { Button } from '../../atoms'
 import { useSession } from 'next-auth/react'
@@ -25,23 +25,31 @@ export const WebPushButton = () => {
         allowLocalhostAsSecureOrigin: true,
       }).then(() => {
         setOneSignalInitialized(true)
+      }).catch((e) => {
+        console.log(e)
       })
     }
-  }, [])
+  }, [oneSignalInitialized])
 
   useEffect(() => {
     if (oneSignalInitialized && status === "authenticated" && sessionData?.user?.id) {
-      OneSignal.setExternalUserId(sessionData?.user?.id)
+      OneSignal.setExternalUserId(sessionData?.user?.id).catch((e) => {
+        console.log(e)
+      })
       OneSignal.isPushNotificationsEnabled((isEnabled) => {
         setPushEnabled(isEnabled)
+      }).catch((e) => {
+        console.log(e)
       })
     }
-  }, [oneSignalInitialized, status])
+  }, [oneSignalInitialized, status, sessionData?.user?.id])
 
   useEffect(() => {
     if (oneSignalInitialized) {
       OneSignal.isPushNotificationsEnabled((isEnabled) => {
         setPushEnabled(isEnabled)
+      }).catch((e) => {
+        console.log(e)
       })
     }
   }, [oneSignalInitialized])
@@ -55,11 +63,13 @@ export const WebPushButton = () => {
     }
     OneSignal.isPushNotificationsEnabled((isEnabled) => {
       setPushEnabled(isEnabled)
+    }).catch((e) => {
+      console.log(e)
     })
   }
 
 
   return (
-    <Button onPress={toggleNotifications} color={!pushEnabled ? "teal" : "red"}>{!pushEnabled ? 'Subscribe to Notifications' : 'Unsubscribe from Notifications'}</Button>
+    <Button onPress={() => { toggleNotifications }} color={!pushEnabled ? "teal" : "red"}>{!pushEnabled ? 'Subscribe to Notifications' : 'Unsubscribe from Notifications'}</Button>
   )
 }

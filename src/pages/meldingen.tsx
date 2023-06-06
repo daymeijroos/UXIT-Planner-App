@@ -7,7 +7,9 @@ const Index = () => {
   const notifications = api.notification.getAll.useQuery()
   const { mutate: deleteNotification } = api.notification.delete.useMutation({
     onSuccess: () => {
-      notifications.refetch()
+      notifications.refetch().catch((e) => {
+        console.log(e)
+      })
     }
   })
   const router = useRouter()
@@ -26,11 +28,16 @@ const Index = () => {
                       <div className="flex flex-col gap-4">
                         <h3> {notification.contents?.en} </h3>
                         {notification.web_url &&
-                          <Button onPress={() => router.push(new URL(notification.web_url!))}>Open</Button>
+                          <Button onPress={
+                            () => {
+                              router.push(new URL(notification.web_url ? notification.web_url : "/"))
+                                .catch((e) => console.log(e))
+                            }
+                          }>Open</Button>
                         }
                       </div>
                       <X onClick={
-                        () => { deleteNotification({ id: notification.id! }) }
+                        () => { if (notification.id) deleteNotification({ id: notification.id }) }
                       } />
                     </Card>
                   )

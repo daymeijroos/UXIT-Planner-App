@@ -7,6 +7,7 @@ import {absenceRouter} from "./absence/absence";
 import { userRouter } from "./user"
 import { shiftRouter } from "./shift"
 
+
 export const appRouter = createTRPCRouter({
   schedule: scheduleRouter,
   staffing: staffingRouter,

@@ -1,14 +1,14 @@
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { createTRPCRouter, protectedProcedure, restrictedProcedure } from "../trpc";
 import { z } from "zod";
 import { getAvailableUsersForStaffing } from "./database-actions";
 import type { Shift } from "@prisma/client";
 import { Staff_Required, User } from "@prisma/client";
+import { Role } from "../../../prisma/role";
 
 export const userRouter = createTRPCRouter({
-  getAllUsers: protectedProcedure
-    .query(({ ctx }) => {
-      return ctx.prisma.user.findMany({});
-    }),
+  getAllUsers: restrictedProcedure(Role.ADMIN).query(({ctx}) => {
+    return ctx.prisma.user.findMany()
+  }),
   getUsersWithPreferencesAndStaffings: protectedProcedure
     .query(({ ctx }) => {
       return ctx.prisma.user.findMany({

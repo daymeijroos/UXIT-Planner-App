@@ -18,6 +18,7 @@ export const WebPushButton = () => {
   const [oneSignalInitialized, setOneSignalInitialized] = useState<boolean>(false)
 
   useEffect(() => {
+    window.OneSignal = window.OneSignal || []
     if (!oneSignalInitialized) {
       OneSignal.init({
         appId: env.NEXT_PUBLIC_ONESIGNAL_APP_ID,

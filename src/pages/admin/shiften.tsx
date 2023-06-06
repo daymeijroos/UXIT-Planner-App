@@ -1,116 +1,104 @@
-import React, { useState } from "react";
-import { Button, NavigationBar, ToastService } from "../../components";
-import { api } from "../../utils/api";
-import { useAutoAnimate } from "@formkit/auto-animate/react";
+import React, { useState } from "react"
+import { Button, NavigationBar, ToastService } from "../../components"
+import { api } from "../../utils/api"
+import { useAutoAnimate } from "@formkit/auto-animate/react"
+import { Trash2 } from "react-feather"
+import { Select } from "../../components/atoms/input/Selector"
+import { Item } from "react-stately"
+import type { User } from "@prisma/client"
 
 export default function Shiften() {
-  const context = api.useContext();
+  const context = api.useContext()
   const { mutate: removeSelectedStaffing } = api.staffing.removeStaffingAdmin.useMutation({
     onSuccess: () => {
       context.shift.getAllShifts.invalidate().catch((reason) => {
-        console.log(reason);
-        ToastService.success("Het is gelukt!");
-      });
+        console.log(reason)
+        ToastService.success("Het is gelukt!")
+      })
     }
-  });
+  })
   const { mutate: removeSelectedShift } = api.shift.removeShiftAdmin.useMutation({
     onSuccess: () => {
       context.shift.getAllShifts.invalidate().catch((reason) => {
-        console.log(reason);
-        ToastService.success("Het is gelukt!");
-      });
+        console.log(reason)
+        ToastService.success("Het is gelukt!")
+      })
     }
-  });
+  })
   const { mutate: addStaffing } = api.staffing.addStaffing.useMutation({
     onSuccess: () => {
       context.shift.getAllShifts.invalidate().catch((reason) => {
-        console.log(reason);
-        ToastService.success("Het is gelukt!");
-      });
+        console.log(reason)
+        ToastService.success("Het is gelukt!")
+      })
     }
-  });
+  })
 
-  let selectedShiftId: string;
-  // let availableUsers: User[]
-  // const availableUsers = api.user.getAllUsers.useQuery();
+  const users = api.user.getUsersWithPreferencesAndStaffings.useQuery()
+  const availableUsers: User[] = []
 
-  const availableUsers = api.user.getAvailableUsers.useQuery({ shift_id: selectedShiftId })
+  // const availableUsers = api.user.getAvailableUsers.useQuery({ shift_id: selectedShiftId })
 
-  const shifts = api.shift.getAllShifts.useQuery();
-  const [expandedRow, setExpandedRow] = useState(null);
-  const [staffingDisplay, setStaffingDisplay] = useState(null);
-  const [staffingList] = useAutoAnimate();
-  const [tableRow] = useAutoAnimate();
+  const shifts = api.shift.getAllShifts.useQuery()
+  const [expandedRow, setExpandedRow] = useState(null)
+  const [staffingDisplay, setStaffingDisplay] = useState(null)
+  const [staffingList] = useAutoAnimate()
+  const [tableRow] = useAutoAnimate()
 
   if (shifts.isLoading) {
-    return <div>loading...</div>;
+    return <div>loading...</div>
   }
 
   if (shifts.error) {
-    return <div>{shifts.error.message}</div>;
+    return <div>{shifts.error.message}</div>
   }
 
   const expandRow = (shiftId: string) => {
     if (expandedRow === shiftId) {
-      setExpandedRow(null);
+      setExpandedRow(null)
     } else {
-      setExpandedRow(shiftId);
-      selectedShiftId = shiftId;
-      console.log(availableUsers);
-      setStaffingDisplay(null);
+      setExpandedRow(shiftId)
+      setStaffingDisplay(null)
     }
-  };
-
-  const expandRowStaffing = (shiftId: string) => {
-    // handleGetUsers()
-    if (staffingDisplay === shiftId) {
-      setStaffingDisplay(null);
-    } else {
-      setStaffingDisplay(shiftId);
-    }
-  };
+  }
 
   const handleRemoveStaffing = (staffingId: string) => {
     try {
-      removeSelectedStaffing({ staffing_id: staffingId });
+      removeSelectedStaffing({ staffing_id: staffingId })
 
     } catch (error) {
-      console.error(error);
+      console.error(error)
     }
-  };
+  }
 
   const handleRemoveShift = (shiftId: string) => {
     try {
-      removeSelectedShift({ shift_id: shiftId });
+      removeSelectedShift({ shift_id: shiftId })
 
     } catch (error) {
-      console.error(error);
+      console.error(error)
     }
-  };
+  }
 
-  const handleAddStaffing = (userId: string, shiftId: string) => {
-    try {
-      addStaffing({ user_id: userId, shift_id: shiftId });
-
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  // const handleGetUsers = (shiftId: string) => {
-  //   try {
-  //     getAvailableUsers({ shift_id: shiftId })
-  //
-  //   } catch (error) {
-  //     console.log(error)
-  //   }
-  // }
+  const handleAddStaffing = (shiftId: string) => {
+    const spanContent = document.getElementById("userSpan").textContent
+    users.data?.map((user) => {
+        if (spanContent === user.name) {
+          const selectedUserId = user.id
+          try {
+            addStaffing({ user_id: selectedUserId, shift_id: shiftId })
+          } catch (error) {
+            console.log(error)
+          }
+        }
+      })
+  }
 
   return (
-    <div>
-      <div className="flex justify-between items-center p-4 mb-20">
-        <h1 className="text-xl font-bold mx-auto">Shifts</h1>
-        <p className="text-sm">{shifts.data?.length} Shifts</p>
+    <div className="mb-20">
+      <div className="flex justify-between items-center p-4 mb-4">
+        <h1 className="text-xl font-bold mx-auto">Shiften</h1>
+        <p className="text-sm">{shifts.data?.length} Shiften</p>
       </div>
       <div className="flex justify-center items-center">
         <table className="w-full md:max-w-2xl divide-y divide-gray-200 border-2 border-black">
@@ -177,7 +165,9 @@ export default function Shiften() {
                           </div>
                         </div>
                         <div className="w-30 ml-4">
-                          <Button color="red" onPress={() => handleRemoveShift(shift.id)}>Verwijder shift</Button>
+                          <Button aria-label="Verwijder shift" title="Verwijder shift" color="red" onPress={() => handleRemoveShift(shift.id)}>
+                            <Trash2 size="24" className="stroke-5/4" />
+                          </Button>
                         </div>
                       </div>
                       <div className="flex flex-col mb-4" ref={staffingList}>
@@ -191,69 +181,13 @@ export default function Shiften() {
                           </div>
                         ))}
                       </div>
-                      <div className="">
-                        <Button color="teal" onPress={() => void expandRowStaffing(shift.id)}>Voeg staffing toe</Button>
+                      <div className="mb-4">
+                        <Select label="Medewerker / Vrijwilliger"
+                                items={users.data}>
+                          {(item) => <Item>{item.name}</Item>}
+                        </Select>
                       </div>
-                    </div>
-                  </td>
-                </tr>
-              )}
-              {(expandedRow === shift.id) && (staffingDisplay === shift.id) && (
-                <tr onClick={() => expandRow(shift.id)}>
-                  <td colSpan="3">
-                    <div className="p-4">
-                      <div className="flex items-start justify-between mb-4">
-                        <div className="flex flex-col">
-                          <p className="mr-6">Starttijd</p>
-                          <div className="flex justify-between items-center max-w-xs mb-2">
-                            <p
-                              className="mr-6">{shift.start.toString().slice(8, 10)} {shift.start.toString().slice(3, 7)} {shift.start.toString().slice(11, 15)} {shift.start.toString().slice(16, 21)}</p>
-                            <div className="w-30">
-                              <Button color="gray">Wijzig starttijd</Button>
-                            </div>
-                          </div>
-                          <p className="mr-6">Eindtijd</p>
-                          <div className="flex justify-between items-center max-w-xs mb-2">
-                            <p
-                              className="mr-6">{shift.end.toString().slice(8, 10)} {shift.end.toString().slice(3, 7)} {shift.end.toString().slice(11, 15)} {shift.end.toString().slice(16, 21)}</p>
-                            <div className="w-30">
-                              <Button color="gray">Wijzig eindtijd</Button>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="w-30 ml-4">
-                          <Button color="red" onPress={() => handleRemoveShift(shift.id)}>Verwijder shift</Button>
-                        </div>
-                      </div>
-                      <div className="flex flex-col mb-4" ref={staffingList}>
-                        <p>Ingeroosterde vrijwilligers</p>
-                        {shift.staffings.map((staffing) => (
-                          <div key={staffing.id} className="flex justify-between items-center max-w-xs mb-2">
-                            <p>{staffing.user.name} {staffing.user.last_name}</p>
-                            <div className="w-32">
-                              <Button color="red" onPress={() => handleRemoveStaffing(staffing.id)}>Verwijder</Button>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                      <div>
-                        {availableUsers.data?.map((user) => (
-                          <div
-                            key={user.id}
-                            className="cursor-pointer hover:bg-gray-100"
-                            onClick={() => handleAddStaffing(user.id, shift.id)}
-                          >
-                            <div className="flex w-64">
-                              <div>
-                                <p className="py-2 px-4 w-32">{user.name}</p>
-                              </div>
-                              <div>
-                                <p className="py-2 px-4">{user.last_name}</p>
-                              </div>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
+                      <Button onPress={() => handleAddStaffing(shift.id)} color="teal">Voeg vrijwilliger toe</Button>
                     </div>
                   </td>
                 </tr>
@@ -265,5 +199,5 @@ export default function Shiften() {
       </div>
       <NavigationBar />
     </div>
-  );
+  )
 }

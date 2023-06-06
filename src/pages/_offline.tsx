@@ -1,5 +1,6 @@
 import Image from "next/image"
 import { Card } from "../components"
+import React from 'react'
 
 export default function Offline() {
   //create a you are offline screen styled with TailwindCSS

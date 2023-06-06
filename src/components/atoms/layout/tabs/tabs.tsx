@@ -4,6 +4,7 @@ import { useTabList } from 'react-aria'
 import { useTabListState } from 'react-stately'
 import { TabPanel } from "./tab-panel"
 import { Tab } from "./tab"
+import React from 'react'
 
 export function Tabs<T extends object>(props: AriaTabListProps<T>) {
   const state = useTabListState(props)

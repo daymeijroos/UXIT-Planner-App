@@ -1,6 +1,7 @@
 import Head from "next/head"
 import { NavigationBar, Tabs, TeamStaffingList, PersonalStaffingList } from "../components"
 import { Item } from "react-stately"
+import React from 'react'
 
 const Index = () => {
   return (
@@ -8,7 +9,7 @@ const Index = () => {
       <Head>
         <title>Rooster</title>
       </Head>
-      <div className="flex justify-center">
+      <div className="flex justify-center pt-8">
         <div className="w-full max-w-4xl">
           <Tabs>
             <Item key="1" title="Team">

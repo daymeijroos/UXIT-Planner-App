@@ -4,6 +4,7 @@ import { CardList } from "../../atoms/layout/card/card-list"
 import { StaffingCard } from "./staffing-card"
 import type { StaffingWithColleagues } from "../../../types/StaffingWithColleagues"
 import { Button } from "../../atoms/input/button"
+import React from 'react'
 
 export function PersonalStaffingList({ fromDate }: { fromDate?: Date }) {
   const personalStaffings = api.staffing.getPersonalStaffing.useInfiniteQuery({ fromDate, limit: 1 }, {

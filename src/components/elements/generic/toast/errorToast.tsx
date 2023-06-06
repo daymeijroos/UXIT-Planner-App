@@ -1,5 +1,6 @@
 import toast, { type Toast } from "react-hot-toast"
 import { AlertOctagon, X } from 'react-feather'
+import React from 'react'
 
 export const errorToast = (message: string) => {
   toast.custom((t: Toast) => (

@@ -1,35 +1,35 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import * as React from "react";
-import type { AriaListBoxOptions } from "@react-aria/listbox";
-import type { ListState } from "react-stately";
-import type { Node } from "@react-types/shared";
-import { useListBox, useListBoxSection, useOption } from "react-aria";
+import * as React from "react"
+import type { AriaListBoxOptions } from "@react-aria/listbox"
+import type { ListState } from "react-stately"
+import type { Node } from "@react-types/shared"
+import { useListBox, useListBoxSection, useOption } from "react-aria"
 
 interface ListBoxProps extends AriaListBoxOptions<unknown> {
-  listBoxRef?: React.RefObject<HTMLUListElement>;
-  state: ListState<unknown>;
+  listBoxRef?: React.RefObject<HTMLUListElement>
+  state: ListState<unknown>
 }
 
 interface SectionProps {
-  section: Node<unknown>;
-  state: ListState<unknown>;
+  section: Node<unknown>
+  state: ListState<unknown>
 }
 
 interface OptionProps {
-  item: Node<unknown>;
-  state: ListState<unknown>;
+  item: Node<unknown>
+  state: ListState<unknown>
 }
 
 export function ListBox(props: ListBoxProps) {
-  const ref = React.useRef<HTMLUListElement>(null);
-  const { listBoxRef = ref, state } = props;
-  const { listBoxProps } = useListBox(props, state, listBoxRef);
+  const ref = React.useRef<HTMLUListElement>(null)
+  const { listBoxRef = ref, state } = props
+  const { listBoxProps } = useListBox(props, state, listBoxRef)
 
   return (
     <ul
       {...listBoxProps}
       ref={listBoxRef}
-      className="w-full max-h-72 overflow-auto outline-none"
+      className="w-full overflow-auto outline-none max-h-72"
     >
       {[...state.collection].map((item) =>
         item.type === "section" ? (
@@ -39,14 +39,14 @@ export function ListBox(props: ListBoxProps) {
         )
       )}
     </ul>
-  );
+  )
 }
 
 function ListBoxSection({ section, state }: SectionProps) {
   const { itemProps, headingProps, groupProps } = useListBoxSection({
     heading: section.rendered,
     "aria-label": section["aria-label"]
-  });
+  })
 
   return (
     <>
@@ -54,7 +54,7 @@ function ListBoxSection({ section, state }: SectionProps) {
         {section.rendered && (
           <span
             {...headingProps}
-            className="text-xs font-bold uppercase text-gray-500 mx-3"
+            className="mx-3 text-xs font-bold text-gray-500 uppercase"
           >
             {section.rendered}
           </span>
@@ -66,35 +66,34 @@ function ListBoxSection({ section, state }: SectionProps) {
         </ul>
       </li>
     </>
-  );
+  )
 }
 
 function Option({ item, state }: OptionProps) {
-  const ref = React.useRef<HTMLLIElement>(null);
+  const ref = React.useRef<HTMLLIElement>(null)
   const { optionProps, isDisabled, isSelected, isFocused } = useOption(
     {
       key: item.key
     },
     state,
     ref
-  );
+  )
 
-  let text = "text-gray-700 dark:text-white";
+  let text = "text-gray-700 dark:text-white"
   if (isFocused || isSelected) {
-    text = "ring-2 ring-yellow-500 text-black";
+    text = "ring-2 ring-yellow-500 text-black"
   } else if (isDisabled) {
-    text = "text-gray-200 dark:text-white";
+    text = "text-gray-200 dark:text-white"
   }
 
   return (
     <li
       {...optionProps}
       ref={ref}
-      className={`m-1 rounded-sm py-2 px-2 text-sm outline-none cursor-pointer flex items-center justify-between ${text} ${
-        isFocused ? "bg-yellow-100" : ""
-      } ${isSelected ? "font-bold dark:text-white focus:text-black" : ""}`}
+      className={`m-1 rounded-sm py-2 px-2 text-sm outline-none cursor-pointer flex items-center justify-between ${text} ${isFocused ? "bg-yellow-100" : ""
+        } ${isSelected ? "font-bold dark:text-white focus:text-black" : ""}`}
     >
       {item.rendered}
     </li>
-  );
+  )
 }

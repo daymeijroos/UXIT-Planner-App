@@ -3,7 +3,7 @@ import { useRangeCalendarState } from 'react-stately'
 import { createCalendar } from '@internationalized/date'
 
 import React from 'react'
-import { Button, ButtonRound } from '../button'
+import { ButtonRound } from '../button'
 import { CalendarGrid } from './calendar-grid'
 
 export function RangeCalendar<T extends DateValue>(props: RangeCalendarProps<T>) {
@@ -20,10 +20,12 @@ export function RangeCalendar<T extends DateValue>(props: RangeCalendarProps<T>)
 
   return (
     <div {...calendarProps} ref={ref}>
-      <div className="flex">
+      <div className="flex justify-between">
         <h2>{title}</h2>
-        <ButtonRound {...prevButtonProps}>&lt;</ButtonRound>
-        <ButtonRound {...nextButtonProps}>&gt;</ButtonRound>
+        <div className="flex gap-4">
+          <ButtonRound {...prevButtonProps}>&lt;</ButtonRound>
+          <ButtonRound {...nextButtonProps}>&gt;</ButtonRound>
+        </div>
       </div>
       <CalendarGrid state={state} />
     </div>

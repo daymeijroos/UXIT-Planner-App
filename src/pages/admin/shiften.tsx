@@ -8,6 +8,8 @@ import { Item } from "react-stately"
 import type { User } from "@prisma/client"
 import type { Shift } from "@prisma/client"
 import { Staffing } from "@prisma/client"
+import { DateField, TimeField } from "../../components/atoms/input/DateField";
+import { Time } from "@internationalized/date";
 
 export default function Shiften() {
   const context = api.useContext()
@@ -61,6 +63,7 @@ export default function Shiften() {
       setExpandedRow(shift.id)
       // logic here
       const staffedUsers = []
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
       shift.staffings?.map((staffing: Staffing) => {
         staffedUsers.push(staffing.user)
       })
@@ -161,6 +164,7 @@ export default function Shiften() {
                           <div className="flex justify-between items-center max-w-xs mb-4">
                             <div className="flex-grow">
                               <p className="border-b-2 border-l-2 border-t-2 border-black p-4 text-center">
+                                <DateField label={"plswork"} defaultValue={shift.start}></DateField>
                                 {shift.start.toString().slice(8, 10)} {shift.start.toString().slice(3, 7)} {shift.start.toString().slice(11, 15)} {shift.start.toString().slice(16, 21)}
                               </p>
                             </div>
@@ -210,8 +214,9 @@ export default function Shiften() {
                         ))}
                       </div>
                       <div className="mb-4">
-                        <Select label="Medewerker / Vrijwilliger" items={availableUsers}>
-                          {(item) => <Item<User>>{item.name}</Item>}
+                        {/*// TODO needs to be availableUsers*/}
+                        <Select label="Medewerker / Vrijwilliger" items={users.data}>
+                          {(item) => <Item>{item.name}</Item>}
                         </Select>
                       </div>
                       <Button onPress={() => handleAddStaffing(shift.id)} color="teal">Voeg vrijwilliger toe</Button>

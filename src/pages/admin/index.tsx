@@ -58,7 +58,7 @@ export default function Admin() {
               })
             }}>Genereer Rooster</Button>
             <Button color="red" onPress={() => { void removeStaffings() }}>Verwijder Rooster</Button>
-            <Button onPress={() => router.push("/admin/aanpassen")}>Handmatige aanpassingen</Button>
+            <Button onPress={() => router.push("/admin/shiften")}>Handmatige aanpassingen</Button>
             <Button>Openingsweekend aangeven</Button>
           </div>
           <h2>Vrijwilligers</h2>

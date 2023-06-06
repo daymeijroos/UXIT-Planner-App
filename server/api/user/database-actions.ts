@@ -62,19 +62,17 @@ export const getUserStaffings = async (user: User, from: Date, to: Date) => {
   })
 }
 
-export const getAvailableUsersForStaffing = async (shift: Shift) => {
+export const getAvailableUsersForStaffing = async (shift: Shift, shift_type: string) => {
   const users: User[] = api.user.getUsersWithPreferencesAndStaffings.useQuery()
   const availableUsers: User[] = []
-  for (const staff_required of shift.staff_required) {
     for (const user of users) {
       const alreadyStaffed = checkUserAlreadyStaffedDuringShift(user, shift)
-      const isDefaultAvailable = checkUserAvailabilityForShiftType(user, staff_required.shift_type, shift.start)
+      const isDefaultAvailable = checkUserAvailabilityForShiftType(user, shift_type, shift.start)
       const isAbsent = checkUserAbsentDuringShift(user, shift)
 
       if (await alreadyStaffed || await isDefaultAvailable || await isAbsent) continue
 
       availableUsers.push(user)
     }
-  }
   return availableUsers
 }

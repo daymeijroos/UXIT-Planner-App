@@ -1,5 +1,8 @@
 import { createTRPCRouter, protectedProcedure } from "../trpc";
-import { getUsersWithPreferencesAndStaffings } from "./database-actions";
+import { z } from "zod";
+import { getAvailableUsersForStaffing } from "./database-actions";
+import type { Shift } from "@prisma/client";
+import { Staff_Required, User } from "@prisma/client";
 
 export const userRouter = createTRPCRouter({
   getAllUsers: protectedProcedure
@@ -27,5 +30,22 @@ export const userRouter = createTRPCRouter({
           staffings: true
         }
       });
+    }),
+  getAvailableUsers: protectedProcedure
+    .input(z.object({
+      shift_id: z.string()
+    }))
+    .query(async ({ ctx, input }) => {
+      const shift: Shift = ctx.prisma.shift.findUnique({
+        where: {
+          id: input.shift_id
+        }
+      })
+      const shiftType = await ctx.prisma.shift_Type.findUnique({
+        where: {
+          name: "Balie"
+        }
+      })
+      return getAvailableUsersForStaffing(shift, shiftType.id)
     })
 })

@@ -13,7 +13,7 @@ export const generateSchedule = async (fromDate: Date, toDate: Date) => {
     for (const staff_required of shift.staff_required) {
       const shiftRequiresStaffAmount = staff_required.amount - staff_required.shift.staffings.length
 
-      for (let i = 0; i <= shiftRequiresStaffAmount; i++) {
+      for (let i = 1; i <= shiftRequiresStaffAmount; i++) {
         for (const user of users) {
           const alreadyStaffed = checkUserAlreadyStaffedDuringShift(user, shift)
           const isDefaultAvailable = checkUserAvailabilityForShiftType(user, staff_required.shift_type, shift.start)

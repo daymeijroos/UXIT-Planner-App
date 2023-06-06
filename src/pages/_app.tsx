@@ -4,6 +4,7 @@ import { type Session } from "next-auth"
 import { api } from '../utils/api'
 import { SessionProvider } from 'next-auth/react'
 import { I18nProvider, SSRProvider } from 'react-aria'
+import { Toaster } from 'react-hot-toast'
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
@@ -14,14 +15,16 @@ const MyApp: AppType<{ session: Session | null }> = ({
 }) => {
   const locale = "nl-NL"
   return (
-    <SessionProvider session={session}>
-      <SSRProvider>
-        <I18nProvider locale={locale}>
-          <Component {...pageProps} />
-        </I18nProvider>
-      </SSRProvider>
-
-    </SessionProvider>
+    <>
+      <SessionProvider session={session}>
+        <SSRProvider>
+          <I18nProvider locale={locale}>
+            <Component {...pageProps} />
+          </I18nProvider>
+        </SSRProvider>
+      </SessionProvider>
+      <Toaster position='bottom-right' />
+    </>
   )
 }
 

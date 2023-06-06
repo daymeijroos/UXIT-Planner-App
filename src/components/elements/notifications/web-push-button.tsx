@@ -6,12 +6,6 @@ import { Button } from '../../atoms'
 import { useSession } from 'next-auth/react'
 import { env } from '../../../../env/client.mjs'
 
-declare global {
-  interface Window {
-    OneSignal: any
-  }
-}
-
 export const WebPushButton = () => {
   const [pushEnabled, setPushEnabled] = useState<boolean>(false)
   const { data: sessionData, status } = useSession()
@@ -74,7 +68,7 @@ export const WebPushButton = () => {
 
   return (
     <>
-      <Button onPress={() => { toggleNotifications() }} color={!pushEnabled ? "teal" : "red"}>{!pushEnabled ? 'Subscribe to Notifications' : 'Unsubscribe from Notifications'}</Button>
+      <Button onPress={() => { toggleNotifications().catch((e) => console.log(e)) }} color={!pushEnabled ? "teal" : "red"}>{!pushEnabled ? 'Subscribe to Notifications' : 'Unsubscribe from Notifications'}</Button>
     </>
   )
 }

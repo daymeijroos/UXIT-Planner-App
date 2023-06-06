@@ -7,7 +7,7 @@ import { Button } from "../../atoms/input/button"
 import React from 'react'
 
 export function PersonalStaffingList({ fromDate }: { fromDate?: Date }) {
-  const personalStaffings = api.staffing.getPersonalStaffing.useInfiniteQuery({ fromDate, limit: 1 }, {
+  const personalStaffings = api.staffing.getPersonalStaffing.useInfiniteQuery({ fromDate, limit: 10 }, {
     getNextPageParam: (lastPage) => {
       return lastPage.nextCursor
     }

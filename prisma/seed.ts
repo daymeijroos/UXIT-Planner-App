@@ -1,11 +1,9 @@
-import { PrismaClient } from "@prisma/client";
-import cuid from "cuid";
-import { Role } from "./role";
-import { Weekday } from "./weekday";
-import { convertAmsterdamTimezoneToUTC } from "../shared/date/dateHelperFunctions";
-import { CalendarDate, Time, toCalendarDateTime } from "@internationalized/date";
+import { PrismaClient } from "@prisma/client"
+import { Role } from "./role"
+import { Weekday } from "./weekday"
+import { CalendarDate, Time, toCalendarDateTime, getDayOfWeek } from "@internationalized/date"
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient()
 
 async function main() {
   //create user role
@@ -14,7 +12,7 @@ async function main() {
       name: Role.USER,
       description: "Dit zijn de standaard gebruikers van de app."
     }
-  });
+  })
 
   //create admin role
   const adminRole = await prisma.role.create({
@@ -22,7 +20,7 @@ async function main() {
       name: Role.ADMIN,
       description: "Admin rol houd alle rechten om de planner te beheren."
     }
-  });
+  })
 
   //create retired role
   const retiredRole = await prisma.role.create({
@@ -30,7 +28,7 @@ async function main() {
       name: Role.RETIRED,
       description: "Retired rol is voor gebruikers die niet meer actief zijn binnen pulchri en dus ook niet gebruik mogen maken van de planner."
     }
-  });
+  })
 
   // Create Shift Types
   // weet niet of dit de bedoeling was maar heb een 3e shifttype toegevoegd voor als de vrijwilliger bij beide kan staan
@@ -39,18 +37,18 @@ async function main() {
       name: "Balie",
       description: "De vrijwilliger wil bij de balie zitten."
     }
-  });
+  })
 
   const shiftType2 = await prisma.shift_Type.create({
     data: {
       name: "Galerie",
       description: "De vrijwilliger wil bij de galerie staan."
     }
-  });
+  })
 
 
 
-  console.log("Shift Types created: ", shiftType1, shiftType2);
+  console.log("Shift Types created: ", shiftType1, shiftType2)
 
   // mockdata voor gebruikers, voorkeuren en standaard beschikbaarheid
   // user 1: robert swarts, elke dag, max 2x
@@ -63,7 +61,7 @@ async function main() {
   // user 8, isabella host, dinsdag/woensdag, max 2x
   // user 9, marieke burckhard, donerdag/vrijdag/zaterdag, max 2x
   // user 10, maria nellessen, vrijdag/zaterdag/zondag, max 3x
-  const users = [];
+  const users = []
 
 
   // create admin user
@@ -153,7 +151,7 @@ async function main() {
         }
       }
     }
-  });
+  })
 
   const mockUser1 = await prisma.user.create({
     data: {
@@ -274,7 +272,7 @@ async function main() {
         }
       }
     }
-  });
+  })
 
 
 
@@ -357,7 +355,7 @@ async function main() {
         }
       }
     }
-  });
+  })
 
   const mockUser3 = await prisma.user.create({
     data: {
@@ -413,7 +411,7 @@ async function main() {
         }
       }
     }
-  });
+  })
 
   const mockUser4 = await prisma.user.create({
     data: {
@@ -461,7 +459,7 @@ async function main() {
         }
       }
     }
-  });
+  })
 
   const mockUser5 = await prisma.user.create({
     data: {
@@ -541,7 +539,7 @@ async function main() {
         }
       }
     }
-  });
+  })
 
   const mockUser6 = await prisma.user.create({
     data: {
@@ -622,7 +620,7 @@ async function main() {
         }
       }
     }
-  });
+  })
 
 
   const mockUser7 = await prisma.user.create({
@@ -703,7 +701,7 @@ async function main() {
         }
       }
     }
-  });
+  })
 
   const mockUser8 = await prisma.user.create({
     data: {
@@ -800,7 +798,7 @@ async function main() {
         }
       }
     }
-  });
+  })
 
 
   const mockUser9 = await prisma.user.create({
@@ -866,7 +864,7 @@ async function main() {
         }
       }
     }
-  });
+  })
 
 
   const mockUser10 = await prisma.user.create({
@@ -923,7 +921,7 @@ async function main() {
         }
       }
     }
-  });
+  })
 
   const mockUser11 = await prisma.user.create({
     data: {
@@ -1004,7 +1002,7 @@ async function main() {
         }
       }
     }
-  });
+  })
 
   const mockUser12 = await prisma.user.create({
     data: {
@@ -1045,7 +1043,7 @@ async function main() {
         }
       }
     }
-  });
+  })
 
   const mockUser13 = await prisma.user.create({
     data: {
@@ -1102,7 +1100,7 @@ async function main() {
         }
       }
     }
-  });
+  })
 
   const mockUser14 = await prisma.user.create({
     data: {
@@ -1167,7 +1165,7 @@ async function main() {
         }
       }
     }
-  });
+  })
 
   const mockUser15 = await prisma.user.create({
     data: {
@@ -1224,7 +1222,7 @@ async function main() {
         }
       }
     }
-  });
+  })
 
   const mockUser16 = await prisma.user.create({
     data: {
@@ -1264,7 +1262,7 @@ async function main() {
         }
       }
     }
-  });
+  })
 
   const mockUser17 = await prisma.user.create({
     data: {
@@ -1345,7 +1343,7 @@ async function main() {
         }
       }
     }
-  });
+  })
 
   const mockUser18 = await prisma.user.create({
     data: {
@@ -1393,7 +1391,7 @@ async function main() {
         }
       }
     }
-  });
+  })
 
 
   const mockUser19 = await prisma.user.create({
@@ -1434,7 +1432,7 @@ async function main() {
         }
       }
     }
-  });
+  })
 
   const mockUser20 = await prisma.user.create({
     data: {
@@ -1482,7 +1480,7 @@ async function main() {
         }
       }
     }
-  });
+  })
 
 
   const mockUser21 = await prisma.user.create({
@@ -1523,7 +1521,7 @@ async function main() {
         }
       }
     }
-  });
+  })
 
   const mockUser22 = await prisma.user.create({
     data: {
@@ -1571,7 +1569,7 @@ async function main() {
         }
       }
     }
-  });
+  })
 
 
   const mockUser23 = await prisma.user.create({
@@ -1620,7 +1618,7 @@ async function main() {
         }
       }
     }
-  });
+  })
 
 
   const mockUser24 = await prisma.user.create({
@@ -1661,7 +1659,7 @@ async function main() {
         }
       }
     }
-  });
+  })
 
   const mockUser25 = await prisma.user.create({
     data: {
@@ -1709,7 +1707,7 @@ async function main() {
         }
       }
     }
-  });
+  })
 
 
   const mockUser26 = await prisma.user.create({
@@ -1758,15 +1756,19 @@ async function main() {
         }
       }
     }
-  });
+  })
 
 
 
   let startDate = new CalendarDate(2023, 1, 1)
-  const endDate = new CalendarDate(2024, 1, 1);
+  const endDate = new CalendarDate(2024, 1, 1)
 
   while (startDate.compare(endDate) < 0) {
 
+    if (getDayOfWeek(startDate, 'en-US') === Weekday.MONDAY) {
+      startDate = startDate.add({ days: 1 })
+      continue
+    }
     const firstShiftDateTime = toCalendarDateTime(startDate, new Time(11, 45))
     const secondShiftDateTime = toCalendarDateTime(startDate, new Time(14, 0))
     const endFirstShiftDateTime = toCalendarDateTime(startDate, new Time(15, 0))
@@ -1778,43 +1780,38 @@ async function main() {
         start: firstShiftDateTime.toDate('Europe/Amsterdam'),
         end: endFirstShiftDateTime.toDate('Europe/Amsterdam'),
         staff_required: {
-          create:{
-            amount:2,
-            shift_type:{connect:{id:shiftType1.id}}
+          create: {
+            amount: 2,
+            shift_type: { connect: { id: shiftType1.id } }
           }
         }
       },
-    });
+    })
 
     const shift2 = await prisma.shift.create({
       data: {
         start: secondShiftDateTime.toDate('Europe/Amsterdam'),
         end: endSecondShiftDateTime.toDate('Europe/Amsterdam'),
         staff_required: {
-          create:{
-            amount:2,
-            shift_type:{connect:{id:shiftType1.id}}
+          create: {
+            amount: 2,
+            shift_type: { connect: { id: shiftType1.id } }
           }
         }
       },
-    });
+    })
 
     startDate = startDate.add({ days: 1 })
   }
-
-
-
-
-
 }
 
 main()
   .catch((e) => {
-    console.error(e);
-    process.exit(1);
+    console.error(e)
+    process.exit(1)
   })
-  .finally( () => {
-     prisma.$disconnect()
-       .catch((e) => {console.log(e)});
+  .finally(() => {
+    prisma.$disconnect()
+      .catch((e) => { console.log(e) })
   });
 

@@ -1,13 +1,13 @@
 import { useState } from "react"
 import { Button, NavigationBar, RangeCalendar, ToastService } from "../../components"
 import { api } from "../../utils/api"
-import { DateValue } from "react-aria"
+import type { DateValue } from "react-aria"
 import React from 'react'
 import { useRouter } from "next/router"
 
 export default function GenereerRooster() {
   const router = useRouter()
-  let [range, setRange] = useState<{
+  const [range, setRange] = useState<{
     start: DateValue,
     end: DateValue
   } | undefined>()
@@ -45,9 +45,13 @@ export default function GenereerRooster() {
             if (range) {
               generateSchedule({
                 from: range?.start.toDate("Europe/Amsterdam"),
-                to: range?.end.toDate("Europe/Amsterdam")
+                to: range?.end.add({ days: 1 }).toDate("Europe/Amsterdam")
               }).then(() => {
-                router.push("/admin")
+                router.push("/").catch((error) => {
+                  console.error(error)
+                })
+              }).catch((error) => {
+                console.error(error)
               })
             } else {
               ToastService.info("Kies een periode om een rooster te genereren.")

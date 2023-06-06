@@ -1,12 +1,11 @@
 import { useRef } from "react"
 import { useCalendarCell } from "@react-aria/calendar"
-import { useDateFormatter } from "@react-aria/i18n"
 import { useFocusRing } from "@react-aria/focus"
 import { mergeProps } from "@react-aria/utils"
 import type { CalendarState } from "@react-stately/calendar"
-import { CalendarDate } from "@internationalized/date"
+import type { CalendarDate } from "@internationalized/date"
 import classNames from "classnames"
-import { RangeCalendarState } from "react-stately"
+import type { RangeCalendarState } from "react-stately"
 import React from 'react'
 import { isSameDay } from "@internationalized/date"
 

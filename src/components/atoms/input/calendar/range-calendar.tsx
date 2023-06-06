@@ -1,4 +1,4 @@
-import { DateValue, RangeCalendarProps, useLocale, useRangeCalendar } from 'react-aria'
+import { type DateValue, type RangeCalendarProps, useLocale, useRangeCalendar } from 'react-aria'
 import { useRangeCalendarState } from 'react-stately'
 import { createCalendar } from '@internationalized/date'
 
@@ -7,15 +7,15 @@ import { ButtonRound } from '../button'
 import { CalendarGrid } from './calendar-grid'
 
 export function RangeCalendar<T extends DateValue>(props: RangeCalendarProps<T>) {
-  let { locale } = useLocale()
-  let state = useRangeCalendarState({
+  const { locale } = useLocale()
+  const state = useRangeCalendarState({
     ...props,
     locale,
     createCalendar
   })
 
-  let ref = React.useRef(null)
-  let { calendarProps, prevButtonProps, nextButtonProps, title } =
+  const ref = React.useRef(null)
+  const { calendarProps, prevButtonProps, nextButtonProps, title } =
     useRangeCalendar(props, state, ref)
 
   return (

@@ -9,7 +9,7 @@ import { ChevronLeft, ChevronRight } from "react-feather"
 import { ButtonRound } from "../../../atoms"
 import React from 'react'
 
-export function WeekView<T extends DateValue>(props: AriaCalendarProps<T> & AriaCalendarGridProps) {
+export function WeekView<T extends DateValue>(props: AriaCalendarProps<T> & AriaCalendarGridProps & { onNextWeek?: () => void, onPrevWeek?: () => void }) {
   const { locale } = useLocale()
   const state = useCalendarState({
     ...props,
@@ -34,10 +34,12 @@ export function WeekView<T extends DateValue>(props: AriaCalendarProps<T> & Aria
 
   function nextWeek() {
     state.selectDate(state.value.add({ weeks: 1 }))
+    props.onNextWeek?.()
   }
 
   function prevWeek() {
     state.selectDate(state.value.subtract({ weeks: 1 }))
+    props.onPrevWeek?.()
   }
 
   return (

@@ -58,6 +58,7 @@ export function Select<T extends object>(props: AriaSelectProps<T>) {
       >
         <span
           {...valueProps}
+          id={`userSpan`}
           className={`text-md ${
             state.selectedItem ? "dark:text-white text-black" : "dark:text-gray-400 text-gray-600"
           }`}

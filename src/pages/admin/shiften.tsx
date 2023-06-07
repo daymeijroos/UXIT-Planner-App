@@ -2,14 +2,12 @@ import React, { useState } from "react"
 import { Button, NavigationBar, ToastService } from "../../components"
 import { api } from "../../utils/api"
 import { useAutoAnimate } from "@formkit/auto-animate/react"
-import { Edit, Trash2 } from "react-feather"
+import { Edit, Minimize2, Trash2 } from "react-feather";
 import { Select } from "../../components/atoms/input/Selector"
 import { Item } from "react-stately"
 import type { User } from "@prisma/client"
 import type { Shift } from "@prisma/client"
 import { Staffing } from "@prisma/client"
-import { DateField, TimeField } from "../../components/atoms/input/DateField";
-import { Time } from "@internationalized/date";
 
 export default function Shiften() {
   const context = api.useContext()
@@ -41,8 +39,6 @@ export default function Shiften() {
   const users = api.user.getUsersWithPreferencesAndStaffings.useQuery()
   const availableUsers: User[] = []
 
-  // const availableUsers = api.user.getAvailableUsers.useQuery({ shift_id: selectedShiftId })
-
   const shifts = api.shift.getAllShifts.useQuery()
   const [expandedRow, setExpandedRow] = useState(null)
   const [staffingList] = useAutoAnimate()
@@ -72,8 +68,8 @@ export default function Shiften() {
           availableUsers.push(user)
         }
       })
-      console.log(availableUsers)
     }
+    console.log(expandedRow);
   }
 
   const handleRemoveStaffing = (staffingId: string) => {
@@ -155,7 +151,7 @@ export default function Shiften() {
                 </tr>
               )}
               {(expandedRow === shift.id) && (
-                <tr onClick={() => expandRow(shift.id)}>
+                <tr>
                   <td colSpan="3">
                     <div className="p-4 relative">
                       <div className="flex flex-col justify-between mb-4">
@@ -164,7 +160,7 @@ export default function Shiften() {
                           <div className="flex justify-between items-center max-w-xs mb-4">
                             <div className="flex-grow">
                               <p className="border-b-2 border-l-2 border-t-2 border-black p-4 text-center">
-                                <DateField label={"plswork"} defaultValue={shift.start}></DateField>
+                                {/*<DateField label={"plswork"} defaultValue={shift.start}></DateField>*/}
                                 {shift.start.toString().slice(8, 10)} {shift.start.toString().slice(3, 7)} {shift.start.toString().slice(11, 15)} {shift.start.toString().slice(16, 21)}
                               </p>
                             </div>
@@ -191,6 +187,11 @@ export default function Shiften() {
                         <div className="w-30 ml-4 absolute top-4 right-4">
                           <Button aria-label="Verwijder shift" title="Verwijder shift" color="red" onPress={() => handleRemoveShift(shift.id)}>
                             <Trash2 size="24" className="stroke-5/4" />
+                          </Button>
+                        </div>
+                        <div className="w-30 ml-4 absolute left-0 top-4">
+                          <Button aria-label="Klap shift in" title="Klap shift in" color="teal" onClick={() => expandRow(shift)}>
+                            <Minimize2 size="24" className="stroke-5/4" />
                           </Button>
                         </div>
                       </div>

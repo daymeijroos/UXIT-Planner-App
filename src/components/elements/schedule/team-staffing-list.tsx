@@ -9,6 +9,7 @@ import { type CalendarDate, getLocalTimeZone, parseDate } from "@internationaliz
 
 export const TeamStaffingList = () => {
   const [selectedDate, setSelectedDate] = useState<CalendarDate>(parseDate(new Date(new Date().setHours(2, 0, 0, 0)).toISOString().slice(0, 10)))
+  const context = api.useContext()
 
   const staffings = api.staffing.getStaffing.useInfiniteQuery({ fromDate: selectedDate.toDate(getLocalTimeZone()) }, {
     getNextPageParam: (lastPage) => {
@@ -65,7 +66,17 @@ export const TeamStaffingList = () => {
 
   return (
     <div ref={parent} className='flex flex-col gap-4 dark:text-white'>
-      <WeekView value={selectedDate} onChange={setSelectedDate} onNextWeek={() => { staffings.fetchNextPage().catch((e) => console.log(e)) }} onPrevWeek={() => { staffings.fetchPreviousPage().catch((e) => console.log(e)) }} />
+      <WeekView value={selectedDate} onChange={setSelectedDate} onNextWeek={() => {
+        context.staffing.getStaffing.invalidate().catch((error) => {
+          console.error(error)
+        })
+        staffings.fetchNextPage().catch((e) => console.log(e))
+      }} onPrevWeek={() => {
+        context.staffing.getStaffing.invalidate().catch((error) => {
+          console.error(error)
+        })
+        staffings.fetchPreviousPage().catch((e) => console.log(e))
+      }} />
       {
         staffings.isLoading ? (
           <LoadingMessage />

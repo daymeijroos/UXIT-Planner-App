@@ -10,11 +10,11 @@ export const generateSchedule = async (fromDate: Date, toDate: Date) => {
   const shifts = await getShifts(fromDate, toDate)
   let users = await getUsersWithPreferencesAndStaffings()
 
-  users = shuffleArray(users)
-
   for (const shift of shifts) {
     for (const staff_required of shift.staff_required) {
       const shiftRequiresStaffAmount = staff_required.amount - staff_required.shift.staffings.length
+
+      users = shuffleArray(users)
 
       for (let i = 1; i <= shiftRequiresStaffAmount; i++) {
         for (const user of users) {
@@ -23,7 +23,9 @@ export const generateSchedule = async (fromDate: Date, toDate: Date) => {
           const isAbsent = checkUserAbsentDuringShift(user, shift)
           const reachedMax = checkReachedMaxStaffings(user, shift.start)
 
-          if (await alreadyStaffed || await isDefaultAvailable || await isAbsent || await reachedMax) continue
+          if (await alreadyStaffed || await isDefaultAvailable || await isAbsent || await reachedMax) {
+            continue
+          }
 
           await createStaffing(user, shift, staff_required)
           break
@@ -32,6 +34,7 @@ export const generateSchedule = async (fromDate: Date, toDate: Date) => {
     }
   }
   await generateBackupSchedule(fromDate, toDate)
+  console.log('Schedule generated')
   return
 }
 

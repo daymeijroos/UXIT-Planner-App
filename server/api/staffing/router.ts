@@ -17,12 +17,13 @@ export const staffingRouter = createTRPCRouter({
       }).nullish(),
     }))
     .query(async ({ ctx, input }) => {
-      const limit = input?.limit || 10
+      const limit = input?.limit || 7
       const items = await ctx.prisma.staffing.findMany({
+        take: limit * 10,
         where: {
           shift: {
             start: {
-              gte: new Date((input.cursor?.shift.start || input?.fromDate || new Date()).setHours(0, 0, 0, 0) - 24 * 60 * 60 * 1000 * (limit + 1)),
+              gte: new Date((input.cursor?.shift.start || input?.fromDate || new Date()).setHours(0, 0, 0, 0) - ((limit + 1) * 24 * 60 * 60 * 1000)),
             },
           }
         },

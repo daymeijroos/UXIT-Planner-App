@@ -1,3 +1,4 @@
+import { UserWithPreferenceAndStaffings } from "../../types/user"
 import { createBackup, getFirstBackupOnDate } from "../backup"
 import { getShifts } from "../shift"
 import { createStaffing } from "../staffing"
@@ -7,7 +8,9 @@ import { checkEnoughBackupStaff, checkReachedMaxStaffings, checkUserAbsent, chec
 
 export const generateSchedule = async (fromDate: Date, toDate: Date) => {
   const shifts = await getShifts(fromDate, toDate)
-  const users = await getUsersWithPreferencesAndStaffings()
+  let users = await getUsersWithPreferencesAndStaffings()
+
+  users = shuffleArray(users)
 
   for (const shift of shifts) {
     for (const staff_required of shift.staff_required) {
@@ -57,4 +60,14 @@ export const generateBackupSchedule = async (fromDate: Date, toDate: Date) => {
     }
   }
   return
+}
+
+function shuffleArray(array: UserWithPreferenceAndStaffings[]) {
+  for (var i = array.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1))
+    var temp = array[i]
+    array[i] = array[j]
+    array[j] = temp
+  }
+  return array
 }

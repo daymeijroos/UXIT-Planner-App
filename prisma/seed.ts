@@ -75,81 +75,6 @@ async function main() {
           name: Role.ADMIN
         }
       },
-      preference: {
-        create: {
-          maxStaffings: 2,
-          shift_type: {
-            connect: {
-              id: shiftType1.id
-            }
-          },
-          availability_week: {
-            create: {
-              sequence: 0,
-              availability: {
-                create: [
-                  {
-                    weekday: Weekday.MONDAY,
-                    shift_types: {
-                      connect: {
-                        id: shiftType1.id
-                      }
-                    }
-                  },
-                  {
-                    weekday: Weekday.TUESDAY,
-                    shift_types: {
-                      connect: {
-                        id: shiftType1.id
-                      }
-                    }
-                  },
-                  {
-                    weekday: Weekday.WEDNESDAY,
-                    shift_types: {
-                      connect: {
-                        id: shiftType1.id
-                      }
-                    }
-                  },
-                  {
-                    weekday: Weekday.THURSDAY,
-                    shift_types: {
-                      connect: {
-                        id: shiftType1.id
-                      }
-                    }
-                  },
-                  {
-                    weekday: Weekday.FRIDAY,
-                    shift_types: {
-                      connect: {
-                        id: shiftType1.id
-                      }
-                    }
-                  },
-                  {
-                    weekday: Weekday.SATURDAY,
-                    shift_types: {
-                      connect: {
-                        id: shiftType1.id
-                      }
-                    }
-                  },
-                  {
-                    weekday: Weekday.SUNDAY,
-                    shift_types: {
-                      connect: {
-                        id: shiftType1.id
-                      }
-                    }
-                  },
-                ]
-              }
-            }
-          }
-        }
-      }
     }
   })
 
@@ -1774,14 +1699,30 @@ async function main() {
     const endFirstShiftDateTime = toCalendarDateTime(startDate, new Time(15, 0))
     const endSecondShiftDateTime = toCalendarDateTime(startDate, new Time(17, 15))
 
+    if (getDayOfWeek(startDate, 'en-US') === Weekday.SATURDAY || getDayOfWeek(startDate, 'en-US') === Weekday.SUNDAY) {
+      await prisma.shift.create({
+        data: {
+          start: firstShiftDateTime.toDate('Europe/Amsterdam'),
+          end: endSecondShiftDateTime.toDate('Europe/Amsterdam'),
+          staff_required: {
+            create: {
+              amount: 2,
+              shift_type: { connect: { id: shiftType1.id } }
+            }
+          }
+        },
+      })
+      startDate = startDate.add({ days: 1 })
+      continue
+    }
 
-    const shift = await prisma.shift.create({
+    await prisma.shift.create({
       data: {
         start: firstShiftDateTime.toDate('Europe/Amsterdam'),
         end: endFirstShiftDateTime.toDate('Europe/Amsterdam'),
         staff_required: {
           create: {
-            amount: 2,
+            amount: 1,
             shift_type: { connect: { id: shiftType1.id } }
           }
         }
@@ -1794,7 +1735,7 @@ async function main() {
         end: endSecondShiftDateTime.toDate('Europe/Amsterdam'),
         staff_required: {
           create: {
-            amount: 2,
+            amount: 1,
             shift_type: { connect: { id: shiftType1.id } }
           }
         }

@@ -8,6 +8,7 @@ import { formatTime } from "../../../utils/date/formatTime"
 import { formatShiftStaffList } from "../../../utils/formatShiftStaffList"
 import { Button, Card, TextField } from "../../atoms"
 import { errorToast } from "../generic/toast/errorToast"
+import React from 'react'
 
 interface StaffingCardProps {
   staffing: StaffingWithColleagues
@@ -41,7 +42,7 @@ export function StaffingCard(props: StaffingCardProps) {
   const context = api.useContext()
 
 
-  const { mutate: handleCheckOut} = api.absence.checkOut.useMutation({
+  const { mutate: handleCheckOut } = api.absence.checkOut.useMutation({
     onSuccess: () => {
       context.staffing.getStaffing.invalidate().catch((error) => {
         throw error

@@ -6,12 +6,6 @@ import { Button } from '../../atoms'
 import { useSession } from 'next-auth/react'
 import { env } from '../../../../env/client.mjs'
 
-declare global {
-  interface Window {
-    OneSignal: any
-  }
-}
-
 export const WebPushButton = () => {
   const [pushEnabled, setPushEnabled] = useState<boolean>(false)
   const { data: sessionData, status } = useSession()
@@ -29,7 +23,7 @@ export const WebPushButton = () => {
         console.log(e)
       })
     }
-  }, [oneSignalInitialized])
+  })
 
   useEffect(() => {
     if (oneSignalInitialized && status === "authenticated" && sessionData?.user?.id) {
@@ -55,8 +49,11 @@ export const WebPushButton = () => {
   }, [oneSignalInitialized])
 
   const toggleNotifications = async () => {
+    console.log("Toggling notifications...")
     if (pushEnabled == false) {
+      console.log("Registering for push notifications...")
       await OneSignal.registerForPushNotifications()
+      console.log("Setting subscription to true...")
       await OneSignal.setSubscription(true)
     } else {
       await OneSignal.setSubscription(false)
@@ -70,6 +67,8 @@ export const WebPushButton = () => {
 
 
   return (
-    <Button onPress={() => { toggleNotifications }} color={!pushEnabled ? "teal" : "red"}>{!pushEnabled ? 'Subscribe to Notifications' : 'Unsubscribe from Notifications'}</Button>
+    <>
+      <Button onPress={() => { toggleNotifications().catch((e) => console.log(e)) }} color={!pushEnabled ? "teal" : "red"}>{!pushEnabled ? 'Subscribe to Notifications' : 'Unsubscribe from Notifications'}</Button>
+    </>
   )
 }

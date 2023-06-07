@@ -4,6 +4,7 @@ import { type Session } from "next-auth"
 import { api } from '../utils/api'
 import { SessionProvider } from 'next-auth/react'
 import { I18nProvider, SSRProvider } from 'react-aria'
+import { Toaster } from 'react-hot-toast'
 
 
 
@@ -23,6 +24,7 @@ const MyApp: AppType<{ session: Session | null }> = ({
           </I18nProvider>
         </SSRProvider>
       </SessionProvider>
+      <Toaster position='bottom-right' />
     </>
   )
 }

@@ -1,12 +1,13 @@
-import { useRef } from "react";
-import { useTabPanel } from "react-aria";
-import type { TabListState } from "react-stately";
+import { useRef } from "react"
+import { useTabPanel } from "react-aria"
+import type { TabListState } from "react-stately"
+import React from 'react'
 
 export function TabPanel<T extends object>({ state, ...props }: {
   state: TabListState<T>
 }) {
-  const ref = useRef(null);
-  const { tabPanelProps } = useTabPanel(props, state, ref);
+  const ref = useRef(null)
+  const { tabPanelProps } = useTabPanel(props, state, ref)
   return (
     <div {...tabPanelProps} ref={ref}>
       {
@@ -14,5 +15,5 @@ export function TabPanel<T extends object>({ state, ...props }: {
         state.selectedItem.props.children
       }
     </div>
-  );
+  )
 }

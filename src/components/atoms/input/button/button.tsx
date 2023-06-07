@@ -2,6 +2,7 @@ import { type AriaButtonProps, useButton } from 'react-aria'
 import { type HTMLProps, useRef } from 'react'
 import { useFocusRing } from 'react-aria'
 import classNames from 'classnames'
+import React from 'react'
 //button react element props
 export function Button(props: { title?: string, color?: "gray" | "teal" | "red" } & AriaButtonProps & HTMLProps<HTMLButtonElement>): JSX.Element {
   const ref = useRef(null)

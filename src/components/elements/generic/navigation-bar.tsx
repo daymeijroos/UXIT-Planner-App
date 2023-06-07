@@ -1,5 +1,6 @@
 'use client'
 
+import React from 'react'
 import { Bell, Calendar, User, Tool } from "react-feather"
 import { useRouter, usePathname } from "next/navigation"
 import { Button } from "../../atoms/input/button"
@@ -25,7 +26,7 @@ export const NavigationBar = () => {
   }
 
   return (
-    <nav className="fixed bottom-0 flex justify-center w-full p-4">
+    <nav className="fixed bottom-0 flex justify-center w-full p-4 bg-blue-gray-400">
       <div className="flex w-full max-w-xl gap-4">
         <Button aria-label="Notificaties" title="Notificaties" color={path.notifications.active() ? "teal" : undefined} onPress={() => router.push(path.notifications.pathname)}>
           <Bell size="24" className="stroke-5/4" />

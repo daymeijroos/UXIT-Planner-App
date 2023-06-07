@@ -2,6 +2,7 @@ import { Button, Card, CardList, LoadingMessage, NavigationBar } from "../compon
 import { api } from "../utils/api"
 import { X } from "react-feather"
 import { useRouter } from "next/router"
+import React from 'react'
 
 const Index = () => {
   const notifications = api.notification.getAll.useQuery()

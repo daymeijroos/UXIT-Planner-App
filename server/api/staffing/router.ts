@@ -8,20 +8,28 @@ export const staffingRouter = createTRPCRouter({
   getStaffing: publicProcedure
     .input(z.object({
       fromDate: z.date().optional(),
-      days: z.number().optional(),
-    }).optional())
-    .query(({ ctx, input }) => {
-      return ctx.prisma.staffing.findMany({
+      limit: z.number().min(1).max(20).nullish(),
+      cursor: z.object({
+        id: z.string(),
+        shift: z.object({
+          start: z.date(),
+        }),
+      }).nullish(),
+    }))
+    .query(async ({ ctx, input }) => {
+      const limit = input?.limit || 7
+      const items = await ctx.prisma.staffing.findMany({
+        take: limit * 10,
         where: {
           shift: {
             start: {
-              gte: input?.fromDate || new Date(new Date().setHours(0, 0, 0, 0)),
+              gte: new Date((input.cursor?.shift.start || input?.fromDate || new Date()).setHours(0, 0, 0, 0) - ((limit + 1) * 24 * 60 * 60 * 1000)),
             },
-            end: {
-              lte: new Date(new Date().setDate(new Date().getDate() + (input?.days || 7))),
-            }
           }
         },
+        cursor: input?.cursor ? {
+          id: input.cursor.id,
+        } : undefined,
         include: {
           shift: {
             include: {
@@ -40,9 +48,28 @@ export const staffingRouter = createTRPCRouter({
           },
           shift_type: true,
         },
+        orderBy: {
+          shift: {
+            start: 'asc',
+          }
+        }
       })
-    }
-    ),
+      let nextCursor: { id: string, shift: { start: Date } } | undefined = undefined
+      if (items.length > limit) {
+        const nextItem = items.pop()
+        nextCursor = nextItem
+      }
+      let previousCursor: { id: string, shift: { start: Date } } | undefined = undefined
+      if (items.length > 0) {
+        const previousItem = items.shift()
+        previousCursor = previousItem
+      }
+      return {
+        items,
+        nextCursor,
+        previousCursor
+      }
+    }),
   getPersonalStaffing: protectedProcedure
     .input(z.object({
       fromDate: z.date().optional(),

@@ -1,5 +1,6 @@
 import toast, { type Toast } from "react-hot-toast"
 import { Info, X } from 'react-feather'
+import React from 'react'
 
 export const infoToast = (message: string) => {
   toast.custom((t: Toast) => (

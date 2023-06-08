@@ -1,25 +1,25 @@
-import Datepicker from "react-tailwindcss-datepicker";
-import React, { useState } from "react";
-import { Item } from "react-stately";
-import { Select } from "../../components/atoms/input/Selector";
-import { Button } from "../../components";
-import { api } from "../../utils/api";
+import Datepicker from "react-tailwindcss-datepicker"
+import React, { useState } from "react"
+import { Item } from "react-stately"
+import { Select } from "../../components/atoms/input/Selector"
+import { Button } from "../../components"
+import { api } from "../../utils/api"
+import type { DateValueType } from "react-tailwindcss-datepicker/dist/types"
 
 export default function Absence() {
-  const users = api.user.getAllUsers.useQuery();
+  const users = api.user.getAllUsers.useQuery()
 
-  const [value, setValue] = useState({
+  const [value, setValue] = useState<DateValueType>({
     startDate: new Date(),
     endDate: new Date(),
-  });
+  })
 
-  const handleValueChange = (newValue: any) => {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-    setValue(newValue);
-  };
+  const handleValueChange = (newValue: DateValueType) => {
+    setValue(newValue)
+  }
 
   if (users.isLoading) {
-    return <div>Loading...</div>;
+    return <div>Loading...</div>
   }
 
   return (
@@ -51,5 +51,5 @@ export default function Absence() {
         </div>
       </div>
     </div>
-  );
+  )
 }

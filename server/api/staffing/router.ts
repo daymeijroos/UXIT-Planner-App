@@ -123,14 +123,20 @@ export const staffingRouter = createTRPCRouter({
     .input(
       z.object({
         shift_id: z.string(),
-        user_id: z.string()
+        user_id: z.string(),
+        shift_type_name: z.string()
       }))
     .mutation(async ({ ctx, input }) => {
-      const shiftType: Shift_Type = await ctx.prisma.shift_Type.findUnique({
+      const shiftType = await ctx.prisma.shift_Type.findUnique({
         where: {
-            name: "Balie"
+          name: input.shift_type_name
         }
-      })
+      });
+
+      if (!shiftType) {
+        throw new Error(`Shift type with name ${input.shift_type_name} not found.`);
+      }
+
       return await ctx.prisma.staffing.create({
         data: {
           user_id: input.user_id,

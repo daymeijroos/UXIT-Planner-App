@@ -1,13 +1,14 @@
-import React, { useState } from "react"
-import { Button, NavigationBar, ToastService } from "../../components"
-import { api } from "../../utils/api"
-import { useAutoAnimate } from "@formkit/auto-animate/react"
+import React, { useState } from "react";
+import { Button, NavigationBar, ToastService } from "../../components";
+import { api } from "../../utils/api";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { Edit, Minimize2, Trash2 } from "react-feather";
-import { Select } from "../../components/atoms/input/Selector"
-import { Item } from "react-stately"
-import type { User } from "@prisma/client"
-import type { Shift } from "@prisma/client"
-import { Staffing } from "@prisma/client"
+import { Select } from "../../components/atoms/input/Selector";
+import { Item } from "react-stately";
+import type { User } from "@prisma/client";
+import type { ShiftWithStaffings } from "../../../server/types/shift";
+import type { Staffing } from "@prisma/client";
+import { prisma } from "../../../server/db";
 
 export default function Shiften() {
   const context = api.useContext()
@@ -40,9 +41,8 @@ export default function Shiften() {
   const availableUsers: User[] = []
 
   const shifts = api.shift.getAllShifts.useQuery()
-  const [expandedRow, setExpandedRow] = useState(null)
+  const [expandedRow, setExpandedRow] = useState<null | string>(null)
   const [staffingList] = useAutoAnimate()
-  const [tableRow] = useAutoAnimate()
 
   if (shifts.isLoading) {
     return <div>loading...</div>
@@ -52,16 +52,23 @@ export default function Shiften() {
     return <div>{shifts.error.message}</div>
   }
 
-  const expandRow = (shift: Shift) => {
+  const expandRow = (shift: ShiftWithStaffings) => {
     if (expandedRow === shift.id) {
       setExpandedRow(null)
     } else {
       setExpandedRow(shift.id)
       // logic here
-      const staffedUsers = []
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
-      shift.staffings?.map((staffing: Staffing) => {
-        staffedUsers.push(staffing.user)
+      const staffedUsers: User[] = []
+
+      shift.staffings?.map(async (staffing: Staffing) => {
+        const staffingWithUser = await prisma.staffing.findUnique({
+          where: { id: staffing.id },
+          include: { user: true }, // Include the associated user
+        });
+
+        if (staffingWithUser?.user) {
+          staffedUsers.push(staffingWithUser.user);
+        }
       })
       users.data?.map((user: User) => {
         if (!staffedUsers.some((staffedUser: User) => staffedUser.id === user.id)) {
@@ -91,12 +98,12 @@ export default function Shiften() {
   }
 
   const handleAddStaffing = (shiftId: string) => {
-    const spanContent = document.getElementById("userSpan").textContent
+    const spanContent = document.getElementById("userSpan")?.textContent ?? ""
     users.data?.map((user) => {
         if (spanContent === user.name) {
-          const selectedUserId = user.id
+          const selectedUserId: string = user.id
           try {
-            addStaffing({ user_id: selectedUserId, shift_id: shiftId })
+            addStaffing({ shift_type_name: "Balie", user_id: selectedUserId, shift_id: shiftId })
           } catch (error) {
             console.log(error)
           }
@@ -152,7 +159,7 @@ export default function Shiften() {
               )}
               {(expandedRow === shift.id) && (
                 <tr>
-                  <td colSpan="3">
+                  <td colSpan={3}>
                     <div className="p-4 relative">
                       <div className="flex flex-col justify-between mb-4">
                         <div className="flex flex-col mx-auto">

@@ -5,6 +5,7 @@ import { ToastService } from "../../components"
 import { useRouter } from "next/navigation";
 
 export default function Admin() {
+  const router = useRouter();
   const { mutateAsync: generateSchedule } = api.schedule.generate.useMutation({
     onSuccess: () => {
       ToastService.success("Het is gelukt!")
@@ -40,7 +41,6 @@ export default function Admin() {
     return <div>{unfulfilledShifts.error.message}</div>
   }
 
-  const router = useRouter();
   return (
     <>
       <Head>

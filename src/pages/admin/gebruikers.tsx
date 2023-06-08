@@ -13,10 +13,6 @@ const Gebruikers = () => {
     return <div>{users.error.message}</div>;
   }
 
-  const handleUserClick = (userId) => {
-    console.log(userId);
-  };
-
   return (
     <div className="p-4">
       <div className="flex justify-between items-center mb-4">
@@ -41,7 +37,7 @@ const Gebruikers = () => {
           <tbody className="bg-white divide-y divide-gray-200">
           {
             users.data?.map((user) => (
-              <tr key={user.id} className="hover:bg-gray-200 cursor-pointer" onClick={() => handleUserClick(user.id)}>
+              <tr key={user.id} className="hover:bg-gray-200 cursor-pointer">
                 <td className="px-6 py-4 whitespace-nowrap border border-black">
                   <div className="text-sm text-gray-900">{user.name}</div>
                 </td>

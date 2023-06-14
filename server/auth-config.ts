@@ -22,7 +22,7 @@ import { Role, RoleType } from "../prisma/role"
 
 declare module "next-auth/jwt" {
   interface JWT {
-    id?: string
+    id: string
     role?: RoleType
     first_name?: string
     last_name?: string
@@ -33,7 +33,7 @@ declare module "next-auth/jwt" {
 
 declare module "next-auth" {
   interface User {
-    id?: string
+    id: string
     first_name?: string
     last_name?: string
     email?: string

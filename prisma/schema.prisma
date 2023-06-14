@@ -107,11 +107,12 @@ model Role {
 
 model Shift {
   id             String           @id @default(cuid())
-  start          DateTime         @unique
+  start          DateTime
   end            DateTime
   staffings      Staffing[]
   staff_required Staff_Required[]
   Backup         Backup[]
+  @@unique([start, end])
 }
 
 model Staffing {

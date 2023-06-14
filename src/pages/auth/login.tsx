@@ -5,6 +5,7 @@ import { useRouter } from "next/router"
 import Image from "next/image"
 import Head from "next/head"
 import { TextField, Button } from "../../components"
+import React from 'react'
 
 export async function getServerSideProps() {
   return {

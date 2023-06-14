@@ -1,2 +1,2 @@
 export * from './weekView'
-export * from './calenderCell'
+export * from '../../../atoms/input/calendar/calender-cell'

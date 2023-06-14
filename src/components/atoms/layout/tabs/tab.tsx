@@ -3,6 +3,7 @@ import { useTab } from "react-aria"
 import type { TabListState } from "react-stately"
 import type { Node } from "@react-types/shared"
 import classNames from "classnames"
+import React from 'react'
 
 export function Tab<T extends object>({ item, state }: {
   item: Node<T>

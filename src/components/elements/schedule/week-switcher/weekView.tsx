@@ -3,12 +3,13 @@ import { useCalendar, useCalendarGrid } from "@react-aria/calendar"
 import { useLocale, useDateFormatter } from "@react-aria/i18n"
 import type { CalendarDate, DateValue } from "@internationalized/date"
 import { createCalendar } from "@internationalized/date"
-import { CalendarCell } from "./calenderCell"
+import { CalendarCell } from "../../../atoms/input/calendar/calender-cell"
 import type { AriaCalendarGridProps, AriaCalendarProps } from "react-aria"
 import { ChevronLeft, ChevronRight } from "react-feather"
 import { ButtonRound } from "../../../atoms"
+import React from 'react'
 
-export function WeekView<T extends DateValue>(props: AriaCalendarProps<T> & AriaCalendarGridProps) {
+export function WeekView<T extends DateValue>(props: AriaCalendarProps<T> & AriaCalendarGridProps & { onNextWeek?: () => void, onPrevWeek?: () => void }) {
   const { locale } = useLocale()
   const state = useCalendarState({
     ...props,
@@ -33,10 +34,12 @@ export function WeekView<T extends DateValue>(props: AriaCalendarProps<T> & Aria
 
   function nextWeek() {
     state.selectDate(state.value.add({ weeks: 1 }))
+    props.onNextWeek?.()
   }
 
   function prevWeek() {
     state.selectDate(state.value.subtract({ weeks: 1 }))
+    props.onPrevWeek?.()
   }
 
   return (

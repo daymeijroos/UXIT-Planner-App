@@ -41,7 +41,6 @@ model User {
   last_name     String?
   email         String?          @unique
   emailVerified DateTime?
-  image         String?
   role          Role             @relation(fields: [role_name], references: [name])
   role_name     String           @default("USER")
   preference    User_Preference?
@@ -112,6 +111,7 @@ model Shift {
   staffings      Staffing[]
   staff_required Staff_Required[]
   Backup         Backup[]
+
   @@unique([start, end])
 }
 

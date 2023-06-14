@@ -23,7 +23,7 @@ export const generateSchedule = async (fromDate: Date, toDate: Date) => {
           const isAbsent = checkUserAbsentDuringShift(user, shift)
           const reachedMax = checkReachedMaxStaffings(user, shift.start)
 
-          if (await alreadyStaffed || await isDefaultAvailable || await isAbsent || await reachedMax) {
+          if (!(await isDefaultAvailable) || await alreadyStaffed || await isAbsent || await reachedMax) {
             continue
           }
 

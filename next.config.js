@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 
 module.exports = {
-  /* config options here */
+  swcMinify: true,
+  output: "standalone",
 }

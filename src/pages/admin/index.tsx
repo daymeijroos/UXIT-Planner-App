@@ -2,9 +2,8 @@ import Head from "next/head"
 import { Button, NavigationBar, LoadingMessage } from "../../components"
 import { api } from "../../utils/api"
 import { ToastService } from "../../components"
-import { useRouter } from "next/navigation";
 import React from 'react'
-import { useRouter } from "next/router"
+import { useRouter } from "next/navigation"
 import { Calendar } from "react-feather"
 
 export default function Admin() {

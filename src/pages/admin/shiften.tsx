@@ -9,8 +9,9 @@ import type { User } from "@prisma/client";
 import type { ShiftWithStaffings } from "../../../server/types/shift";
 import type { Staffing } from "@prisma/client";
 import { prisma } from "../../../server/db";
+import { StaffingWithColleagues } from "../../types/StaffingWithColleagues";
 
-export default function Shiften() {
+const Shiften = () => {
   const context = api.useContext()
   const { mutate: removeSelectedStaffing } = api.staffing.removeStaffingAdmin.useMutation({
     onSuccess: () => {
@@ -57,19 +58,14 @@ export default function Shiften() {
       setExpandedRow(null)
     } else {
       setExpandedRow(shift.id)
-      // logic here
       const staffedUsers: User[] = []
 
-      shift.staffings?.map(async (staffing: Staffing) => {
-        const staffingWithUser = await prisma.staffing.findUnique({
-          where: { id: staffing.id },
-          include: { user: true }, // Include the associated user
-        });
-
-        if (staffingWithUser?.user) {
-          staffedUsers.push(staffingWithUser.user);
+      shift.staffings?.map((staffing: StaffingWithColleagues) => {
+        if(staffing?.user) {
+          staffedUsers.push(staffing.user)
         }
       })
+
       users.data?.map((user: User) => {
         if (!staffedUsers.some((staffedUser: User) => staffedUser.id === user.id)) {
           availableUsers.push(user)
@@ -241,3 +237,5 @@ export default function Shiften() {
     </div>
   )
 }
+
+export default Shiften;

@@ -1,7 +1,8 @@
 // absence export
 
 import { z } from "zod"
-import { publicProcedure, createTRPCRouter, protectedProcedure } from "../trpc"
+import { publicProcedure, createTRPCRouter, protectedProcedure, restrictedProcedure } from "../trpc";
+import { Role } from "../../../prisma/role";
 
 export const absenceRouter = createTRPCRouter({
   checkOut: protectedProcedure
@@ -66,4 +67,42 @@ export const absenceRouter = createTRPCRouter({
 
       return createdAbsence;
     }),
+
+  createAbsence: restrictedProcedure(Role.ADMIN)
+    .input(
+      z.object({
+        startDate: z.date(),
+        endDate: z.date(),
+        reason: z.string().optional(),
+        userId: z.string(),
+      })
+    )
+
+    .mutation(async ({ ctx, input }) => {
+
+      if (input.startDate > input.endDate) throw new Error("Start date cannot be after end date")
+
+      const user = await ctx.prisma.user.findUnique({
+        where: { id: input.userId }
+      })
+
+      const conflictingStaffings = await ctx.prisma.staffing.findMany({
+        where: {user_id: input.userId, shift: {start: {lte: input.endDate}, end: {gte: input.startDate}}}
+      })
+
+      if (conflictingStaffings.length > 0) throw new Error("User is already staffed during this period")
+
+
+      const createAbsencePeriod = await ctx.prisma.absence.create({
+        data: {
+          startDate: input.startDate,
+          endDate: input.endDate,
+          reason: input.reason,
+          userId: input.userId
+        }
+      })
+
+    }),
+
+
 })

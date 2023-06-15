@@ -1,18 +1,47 @@
 import Datepicker from "react-tailwindcss-datepicker"
 import React, { useState } from "react"
 import { Item } from "react-stately"
-import { Select } from "../../components/atoms/input/Selector"
-import { Button } from "../../components"
+import { Button, ToastService, Select } from "../../components"
 import { api } from "../../utils/api"
 import type { DateValueType } from "react-tailwindcss-datepicker/dist/types"
+import { User } from "@prisma/client";
+import { useRouter } from "next/router";
 
 export default function Absence() {
-  const users = api.user.getAllUsers.useQuery()
-
+  const router = useRouter()
+  const users = api.user.getAllUsers.useQuery();
+  const { mutate: createAbsence } = api.absence.createAbsence.useMutation(
+    {
+      onSuccess: () => {
+        ToastService.success("De absentie is verwerkt")
+        router.push("/").catch((error) => {
+          console.error(error)
+        })
+      },
+      onError: (error) => {
+        console.log(error);
+        ToastService.error(error.message)
+      }
+    }
+  );
   const [value, setValue] = useState<DateValueType>({
     startDate: new Date(),
     endDate: new Date(),
   })
+
+  const [userValue, setUserValue] = useState<User>();
+
+
+
+  const handleAbsence = () => {
+    if (!userValue) return
+    createAbsence({
+      startDate: value.startDate,
+      endDate: value.endDate,
+      userId: userValue?.id
+    })
+  }
+
 
   const handleValueChange = (newValue: DateValueType) => {
     setValue(newValue)
@@ -28,8 +57,10 @@ export default function Absence() {
         <h1>Absentie Verwerken</h1>
 
         <div className={"mt-5"}>
-          <Select label="Medewerker / Vrijwilliger" items={users.data}>
-            {(item) => <Item>{item.name}</Item>}
+          <Select label="Medewerker / Vrijwilliger" items={users.data} onSelectionChange={(item) => {
+            setUserValue(users.data?.find((u) => u.id === item))
+          }}>
+            {(item) => <Item key={item.id}>{item.name}</Item>}
           </Select>
         </div>
         <div className={"mt-5"}>
@@ -47,7 +78,8 @@ export default function Absence() {
           />
         </div>
         <div className={"pt-5"}>
-          <Button color={"teal"}>Verwerk Absentie</Button>
+          <Button color={"teal"} onPress={() => {handleAbsence()}
+          } >Verwerk Absentie</Button>
         </div>
       </div>
     </div>

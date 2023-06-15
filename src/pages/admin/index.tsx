@@ -57,7 +57,11 @@ export default function Admin() {
             <Button>Voorkeur aanpassen</Button>
             <Button>Beschikbaarheid aanpassen</Button>
             <Button>Werkuren aanpassen</Button>
-            <Button>Verlof aangeven</Button>
+            <Button onPress={() => {
+              router.push("/admin/absence").catch((error) => {
+                console.error(error)
+              })
+            }}> Verlof aangeven</Button>
             <Button>Inwerken inroosteren</Button>
           </div>
           <h2>Uitbreiding</h2>

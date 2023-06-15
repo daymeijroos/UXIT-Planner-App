@@ -18,7 +18,6 @@ export const appRouter = createTRPCRouter({
   absence: absenceRouter,
   shift: shiftRouter,
   notification: notificationRouter,
-  user: userRouter,
 })
 
 export type AppRouter = typeof appRouter

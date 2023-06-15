@@ -47,10 +47,7 @@ export default function Admin() {
           <div className="grid w-full grid-cols-2 gap-4">
             <div className="col-span-2">
               <Button color="teal" onPress={() => {
-                router.push("/admin/genereer-rooster").catch((error) => {
-                  console.error(error)
-                })
-              }}>
+                router.push("/admin/genereer-rooster")}}>
                 <h4>Genereer Rooster</h4>
                 <Calendar size="24" className="ml-2 stroke-2" />
               </Button>

@@ -7,9 +7,7 @@ import { Select } from "../../components/atoms/input/Selector";
 import { Item } from "react-stately";
 import type { User } from "@prisma/client";
 import type { ShiftWithStaffings } from "../../../server/types/shift";
-import type { Staffing } from "@prisma/client";
-import { prisma } from "../../../server/db";
-import { StaffingWithColleagues } from "../../types/StaffingWithColleagues";
+import type { StaffingWithColleagues } from "../../types/StaffingWithColleagues";
 
 const Shiften = () => {
   const context = api.useContext()
@@ -38,8 +36,8 @@ const Shiften = () => {
     }
   })
 
-  const users = api.user.getUsersWithPreferencesAndStaffings.useQuery()
-  const availableUsers: User[] = []
+  const users: User[] = api.user.getUsersWithPreferencesAndStaffings.useQuery()
+  let availableUsers: User[]
 
   const shifts = api.shift.getAllShifts.useQuery()
   const [expandedRow, setExpandedRow] = useState<null | string>(null)
@@ -54,6 +52,7 @@ const Shiften = () => {
   }
 
   const expandRow = (shift: ShiftWithStaffings) => {
+    availableUsers = []
     if (expandedRow === shift.id) {
       setExpandedRow(null)
     } else {
@@ -73,6 +72,8 @@ const Shiften = () => {
       })
     }
     console.log(expandedRow);
+    console.log(users.data);
+    console.log(availableUsers)
   }
 
   const handleRemoveStaffing = (staffingId: string) => {
@@ -219,7 +220,7 @@ const Shiften = () => {
                       </div>
                       <div className="mb-4">
                         {/*// TODO needs to be availableUsers*/}
-                        <Select label="Medewerker / Vrijwilliger" items={users.data}>
+                        <Select label="Medewerker / Vrijwilliger" items={availableUsers.data}>
                           {(item) => <Item>{item.name}</Item>}
                         </Select>
                       </div>
@@ -238,4 +239,4 @@ const Shiften = () => {
   )
 }
 
-export default Shiften;
+export default Shiften

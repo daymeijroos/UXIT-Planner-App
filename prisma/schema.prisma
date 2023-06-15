@@ -61,33 +61,50 @@ model VerificationToken {
 
 model User_Preference {
   id                String             @id @default(cuid())
-  maxStaffings      Int
   shift_type_id     String
   user_id           String             @unique
   shift_type        Shift_Type         @relation(fields: [shift_type_id], references: [id])
   absence           Absence[]
-  availability_week AvailabilityWeek[]
+  evenWeek          EvenWeek           @relation(fields: [evenWeek_id], references: [id])
+  evenWeek_id       String             @unique
+  oddWeek           OddWeek?
+  reservationWeek   ReservationWeek?
   user              User               @relation(fields: [user_id], references: [id])
 }
 
-model AvailabilityWeek {
-  id            String          @id @default(cuid())
-  sequence      Int
-  preference_id String
-  preference    User_Preference @relation(fields: [preference_id], references: [id])
-  availability  Availability[]
 
-  @@unique([sequence, preference_id])
+model EvenWeek {
+  id            String          @id @default(cuid())
+  preference    User_Preference?
+  availability  Availability[]
+}
+
+model OddWeek {
+  id            String          @id @default(cuid())
+  preference    User_Preference @relation(fields: [preference_id], references: [id])
+  preference_id String          @unique
+  availability  Availability[]
+}
+
+model ReservationWeek {
+  id            String          @id @default(cuid())
+  preference    User_Preference @relation(fields: [preference_id], references: [id])
+  preference_id String          @unique
+  availability  Availability[]
 }
 
 model Availability {
   id                   String           @id @default(cuid())
   weekday              Int
-  availability_week_id String
-  availability_week    AvailabilityWeek @relation(fields: [availability_week_id], references: [id])
+  even_week_id         String?
+  even_week            EvenWeek?         @relation(fields: [even_week_id], references: [id])
+  odd_week_id          String?
+  odd_week             OddWeek?          @relation(fields: [odd_week_id], references: [id])
+  reservation_week_id  String?
+  reservation_week     ReservationWeek? @relation(fields: [reservation_week_id], references: [id])
   shift_types          Shift_Type[]
 
-  @@unique([weekday, availability_week_id])
+  @@unique([weekday, even_week_id, odd_week_id, reservation_week_id])
 }
 
 model Absence {
@@ -112,6 +129,7 @@ model Shift {
   staffings      Staffing[]
   staff_required Staff_Required[]
   Backup         Backup[]
+  isOpen         Boolean          @default(true)
   @@unique([start, end])
 }
 

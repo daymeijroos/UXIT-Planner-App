@@ -3,7 +3,6 @@ import { createBackup, getFirstBackupOnDate } from "../backup"
 import { getShifts } from "../shift"
 import { createStaffing } from "../staffing"
 import { getUsersWithPreferencesAndStaffings } from "../user"
-
 import { checkEnoughBackupStaff, checkReachedMaxStaffings, checkUserAbsent, checkUserAbsentDuringShift, checkUserAlreadyStaffed, checkUserAlreadyStaffedDuringShift, checkUserAvailability, checkUserAvailabilityForShiftType } from "./checks"
 
 export const generateSchedule = async (fromDate: Date, toDate: Date) => {

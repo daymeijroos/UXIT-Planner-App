@@ -46,9 +46,16 @@ async function main() {
     }
   })
 
+  const shiftType3 = await prisma.shift_Type.create({
+    data: {
+      name: "Inwerken",
+      description: "Een nieuwe vrijwilliger wordt ingewerkt."
+    }
+  })
 
 
-  console.log("Shift Types created: ", shiftType1, shiftType2)
+
+  console.log("Shift Types created: ", shiftType1, shiftType2, shiftType3)
 
   // mockdata voor gebruikers, voorkeuren en standaard beschikbaarheid
   // user 1: robert swarts, elke dag, max 2x

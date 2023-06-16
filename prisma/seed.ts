@@ -78,6 +78,100 @@ async function main() {
     }
   })
 
+  const mockUser1 = await prisma.user.create({
+    data: {
+      name: "Ronja",
+      last_name: "van Boxtel",
+      email: "example@gmail.com",
+      role: {
+        connect: {
+          name: Role.USER
+        }
+      },
+      preference: {
+        create: {
+          shift_type: {
+            connect: {
+              id: shiftType1.id
+            }
+          },
+          availability_even_week: {
+            create: {
+              availability: {
+                create: [
+                  {
+                    weekday: Weekday.SUNDAY,
+                    shift_types: {
+                      connect: {
+                        id: shiftType1.id
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          availability_odd_week: {
+            create: {
+              availability: {
+                create: [
+                  {
+                    weekday: Weekday.THURSDAY,
+                    shift_types: {
+                      connect: {
+                        id: shiftType1.id
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          availability_flexible: {
+            create: {
+              availability: {
+                create: [
+                  {
+                    weekday: Weekday.TUESDAY,
+                    shift_types: {
+                      connect: {
+                        id: shiftType1.id
+                      }
+                    }
+                  },
+                  {
+                    weekday: Weekday.WEDNESDAY,
+                    shift_types: {
+                      connect: {
+                        id: shiftType1.id
+                      }
+                    }
+                  },
+                  {
+                    weekday: Weekday.FRIDAY,
+                    shift_types: {
+                      connect: {
+                        id: shiftType1.id
+                      }
+                    }
+                  },
+                  {
+                    weekday: Weekday.SATURDAY,
+                    shift_types: {
+                      connect: {
+                        id: shiftType1.id
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          },
+        }
+      }
+    }
+  })
+
   // const mockUser1 = await prisma.user.create({
   //   data: {
   //     name: "Ronja",

@@ -11,6 +11,8 @@ import { checkEnoughBackupStaff, checkUserAbsent, checkUserAbsentDuringShift, ch
 
 export const generateSchedule = async (fromDate: Date, toDate: Date) => {
   await generateShiftSchedule(fromDate, toDate)
+  //Two backups per day needed💀
+  await generateBackupSchedule(fromDate, toDate)
   await generateBackupSchedule(fromDate, toDate)
   return
 }

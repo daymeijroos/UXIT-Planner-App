@@ -1,13 +1,14 @@
-import { signIn, signOut, useSession } from "next-auth/react";
-import { Button } from "../aria/button";
+import { signIn, signOut, useSession } from "next-auth/react"
+import { Button } from "../atoms/input/button"
+import React from 'react'
 
 const LoginExample: React.FC = () => {
-  const { data: sessionData } = useSession();
+  const { data: sessionData, status } = useSession()
 
   //make it with an unstyled Button element
   return (
     <>
-      {sessionData && <div>Logged in as {sessionData.user.email}</div>}
+      {status === "authenticated" && <div>Logged in as {sessionData.user?.email} - {sessionData.user?.name} </div>}
       <Button onPress={sessionData ? () => void signOut() : () => void signIn()}>
         {sessionData ? "Sign out" : "Sign in"}
       </Button>

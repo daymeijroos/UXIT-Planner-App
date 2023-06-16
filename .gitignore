@@ -48,3 +48,6 @@ next-env.d.ts
 
 /prisma/db.sqlite
 prisma/db.sqlite-journal
+
+.idea
+.vscode

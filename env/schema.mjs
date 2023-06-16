@@ -19,12 +19,15 @@ export const serverSchema = z.object({
     // VERCEL_URL doesn't include `https` so it cant be validated as a URL
     process.env.VERCEL ? z.string() : z.string().url(),
   ),
-  GOOGLE_CLIENT_ID: z.string(),
-  GOOGLE_CLIENT_SECRET: z.string(),
-  GITHUB_CLIENT_ID: z.string(),
-  GITHUB_CLIENT_SECRET: z.string(),
-  DISCORD_CLIENT_ID: z.string(),
-  DISCORD_CLIENT_SECRET: z.string(),
+  EMAIL_SERVER_USER: z.string().email(),
+  EMAIL_SERVER_PASSWORD: z.string(),
+  EMAIL_SERVER_HOST: z.string(),
+  EMAIL_SERVER_PORT: z.string(),
+  EMAIL_FROM: z.string().email(),
+  ADMIN_EMAIL: z.string().email(),
+  ONESIGNAL_APP_ID: z.string(),
+  ONESIGNAL_USER_KEY: z.string(),
+  ONESIGNAL_APP_API_KEY: z.string(),
 });
 
 /**
@@ -37,12 +40,15 @@ export const serverEnv = {
   NODE_ENV: process.env.NODE_ENV,
   NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
   NEXTAUTH_URL: process.env.NEXTAUTH_URL,
-  GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
-  GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
-  GITHUB_CLIENT_ID: process.env.GITHUB_CLIENT_ID,
-  GITHUB_CLIENT_SECRET: process.env.GITHUB_CLIENT_SECRET,
-  DISCORD_CLIENT_ID: process.env.DISCORD_CLIENT_ID,
-  DISCORD_CLIENT_SECRET: process.env.DISCORD_CLIENT_SECRET,
+  EMAIL_SERVER_USER: process.env.EMAIL_SERVER_USER,
+  EMAIL_SERVER_PASSWORD: process.env.EMAIL_SERVER_PASSWORD,
+  EMAIL_SERVER_HOST: process.env.EMAIL_SERVER_HOST,
+  EMAIL_SERVER_PORT: process.env.EMAIL_SERVER_PORT,
+  EMAIL_FROM: process.env.EMAIL_FROM,
+  ADMIN_EMAIL: process.env.ADMIN_EMAIL,
+  ONESIGNAL_APP_ID: process.env.NEXT_PUBLIC_ONESIGNAL_APP_ID,
+  ONESIGNAL_USER_KEY: process.env.ONESIGNAL_USER_KEY,
+  ONESIGNAL_APP_API_KEY: process.env.ONESIGNAL_APP_API_KEY,
 };
 
 /**
@@ -53,6 +59,8 @@ export const serverEnv = {
 export const clientSchema = z.object({
   NEXT_PUBLIC_APP_URL: z.string().url(),
   NEXT_PUBLIC_APP_PORT: z.string(),
+  NEXT_PUBLIC_ONESIGNAL_APP_ID: z.string(),
+  NEXT_PUBLIC_ONESIGNAL_SAFARI_KEY: z.string(),
 });
 
 /**
@@ -64,4 +72,6 @@ export const clientSchema = z.object({
 export const clientEnv = {
   NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
   NEXT_PUBLIC_APP_PORT: process.env.NEXT_PUBLIC_APP_PORT,
+  NEXT_PUBLIC_ONESIGNAL_APP_ID: process.env.NEXT_PUBLIC_ONESIGNAL_APP_ID,
+  NEXT_PUBLIC_ONESIGNAL_SAFARI_KEY: process.env.NEXT_PUBLIC_ONESIGNAL_SAFARI_KEY,
 };

@@ -1,18 +1,21 @@
-import { createTRPCRouter } from "./trpc";
-import { exampleRouter } from "./example/exampleRouter";
-import { scheduleRouter } from "./schedule/schedule";
-import { staffingRouter } from "./userRouters/staffing";
+import { createTRPCRouter } from "./trpc"
+import { scheduleRouter } from "./schedule/"
+import { staffingRouter } from "./staffing"
+import { staffRequiredRouter } from "./staff-required"
+import { availabilityRouter } from "./availability"
+import { absenceRouter } from "./absence/absence"
+import { notificationRouter } from "./notification"
+import { userRouter } from "./user"
 
-/**
- * This is the primary router for your server.
- *
- * All routers added in /api/routers should be manually added here
- */
+
 export const appRouter = createTRPCRouter({
-  example: exampleRouter,
   schedule: scheduleRouter,
   staffing: staffingRouter,
-});
+  staffRequired: staffRequiredRouter,
+  availability: availabilityRouter,
+  absence: absenceRouter,
+  notification: notificationRouter,
+  user: userRouter,
+})
 
-// export type definition of API
-export type AppRouter = typeof appRouter;
+export type AppRouter = typeof appRouter

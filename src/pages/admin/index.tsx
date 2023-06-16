@@ -1,5 +1,5 @@
 import Head from "next/head"
-import { Button, NavigationBar, LoadingMessage } from "../../components"
+import { Button, NavigationBar } from "../../components"
 import { api } from "../../utils/api"
 import { ToastService } from "../../components"
 import React from 'react'

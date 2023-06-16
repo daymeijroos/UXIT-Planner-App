@@ -94,17 +94,17 @@ model AvailabilityFlexible {
 }
 
 model Availability {
-  id                         String                @id @default(cuid())
-  weekday                    Int
-  availability_even_week     AvailabilityEvenWeek? @relation(fields: [availability_even_week_id], references: [id])
-  availability_even_week_id  String?
-  availability_odd_week      AvailabilityOddWeek?  @relation(fields: [availability_odd_week_id], references: [id])
-  availability_odd_week_id   String?
-  availability_flexible_week AvailabilityFlexible? @relation(fields: [availability_even_week_id], references: [id])
-  availability_flexible_id   String?
-  shift_types                Shift_Type[]
+  id                            String                @id @default(cuid())
+  weekday                       Int
+  availability_even_week        AvailabilityEvenWeek? @relation(fields: [availability_even_week_id], references: [id])
+  availability_even_week_id     String?
+  availability_odd_week         AvailabilityOddWeek?  @relation(fields: [availability_odd_week_id], references: [id])
+  availability_odd_week_id      String?
+  availability_flexible_week    AvailabilityFlexible? @relation(fields: [availability_flexible_week_id], references: [id])
+  availability_flexible_week_id String?
+  shift_types                   Shift_Type[]
 
-  @@unique([weekday, availability_even_week_id, availability_odd_week_id, availability_flexible_id])
+  @@unique([weekday, availability_even_week_id, availability_odd_week_id, availability_flexible_week_id])
 }
 
 model Absence {

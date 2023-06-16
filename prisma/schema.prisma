@@ -152,8 +152,6 @@ model OpenStaffing {
   shift_type_id String
   shift         Shift      @relation(fields: [shift_id], references: [id])
   shift_type    Shift_Type @relation(fields: [shift_type_id], references: [id])
-
-  @@unique([shift_id, shift_type_id])
 }
 
 model Backup {

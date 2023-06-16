@@ -1,5 +1,4 @@
-import { Staffing } from '@prisma/client'
-import { OpenStaffing } from '@prisma/client'
+import { Staffing, OpenStaffing } from '@prisma/client'
 import { ShiftWithStaffingDetails } from "../../types/shift"
 import { UserWithPreferenceAndStaffings } from "../../types/user"
 import { createBackup, getFirstBackupOnDate } from "../backup"
@@ -7,7 +6,8 @@ import { getShifts } from "../shift"
 import { createOpenStaffing, createStaffing } from "../staffing"
 import { getUsersWithPreferencesAndStaffings } from "../user"
 
-import { checkEnoughBackupStaff, checkUserAbsent, checkUserAbsentDuringShift, checkUserAlreadyStaffed, checkUserAlreadyStaffedDuringShift, checkUserAvailabilityForShiftType, checkUserFlexibleAvailability, checkUserFlexibleAvailabilityForShiftType } from "./checks"
+import { checkEnoughBackupStaff, checkUserAbsent, checkUserAbsentDuringShift, checkUserAlreadyStaffed, checkUserAlreadyStaffedDuringShift, checkUserAlreadyStaffedForDays, checkUserAvailabilityForShiftType, checkUserFlexibleAvailability, checkUserFlexibleAvailabilityForShiftType, shiftHasEnoughOpenStaffings } from "./checks"
+import { findFirstOpenStaffingForShift } from '../open-staffing'
 
 export const generateSchedule = async (fromDate: Date, toDate: Date): Promise<void> => {
   await generateShiftSchedule(fromDate, toDate)
@@ -26,13 +26,18 @@ const generateShiftSchedule = async (fromDate: Date, toDate: Date): Promise<void
   for (const shift of shifts) {
     for (const staff_required of shift.staff_required) {
       const shiftRequiresStaffAmount = staff_required.amount - shift.staffings.length
-      const openStaffing: OpenStaffing = await createOpenStaffing(shift, staff_required.shift_type)
       for (let i = 1; i <= shiftRequiresStaffAmount; i++) {
+        let openStaffing: OpenStaffing | undefined | null
+        if (!shiftHasEnoughOpenStaffings(shift, staff_required.shift_type)) {
+          openStaffing = await findFirstOpenStaffingForShift(shift, staff_required.shift_type)
+        }
+        if (openStaffing === undefined || openStaffing === null) openStaffing = await createOpenStaffing(shift, staff_required.shift_type)
+
         let staffing: Staffing | undefined
         for (const user of users) {
-          const isDefaultAvailable = checkUserAvailabilityForShiftType(user, staff_required.shift_type, shift.start)
-          const alreadyStaffed = checkUserAlreadyStaffedDuringShift(user, shift)
-          const isAbsent = checkUserAbsentDuringShift(user, shift)
+          const isDefaultAvailable: boolean = await checkUserAvailabilityForShiftType(user, staff_required.shift_type, shift.start)
+          const alreadyStaffed: boolean = await checkUserAlreadyStaffedForDays(user, shift.start, shift.end)
+          const isAbsent: boolean = await checkUserAbsentDuringShift(user, shift)
 
           if (!(await isDefaultAvailable) || await alreadyStaffed || await isAbsent) {
             continue

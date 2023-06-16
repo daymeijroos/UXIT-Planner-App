@@ -1,4 +1,4 @@
-import { Staffing, User } from '@prisma/client'
+import { Shift, Staffing, User } from '@prisma/client'
 import { prisma } from "../../db"
 import { SplitDate } from '../../../shared/types/splitDate'
 import { UserWithPreferenceAndStaffings } from '../../types/user'
@@ -59,7 +59,7 @@ export async function getUserStaffingsForWeek(user: User, start: SplitDate): Pro
   })
 }
 
-export async function getUserStaffings(user: User, from: Date, to: Date): Promise<Staffing[]> {
+export async function getUserStaffings(user: User, from: Date, to: Date): Promise<(Staffing & { shift: Shift })[]> {
   return prisma.staffing.findMany({
     where: {
       user_id: user.id,
@@ -72,5 +72,8 @@ export async function getUserStaffings(user: User, from: Date, to: Date): Promis
         },
       },
     },
+    include: {
+      shift: true
+    }
   })
 }

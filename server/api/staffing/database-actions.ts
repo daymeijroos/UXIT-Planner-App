@@ -2,7 +2,7 @@ import { prisma } from "../../db"
 import type { OpenStaffing, Shift, Shift_Type, Staffing, User } from "@prisma/client"
 
 export const createStaffing = async (user: User, openStaffing: OpenStaffing): Promise<Staffing> => {
-  return prisma.staffing.create({
+  const staffing = await prisma.staffing.create({
     data: {
       shift: {
         connect: {
@@ -21,6 +21,12 @@ export const createStaffing = async (user: User, openStaffing: OpenStaffing): Pr
       }
     },
   })
+  if (staffing) prisma.openStaffing.delete({
+    where: {
+      id: openStaffing.id
+    }
+  })
+  return staffing
 }
 
 export const createOpenStaffing = async (shift: Shift, shiftType: Shift_Type): Promise<OpenStaffing> => {

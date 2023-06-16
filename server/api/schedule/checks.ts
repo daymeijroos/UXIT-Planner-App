@@ -1,26 +1,40 @@
-import { Shift, Shift_Type } from "@prisma/client"
-import { SplitDate } from "../../../shared/types/splitDate"
-import { getAvailabilityForDate } from "../availability"
-import { getUserStaffings, getUserStaffingsForWeek } from "../user/database-actions"
 import { getBackupsOnDate } from "../backup"
+import { getUserStaffings } from "../user/database-actions"
+import { AvailabilityEvenWeek, AvailabilityFlexible, AvailabilityOddWeek, Shift, Shift_Type } from "@prisma/client"
+import { SplitDate } from "../../../shared/types/splitDate"
 import { UserWithPreferenceAndStaffings } from "../../types/user"
+import { getWeekNumber } from './helper-functions'
+import { AvailabilityEvenWeekWithAvailability, AvailabilityFlexibleWithAvailability, AvailabilityOddWeekWithAvailability, AvailabilityWithShiftTypes } from "../../types/availability"
 
-export const checkUserAvailability = async (user: UserWithPreferenceAndStaffings, on: Date) => {
-  if (!user.preference) return false
-  const onSplit = SplitDate.fromDate(on)
-
-  const availibility = await getAvailabilityForDate(user.preference.availability_week, onSplit)
-  return !!availibility
+export const checkUserFlexibleAvailability = (user: UserWithPreferenceAndStaffings, on: Date): boolean => {
+  if (!(user.preference && user.preference.availability_flexible)) return false
+  let availability: AvailabilityFlexibleWithAvailability = user.preference.availability_flexible
+  const dayOfWeek: number = on.getDay()
+  const availabilityForDay: AvailabilityWithShiftTypes | undefined = availability.availability.find((availability) => availability.weekday === dayOfWeek)
+  return !!availabilityForDay
 }
 
-export const checkUserAvailabilityForShiftType = async (user: UserWithPreferenceAndStaffings, shiftType: Shift_Type, on: Date) => {
-  if (!user.preference) return false
-  const onSplit = SplitDate.fromDate(on)
+export const checkUserFlexibleAvailabilityForShiftType = (user: UserWithPreferenceAndStaffings, shiftType: Shift_Type, on: Date) => {
+  if (!(user.preference && user.preference.availability_flexible)) return false
+  let availability: AvailabilityFlexibleWithAvailability = user.preference.availability_flexible
+  const dayOfWeek: number = on.getDay()
+  const availabilityForDay: AvailabilityWithShiftTypes | undefined = availability.availability.find((availability) => availability.weekday === dayOfWeek)
+  const isAvailable: boolean = availabilityForDay?.shift_types.includes(shiftType) ?? false
+  return isAvailable
+}
 
-  const availibility = await getAvailabilityForDate(user.preference.availability_week, onSplit)
-  if (!availibility) return false
-  if (!availibility.shift_types.find((st) => st.id === shiftType.id)) return false
-  return true
+export const checkUserAvailabilityForShiftType = (user: UserWithPreferenceAndStaffings, shiftType: Shift_Type, on: Date): boolean => {
+  if (!user.preference) return false
+  let availability: AvailabilityEvenWeekWithAvailability | AvailabilityOddWeekWithAvailability = user.preference.availability_even_week
+  if (user.preference.availability_odd_week) {
+    const weekNumber: number = getWeekNumber(on)
+    const isOddWeek: boolean = weekNumber % 2 === 1
+    if (isOddWeek) availability = user.preference.availability_odd_week
+  }
+  const dayOfWeek: number = on.getDay()
+  const availabilityForDay: AvailabilityWithShiftTypes | undefined = availability.availability.find((availability) => availability.weekday === dayOfWeek)
+  const isAvailable: boolean = availabilityForDay?.shift_types.includes(shiftType) ?? false
+  return isAvailable
 }
 
 export const checkUserAbsent = (user: UserWithPreferenceAndStaffings, from: Date, to: Date) => {
@@ -35,15 +49,6 @@ export const checkUserAbsent = (user: UserWithPreferenceAndStaffings, from: Date
 
 export const checkUserAbsentDuringShift = async (user: UserWithPreferenceAndStaffings, shift: Shift) => {
   return checkUserAbsent(user, shift.start, shift.end)
-}
-
-export const checkReachedMaxStaffings = async (user: UserWithPreferenceAndStaffings, start: Date) => {
-  const startSplit = SplitDate.fromDate(start)
-  const maxStaffings = user.preference?.maxStaffings || 0
-  const amountStaffed = await getUserStaffingsForWeek(user, startSplit)
-  if (maxStaffings === 0) return false
-  if (amountStaffed < maxStaffings) return false
-  return true
 }
 
 export const checkUserAlreadyStaffed = async (user: UserWithPreferenceAndStaffings, from: Date, to: Date): Promise<boolean> => {

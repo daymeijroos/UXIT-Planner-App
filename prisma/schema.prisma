@@ -27,6 +27,7 @@ model Account {
   @@unique([provider, providerAccountId])
 }
 
+// Necessary for Next auth
 model Session {
   id           String   @id @default(cuid())
   sessionToken String   @unique
@@ -60,33 +61,32 @@ model VerificationToken {
 }
 
 model User_Preference {
-  id                String             @id @default(cuid())
-  shift_type_id     String
-  user_id           String             @unique
-  shift_type        Shift_Type         @relation(fields: [shift_type_id], references: [id])
-  absence           Absence[]
-  evenWeek          EvenWeek           @relation(fields: [evenWeek_id], references: [id])
-  evenWeek_id       String             @unique
-  oddWeek           OddWeek?
-  reservationWeek   ReservationWeek?
-  user              User               @relation(fields: [user_id], references: [id])
+  id                        String                @id @default(cuid())
+  shift_type_id             String
+  user_id                   String                @unique
+  shift_type                Shift_Type            @relation(fields: [shift_type_id], references: [id])
+  absence                   Absence[]
+  availability_even_week    AvailabilityEvenWeek  @relation(fields: [availability_even_week_id], references: [id])
+  availability_even_week_id String                @unique
+  availability_odd_week     AvailabilityOddWeek?
+  availability_flexible     AvailabilityFlexible?
+  user                      User                  @relation(fields: [user_id], references: [id])
 }
 
-
-model EvenWeek {
-  id            String          @id @default(cuid())
-  preference    User_Preference?
-  availability  Availability[]
+model AvailabilityEvenWeek {
+  id           String           @id @default(cuid())
+  preference   User_Preference?
+  availability Availability[]
 }
 
-model OddWeek {
+model AvailabilityOddWeek {
   id            String          @id @default(cuid())
   preference    User_Preference @relation(fields: [preference_id], references: [id])
   preference_id String          @unique
   availability  Availability[]
 }
 
-model ReservationWeek {
+model AvailabilityFlexible {
   id            String          @id @default(cuid())
   preference    User_Preference @relation(fields: [preference_id], references: [id])
   preference_id String          @unique
@@ -94,17 +94,15 @@ model ReservationWeek {
 }
 
 model Availability {
-  id                   String           @id @default(cuid())
-  weekday              Int
-  even_week_id         String?
-  even_week            EvenWeek?         @relation(fields: [even_week_id], references: [id])
-  odd_week_id          String?
-  odd_week             OddWeek?          @relation(fields: [odd_week_id], references: [id])
-  reservation_week_id  String?
-  reservation_week     ReservationWeek? @relation(fields: [reservation_week_id], references: [id])
-  shift_types          Shift_Type[]
+  id                         String                @id @default(cuid())
+  weekday                    Int
+  availability_even_week     AvailabilityEvenWeek? @relation(fields: [availability_id], references: [id])
+  availability_odd_week      AvailabilityOddWeek?  @relation(fields: [availability_id], references: [id])
+  availability_flexible_week AvailabilityFlexible? @relation(fields: [availability_id], references: [id])
+  availability_id            String?
+  shift_types                Shift_Type[]
 
-  @@unique([weekday, even_week_id, odd_week_id, reservation_week_id])
+  @@unique([weekday, availability_id])
 }
 
 model Absence {
@@ -129,7 +127,8 @@ model Shift {
   staffings      Staffing[]
   staff_required Staff_Required[]
   Backup         Backup[]
-  isOpen         Boolean          @default(true)
+  open_staffings OpenStaffing[]
+
   @@unique([start, end])
 }
 
@@ -143,6 +142,16 @@ model Staffing {
   user          User       @relation(fields: [user_id], references: [id])
 
   @@unique([shift_id, user_id])
+}
+
+model OpenStaffing {
+  id            String     @id @default(cuid())
+  shift_id      String
+  shift_type_id String
+  shift         Shift      @relation(fields: [shift_id], references: [id])
+  shift_type    Shift_Type @relation(fields: [shift_type_id], references: [id])
+
+  @@unique([shift_id, shift_type_id])
 }
 
 model Backup {
@@ -176,4 +185,5 @@ model Shift_Type {
   staffings        Staffing[]
   staff_required   Staff_Required[]
   user_preferences User_Preference[]
+  open_staffing    OpenStaffing[]
 }

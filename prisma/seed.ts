@@ -74,122 +74,9 @@ async function main() {
         connect: {
           name: Role.ADMIN
         }
-      },
-      preference: {
-        create: {
-          shift_type: {
-            connect: {
-              id: shiftType1.id
-            }
-          },
-          evenWeek: {
-            create: {
-              availability: {
-                create: [
-                  {
-                    weekday: Weekday.MONDAY,
-                    shift_types: {
-                      connect: {
-                        id: shiftType1.id
-                      }
-                    }
-                  },
-                  {
-                    weekday: Weekday.TUESDAY,
-                    shift_types: {
-                      connect: {
-                        id: shiftType1.id
-                      }
-                    }
-                  },
-                  {
-                    weekday: Weekday.WEDNESDAY,
-                    shift_types: {
-                      connect: {
-                        id: shiftType1.id
-                      }
-                    }
-                  },
-                  {
-                    weekday: Weekday.THURSDAY,
-                    shift_types: {
-                      connect: {
-                        id: shiftType1.id
-                      }
-                    }
-                  }
-                ]
-              }
-            }
-          },
-          oddWeek: {
-            create: {
-              availability: {
-                create: [
-                  {
-                    weekday: Weekday.FRIDAY,
-                    shift_types: {
-                      connect: {
-                        id: shiftType1.id
-                      }
-                    }
-                  },
-                  {
-                    weekday: Weekday.SATURDAY,
-                    shift_types: {
-                      connect: {
-                        id: shiftType1.id
-                      }
-                    }
-                  },
-                  {
-                    weekday: Weekday.SUNDAY,
-                    shift_types: {
-                      connect: {
-                        id: shiftType1.id
-                      }
-                    }
-                  }
-                ]
-              }
-            }
-          },
-          reservationWeek: {
-            create: {
-              availability: {
-                create: [
-                  {
-                    weekday: Weekday.FRIDAY,
-                    shift_types: {
-                      connect: {
-                        id: shiftType1.id
-                      }
-                    }
-                  },
-                  {
-                    weekday: Weekday.SATURDAY,
-                    shift_types: {
-                      connect: {
-                        id: shiftType1.id
-                      }
-                    }
-                  },
-                  {
-                    weekday: Weekday.SUNDAY,
-                    shift_types: {
-                      connect: {
-                        id: shiftType1.id
-                      }
-                    }
-                  }
-                ]
-              }
-            }
-          },
-        }
       }
     }
-  });
+  })
 
   // const mockUser1 = await prisma.user.create({
   //   data: {
@@ -285,9 +172,9 @@ async function main() {
   //     }
   //   }
   // })
-  //
-  //
-  //
+
+
+
   // const mockUser2 = await prisma.user.create({
   //   data: {
   //     name: "Willem",
@@ -311,7 +198,7 @@ async function main() {
   //             sequence: 0,
   //             availability: {
   //               create: [
-  //
+
   //                 {
   //                   weekday: Weekday.TUESDAY,
   //                   shift_types: {
@@ -368,7 +255,7 @@ async function main() {
   //     }
   //   }
   // })
-  //
+
   // const mockUser3 = await prisma.user.create({
   //   data: {
   //     name: "Ellen",
@@ -424,7 +311,7 @@ async function main() {
   //     }
   //   }
   // })
-  //
+
   // const mockUser4 = await prisma.user.create({
   //   data: {
   //     name: "Wilbert",
@@ -472,7 +359,7 @@ async function main() {
   //     }
   //   }
   // })
-  //
+
   // const mockUser5 = await prisma.user.create({
   //   data: {
   //     name: "Willem",
@@ -552,7 +439,7 @@ async function main() {
   //     }
   //   }
   // })
-  //
+
   // const mockUser6 = await prisma.user.create({
   //   data: {
   //     name: "Mariëtte",
@@ -633,8 +520,8 @@ async function main() {
   //     }
   //   }
   // })
-  //
-  //
+
+
   // const mockUser7 = await prisma.user.create({
   //   data: {
   //     name: "ELlen",
@@ -714,7 +601,7 @@ async function main() {
   //     }
   //   }
   // })
-  //
+
   // const mockUser8 = await prisma.user.create({
   //   data: {
   //     name: "Linda",
@@ -811,8 +698,8 @@ async function main() {
   //     }
   //   }
   // })
-  //
-  //
+
+
   // const mockUser9 = await prisma.user.create({
   //   data: {
   //     name: "Marijke",
@@ -877,8 +764,8 @@ async function main() {
   //     }
   //   }
   // })
-  //
-  //
+
+
   // const mockUser10 = await prisma.user.create({
   //   data: {
   //     name: "Angelique",
@@ -934,7 +821,7 @@ async function main() {
   //     }
   //   }
   // })
-  //
+
   // const mockUser11 = await prisma.user.create({
   //   data: {
   //     name: "Ingrid",
@@ -958,7 +845,7 @@ async function main() {
   //             sequence: 0,
   //             availability: {
   //               create: [
-  //
+
   //                 {
   //                   weekday: Weekday.TUESDAY,
   //                   shift_types: {
@@ -1015,7 +902,7 @@ async function main() {
   //     }
   //   }
   // })
-  //
+
   // const mockUser12 = await prisma.user.create({
   //   data: {
   //     name: "Hennie",
@@ -1039,7 +926,7 @@ async function main() {
   //             sequence: 0,
   //             availability: {
   //               create: [
-  //
+
   //                 {
   //                   weekday: Weekday.TUESDAY,
   //                   shift_types: {
@@ -1056,7 +943,7 @@ async function main() {
   //     }
   //   }
   // })
-  //
+
   // const mockUser13 = await prisma.user.create({
   //   data: {
   //     name: "Anja",
@@ -1080,7 +967,7 @@ async function main() {
   //             sequence: 0,
   //             availability: {
   //               create: [
-  //
+
   //                 {
   //                   weekday: Weekday.TUESDAY,
   //                   shift_types: {
@@ -1113,7 +1000,7 @@ async function main() {
   //     }
   //   }
   // })
-  //
+
   // const mockUser14 = await prisma.user.create({
   //   data: {
   //     name: "Debbie",
@@ -1137,7 +1024,7 @@ async function main() {
   //             sequence: 0,
   //             availability: {
   //               create: [
-  //
+
   //                 {
   //                   weekday: Weekday.TUESDAY,
   //                   shift_types: {
@@ -1178,7 +1065,7 @@ async function main() {
   //     }
   //   }
   // })
-  //
+
   // const mockUser15 = await prisma.user.create({
   //   data: {
   //     name: "Frits",
@@ -1202,7 +1089,7 @@ async function main() {
   //             sequence: 0,
   //             availability: {
   //               create: [
-  //
+
   //                 {
   //                   weekday: Weekday.TUESDAY,
   //                   shift_types: {
@@ -1235,7 +1122,7 @@ async function main() {
   //     }
   //   }
   // })
-  //
+
   // const mockUser16 = await prisma.user.create({
   //   data: {
   //     name: "Jacobine",
@@ -1275,7 +1162,7 @@ async function main() {
   //     }
   //   }
   // })
-  //
+
   // const mockUser17 = await prisma.user.create({
   //   data: {
   //     name: "Janine",
@@ -1299,7 +1186,7 @@ async function main() {
   //             sequence: 0,
   //             availability: {
   //               create: [
-  //
+
   //                 {
   //                   weekday: Weekday.TUESDAY,
   //                   shift_types: {
@@ -1356,7 +1243,7 @@ async function main() {
   //     }
   //   }
   // })
-  //
+
   // const mockUser18 = await prisma.user.create({
   //   data: {
   //     name: "Mirjam",
@@ -1404,8 +1291,8 @@ async function main() {
   //     }
   //   }
   // })
-  //
-  //
+
+
   // const mockUser19 = await prisma.user.create({
   //   data: {
   //     name: "Fenna",
@@ -1445,7 +1332,7 @@ async function main() {
   //     }
   //   }
   // })
-  //
+
   // const mockUser20 = await prisma.user.create({
   //   data: {
   //     name: "Linda",
@@ -1493,8 +1380,8 @@ async function main() {
   //     }
   //   }
   // })
-  //
-  //
+
+
   // const mockUser21 = await prisma.user.create({
   //   data: {
   //     name: "Marcella",
@@ -1534,7 +1421,7 @@ async function main() {
   //     }
   //   }
   // })
-  //
+
   // const mockUser22 = await prisma.user.create({
   //   data: {
   //     name: "Danielle",
@@ -1582,8 +1469,8 @@ async function main() {
   //     }
   //   }
   // })
-  //
-  //
+
+
   // const mockUser23 = await prisma.user.create({
   //   data: {
   //     name: "Marcella",
@@ -1631,8 +1518,8 @@ async function main() {
   //     }
   //   }
   // })
-  //
-  //
+
+
   // const mockUser24 = await prisma.user.create({
   //   data: {
   //     name: "Paula",
@@ -1672,7 +1559,7 @@ async function main() {
   //     }
   //   }
   // })
-  //
+
   // const mockUser25 = await prisma.user.create({
   //   data: {
   //     name: "Sally",
@@ -1720,8 +1607,8 @@ async function main() {
   //     }
   //   }
   // })
-  //
-  //
+
+
   // const mockUser26 = await prisma.user.create({
   //   data: {
   //     name: "Ingrid",

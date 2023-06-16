@@ -1,44 +1,62 @@
+import { Staffing } from '@prisma/client'
+import { OpenStaffing } from '@prisma/client'
+import { ShiftWithStaffingDetails } from "../../types/shift"
 import { UserWithPreferenceAndStaffings } from "../../types/user"
 import { createBackup, getFirstBackupOnDate } from "../backup"
 import { getShifts } from "../shift"
-import { createStaffing } from "../staffing"
+import { createOpenStaffing, createStaffing } from "../staffing"
 import { getUsersWithPreferencesAndStaffings } from "../user"
 
-import { checkEnoughBackupStaff, checkReachedMaxStaffings, checkUserAbsent, checkUserAbsentDuringShift, checkUserAlreadyStaffed, checkUserAlreadyStaffedDuringShift, checkUserAvailability, checkUserAvailabilityForShiftType } from "./checks"
+import { checkEnoughBackupStaff, checkUserAbsent, checkUserAbsentDuringShift, checkUserAlreadyStaffed, checkUserAlreadyStaffedDuringShift, checkUserAvailabilityForShiftType, checkUserFlexibleAvailability, checkUserFlexibleAvailabilityForShiftType } from "./checks"
 
 export const generateSchedule = async (fromDate: Date, toDate: Date) => {
-  const shifts = await getShifts(fromDate, toDate)
-  let users = await getUsersWithPreferencesAndStaffings()
+  await generateShiftSchedule(fromDate, toDate)
+  await generateBackupSchedule(fromDate, toDate)
+  return
+}
+
+const generateShiftSchedule = async (fromDate: Date, toDate: Date) => {
+  const shifts: ShiftWithStaffingDetails[] = await getShifts(fromDate, toDate)
+  let users: UserWithPreferenceAndStaffings[] = await getUsersWithPreferencesAndStaffings()
 
   for (const shift of shifts) {
     for (const staff_required of shift.staff_required) {
-      const shiftRequiresStaffAmount = staff_required.amount - staff_required.shift.staffings.length
-
-      users = shuffleArray(users)
-
+      const shiftRequiresStaffAmount = staff_required.amount - shift.staffings.length
+      const openStaffing: OpenStaffing = await createOpenStaffing(shift, staff_required.shift_type)
       for (let i = 1; i <= shiftRequiresStaffAmount; i++) {
+        let staffing: Staffing | undefined
         for (const user of users) {
-          const alreadyStaffed = checkUserAlreadyStaffedDuringShift(user, shift)
           const isDefaultAvailable = checkUserAvailabilityForShiftType(user, staff_required.shift_type, shift.start)
+          const alreadyStaffed = checkUserAlreadyStaffedDuringShift(user, shift)
           const isAbsent = checkUserAbsentDuringShift(user, shift)
-          const reachedMax = checkReachedMaxStaffings(user, shift.start)
 
-          if (await alreadyStaffed || await isDefaultAvailable || await isAbsent || await reachedMax) {
+          if (!(await isDefaultAvailable) || await alreadyStaffed || await isAbsent) {
             continue
           }
 
-          await createStaffing(user, shift, staff_required)
+          staffing = await createStaffing(user, openStaffing)
+          break
+        }
+        if (staffing) continue
+        for (const user of users) {
+          users = shuffleArray(users)
+          const isFlexibleAvailable = checkUserFlexibleAvailabilityForShiftType(user, staff_required.shift_type, shift.start)
+          const alreadyStaffed = checkUserAlreadyStaffedDuringShift(user, shift)
+          const isAbsent = checkUserAbsentDuringShift(user, shift)
+
+          if (!(await isFlexibleAvailable) || await alreadyStaffed || await isAbsent) {
+            continue
+          }
+
+          staffing = await createStaffing(user, openStaffing)
           break
         }
       }
     }
   }
-  await generateBackupSchedule(fromDate, toDate)
-  console.log('Schedule generated')
-  return
 }
 
-export const generateBackupSchedule = async (fromDate: Date, toDate: Date) => {
+const generateBackupSchedule = async (fromDate: Date, toDate: Date) => {
   const days = Math.floor((toDate.getTime() - fromDate.getTime()) / (1000 * 60 * 60 * 24))
   const users = await getUsersWithPreferencesAndStaffings()
 
@@ -51,13 +69,12 @@ export const generateBackupSchedule = async (fromDate: Date, toDate: Date) => {
 
       if (!await enoughBackup) break
 
+      const isDefaultAvailable = checkUserFlexibleAvailability(user, dayStart)
       const userIsBackup = getFirstBackupOnDate(dayStart, { user: user })
       const alreadyStaffed = checkUserAlreadyStaffed(user, dayStart, dayEnd)
-      const isDefaultAvailable = checkUserAvailability(user, dayStart)
       const isAbsent = checkUserAbsent(user, dayStart, dayEnd)
-      const reachedMax = checkReachedMaxStaffings(user, dayStart)
 
-      if (await alreadyStaffed || !await isDefaultAvailable || await isAbsent || await reachedMax || await userIsBackup) continue
+      if (!(await isDefaultAvailable) || await alreadyStaffed || await isAbsent || await userIsBackup) continue
 
       await createBackup({ user, date: dayStart })
     }
@@ -66,11 +83,11 @@ export const generateBackupSchedule = async (fromDate: Date, toDate: Date) => {
 }
 
 function shuffleArray(array: UserWithPreferenceAndStaffings[]) {
-  for (var i = array.length - 1; i > 0; i--) {
-    var j = Math.floor(Math.random() * (i + 1))
-    var temp = array[i]
-    array[i] = array[j]
-    array[j] = temp
+  for (var index = array.length - 1; index > 0; index--) {
+    var randomIndex = Math.floor(Math.random() * (index + 1))
+    var temp = array[index]
+    array[index] = array[randomIndex]
+    array[randomIndex] = temp
   }
   return array
 }

@@ -9,15 +9,17 @@ import { getUsersWithPreferencesAndStaffings } from "../user"
 
 import { checkEnoughBackupStaff, checkUserAbsent, checkUserAbsentDuringShift, checkUserAlreadyStaffed, checkUserAlreadyStaffedDuringShift, checkUserAvailabilityForShiftType, checkUserFlexibleAvailability, checkUserFlexibleAvailabilityForShiftType } from "./checks"
 
-export const generateSchedule = async (fromDate: Date, toDate: Date) => {
+export const generateSchedule = async (fromDate: Date, toDate: Date): Promise<void> => {
   await generateShiftSchedule(fromDate, toDate)
-  //Two backups per day needed💀
-  await generateBackupSchedule(fromDate, toDate)
-  await generateBackupSchedule(fromDate, toDate)
+  const amountBackupNeeded = 2 //💀
+  for (let index = 0; index < amountBackupNeeded; index++) {
+    await generateBackupSchedule(fromDate, toDate)
+    await generateBackupSchedule(fromDate, toDate)
+  }
   return
 }
 
-const generateShiftSchedule = async (fromDate: Date, toDate: Date) => {
+const generateShiftSchedule = async (fromDate: Date, toDate: Date): Promise<void> => {
   const shifts: ShiftWithStaffingDetails[] = await getShifts(fromDate, toDate)
   let users: UserWithPreferenceAndStaffings[] = await getUsersWithPreferencesAndStaffings()
 
@@ -58,7 +60,7 @@ const generateShiftSchedule = async (fromDate: Date, toDate: Date) => {
   }
 }
 
-const generateBackupSchedule = async (fromDate: Date, toDate: Date) => {
+const generateBackupSchedule = async (fromDate: Date, toDate: Date): Promise<void> => {
   const days = Math.floor((toDate.getTime() - fromDate.getTime()) / (1000 * 60 * 60 * 24))
   const users = await getUsersWithPreferencesAndStaffings()
 

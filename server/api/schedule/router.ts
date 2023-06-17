@@ -38,21 +38,20 @@ export const scheduleRouter = createTRPCRouter({
     }
     ),
     // return true if  shift by date and starttime 
-    checkShift: publicProcedure
+    checkShiftExistsByDate: publicProcedure
     .input(z.object({
-        date: z.date(),
-        startTime: z.string()
+      start: z.date(),
+      end: z.date(),
     }))
     .query(async ({ input }) => {
-        const start = 
-        new Date(input.date.getFullYear(), input.date.getMonth(), input.date.getDate(), parseInt(input.startTime.split(':')[0]), parseInt(input.startTime.split(':')[1]))
         const shift = await prisma.shift.findFirst({
             where: {
-                start: start
+                start: input.start,
+                end: input.end,
             }
         })
         if (shift) {
-            return true
+          return true
         } else {
             return false
         }
@@ -95,5 +94,7 @@ export const scheduleRouter = createTRPCRouter({
       // get all shifts
       getAllShifts : publicProcedure
       .query(()=>prisma.shift.findMany()),
+
+      
 })
 

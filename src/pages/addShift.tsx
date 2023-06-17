@@ -77,11 +77,9 @@ export default function AddShiftPage() {
     e.preventDefault();
 
     if (!selectedShift) {
-      console.error("Please select a shift");
       return;
     }
     if (!date) {
-      console.error("Please select a date");
       return;
     }
 
@@ -110,9 +108,6 @@ export default function AddShiftPage() {
       end.setHours(endHour, endMinute, 0, 0);
     }
 
-    // TODO
-    // If shift already exists with same start and end time return error
-
     try {
       createNewShift.mutate({
         start,
@@ -126,7 +121,6 @@ export default function AddShiftPage() {
       router.push("/");
 
     } catch (error) {
-      // show error use ToastService
       ToastService.error('Er is iets verkeerd gegaan!');
     }
   };

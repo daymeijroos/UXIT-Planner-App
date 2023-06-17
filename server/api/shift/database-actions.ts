@@ -23,4 +23,5 @@ export const getShifts = async (fromDate?: Date, toDate?: Date) => {
       }
     }
   })
+
 }

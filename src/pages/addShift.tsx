@@ -11,7 +11,7 @@ interface ShiftTypeStaffing {
 enum ShiftChoice {
   MORNING = "ochtend",
   AFTERNOON = "afternoon",
-  AFTERNOON_EVENING = "middag-avond",
+  AFTERNOON_EVENING = "afternoon_evening",
   CUSTOM = "custom",
   
 }

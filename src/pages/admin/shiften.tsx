@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useMemo, useState} from "react";
 import { Button, NavigationBar, ToastService } from "../../components";
 import { api } from "../../utils/api";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
@@ -36,11 +36,15 @@ const Shiften = () => {
     }
   })
 
-  const users: User[] = api.user.getUsersWithPreferencesAndStaffings.useQuery()
-  let availableUsers: User[]
+  const users: User[] = api.user.getUsersWithPreferencesAndStaffings.useQuery().data
+
+  let availableUsers: User[] = useMemo(() => {
+    return []
+  }, []); // Empty dependency array ensures useMemo runs only once
 
   const shifts = api.shift.getAllShifts.useQuery()
   const [expandedRow, setExpandedRow] = useState<null | string>(null)
+  const [avlUsers, setavlUsers] = useState<null | string>(null)
   const [staffingList] = useAutoAnimate()
 
   if (shifts.isLoading) {
@@ -55,6 +59,7 @@ const Shiften = () => {
     availableUsers = []
     if (expandedRow === shift.id) {
       setExpandedRow(null)
+      setavlUsers(null)
     } else {
       setExpandedRow(shift.id)
       const staffedUsers: User[] = []
@@ -65,15 +70,17 @@ const Shiften = () => {
         }
       })
 
-      users.data?.map((user: User) => {
+      users.map((user: User) => {
         if (!staffedUsers.some((staffedUser: User) => staffedUser.id === user.id)) {
           availableUsers.push(user)
         }
       })
     }
-    console.log(expandedRow);
-    console.log(users.data);
+    setavlUsers("pog")
+    console.log(expandedRow)
+    console.log(users)
     console.log(availableUsers)
+    console.log(availableUsers.length)
   }
 
   const handleRemoveStaffing = (staffingId: string) => {
@@ -96,8 +103,8 @@ const Shiften = () => {
 
   const handleAddStaffing = (shiftId: string) => {
     const spanContent = document.getElementById("userSpan")?.textContent ?? ""
-    users.data?.map((user) => {
-        if (spanContent === user.name) {
+    users.map((user) => {
+        if (spanContent === (user.name + " " + user.last_name)) {
           const selectedUserId: string = user.id
           try {
             addStaffing({ shift_type_name: "Balie", user_id: selectedUserId, shift_id: shiftId })
@@ -220,9 +227,11 @@ const Shiften = () => {
                       </div>
                       <div className="mb-4">
                         {/*// TODO needs to be availableUsers*/}
-                        <Select label="Medewerker / Vrijwilliger" items={availableUsers.data}>
-                          {(item) => <Item>{item.name}</Item>}
-                        </Select>
+                        {avlUsers != null && (
+                            <Select label="Medewerker / Vrijwilliger" items={users}>
+                              {(item: User) => <Item>{item.name + " " + item.last_name}</Item>}
+                            </Select>
+                        )}
                       </div>
                       <Button onPress={() => handleAddStaffing(shift.id)} color="teal">Voeg vrijwilliger toe</Button>
                     </div>

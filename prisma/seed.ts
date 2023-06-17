@@ -14,6 +14,14 @@ async function main() {
     }
   })
 
+  //create employee role
+  const employeeRole = await prisma.role.create({
+    data: {
+      name: Role.EMPLOYEE,
+      description: "Dit zijn de handmatig ingeroosterde medewerkers."
+    }
+  })
+
   //create admin role
   const adminRole = await prisma.role.create({
     data: {
@@ -80,6 +88,32 @@ async function main() {
       role: {
         connect: {
           name: Role.ADMIN
+        }
+      },
+    }
+  })
+
+  const employeeUser1 = await prisma.user.create({
+    data: {
+      name: "Mede",
+      last_name: "Werker",
+      email: "exampleEmp@hotmail.com",
+      role: {
+        connect: {
+          name: Role.EMPLOYEE
+        }
+      },
+    }
+  })
+
+  const employeeUser2 = await prisma.user.create({
+    data: {
+      name: "Medew",
+      last_name: "Erker",
+      email: "exampleEmp2@hotmail.com",
+      role: {
+        connect: {
+          name: Role.EMPLOYEE
         }
       },
     }

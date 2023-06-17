@@ -37,6 +37,7 @@ const Shiften = () => {
   })
 
   const users: User[] = api.user.getUsersWithPreferencesAndStaffings.useQuery().data
+  const employees: User[] = api.user.getUsersThatAreEmployees.useQuery().data
 
   let availableUsers: User[] = useMemo(() => {
     return []
@@ -81,6 +82,7 @@ const Shiften = () => {
     console.log(users)
     console.log(availableUsers)
     console.log(availableUsers.length)
+    console.log(employees)
   }
 
   const handleRemoveStaffing = (staffingId: string) => {
@@ -101,13 +103,13 @@ const Shiften = () => {
     }
   }
 
-  const handleAddStaffing = (shiftId: string) => {
-    const spanContent = document.getElementById("userSpan")?.textContent ?? ""
+  const handleAddStaffing = (shiftId: string, shift_type: string) => {
+    const spanContent = document.getElementById(shift_type)?.textContent ?? ""
     users.map((user) => {
         if (spanContent === (user.name + " " + user.last_name)) {
           const selectedUserId: string = user.id
           try {
-            addStaffing({ shift_type_name: "Balie", user_id: selectedUserId, shift_id: shiftId })
+            addStaffing({ shift_type_name: shift_type, user_id: selectedUserId, shift_id: shiftId })
           } catch (error) {
             console.log(error)
           }
@@ -207,8 +209,9 @@ const Shiften = () => {
                         </div>
                       </div>
                       <div className="flex flex-col max-w-xs mx-auto" ref={staffingList}>
-                        <p className="mb-4 font-bold text-center">Ingeroosterde vrijwilligers</p>
-                        {shift.staffings.map((staffing) => (
+                        <p className="mb-4 font-bold text-center">Staffing Balie</p>
+                        {shift.staffings.map((staffing) =>
+                            staffing.shift_type.name === "Balie" ? (
                           <div key={staffing.id} className="flex items-center mb-2">
                             <div className="flex-grow">
                               <p className="border-b-2 border-l-2 border-t-2 border-black p-4">{staffing.user.name} {staffing.user.last_name}</p>
@@ -223,17 +226,48 @@ const Shiften = () => {
                               </Button>
                             </div>
                           </div>
-                        ))}
+                        ) : null
+                        )}
                       </div>
+                      <div className="flex flex-col max-w-xs mx-auto" ref={staffingList}>
+                        <p className="mb-4 font-bold text-center">Staffing Galerie</p>
+                        {shift.staffings.map((staffing) =>
+                            staffing.shift_type.name === "Galerie" ? (
+                            <div key={staffing.id} className="flex items-center mb-2">
+                              <div className="flex-grow">
+                                <p className="border-b-2 border-l-2 border-t-2 border-black p-4">{staffing.user.name} {staffing.user.last_name}</p>
+                              </div>
+                              <div>
+                                <Button
+                                    aria-label="Verwijder"
+                                    title="Verwijder"
+                                    color="red"
+                                    onPress={() => handleRemoveStaffing(staffing.id)}>
+                                  <Trash2 size="24" className="stroke-5/4" />
+                                </Button>
+                              </div>
+                            </div>
+                            ) : null
+                        )}
+                      </div>
+
                       <div className="mb-4">
                         {/*// TODO needs to be availableUsers*/}
                         {avlUsers != null && (
-                            <Select label="Medewerker / Vrijwilliger" items={users}>
+                            <Select label="Balievrijwilligers" id={"Balie"} items={users}>
                               {(item: User) => <Item>{item.name + " " + item.last_name}</Item>}
                             </Select>
                         )}
                       </div>
-                      <Button onPress={() => handleAddStaffing(shift.id)} color="teal">Voeg vrijwilliger toe</Button>
+                      <Button onPress={() => handleAddStaffing(shift.id, "Balie")} color="teal">Voeg vrijwilliger toe</Button>
+
+                      <div className="mb-4">
+                         <Select label="Galeriemedewerkers en -vrijwilligers" id={"Galerie"} items={employees}>
+                           {(item: User) => <Item>{item.name + " " + item.last_name}</Item>}
+                         </Select>
+                      </div>
+                      <Button onPress={() => handleAddStaffing(shift.id, "Galerie")} color="teal">Voeg medewerker toe</Button>
+
                     </div>
                   </td>
                 </tr>

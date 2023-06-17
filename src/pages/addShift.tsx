@@ -32,6 +32,7 @@ export default function AddShiftPage() {
   const [selectedShift, setSelectedShift] = useState<ShiftChoice | null>(null);
   const [customStartTime, setCustomStartTime] = useState("");
   const [customEndTime, setCustomEndTime] = useState("");
+  const [error, setError] = useState("");
   const router = useRouter();
 
   const getAllShifts = api.schedule.getAllShifts.useQuery();
@@ -64,18 +65,18 @@ export default function AddShiftPage() {
     e.preventDefault();
 
     if (!selectedShift) {
-      console.error("Please select a shift");
+      setError("Selecteer een shift");
       return;
     }
     if (!date) {
-      console.error("Please select a date");
+      setError("Selecteer een datum");
       return;
     }
 
-    let start, end;
+    let start: Date, end: Date;
     if (selectedShift === ShiftChoice.CUSTOM) {
       if (!customStartTime || !customEndTime) {
-        console.error("Graag vul een geldige tijdstip in!");
+        setError("Vul een geldig tijdstip in");
         return;
       }
       start = new Date(`${date}T${customStartTime}`);
@@ -86,6 +87,12 @@ export default function AddShiftPage() {
       start.setHours(startHour, 0, 0, 0);
       end = new Date(date);
       end.setHours(endHour, 0, 0, 0);
+    }
+
+    const existingShift = getAllShifts.data?.find((shift) => shift.start === start && shift.end === end);
+    if (existingShift) {
+      setError("Er bestaat al een shift met dezelfde start- en einddatum");
+      return;
     }
 
     try {
@@ -106,7 +113,7 @@ export default function AddShiftPage() {
   return (
     <div className="container mx-auto max-w-[500px] m-auto">
       <h2 className="text-2xl font-bold mb-4">Shift toevoegen</h2>
-      <form onSubmit={handleSubmit} >
+      <form onSubmit={handleSubmit}>
         <div className="mb-4">
           <h2 className="font-bold">Datum:</h2>
           <TextField type="date" id="date" value={date} onChange={(value) => setDate(value)} />
@@ -144,7 +151,7 @@ export default function AddShiftPage() {
 
         {selectedShift && selectedShift !== ShiftChoice.CUSTOM && (
           <div className="mb-4 mt-10">
-            <h2 className="font-bold">Select the staffing per shift type:</h2>
+            <h2 className="font-bold">Selecteer de benodigde personeelsbezetting per shifttype:</h2>
             {shiftTypeNames.map((shiftTypeName) => (
               <div key={shiftTypeName} className="flex items-center mb-2">
                 <label htmlFor={shiftTypeName} className="mr-2">
@@ -179,10 +186,10 @@ export default function AddShiftPage() {
 
         {selectedShift === ShiftChoice.CUSTOM && (
           <div className="mb-4 mt-10">
-            <h2 className="font-bold">Voeg aangepaste shift tijdstip:</h2>
+            <h2 className="font-bold">Voeg aangepaste shifttijden toe:</h2>
             <div className="flex items-center mb-2">
               <label htmlFor="custom-start-time" className="mr-2">
-                Start Time:
+                Starttijd:
               </label>
               <TextField
                 type="time"
@@ -193,7 +200,7 @@ export default function AddShiftPage() {
             </div>
             <div className="flex items-center">
               <label htmlFor="custom-end-time" className="mr-2">
-                End Time:
+                Eindtijd:
               </label>
               <TextField
                 type="time"
@@ -202,7 +209,7 @@ export default function AddShiftPage() {
                 onChange={(value) => setCustomEndTime(value)}
               />
             </div>
-            <h2 className="font-bold mt-10">Benodigde personeel per locatie:</h2>
+            <h2 className="font-bold mt-10">Benodigd personeel per shifttype:</h2>
             {shiftTypeNames.map((shiftTypeName) => (
               <div key={shiftTypeName} className="flex items-center mb-2">
                 <label htmlFor={shiftTypeName} className="mr-2">
@@ -235,7 +242,9 @@ export default function AddShiftPage() {
           </div>
         )}
 
-        <Button type="submit">Add Shift</Button>
+        {error && <p className="text-red-500 mb-4">{error}</p>}
+
+        <Button type="submit">Shift toevoegen</Button>
       </form>
     </div>
   );

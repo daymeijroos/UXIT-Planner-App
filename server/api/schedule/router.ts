@@ -1,6 +1,6 @@
 import { z } from "zod"
 
-import { createTRPCRouter, publicProcedure, restrictedProcedure } from "../trpc"
+import { createTRPCRouter, protectedProcedure, publicProcedure, restrictedProcedure } from "../trpc"
 import { getUnfulfilledShifts } from "../../utils/getUnfulfilledShifts"
 import { Role } from "../../../prisma/role"
 import { generateSchedule } from "./generate-functions"
@@ -38,7 +38,7 @@ export const scheduleRouter = createTRPCRouter({
     }
     ),
     // return true if  shift by date and starttime 
-    checkShiftExistsByDate: publicProcedure
+    checkShiftExistsByDate: protectedProcedure
     .input(z.object({
       start: z.date(),
       end: z.date(),
@@ -58,7 +58,7 @@ export const scheduleRouter = createTRPCRouter({
     }),
 
    
-    createShift : publicProcedure
+    createShift : protectedProcedure
     .input(
       z.object({
         start: z.date(),
@@ -92,7 +92,7 @@ export const scheduleRouter = createTRPCRouter({
       }),
 
       // get all shifts
-      getAllShifts : publicProcedure
+      getAllShifts : protectedProcedure
       .query(()=>prisma.shift.findMany()),
 
       

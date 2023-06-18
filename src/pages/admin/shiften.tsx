@@ -1,4 +1,4 @@
-import React, {useMemo, useState} from "react";
+import React, {useEffect, useMemo, useState} from "react";
 import { Button, NavigationBar, ToastService } from "../../components";
 import { api } from "../../utils/api";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
@@ -36,17 +36,22 @@ const Shiften = () => {
     }
   })
 
-  const users: User[] = api.user.getUsersWithPreferencesAndStaffings.useQuery().data
-  const employees: User[] = api.user.getUsersThatAreEmployees.useQuery().data
+  const users: User[] = api.user.getUsersWithPreferencesAndStaffings.useQuery().data ?? [];
+  const employees: User[] = api.user.getUsersThatAreEmployees.useQuery().data;
+  const shifts = api.shift.getAllShifts.useQuery();
+  const [unstaffedUsers, setUnstaffedUsers] = useState<User[]>([]);
+  const [staffedUsers, setStaffedUsers] = useState<User[]>([]);
+  const [expandedRow, setExpandedRow] = useState<null | string>(null);
+  const [staffingList] = useAutoAnimate();
 
-  let availableUsers: User[] = useMemo(() => {
-    return []
-  }, []); // Empty dependency array ensures useMemo runs only once
-
-  const shifts = api.shift.getAllShifts.useQuery()
-  const [expandedRow, setExpandedRow] = useState<null | string>(null)
-  const [avlUsers, setavlUsers] = useState<null | string>(null)
-  const [staffingList] = useAutoAnimate()
+  useEffect(() => {
+    if (expandedRow) {
+      const shift = shifts.data?.find((shift) => shift.id === expandedRow);
+      if (shift) {
+        updateStaffedUsers(shift);
+      }
+    }
+  }, [expandedRow, shifts.data]);
 
   if (shifts.isLoading) {
     return <div>loading...</div>
@@ -57,65 +62,63 @@ const Shiften = () => {
   }
 
   const expandRow = (shift: ShiftWithStaffings) => {
-    availableUsers = []
     if (expandedRow === shift.id) {
-      setExpandedRow(null)
-      setavlUsers(null)
+      setExpandedRow(null);
     } else {
-      setExpandedRow(shift.id)
-      const staffedUsers: User[] = []
-
-      shift.staffings?.map((staffing: StaffingWithColleagues) => {
-        if(staffing?.user) {
-          staffedUsers.push(staffing.user)
-        }
-      })
-
-      users.map((user: User) => {
-        if (!staffedUsers.some((staffedUser: User) => staffedUser.id === user.id)) {
-          availableUsers.push(user)
-        }
-      })
+      setExpandedRow(shift.id);
+      updateStaffedUsers(shift);
     }
-    setavlUsers("pog")
-    console.log(expandedRow)
-    console.log(users)
-    console.log(availableUsers)
-    console.log(availableUsers.length)
-    console.log(employees)
+  };
+
+  const updateUnstaffedUsers = (updatedStaffedUsers: User[]) => {
+    const updatedUnstaffedUsers: User[] = users.filter((user: User) => {
+      return !updatedStaffedUsers.some((staffedUser: User) => staffedUser.id === user.id);
+    });
+    setUnstaffedUsers(updatedUnstaffedUsers);
+  };
+
+  const updateStaffedUsers = (shift: ShiftWithStaffings) => {
+    const updatedStaffedUsers: User[] = [];
+    shift.staffings?.forEach((staffing) => {
+      if (staffing?.user) {
+        updatedStaffedUsers.push(staffing.user);
+      }
+    });
+
+    setStaffedUsers(updatedStaffedUsers);
+    updateUnstaffedUsers(updatedStaffedUsers);
   }
 
-  const handleRemoveStaffing = (staffingId: string) => {
+  const handleRemoveStaffing = async (shift: ShiftWithStaffings, staffingId: string) => {
     try {
-      removeSelectedStaffing({ staffing_id: staffingId })
-
+      await removeSelectedStaffing({ staffing_id: staffingId });
+      updateStaffedUsers(shift)
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
-  }
+  };
 
   const handleRemoveShift = (shiftId: string) => {
     try {
-      removeSelectedShift({ shift_id: shiftId })
-
+      removeSelectedShift({ shift_id: shiftId });
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
-  }
+  };
 
-  const handleAddStaffing = (shiftId: string, shift_type: string) => {
-    const spanContent = document.getElementById(shift_type)?.textContent ?? ""
-    users.map((user) => {
-        if (spanContent === (user.name + " " + user.last_name)) {
-          const selectedUserId: string = user.id
-          try {
-            addStaffing({ shift_type_name: shift_type, user_id: selectedUserId, shift_id: shiftId })
-          } catch (error) {
-            console.log(error)
-          }
+  const handleAddStaffing = (shift: ShiftWithStaffings, shift_type: string) => {
+    const spanContent = document.getElementById(shift_type)?.textContent ?? "";
+    users.forEach((user) => {
+      if (spanContent === `${user.name} ${user.last_name}`) {
+        const selectedUserId: string = user.id;
+        try {
+          addStaffing({ shift_type_name: shift_type, user_id: selectedUserId, shift_id: shift.id });
+        } catch (error) {
+          console.log(error);
         }
-      })
-  }
+      }
+    });
+  };
 
   return (
     <div className="mb-20">
@@ -221,7 +224,7 @@ const Shiften = () => {
                                 aria-label="Verwijder"
                                 title="Verwijder"
                                 color="red"
-                                onPress={() => handleRemoveStaffing(staffing.id)}>
+                                onPress={() => handleRemoveStaffing(shift, staffing.id)}>
                                 <Trash2 size="24" className="stroke-5/4" />
                               </Button>
                             </div>
@@ -242,7 +245,7 @@ const Shiften = () => {
                                     aria-label="Verwijder"
                                     title="Verwijder"
                                     color="red"
-                                    onPress={() => handleRemoveStaffing(staffing.id)}>
+                                    onPress={() => handleRemoveStaffing(shift, staffing.id)}>
                                   <Trash2 size="24" className="stroke-5/4" />
                                 </Button>
                               </div>
@@ -252,21 +255,21 @@ const Shiften = () => {
                       </div>
 
                       <div className="mb-4">
-                        {/*// TODO needs to be availableUsers*/}
-                        {avlUsers != null && (
-                            <Select label="Balievrijwilligers" id={"Balie"} items={users}>
-                              {(item: User) => <Item>{item.name + " " + item.last_name}</Item>}
-                            </Select>
-                        )}
+                        {/*// TODO needs to be unstaffedUsers*/}
+                         <Select label="Balievrijwilligers" id={"Balie"}>
+                           {unstaffedUsers.map((user) =>
+                               <Item key={user.name + user.last_name}>{user.name + " " + user.last_name}</Item>
+                           )}
+                         </Select>
                       </div>
-                      <Button onPress={() => handleAddStaffing(shift.id, "Balie")} color="teal">Voeg vrijwilliger toe</Button>
+                      <Button onPress={() => handleAddStaffing(shift, "Balie")} color="teal">Voeg vrijwilliger toe</Button>
 
                       <div className="mb-4">
                          <Select label="Galeriemedewerkers en -vrijwilligers" id={"Galerie"} items={employees}>
                            {(item: User) => <Item>{item.name + " " + item.last_name}</Item>}
                          </Select>
                       </div>
-                      <Button onPress={() => handleAddStaffing(shift.id, "Galerie")} color="teal">Voeg medewerker toe</Button>
+                      <Button onPress={() => handleAddStaffing(shift, "Galerie")} color="teal">Voeg medewerker toe</Button>
 
                     </div>
                   </td>

@@ -50,6 +50,7 @@ model User {
   backups       Backup[]
   accounts      Account[]
   sessions      Session[]
+  OpenStaffing  OpenStaffing[]
 }
 
 model VerificationToken {
@@ -147,11 +148,14 @@ model Staffing {
 }
 
 model OpenStaffing {
-  id            String     @id @default(cuid())
-  shift_id      String
-  shift_type_id String
-  shift         Shift      @relation(fields: [shift_id], references: [id])
-  shift_type    Shift_Type @relation(fields: [shift_type_id], references: [id])
+  id             String     @id @default(cuid())
+  absent_user    User?      @relation(fields: [userId], references: [id])
+  absent_user_id String?
+  shift_id       String
+  shift_type_id  String
+  shift          Shift      @relation(fields: [shift_id], references: [id])
+  shift_type     Shift_Type @relation(fields: [shift_type_id], references: [id])
+  userId         String?
 }
 
 model Backup {

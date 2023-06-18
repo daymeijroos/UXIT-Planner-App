@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client"
 import { Role } from "./role"
 import { Weekday } from "./weekday"
-import { CalendarDate, Time, toCalendarDateTime, getDayOfWeek } from "@internationalized/date"
+import { CalendarDate, Time, toCalendarDateTime, getDayOfWeek, CalendarDateTime } from "@internationalized/date"
 
 const prisma = new PrismaClient()
 
@@ -167,6 +167,28 @@ async function main() {
               }
             }
           },
+        }
+      }
+    }
+  })
+
+  const openStaffing = await prisma.openStaffing.create({
+    data: {
+      id: "birthday",
+      shift_type: {
+        connect: {
+          id: shiftType1.id
+        }
+      },
+      shift: {
+        create: {
+          start: new CalendarDateTime(2023, 6, 18, 11, 45).toDate('Europe/Amsterdam'),
+          end: new CalendarDateTime(2023, 6, 18, 17, 15).toDate('Europe/Amsterdam'),
+        }
+      },
+      absent_user: {
+        connect: {
+          id: mockUser1.id
         }
       }
     }

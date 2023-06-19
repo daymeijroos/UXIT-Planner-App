@@ -37,6 +37,22 @@ export const shiftRouter = createTRPCRouter({
         }
       });
     }),
-  updateShiftProperties: restrictedProcedure(Role.ADMIN)
-
+  updateShiftStartAndEndTimes: restrictedProcedure(Role.ADMIN)
+      .input(
+          z.object({
+            id: z.string(),
+            startTime: z.string().datetime(),
+            endTime: z.string().datetime(),
+          }))
+      .mutation(async ({ ctx, input }) => {
+        return await ctx.prisma.shift.update({
+          where: {
+            id: input.id
+          },
+          data: {
+            start: input.startTime,
+            end: input.endTime
+          }
+        })
+      }),
 });

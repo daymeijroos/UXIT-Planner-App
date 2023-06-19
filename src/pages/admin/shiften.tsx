@@ -9,7 +9,9 @@ import type {User} from "@prisma/client";
 import type {ShiftWithStaffings} from "../../../server/types/shift";
 import {DatetimeField} from "../../components/atoms/input/calendar/datetime-field";
 import {parseDateTime} from "@internationalized/date";
-import {DateTime} from "next-auth/providers/kakao";
+import {DateTime} from "luxon";
+import {DateValue} from "react-aria";
+import {Shift} from "@prisma/client";
 
 const Shiften = () => {
   const context = api.useContext()
@@ -37,6 +39,14 @@ const Shiften = () => {
       })
     }
   })
+  const { mutate: changeTime } = api.shift.updateShiftStartAndEndTimes.useMutation({
+    onSuccess: () => {
+      context.shift.getAllShifts.invalidate().catch((reason) => {
+        console.log(reason)
+        ToastService.success("Het is gelukt!")
+      })
+    }
+  })
 
   const users: User[] = api.user.getUsersWithPreferencesAndStaffings.useQuery().data ?? [];
   const employees: User[] = api.user.getUsersThatAreEmployees.useQuery().data;
@@ -46,6 +56,9 @@ const Shiften = () => {
   const [staffedUsers, setStaffedUsers] = useState<User[]>([]);
   const [expandedRow, setExpandedRow] = useState<null | string>(null);
   const [selectedShiftType, setSelectedShiftType] = useState<string | null>(null);
+  const [dateValueStart, setDateValueStart] = useState<{start: DateValue, end: DateValue}>()
+  const [dateValueEnd, setDateValueEnd] = useState<{start: DateValue, end: DateValue}>()
+
   const [staffingList] = useAutoAnimate();
 
   useEffect(() => {
@@ -88,8 +101,15 @@ const Shiften = () => {
     return `${year}-${month}-${day}T${hours}:${minutes}`;
   };
 
-  const handleChangeTime = (startOrEnd: string) => {
-    console.log(document.getElementById(startOrEnd))?.textContent
+  const handleChangeTime = (shift: ShiftWithStaffings, startOrEnd: string) => {
+    if (startOrEnd === "start") {
+      console.log(dateValueStart)
+      console.log(new Date(dateValueStart))
+      changeTime(shift.id, new Date(dateValueStart).toISOString, new Date(dateValueEnd).toISOString)
+    } else if (startOrEnd === "end") {
+      console.log(dateValueEnd)
+
+    }
   }
 
   const updateUnstaffedUsers = (updatedStaffedUsers: User[]) => {
@@ -217,11 +237,12 @@ const Shiften = () => {
                                     label=" "
                                     id="start"
                                     defaultValue={parseDateTime(getFormattedTimeShift(shift.start))}
+                                    onChange={(v) => { setDateValueStart(v) }}
                                 ></DatetimeField>
                               </div>
                             </div>
                             <div className="w-30">
-                              <Button onPress={() => handleChangeTime("start")} aria-label="Wijzig starttijd" title="Wijzig starttijd" color="gray">
+                              <Button onPress={() => handleChangeTime(shift,"start")} aria-label="Wijzig starttijd" title="Wijzig starttijd" color="gray">
                                 <Edit size="24" className="stroke-5/4" />
                               </Button>
                             </div>
@@ -234,11 +255,12 @@ const Shiften = () => {
                                     label=" "
                                     id="end"
                                     defaultValue={parseDateTime(getFormattedTimeShift(shift.end))}
+                                    onChange={(v) => { setDateValueEnd(v) }}
                                 ></DatetimeField>
                               </div>
                             </div>
                             <div className="w-30">
-                              <Button onPress={() => handleChangeTime("end")} aria-label="Wijzig eindtijd" title="Wijzig eindtijd" color="gray">
+                              <Button onPress={() => handleChangeTime(shift,"end")} aria-label="Wijzig eindtijd" title="Wijzig eindtijd" color="gray">
                                 <Edit size="24" className="stroke-5/4" />
                               </Button>
                             </div>

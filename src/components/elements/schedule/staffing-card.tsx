@@ -20,13 +20,13 @@ export function StaffingCard(props: StaffingCardProps) {
   // const shift_type_id = api.requiredStaffing.getReserveShiftType.useQuery();
 
   const { data: sessionData } = useSession()
-  const userName = sessionData?.user?.name
+  const userId = sessionData?.user?.id
   const [showForm, setShowForm] = useState(false)
 
   const determineShowButton = (staffing: StaffingWithColleagues): boolean => {
     let result = false
     staffing.shift.staffings.forEach((nestedStaffing) => {
-      if (nestedStaffing.user.name == userName) {
+      if (nestedStaffing.user.id == userId) {
         result = true
       }
     })

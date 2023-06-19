@@ -1,4 +1,4 @@
-import { Button, Card } from "../../components"
+import { Button, Card, ToastService } from "../../components"
 import { api } from "../../utils/api"
 import { serverSideHelper } from "../../utils/serverSideHelper"
 import type { InferGetServerSidePropsType, GetServerSideProps, GetServerSidePropsContext, PreviewData } from 'next'
@@ -6,6 +6,8 @@ import { ParsedUrlQuery } from "querystring"
 import { formatDate } from "../../utils/date/formatDate"
 import { formatTime } from "../../utils/date/formatTime"
 import { useSession } from "next-auth/react"
+import { router } from "@trpc/server"
+import { useRouter } from "next/router"
 
 export const getServerSideProps: GetServerSideProps<{
   id: string
@@ -25,10 +27,26 @@ export const getServerSideProps: GetServerSideProps<{
 }
 
 export default function OpenShiftPage({ id }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const router = useRouter()
+  const context = api.useContext()
   const { data: openStaffing, error } = api.openStaffing.getOpenStaffing.useQuery({ id })
-  const { data: session, status: sessionStatus } = useSession()
+  const { mutate: fillOpenStaffing } = api.openStaffing.fillOpenStaffing.useMutation({
+    onError: (error) => ToastService.error(error.message),
+    onSuccess: () => {
+      ToastService.success("Shift ingevuld")
+      router.push("/")
+      context.staffing.getPersonalStaffing.invalidate()
+      context.staffing.getStaffing.invalidate()
+    }
+  })
+  const { data: session } = useSession()
   if (error) return <div>Error: {error.message}</div>
   if (!openStaffing) return <div>Not found</div>
+
+  const skipOpenStaffing = () => {
+    router.push("/")
+    ToastService.info("Shift niet ingevuld")
+  }
 
   return (
     <div className="flex justify-center max-h-screen pb-24">
@@ -41,8 +59,8 @@ export default function OpenShiftPage({ id }: InferGetServerSidePropsType<typeof
             <p>Van: {formatDate(openStaffing.shift.start)} {formatTime(openStaffing.shift.start)}</p>
             <p>Tot: {formatDate(openStaffing.shift.end)} {formatTime(openStaffing.shift.end)}</p>
             <div className="flex gap-4">
-              <Button onPress={() => console.log("skip")} color="red">Ik kan niet</Button>
-              <Button onPress={() => console.log("take")} color="teal">Neem shift</Button>
+              <Button onPress={() => { skipOpenStaffing() }} color="red">Ik kan niet</Button>
+              <Button onPress={() => { fillOpenStaffing({ id }) }} color="teal">Neem shift</Button>
             </div>
           </div>
         </Card>

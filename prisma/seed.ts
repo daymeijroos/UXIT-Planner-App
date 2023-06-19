@@ -67,6 +67,7 @@ async function main() {
   // create admin user
   const adminUser = await prisma.user.create({
     data: {
+      id: "clj13gfeh0004u1o1lt55cfuk",
       name: "Admin",
       last_name: "Admin",
       email: process.env.ADMIN_EMAIL,
@@ -182,7 +183,7 @@ async function main() {
       },
       shift: {
         create: {
-          start: new CalendarDateTime(2023, 6, 18, 11, 45).toDate('Europe/Amsterdam'),
+          start: new CalendarDateTime(2023, 6, 18, 11, 46).toDate('Europe/Amsterdam'),
           end: new CalendarDateTime(2023, 6, 18, 17, 15).toDate('Europe/Amsterdam'),
         }
       },

@@ -1,17 +1,17 @@
-import React, {useEffect, useState} from "react";
-import {Button, NavigationBar, ToastService} from "../../components";
-import {api} from "../../utils/api";
-import {useAutoAnimate} from "@formkit/auto-animate/react";
-import {Edit, Minimize2, Trash2} from "react-feather";
-import {Select} from "../../components/atoms/input/Selector";
-import {Item} from "react-stately";
-import type {User} from "@prisma/client";
-import type {ShiftWithStaffings} from "../../../server/types/shift";
-import {DatetimeField} from "../../components/atoms/input/calendar/datetime-field";
-import {parseDateTime} from "@internationalized/date";
-import {DateTime} from "next-auth/providers/kakao";
-import {DateValue} from "react-aria";
-import {Shift} from "@prisma/client";
+import React, {useEffect, useState} from "react"
+import {Button, NavigationBar, ToastService} from "../../components"
+import {api} from "../../utils/api"
+import {useAutoAnimate} from "@formkit/auto-animate/react"
+import {Edit, Minimize2, Trash2} from "react-feather"
+import {Select} from "../../components/atoms/input/Selector"
+import {Item} from "react-stately"
+import type {User} from "@prisma/client"
+import type {ShiftWithStaffings} from "../../../server/types/shift"
+import {DatetimeField} from "../../components/atoms/input/calendar/datetime-field"
+import {parseDateTime} from "@internationalized/date"
+import {DateTime} from "next-auth/providers/kakao"
+import {DateValue} from "react-aria"
+import {Shift} from "@prisma/client"
 
 const Shiften = () => {
   const context = api.useContext()
@@ -46,27 +46,27 @@ const Shiften = () => {
     }
   })
 
-  const users: User[] = api.user.getUsersWithPreferencesAndStaffings.useQuery().data ?? [];
-  const employees: User[] = api.user.getUsersThatAreEmployees.useQuery().data;
-  const shifts = api.shift.getAllShifts.useQuery();
-  const [unstaffedUsers, setUnstaffedUsers] = useState<User[]>([]);
-  const [unstaffedEmployees, setUnstaffedEmployees] = useState<User[]>([]);
-  const [staffedUsers, setStaffedUsers] = useState<User[]>([]);
-  const [expandedRow, setExpandedRow] = useState<null | string>(null);
-  const [selectedShiftType, setSelectedShiftType] = useState<string | null>(null);
+  const users: User[] = api.user.getUsersWithPreferencesAndStaffings.useQuery().data ?? []
+  const employees: User[] = api.user.getUsersThatAreEmployees.useQuery().data
+  const shifts = api.shift.getAllShifts.useQuery()
+  const [unstaffedUsers, setUnstaffedUsers] = useState<User[]>([])
+  const [unstaffedEmployees, setUnstaffedEmployees] = useState<User[]>([])
+  const [staffedUsers, setStaffedUsers] = useState<User[]>([])
+  const [expandedRow, setExpandedRow] = useState<null | string>(null)
+  const [selectedShiftType, setSelectedShiftType] = useState<string | null>(null)
   const [dateValueStart, setDateValueStart] = useState<{start: DateValue, end: DateValue}>()
   const [dateValueEnd, setDateValueEnd] = useState<{start: DateValue, end: DateValue}>()
 
-  const [staffingList] = useAutoAnimate();
+  const [staffingList] = useAutoAnimate()
 
   useEffect(() => {
     if (expandedRow) {
-      const shift = shifts.data?.find((shift) => shift.id === expandedRow);
+      const shift = shifts.data?.find((shift) => shift.id === expandedRow)
       if (shift) {
-        updateStaffedUsers(shift);
+        updateStaffedUsers(shift)
       }
     }
-  }, [expandedRow, shifts.data]);
+  }, [expandedRow, shifts.data])
 
   if (shifts.isLoading) {
     return <div>loading...</div>
@@ -78,26 +78,26 @@ const Shiften = () => {
 
   const expandRow = (shift: ShiftWithStaffings) => {
     if (expandedRow === shift.id) {
-      setExpandedRow(null);
+      setExpandedRow(null)
     } else {
-      setExpandedRow(shift.id);
-      updateStaffedUsers(shift);
+      setExpandedRow(shift.id)
+      updateStaffedUsers(shift)
       console.log(shift.staff_required)
-      console.log(shift.start)
+      console.log(unstaffedEmployees)
     }
-  };
+  }
 
   const getFormattedTimeShift = (shiftTime: DateTime) => {
-    const dateTime = new Date(shiftTime);
+    const dateTime = new Date(shiftTime)
 
-    const year = dateTime.getFullYear();
-    const month = String(dateTime.getMonth() + 1).padStart(2, "0");
-    const day = String(dateTime.getDate()).padStart(2, "0");
-    const hours = String(dateTime.getHours()).padStart(2, "0");
-    const minutes = String(dateTime.getMinutes()).padStart(2, "0");
+    const year = dateTime.getFullYear()
+    const month = String(dateTime.getMonth() + 1).padStart(2, "0")
+    const day = String(dateTime.getDate()).padStart(2, "0")
+    const hours = String(dateTime.getHours()).padStart(2, "0")
+    const minutes = String(dateTime.getMinutes()).padStart(2, "0")
 
-    return `${year}-${month}-${day}T${hours}:${minutes}`;
-  };
+    return `${year}-${month}-${day}T${hours}:${minutes}`
+  }
 
   const handleChangeTime = (shift: ShiftWithStaffings, startOrEnd: string) => {
     const newStartTime: Date = new Date(dateValueStart)
@@ -113,7 +113,7 @@ const Shiften = () => {
       return
     }
     if (newStartTime < newEndTime) {
-      changeTime({ id: shiftId, startTime: newStartTime, endTime: newEndTime });
+      changeTime({ id: shiftId, startTime: newStartTime, endTime: newEndTime })
     } else {
       ToastService.error("De begintijd moet voor de eindtijd zijn")
     }
@@ -122,67 +122,67 @@ const Shiften = () => {
 
   const updateUnstaffedUsers = (updatedStaffedUsers: User[]) => {
     const updatedUnstaffedUsers: User[] = users.filter((user: User) => {
-      return !updatedStaffedUsers.some((staffedUser: User) => staffedUser.id === user.id);
-    });
-    setUnstaffedUsers(updatedUnstaffedUsers);
-  };
+      return !updatedStaffedUsers.some((staffedUser: User) => staffedUser.id === user.id)
+    })
+    setUnstaffedUsers(updatedUnstaffedUsers)
+  }
 
   const updateUnstaffedEmployees = (updatedStaffedEmployees: User[]) => {
     const updatedUnstaffedEmployees: User[] = employees.filter((user: User) => {
-      return !updatedStaffedEmployees.some((staffedUser: User) => staffedUser.id === user.id);
-    });
-    setUnstaffedEmployees(updatedUnstaffedEmployees);
-  };
+      return !updatedStaffedEmployees.some((staffedUser: User) => staffedUser.id === user.id)
+    })
+    setUnstaffedEmployees(updatedUnstaffedEmployees)
+  }
 
   const updateStaffedUsers = (shift: ShiftWithStaffings) => {
-    const updatedStaffedUsers: User[] = [];
+    const updatedStaffedUsers: User[] = []
     shift.staffings?.forEach((staffing) => {
       if (staffing?.user) {
-        updatedStaffedUsers.push(staffing.user);
+        updatedStaffedUsers.push(staffing.user)
       }
-    });
+    })
 
-    setStaffedUsers(updatedStaffedUsers);
-    updateUnstaffedUsers(updatedStaffedUsers);
+    setStaffedUsers(updatedStaffedUsers)
+    updateUnstaffedUsers(updatedStaffedUsers)
     updateUnstaffedEmployees(updatedStaffedUsers)
   }
 
   const handleRemoveStaffing = async (shift: ShiftWithStaffings, staffingId: string) => {
     try {
-      await removeSelectedStaffing({ staffing_id: staffingId });
+      await removeSelectedStaffing({ staffing_id: staffingId })
       updateStaffedUsers(shift)
     } catch (error) {
-      console.error(error);
+      console.error(error)
     }
-  };
+  }
 
   const handleRemoveShift = (shiftId: string) => {
     try {
-      removeSelectedShift({ shift_id: shiftId });
+      removeSelectedShift({ shift_id: shiftId })
     } catch (error) {
-      console.error(error);
+      console.error(error)
     }
-  };
+  }
 
   const handleAddStaffing = (shift: ShiftWithStaffings, shift_type: string) => {
-    const spanContent = document.getElementById(shift_type)?.textContent ?? "";
+    const spanContent = document.getElementById(shift_type)?.textContent ?? ""
     users.forEach((user) => {
       if (spanContent === `${user.name} ${user.last_name}`) {
-        const selectedUserId: string = user.id;
+        const selectedUserId: string = user.id
         try {
-          addStaffing({ shift_type_name: shift_type, user_id: selectedUserId, shift_id: shift.id });
+          addStaffing({ shift_type_name: shift_type, user_id: selectedUserId, shift_id: shift.id })
         } catch (error) {
-          console.log(error);
+          console.log(error)
         }
       }
-    });
-  };
+    })
+  }
 
   const handleSelectShiftType = () => {
     const shiftType = document.getElementById("shiftType")?.textContent ?? ""
 
-    setSelectedShiftType(shiftType);
-  };
+    setSelectedShiftType(shiftType)
+  }
 
   return (
     <div className="mb-20">
@@ -191,6 +191,7 @@ const Shiften = () => {
       </div>
       <div className="flex justify-center items-center">
         <table className="w-full md:max-w-2xl divide-y divide-gray-200 border-2 border-black">
+          {/* Table headers */}
           <thead className="bg-gray-50 border-2 border-black">
           <tr>
             <th className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider border-2 border-black">
@@ -205,6 +206,7 @@ const Shiften = () => {
           </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
+          {/* Shift displayed as row in table */}
           {shifts.data?.map((shift) => (
             <React.Fragment key={shift.id}>
               {expandedRow !== shift.id && (
@@ -212,15 +214,19 @@ const Shiften = () => {
                   className="hover:bg-gray-200 cursor-pointer"
                   onClick={() => expandRow(shift)}
                 >
+                  {/* Shift date*/}
                   <td className="px-6 py-4 whitespace-nowrap border-2 border-black">
                     <div
-                      className="text-sm text-gray-900">{shift.start.toString().slice(8, 10)} {shift.start.toString().slice(3, 7)} {shift.start.toString().slice(11, 15)}</div>
+                      className="text-sm text-gray-900">{shift.start.toString().slice(8, 10)} {shift.start.toString().slice(3, 7)} {shift.start.toString().slice(11, 15)}
+                    </div>
                   </td>
+                  {/* Shift time start to time end */}
                   <td className="px-6 py-4 whitespace-nowrap border-2 border-black">
                     <div className="text-sm text-gray-900">
                       {shift.start.toString().slice(16, 21)} tot {shift.end.toString().slice(16, 21)}
                     </div>
                   </td>
+                  {/* Shift staffings */}
                   <td className="px-6 py-4 whitespace-nowrap border-2 border-black">
                     <div className="text-sm text-gray-900">
                       {shift.staffings.map((staffing) => (
@@ -230,11 +236,13 @@ const Shiften = () => {
                   </td>
                 </tr>
               )}
+              {/* Expanded shift */}
               {(expandedRow === shift.id) && (
                 <tr>
                   <td colSpan={3}>
                     <div className="p-4 relative">
                       <div className="flex flex-col justify-between mb-4">
+                        {/* Change shift time */}
                         <div className="flex flex-col mx-auto">
                           <div className="mb-2 font-bold text-center">Starttijd</div>
                           <div className="flex justify-between items-center max-w-xs mb-4">
@@ -274,6 +282,7 @@ const Shiften = () => {
                             </div>
                           </div>
                         </div>
+                        {/* Minimise and delete buttons */}
                         <div className="w-30 ml-4 absolute top-4 right-4">
                           <Button aria-label="Verwijder shift" title="Verwijder shift" color="red" onPress={() => handleRemoveShift(shift.id)}>
                             <Trash2 size="24" className="stroke-5/4" />
@@ -285,6 +294,7 @@ const Shiften = () => {
                           </Button>
                         </div>
                       </div>
+                      {/* Displayed staffing "balie" */}
                       <div className="flex flex-col max-w-xs mx-auto" ref={staffingList}>
                         <p className="mb-4 font-bold text-center">Staffing Balie</p>
                         {shift.staffings.map((staffing) =>
@@ -306,6 +316,7 @@ const Shiften = () => {
                         ) : null
                         )}
                       </div>
+                      {/* Displayed staffing "galerie" */}
                       <div className="flex flex-col max-w-xs mx-auto" ref={staffingList}>
                         <p className="mb-4 mt-4 font-bold text-center">Staffing Galerie</p>
                         {shift.staffings.map((staffing) =>
@@ -327,14 +338,14 @@ const Shiften = () => {
                             ) : null
                         )}
                       </div>
-
+                      {/* Shift type selector */}
                       <div>
                         {/*TODO: onFocusChange is unintuitive, need to click on another element for method to be called*/}
                         <Select label="Shift Type" id="shiftType" initialText="Kies een shift type" onFocusChange={handleSelectShiftType}>
                           <Item value="Balie">Balie</Item>
                           <Item value="Galerie">Galerie</Item>
                         </Select>
-
+                        {/* Select a staffing for balie */}
                         {selectedShiftType === 'Balie' && (
                             <>
                               <div className="mb-4">
@@ -349,7 +360,7 @@ const Shiften = () => {
                               </Button>
                             </>
                         )}
-
+                        {/* Select a staffing for galerie*/}
                         {selectedShiftType === 'Galerie' && (
                             <>
                               <div className="mb-4">
@@ -365,7 +376,6 @@ const Shiften = () => {
                             </>
                         )}
                       </div>
-
                     </div>
                   </td>
                 </tr>

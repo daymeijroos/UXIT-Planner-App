@@ -41,8 +41,8 @@ export const shiftRouter = createTRPCRouter({
       .input(
           z.object({
             id: z.string(),
-            startTime: z.string().datetime(),
-            endTime: z.string().datetime(),
+            startTime: z.date(),
+            endTime: z.date(),
           }))
       .mutation(async ({ ctx, input }) => {
         return await ctx.prisma.shift.update({

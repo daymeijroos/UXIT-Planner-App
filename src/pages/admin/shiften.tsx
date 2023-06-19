@@ -9,7 +9,7 @@ import type {User} from "@prisma/client";
 import type {ShiftWithStaffings} from "../../../server/types/shift";
 import {DatetimeField} from "../../components/atoms/input/calendar/datetime-field";
 import {parseDateTime} from "@internationalized/date";
-import {DateTime} from "luxon";
+import {DateTime} from "next-auth/providers/kakao";
 import {DateValue} from "react-aria";
 import {Shift} from "@prisma/client";
 
@@ -19,7 +19,6 @@ const Shiften = () => {
     onSuccess: () => {
       context.shift.getAllShifts.invalidate().catch((reason) => {
         console.log(reason)
-        ToastService.success("Het is gelukt!")
       })
     }
   })
@@ -27,15 +26,14 @@ const Shiften = () => {
     onSuccess: () => {
       context.shift.getAllShifts.invalidate().catch((reason) => {
         console.log(reason)
-        ToastService.success("Het is gelukt!")
       })
+      ToastService.success("Shift is verwijderd")
     }
   })
   const { mutate: addStaffing } = api.staffing.addStaffing.useMutation({
     onSuccess: () => {
       context.shift.getAllShifts.invalidate().catch((reason) => {
         console.log(reason)
-        ToastService.success("Het is gelukt!")
       })
     }
   })
@@ -43,8 +41,8 @@ const Shiften = () => {
     onSuccess: () => {
       context.shift.getAllShifts.invalidate().catch((reason) => {
         console.log(reason)
-        ToastService.success("Het is gelukt!")
       })
+      ToastService.success("Tijden zijn veranderd")
     }
   })
 
@@ -102,14 +100,24 @@ const Shiften = () => {
   };
 
   const handleChangeTime = (shift: ShiftWithStaffings, startOrEnd: string) => {
-    if (startOrEnd === "start") {
-      console.log(dateValueStart)
-      console.log(new Date(dateValueStart))
-      changeTime(shift.id, new Date(dateValueStart).toISOString, new Date(dateValueEnd).toISOString)
-    } else if (startOrEnd === "end") {
-      console.log(dateValueEnd)
+    const newStartTime: Date = new Date(dateValueStart)
+    const newEndTime: Date = new Date(dateValueEnd)
+    const shiftId: string = shift.id
 
+    if (newStartTime < new Date()) {
+      ToastService.error("De begintijd moet na de huidige datum zijn")
+      return
     }
+    if ((newStartTime.getDay() != newEndTime.getDay())) {
+      ToastService.error("De begin- en endtijd moeten op dezelfde dag vallen")
+      return
+    }
+    if (newStartTime < newEndTime) {
+      changeTime({ id: shiftId, startTime: newStartTime, endTime: newEndTime });
+    } else {
+      ToastService.error("De begintijd moet voor de eindtijd zijn")
+    }
+
   }
 
   const updateUnstaffedUsers = (updatedStaffedUsers: User[]) => {

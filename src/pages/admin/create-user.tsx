@@ -35,13 +35,14 @@ export default function CreateUser() {
       email: email,
     }
 
-    Promise.all([
-      createUserBackend(formData),
-
-    ]).catch(() => {
-      ToastService.error("There has been an error")
-    })
-  }
+    Promise.all([createUserBackend(formData)])
+      .then(() => {
+        ToastService.success("Gebruiker is aangemaakt");
+      })
+      .catch(() => {
+        ToastService.error("Er is een fout opgetreden");
+      });
+  };
 
   return (
     <div className="text-center pt-10 h-screen flex justify-center mx-auto">

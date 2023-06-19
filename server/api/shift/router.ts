@@ -37,4 +37,6 @@ export const shiftRouter = createTRPCRouter({
         }
       });
     }),
+  updateShiftProperties: restrictedProcedure(Role.ADMIN)
+
 });

@@ -1,12 +1,15 @@
-import React, {useEffect, useMemo, useState} from "react";
-import { Button, NavigationBar, ToastService } from "../../components";
-import { api } from "../../utils/api";
-import { useAutoAnimate } from "@formkit/auto-animate/react";
-import { Edit, Minimize2, Trash2 } from "react-feather";
-import { Select } from "../../components/atoms/input/Selector";
-import { Item } from "react-stately";
-import type { User } from "@prisma/client";
-import type { ShiftWithStaffings } from "../../../server/types/shift";
+import React, {useEffect, useState} from "react";
+import {Button, NavigationBar, ToastService} from "../../components";
+import {api} from "../../utils/api";
+import {useAutoAnimate} from "@formkit/auto-animate/react";
+import {Edit, Minimize2, Trash2} from "react-feather";
+import {Select} from "../../components/atoms/input/Selector";
+import {Item} from "react-stately";
+import type {User} from "@prisma/client";
+import type {ShiftWithStaffings} from "../../../server/types/shift";
+import {DatetimeField} from "../../components/atoms/input/calendar/datetime-field";
+import {parseDateTime} from "@internationalized/date";
+import {DateTime} from "next-auth/providers/kakao";
 
 const Shiften = () => {
   const context = api.useContext()
@@ -69,8 +72,25 @@ const Shiften = () => {
       setExpandedRow(shift.id);
       updateStaffedUsers(shift);
       console.log(shift.staff_required)
+      console.log(shift.start)
     }
   };
+
+  const getFormattedTimeShift = (shiftTime: DateTime) => {
+    const dateTime = new Date(shiftTime);
+
+    const year = dateTime.getFullYear();
+    const month = String(dateTime.getMonth() + 1).padStart(2, "0");
+    const day = String(dateTime.getDate()).padStart(2, "0");
+    const hours = String(dateTime.getHours()).padStart(2, "0");
+    const minutes = String(dateTime.getMinutes()).padStart(2, "0");
+
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
+  };
+
+  const handleChangeTime = (startOrEnd: string) => {
+    console.log(document.getElementById(startOrEnd))?.textContent
+  }
 
   const updateUnstaffedUsers = (updatedStaffedUsers: User[]) => {
     const updatedUnstaffedUsers: User[] = users.filter((user: User) => {
@@ -188,29 +208,37 @@ const Shiften = () => {
                     <div className="p-4 relative">
                       <div className="flex flex-col justify-between mb-4">
                         <div className="flex flex-col mx-auto">
-                          <p className="mb-2 font-bold text-center">Starttijd</p>
+                          <div className="mb-2 font-bold text-center">Starttijd</div>
                           <div className="flex justify-between items-center max-w-xs mb-4">
                             <div className="flex-grow">
-                              <p className="border-b-2 border-l-2 border-t-2 border-black p-4 text-center">
-                                {/*<DateField label={"plswork"} defaultValue={shift.start}></DateField>*/}
-                                {shift.start.toString().slice(8, 10)} {shift.start.toString().slice(3, 7)} {shift.start.toString().slice(11, 15)} {shift.start.toString().slice(16, 21)}
-                              </p>
+                              <div className="border-b-2 border-l-2 border-t-2 border-black p-4 text-center">
+                                <DatetimeField
+                                    // hacky way around the label requirement, any visible label would break styling
+                                    label=" "
+                                    id="start"
+                                    defaultValue={parseDateTime(getFormattedTimeShift(shift.start))}
+                                ></DatetimeField>
+                              </div>
                             </div>
                             <div className="w-30">
-                              <Button aria-label="Wijzig starttijd" title="Wijzig starttijd" color="gray">
+                              <Button onPress={() => handleChangeTime("start")} aria-label="Wijzig starttijd" title="Wijzig starttijd" color="gray">
                                 <Edit size="24" className="stroke-5/4" />
                               </Button>
                             </div>
                           </div>
-                          <p className="mb-2 font-bold text-center">Eindtijd</p>
+                          <div className="mb-2 font-bold text-center">Eindtijd</div>
                           <div className="flex justify-between items-center max-w-xs mb-2">
                             <div className="flex-grow">
-                              <p className="border-b-2 border-l-2 border-t-2 border-black p-4 text-center">
-                                {shift.end.toString().slice(8, 10)} {shift.end.toString().slice(3, 7)} {shift.end.toString().slice(11, 15)} {shift.end.toString().slice(16, 21)}
-                              </p>
+                              <div className="border-b-2 border-l-2 border-t-2 border-black p-4 text-center">
+                                <DatetimeField
+                                    label=" "
+                                    id="end"
+                                    defaultValue={parseDateTime(getFormattedTimeShift(shift.end))}
+                                ></DatetimeField>
+                              </div>
                             </div>
                             <div className="w-30">
-                              <Button aria-label="Wijzig eindtijd" title="Wijzig eindtijd" color="gray">
+                              <Button onPress={() => handleChangeTime("end")} aria-label="Wijzig eindtijd" title="Wijzig eindtijd" color="gray">
                                 <Edit size="24" className="stroke-5/4" />
                               </Button>
                             </div>

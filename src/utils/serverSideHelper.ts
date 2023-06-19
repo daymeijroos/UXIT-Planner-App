@@ -1,5 +1,5 @@
 import { createServerSideHelpers } from '@trpc/react-query/server'
-import { GetServerSidePropsContext } from 'next'
+import type { GetServerSidePropsContext } from 'next'
 import { getServerAuthSession } from "../../server/auth-config"
 import { prisma } from "../../server/db"
 import { appRouter } from "../../server/api/root"

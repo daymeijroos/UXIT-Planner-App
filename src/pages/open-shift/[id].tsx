@@ -6,7 +6,6 @@ import { ParsedUrlQuery } from "querystring"
 import { formatDate } from "../../utils/date/formatDate"
 import { formatTime } from "../../utils/date/formatTime"
 import { useSession } from "next-auth/react"
-import { router } from "@trpc/server"
 import { useRouter } from "next/router"
 
 export const getServerSideProps: GetServerSideProps<{
@@ -34,9 +33,15 @@ export default function OpenShiftPage({ id }: InferGetServerSidePropsType<typeof
     onError: (error) => ToastService.error(error.message),
     onSuccess: () => {
       ToastService.success("Shift ingevuld")
-      router.push("/")
-      context.staffing.getPersonalStaffing.invalidate()
-      context.staffing.getStaffing.invalidate()
+      router.push("/").catch((e) => {
+        ToastService.error(e.message)
+      })
+      context.staffing.getPersonalStaffing.invalidate().catch((e) => {
+        ToastService.error(e.message)
+      })
+      context.staffing.getStaffing.invalidate().catch((e) => {
+        ToastService.error(e.message)
+      })
     }
   })
   const { data: session } = useSession()
@@ -44,7 +49,9 @@ export default function OpenShiftPage({ id }: InferGetServerSidePropsType<typeof
   if (!openStaffing) return <div>Not found</div>
 
   const skipOpenStaffing = () => {
-    router.push("/")
+    router.push("/").catch((e) => {
+      ToastService.error(e.message)
+    })
     ToastService.info("Shift niet ingevuld")
   }
 

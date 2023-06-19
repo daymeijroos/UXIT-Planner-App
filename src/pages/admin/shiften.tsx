@@ -45,6 +45,13 @@ const Shiften = () => {
       ToastService.success("Tijden zijn veranderd")
     }
   })
+  const { mutate: changeStaffRequired } = api.staffRequired.updateRequiredStaffingWithoutShiftTypeId.useMutation({
+    onSuccess: () => {
+      context.shift.getAllShifts.invalidate().catch((reason) => {
+        console.log(reason)
+      })
+    }
+  })
 
   const users: User[] = api.user.getUsersWithPreferencesAndStaffings.useQuery().data ?? []
   const employees: User[] = api.user.getUsersThatAreEmployees.useQuery().data
@@ -56,6 +63,7 @@ const Shiften = () => {
   const [selectedShiftType, setSelectedShiftType] = useState<string | null>(null)
   const [dateValueStart, setDateValueStart] = useState<{start: DateValue, end: DateValue}>()
   const [dateValueEnd, setDateValueEnd] = useState<{start: DateValue, end: DateValue}>()
+  const [staffingRequired, setStaffingRequired] = useState<number>(1);
 
   const [staffingList] = useAutoAnimate()
 
@@ -82,8 +90,7 @@ const Shiften = () => {
     } else {
       setExpandedRow(shift.id)
       updateStaffedUsers(shift)
-      console.log(shift.staff_required)
-      console.log(unstaffedEmployees)
+      console.log(shift.staff_required[0].amount)
     }
   }
 
@@ -99,7 +106,7 @@ const Shiften = () => {
     return `${year}-${month}-${day}T${hours}:${minutes}`
   }
 
-  const handleChangeTime = (shift: ShiftWithStaffings, startOrEnd: string) => {
+  const handleChangeTime = (shift: ShiftWithStaffings) => {
     const newStartTime: Date = new Date(dateValueStart)
     const newEndTime: Date = new Date(dateValueEnd)
     const shiftId: string = shift.id
@@ -117,7 +124,17 @@ const Shiften = () => {
     } else {
       ToastService.error("De begintijd moet voor de eindtijd zijn")
     }
+  }
 
+  const handleStaffingChange = (shift: ShiftWithStaffings, plusOrMinus: string) => {
+    let newStaffingRequired: number
+    if (plusOrMinus === "plus") {
+      newStaffingRequired = shift.staff_required[0].amount + 1
+    } else if (plusOrMinus === "minus" && shift.staff_required[0].id > 0) {
+      newStaffingRequired = shift.staff_required[0].amount - 1
+    }
+    setStaffingRequired(newStaffingRequired)
+    changeStaffRequired({id: shift.staff_required[0].id, staffRequired: staffingRequired})
   }
 
   const updateUnstaffedUsers = (updatedStaffedUsers: User[]) => {
@@ -243,7 +260,7 @@ const Shiften = () => {
                     <div className="p-4 relative">
                       <div className="flex flex-col justify-between mb-4">
                         {/* Change shift time */}
-                        <div className="flex flex-col mx-auto">
+                        <div className="flex flex-col mx-auto mb-2">
                           <div className="mb-2 font-bold text-center">Starttijd</div>
                           <div className="flex justify-between items-center max-w-xs mb-4">
                             <div className="flex-grow">
@@ -258,7 +275,7 @@ const Shiften = () => {
                               </div>
                             </div>
                             <div className="w-30">
-                              <Button onPress={() => handleChangeTime(shift,"start")} aria-label="Wijzig starttijd" title="Wijzig starttijd" color="gray">
+                              <Button onPress={() => handleChangeTime(shift)} aria-label="Wijzig starttijd" title="Wijzig starttijd" color="gray">
                                 <Edit size="24" className="stroke-5/4" />
                               </Button>
                             </div>
@@ -276,10 +293,41 @@ const Shiften = () => {
                               </div>
                             </div>
                             <div className="w-30">
-                              <Button onPress={() => handleChangeTime(shift,"end")} aria-label="Wijzig eindtijd" title="Wijzig eindtijd" color="gray">
+                              <Button onPress={() => handleChangeTime(shift)} aria-label="Wijzig eindtijd" title="Wijzig eindtijd" color="gray">
                                 <Edit size="24" className="stroke-5/4" />
                               </Button>
                             </div>
+                          </div>
+                        </div>
+                        {/* Required staffing */}
+                        <div className="flex flex-col mx-auto">
+                          <div className="mb-2 font-bold text-center">Benodigde vrijwilligers</div>
+                          <div className="flex items-center border border-gray-300 rounded-lg">
+                            <button
+                                type="button"
+                                onClick={() => handleStaffingChange(shift, "minus")}
+                                className="rounded-l-lg px-4 py-2 bg-gray-200 text-gray-700 text-3xl focus:outline-none"
+                            >
+                              -
+                            </button>
+                            <input
+                                type="text"
+                                id={"staffRequired"}
+                                pattern="[0-9]*"
+                                inputMode="numeric"
+                                value={shift.staff_required[0].amount}
+                                placeholder="0"
+                                // onChange={(e) => handleShiftTypeStaffingChange(shiftTypeName, e.target.value)}
+                                className="w-16 px-4 py-2 bg-white text-gray-700 text-xl focus:outline-none text-center cursor-auto"
+                                readOnly
+                            />
+                            <button
+                                type="button"
+                                onClick={() => handleStaffingChange(shift, "plus")}
+                                className="rounded-r-lg px-4 py-2 bg-gray-200 text-gray-700 text-3xl focus:outline-none"
+                            >
+                              +
+                            </button>
                           </div>
                         </div>
                         {/* Minimise and delete buttons */}

@@ -39,6 +39,7 @@ const Shiften = () => {
   const employees: User[] = api.user.getUsersThatAreEmployees.useQuery().data;
   const shifts = api.shift.getAllShifts.useQuery();
   const [unstaffedUsers, setUnstaffedUsers] = useState<User[]>([]);
+  const [unstaffedEmployees, setUnstaffedEmployees] = useState<User[]>([]);
   const [staffedUsers, setStaffedUsers] = useState<User[]>([]);
   const [expandedRow, setExpandedRow] = useState<null | string>(null);
   const [selectedShiftType, setSelectedShiftType] = useState<string | null>(null);
@@ -77,6 +78,13 @@ const Shiften = () => {
     setUnstaffedUsers(updatedUnstaffedUsers);
   };
 
+  const updateUnstaffedEmployees = (updatedStaffedEmployees: User[]) => {
+    const updatedUnstaffedEmployees: User[] = employees.filter((user: User) => {
+      return !updatedStaffedEmployees.some((staffedUser: User) => staffedUser.id === user.id);
+    });
+    setUnstaffedEmployees(updatedUnstaffedEmployees);
+  };
+
   const updateStaffedUsers = (shift: ShiftWithStaffings) => {
     const updatedStaffedUsers: User[] = [];
     shift.staffings?.forEach((staffing) => {
@@ -87,6 +95,7 @@ const Shiften = () => {
 
     setStaffedUsers(updatedStaffedUsers);
     updateUnstaffedUsers(updatedStaffedUsers);
+    updateUnstaffedEmployees(updatedStaffedUsers)
   }
 
   const handleRemoveStaffing = async (shift: ShiftWithStaffings, staffingId: string) => {
@@ -286,7 +295,9 @@ const Shiften = () => {
                             <>
                               <div className="mb-4">
                                 <Select label="Galeriemedewerkers en -vrijwilligers" id={"Galerie"} initialText="Kies een medewerker of vrijwilliger" items={employees}>
-                                  {(item: User) => <Item>{item.name + " " + item.last_name}</Item>}
+                                  {unstaffedEmployees.map((user) => (
+                                      <Item key={user.name + user.last_name}>{user.name + " " + user.last_name}</Item>
+                                  ))}
                                 </Select>
                               </div>
                               <Button onPress={() => handleAddStaffing(shift, "Galerie")} color="teal">

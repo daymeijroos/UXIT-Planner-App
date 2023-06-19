@@ -7,7 +7,6 @@ import { Select } from "../../components/atoms/input/Selector";
 import { Item } from "react-stately";
 import type { User } from "@prisma/client";
 import type { ShiftWithStaffings } from "../../../server/types/shift";
-import type { StaffingWithColleagues } from "../../types/StaffingWithColleagues";
 
 const Shiften = () => {
   const context = api.useContext()
@@ -42,6 +41,7 @@ const Shiften = () => {
   const [unstaffedUsers, setUnstaffedUsers] = useState<User[]>([]);
   const [staffedUsers, setStaffedUsers] = useState<User[]>([]);
   const [expandedRow, setExpandedRow] = useState<null | string>(null);
+  const [selectedShiftType, setSelectedShiftType] = useState<string | null>(null);
   const [staffingList] = useAutoAnimate();
 
   useEffect(() => {
@@ -118,6 +118,12 @@ const Shiften = () => {
         }
       }
     });
+  };
+
+  const handleSelectShiftType = () => {
+    const shiftType = document.getElementById("shiftType")?.textContent ?? ""
+
+    setSelectedShiftType(shiftType);
   };
 
   return (
@@ -233,7 +239,7 @@ const Shiften = () => {
                         )}
                       </div>
                       <div className="flex flex-col max-w-xs mx-auto" ref={staffingList}>
-                        <p className="mb-4 font-bold text-center">Staffing Galerie</p>
+                        <p className="mb-4 mt-4 font-bold text-center">Staffing Galerie</p>
                         {shift.staffings.map((staffing) =>
                             staffing.shift_type.name === "Galerie" ? (
                             <div key={staffing.id} className="flex items-center mb-2">
@@ -254,22 +260,41 @@ const Shiften = () => {
                         )}
                       </div>
 
-                      <div className="mb-4">
-                        {/*// TODO needs to be unstaffedUsers*/}
-                         <Select label="Balievrijwilligers" id={"Balie"}>
-                           {unstaffedUsers.map((user) =>
-                               <Item key={user.name + user.last_name}>{user.name + " " + user.last_name}</Item>
-                           )}
-                         </Select>
-                      </div>
-                      <Button onPress={() => handleAddStaffing(shift, "Balie")} color="teal">Voeg vrijwilliger toe</Button>
+                      <div>
+                        {/*TODO: onFocusChange is unintuitive, need to click on another element for method to be called*/}
+                        <Select label="Shift Type" id="shiftType" initialText="Kies een shift type" onFocusChange={handleSelectShiftType}>
+                          <Item value="Balie">Balie</Item>
+                          <Item value="Galerie">Galerie</Item>
+                        </Select>
 
-                      <div className="mb-4">
-                         <Select label="Galeriemedewerkers en -vrijwilligers" id={"Galerie"} items={employees}>
-                           {(item: User) => <Item>{item.name + " " + item.last_name}</Item>}
-                         </Select>
+                        {selectedShiftType === 'Balie' && (
+                            <>
+                              <div className="mb-4">
+                                <Select label="Balievrijwilligers" id={"Balie"} initialText="Kies een vrijwilliger">
+                                  {unstaffedUsers.map((user) => (
+                                      <Item key={user.name + user.last_name}>{user.name + " " + user.last_name}</Item>
+                                  ))}
+                                </Select>
+                              </div>
+                              <Button onPress={() => handleAddStaffing(shift, "Balie")} color="teal">
+                                Voeg vrijwilliger toe
+                              </Button>
+                            </>
+                        )}
+
+                        {selectedShiftType === 'Galerie' && (
+                            <>
+                              <div className="mb-4">
+                                <Select label="Galeriemedewerkers en -vrijwilligers" id={"Galerie"} initialText="Kies een medewerker of vrijwilliger" items={employees}>
+                                  {(item: User) => <Item>{item.name + " " + item.last_name}</Item>}
+                                </Select>
+                              </div>
+                              <Button onPress={() => handleAddStaffing(shift, "Galerie")} color="teal">
+                                Voeg medewerker toe
+                              </Button>
+                            </>
+                        )}
                       </div>
-                      <Button onPress={() => handleAddStaffing(shift, "Galerie")} color="teal">Voeg medewerker toe</Button>
 
                     </div>
                   </td>

@@ -63,6 +63,13 @@ export default function Admin() {
           <h2>Uitbreiding</h2>
           <div className="grid w-full grid-cols-2 gap-4">
             <Button>Nieuw shifttype toevoegen</Button>
+            <Button
+              onPress={() => {
+                router.push("/admin/add-shift").catch((error) => {
+                  console.error(error)
+                })
+              }}
+            >Nieuw shift toevoegen</Button>
           </div>
           <h2>Accounts beheren</h2>
           <div className="grid w-full grid-cols-2 gap-4">

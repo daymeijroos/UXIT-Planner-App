@@ -5,7 +5,7 @@ export const userRouter = createTRPCRouter({
   getAllUsers: restrictedProcedure(Role.ADMIN).query(({ctx}) => {
     return ctx.prisma.user.findMany()
   }),
-  getUsersWithPreferencesAndStaffings: protectedProcedure
+  getUsersWithPreferencesAndStaffings: restrictedProcedure(Role.ADMIN)
     .query(({ ctx }) => {
       return ctx.prisma.user.findMany({
         include: {
@@ -27,7 +27,7 @@ export const userRouter = createTRPCRouter({
         }
       });
     }),
-  getUsersThatAreEmployees: protectedProcedure
+  getUsersThatAreEmployees: restrictedProcedure(Role.ADMIN)
       .query(({ctx}) => {
         return ctx.prisma.user.findMany({
           where: {

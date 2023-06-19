@@ -1,5 +1,6 @@
-import { createTRPCRouter, protectedProcedure } from "../trpc";
+import {createTRPCRouter, protectedProcedure, restrictedProcedure} from "../trpc";
 import { z } from "zod";
+import {Role} from "../../../prisma/role";
 
 export const shiftRouter = createTRPCRouter({
   getAllShifts: protectedProcedure
@@ -25,7 +26,7 @@ export const shiftRouter = createTRPCRouter({
         }
       });
     }),
-  removeShiftAdmin: protectedProcedure
+  removeShiftAdmin: restrictedProcedure(Role.ADMIN)
     .input(z.object({
       shift_id: z.string()
     }))

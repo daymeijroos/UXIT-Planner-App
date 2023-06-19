@@ -68,6 +68,7 @@ const Shiften = () => {
     } else {
       setExpandedRow(shift.id);
       updateStaffedUsers(shift);
+      console.log(shift.staff_required)
     }
   };
 
@@ -286,7 +287,7 @@ const Shiften = () => {
                                 </Select>
                               </div>
                               <Button onPress={() => handleAddStaffing(shift, "Balie")} color="teal">
-                                Voeg vrijwilliger toe
+                                Voeg balie staffing toe
                               </Button>
                             </>
                         )}
@@ -301,7 +302,7 @@ const Shiften = () => {
                                 </Select>
                               </div>
                               <Button onPress={() => handleAddStaffing(shift, "Galerie")} color="teal">
-                                Voeg medewerker toe
+                                Voeg galerie staffing toe
                               </Button>
                             </>
                         )}

@@ -1,6 +1,7 @@
 import { z } from "zod"
 
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
+import {createTRPCRouter, protectedProcedure, publicProcedure, restrictedProcedure} from "../trpc";
+import {Role} from "../../../prisma/role";
 
 //get all shifts from the start of today onwards until a set amount of days after that
 
@@ -145,7 +146,7 @@ export const staffingRouter = createTRPCRouter({
         }
       });
     }),
-  addStaffing: protectedProcedure
+  addStaffing: restrictedProcedure(Role.ADMIN)
     .input(
       z.object({
         shift_id: z.string(),
@@ -214,7 +215,7 @@ export const staffingRouter = createTRPCRouter({
         }
       })
     }),
-  removeStaffingAdmin: publicProcedure
+  removeStaffingAdmin: restrictedProcedure(Role.ADMIN)
     .input(z.object({
       staffing_id: z.string()
     }))

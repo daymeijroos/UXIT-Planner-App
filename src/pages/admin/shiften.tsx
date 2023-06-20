@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react"
+import React, {Key, useEffect, useState} from "react"
 import {Button, NavigationBar, ToastService} from "../../components"
 import {api} from "../../utils/api"
 import {useAutoAnimate} from "@formkit/auto-animate/react"
@@ -11,8 +11,6 @@ import {DatetimeField} from "../../components/atoms/input/calendar/datetime-fiel
 import {parseDateTime} from "@internationalized/date"
 import {DateTime} from "next-auth/providers/kakao"
 import {DateValue} from "react-aria"
-import {Shift} from "@prisma/client"
-import {Toast} from "next/dist/client/components/react-dev-overlay/internal/components/Toast";
 
 const Shiften = () => {
   const context = api.useContext()
@@ -51,6 +49,7 @@ const Shiften = () => {
       context.shift.getAllShifts.invalidate().catch((reason) => {
         console.log(reason)
       })
+      ToastService.succes("Het aantal is gewijzigd")
     }
   })
 
@@ -203,12 +202,6 @@ const Shiften = () => {
     })
   }
 
-  const handleSelectShiftType = () => {
-    const shiftType = document.getElementById("shiftType")?.textContent ?? ""
-
-    setSelectedShiftType(shiftType)
-  }
-
   return (
     <div className="mb-20">
       <div className="flex justify-between items-center p-4 mb-4">
@@ -283,7 +276,7 @@ const Shiften = () => {
                               </div>
                             </div>
                             <div className="w-30">
-                              <Button onPress={() => handleChangeTime(shift)} aria-label="Wijzig starttijd" title="Wijzig starttijd" color="gray">
+                              <Button onPress={() => handleChangeTime(shift)} aria-label="Wijzig starttijd" title="Wijzig starttijd" color="teal">
                                 <Edit size="24" className="stroke-5/4" />
                               </Button>
                             </div>
@@ -301,7 +294,7 @@ const Shiften = () => {
                               </div>
                             </div>
                             <div className="w-30">
-                              <Button onPress={() => handleChangeTime(shift)} aria-label="Wijzig eindtijd" title="Wijzig eindtijd" color="gray">
+                              <Button onPress={() => handleChangeTime(shift)} aria-label="Wijzig eindtijd" title="Wijzig eindtijd" color="teal">
                                 <Edit size="24" className="stroke-5/4" />
                               </Button>
                             </div>
@@ -334,7 +327,7 @@ const Shiften = () => {
                                 onPress={() => handleConfirmStaffingCharge(shift)}
                                 aria-label="Wijzig benodigd aantal vrijwilligers"
                                 title="Wijzig benodigd aantal vrijwilligers"
-                                color="gray">
+                                color="teal">
                               <CheckSquare size="24" className="stroke-5/4" />
                             </Button>
                           </div>
@@ -396,11 +389,12 @@ const Shiften = () => {
                         )}
                       </div>
                       {/* Shift type selector */}
-                      <div>
-                        {/*TODO: onFocusChange is unintuitive, need to click on another element for method to be called*/}
-                        <Select label="Shift Type" id="shiftType" initialText="Kies een shift type" onFocusChange={handleSelectShiftType}>
-                          <Item value="Balie">Balie</Item>
-                          <Item value="Galerie">Galerie</Item>
+                      <div className="mt-4">
+                        <p className="font-bold">Kies een shift type voor handmatige toevoegingen</p>
+                        <Select label="Shift Type" id="shiftType" initialText="Kies een shift type"
+                                selectedKey={selectedShiftType} onSelectionChange={(newShiftType: Key) => setSelectedShiftType(newShiftType as string)}>
+                          <Item key="Balie">Balie</Item>
+                          <Item key="Galerie">Galerie</Item>
                         </Select>
                         {/* Select a staffing for balie */}
                         {selectedShiftType === 'Balie' && (

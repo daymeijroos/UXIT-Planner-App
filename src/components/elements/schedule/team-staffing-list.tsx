@@ -11,14 +11,7 @@ export const TeamStaffingList = () => {
   const [selectedDate, setSelectedDate] = useState<CalendarDate>(parseDate(new Date(new Date().setHours(2, 0, 0, 0)).toISOString().slice(0, 10)))
   const context = api.useContext()
 
-  const staffings = api.staffing.getStaffing.useInfiniteQuery({ fromDate: selectedDate.toDate(getLocalTimeZone()) }, {
-    getNextPageParam: (lastPage) => {
-      return lastPage.nextCursor
-    },
-    getPreviousPageParam: (firstPage) => {
-      return firstPage.previousCursor
-    }
-  })
+  const staffings = api.staffing.getStaffing.useQuery({ fromDate: selectedDate.toDate(getLocalTimeZone()) })
 
   useEffect(() => {
     setSelectedDate(parseDate(new Date(new Date().setHours(2, 0, 0, 0)).toISOString().slice(0, 10)))
@@ -38,7 +31,7 @@ export const TeamStaffingList = () => {
   let filteredStaffings: StaffingWithColleagues[] = []
 
   if (!staffings.isLoading) {
-    uniqueStaffings = staffings.data.pages.flatMap((page) => page.items).reduce((accumulator: StaffingWithColleagues[], current: StaffingWithColleagues) => {
+    uniqueStaffings = staffings.data.reduce((accumulator: StaffingWithColleagues[], current: StaffingWithColleagues) => {
       const existingStaffing = accumulator.find((staffing: StaffingWithColleagues) => {
         const sameStart = staffing.shift.start.getTime() === current.shift.start.getTime()
         const sameEnd = staffing.shift.end.getTime() === current.shift.end.getTime()
@@ -70,12 +63,10 @@ export const TeamStaffingList = () => {
         context.staffing.getStaffing.invalidate().catch((error) => {
           console.error(error)
         })
-        staffings.fetchNextPage().catch((e) => console.log(e))
       }} onPrevWeek={() => {
         context.staffing.getStaffing.invalidate().catch((error) => {
           console.error(error)
         })
-        staffings.fetchPreviousPage().catch((e) => console.log(e))
       }} />
       {
         staffings.isLoading ? (

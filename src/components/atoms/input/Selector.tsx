@@ -1,6 +1,6 @@
-import * as React from "react";
-import type { AriaSelectProps } from "@react-types/select";
-import { useSelectState } from "react-stately";
+import * as React from "react"
+import type { AriaSelectProps } from "@react-types/select"
+import { useSelectState } from "react-stately"
 import { ChevronDown, ChevronUp } from 'react-feather'
 
 import {
@@ -9,31 +9,31 @@ import {
   useButton,
   mergeProps,
   useFocusRing
-} from "react-aria";
+} from "react-aria"
 
-import { ListBox } from "./ListBox";
-import { Popover } from "./popover";
+import { ListBox } from "./ListBox"
+import { Popover } from "../layout/popover"
 
-export { Item } from "react-stately";
+export { Item } from "react-stately"
 
 
 
 export function Select<T extends object>(props: AriaSelectProps<T>) {
   // Create state based on the incoming props
-  const state = useSelectState(props);
+  const state = useSelectState(props)
 
   // Get props for child elements from useSelect
-  const ref = React.useRef(null);
+  const ref = React.useRef(null)
   const { labelProps, triggerProps, valueProps, menuProps } = useSelect(
     props,
     state,
     ref
-  );
+  )
 
   // Get props for the button based on the trigger props from useSelect
-  const { buttonProps } = useButton(triggerProps, ref);
+  const { buttonProps } = useButton(triggerProps, ref)
 
-  const { focusProps, isFocusVisible } = useFocusRing();
+  const { focusProps, isFocusVisible } = useFocusRing()
 
   return (
     <div className="flex-col w-full mt-4">
@@ -52,15 +52,13 @@ export function Select<T extends object>(props: AriaSelectProps<T>) {
       <button
         {...mergeProps(buttonProps, focusProps)}
         ref={ref}
-        className={`p-4 w-full relative inline-flex flex-row items-center justify-between overflow-hidden cursor-default shadow-sm border-r-2 border-l-2 border-t-2 border-b-4 outline-none ${
-          isFocusVisible ? "dark:border-gray-400 border-black ring-4 ring-yellow-500" : "dark:border-gray-400 border-black"
-        } ${state.isOpen ? "bg-gray-100 dark:bg-gray-600" : "dark:bg-gray-700 bg-white"}`}
+        className={`p-4 w-full relative inline-flex flex-row items-center justify-between overflow-hidden cursor-default shadow-sm border-r-2 border-l-2 border-t-2 border-b-4 outline-none ${isFocusVisible ? "dark:border-gray-400 border-black ring-4 ring-yellow-500" : "dark:border-gray-400 border-black"
+          } ${state.isOpen ? "bg-gray-100 dark:bg-gray-600" : "dark:bg-gray-700 bg-white"}`}
       >
         <span
           {...valueProps}
-          className={`text-md ${
-            state.selectedItem ? "dark:text-white text-black" : "dark:text-gray-400 text-gray-600"
-          }`}
+          className={`text-md ${state.selectedItem ? "dark:text-white text-black" : "dark:text-gray-400 text-gray-600"
+            }`}
         >
           {state.selectedItem
             ? state.selectedItem.rendered
@@ -94,7 +92,7 @@ export function Select<T extends object>(props: AriaSelectProps<T>) {
         </Popover>
       )}
     </div>
-  );
+  )
 }
 
 

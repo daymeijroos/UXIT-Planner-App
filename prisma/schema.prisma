@@ -129,7 +129,9 @@ model Shift {
   end            DateTime
   staffings      Staffing[]
   staff_required Staff_Required[]
-  open_staffings OpenStaffing[]
+  Backup         Backup[]
+  isOpen         Boolean          @default(true)
+  OpenStaffing   OpenStaffing[]
 
   @@unique([start, end])
 }
@@ -162,6 +164,8 @@ model Backup {
   user_id String
   date    DateTime @unique
   user    User     @relation(fields: [user_id], references: [id])
+  Shift   Shift?   @relation(fields: [shiftId], references: [id])
+  shiftId String?
 
   @@unique([user_id, date])
 }

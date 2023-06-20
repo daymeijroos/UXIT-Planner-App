@@ -2022,5 +2022,4 @@ main()
   .finally(() => {
     prisma.$disconnect()
       .catch((e) => { console.error(e) })
-  });
-
+  })

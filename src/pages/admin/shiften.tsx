@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react"
 import {Button, NavigationBar, ToastService} from "../../components"
 import {api} from "../../utils/api"
 import {useAutoAnimate} from "@formkit/auto-animate/react"
-import {Edit, Minimize2, Trash2} from "react-feather"
+import {CheckSquare, Edit, Minimize2, Trash2} from "react-feather"
 import {Select} from "../../components/atoms/input/Selector"
 import {Item} from "react-stately"
 import type {User} from "@prisma/client"
@@ -12,6 +12,7 @@ import {parseDateTime} from "@internationalized/date"
 import {DateTime} from "next-auth/providers/kakao"
 import {DateValue} from "react-aria"
 import {Shift} from "@prisma/client"
+import {Toast} from "next/dist/client/components/react-dev-overlay/internal/components/Toast";
 
 const Shiften = () => {
   const context = api.useContext()
@@ -90,6 +91,7 @@ const Shiften = () => {
     } else {
       setExpandedRow(shift.id)
       updateStaffedUsers(shift)
+      setStaffingRequired(shift.staff_required[0].amount)
       console.log(shift.staff_required[0].amount)
     }
   }
@@ -129,11 +131,17 @@ const Shiften = () => {
   const handleStaffingChange = (shift: ShiftWithStaffings, plusOrMinus: string) => {
     let newStaffingRequired: number
     if (plusOrMinus === "plus") {
-      newStaffingRequired = shift.staff_required[0].amount + 1
-    } else if (plusOrMinus === "minus" && shift.staff_required[0].id > 0) {
-      newStaffingRequired = shift.staff_required[0].amount - 1
+      newStaffingRequired = staffingRequired + 1
+    } else if (plusOrMinus === "minus" && staffingRequired > 0) {
+      newStaffingRequired = staffingRequired - 1
+    } else if (plusOrMinus === "minus" && staffingRequired === 0) {
+      ToastService.error("Dit getal kan niet onder 0 komen")
+      return
     }
     setStaffingRequired(newStaffingRequired)
+  }
+
+  const handleConfirmStaffingCharge = (shift: ShiftWithStaffings) => {
     changeStaffRequired({id: shift.staff_required[0].id, staffRequired: staffingRequired})
   }
 
@@ -300,34 +308,35 @@ const Shiften = () => {
                           </div>
                         </div>
                         {/* Required staffing */}
-                        <div className="flex flex-col mx-auto">
-                          <div className="mb-2 font-bold text-center">Benodigde vrijwilligers</div>
+                        <div className="mb-2 font-bold text-center">Benodigde vrijwilligers</div>
+                        <div className="flex flex-row items-center mx-auto">
                           <div className="flex items-center border border-gray-300 rounded-lg">
                             <button
                                 type="button"
                                 onClick={() => handleStaffingChange(shift, "minus")}
-                                className="rounded-l-lg px-4 py-2 bg-gray-200 text-gray-700 text-3xl focus:outline-none"
-                            >
-                              -
-                            </button>
+                                className="rounded-l-lg px-4 py-2 bg-gray-200 text-gray-700 text-3xl focus:outline-none h-full">-</button>
                             <input
                                 type="text"
-                                id={"staffRequired"}
+                                id="staffRequired"
                                 pattern="[0-9]*"
                                 inputMode="numeric"
-                                value={shift.staff_required[0].amount}
+                                value={staffingRequired}
                                 placeholder="0"
-                                // onChange={(e) => handleShiftTypeStaffingChange(shiftTypeName, e.target.value)}
                                 className="w-16 px-4 py-2 bg-white text-gray-700 text-xl focus:outline-none text-center cursor-auto"
-                                readOnly
-                            />
+                                readOnly/>
                             <button
                                 type="button"
                                 onClick={() => handleStaffingChange(shift, "plus")}
-                                className="rounded-r-lg px-4 py-2 bg-gray-200 text-gray-700 text-3xl focus:outline-none"
-                            >
-                              +
-                            </button>
+                                className="rounded-r-lg px-4 py-2 bg-gray-200 text-gray-700 text-3xl focus:outline-none h-full">+</button>
+                          </div>
+                          <div className="ml-4">
+                            <Button
+                                onPress={() => handleConfirmStaffingCharge(shift)}
+                                aria-label="Wijzig benodigd aantal vrijwilligers"
+                                title="Wijzig benodigd aantal vrijwilligers"
+                                color="gray">
+                              <CheckSquare size="24" className="stroke-5/4" />
+                            </Button>
                           </div>
                         </div>
                         {/* Minimise and delete buttons */}

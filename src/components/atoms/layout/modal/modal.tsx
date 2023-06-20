@@ -1,10 +1,10 @@
 import React from 'react'
 import { Overlay, useModalOverlay } from 'react-aria'
-import { OverlayTriggerState } from 'react-stately'
+import type { OverlayTriggerState } from 'react-stately'
 
 export function Modal({ state, children, ...props }: { state: OverlayTriggerState, children: React.ReactNode }) {
-  let ref = React.useRef(null)
-  let { modalProps, underlayProps } = useModalOverlay(props, state, ref)
+  const ref = React.useRef(null)
+  const { modalProps, underlayProps } = useModalOverlay(props, state, ref)
 
   return (
     <Overlay>

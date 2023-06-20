@@ -64,8 +64,8 @@ model VerificationToken {
 
 model User_Preference {
   id                        String                @id @default(cuid())
-  shift_type_id             String
-  shift_type                Shift_Type            @relation(fields: [shift_type_id], references: [id])
+  shift_type_id             String?
+  shift_type                Shift_Type?           @relation(fields: [shift_type_id], references: [id])
   absence                   Absence[]
   availability_even_week    AvailabilityEvenWeek  @relation(fields: [availability_even_week_id], references: [id])
   availability_even_week_id String                @unique

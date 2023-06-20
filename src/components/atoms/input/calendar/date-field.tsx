@@ -1,19 +1,19 @@
 import { type AriaDateFieldProps, type DateValue, useDateField, useDateSegment, useLocale } from 'react-aria'
-import { DateFieldState, DateSegment, useDateFieldState } from 'react-stately'
+import { type DateFieldState, DateSegment, useDateFieldState } from 'react-stately'
 import { createCalendar } from '@internationalized/date'
 import React from 'react'
 import classNames from 'classnames'
 
 export function DateField<T extends DateValue>(props: AriaDateFieldProps<T>) {
-  let { locale } = useLocale()
-  let state = useDateFieldState({
+  const { locale } = useLocale()
+  const state = useDateFieldState({
     ...props,
     locale,
     createCalendar
   })
 
-  let ref = React.useRef(null)
-  let { labelProps, fieldProps } = useDateField(props, state, ref)
+  const ref = React.useRef(null)
+  const { labelProps, fieldProps } = useDateField(props, state, ref)
 
   return (
     <div className="flex">
@@ -30,8 +30,8 @@ export function DateField<T extends DateValue>(props: AriaDateFieldProps<T>) {
 }
 
 function DateSegment({ segment, state }: { segment: DateSegment, state: DateFieldState }) {
-  let ref = React.useRef(null)
-  let { segmentProps } = useDateSegment(segment, state, ref)
+  const ref = React.useRef(null)
+  const { segmentProps } = useDateSegment(segment, state, ref)
 
   return (
     <div

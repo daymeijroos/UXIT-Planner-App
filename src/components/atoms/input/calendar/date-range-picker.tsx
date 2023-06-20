@@ -11,9 +11,9 @@ import { Dialog } from '../../layout/dialog'
 import { Calendar } from 'react-feather'
 
 export function DateRangePicker<T extends DateValue>(props: AriaDateRangePickerProps<T>) {
-  let state = useDateRangePickerState(props)
-  let ref = React.useRef(null)
-  let {
+  const state = useDateRangePickerState(props)
+  const ref = React.useRef(null)
+  const {
     labelProps,
     groupProps,
     startFieldProps,

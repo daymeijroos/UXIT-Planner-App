@@ -5,7 +5,6 @@ import OneSignal from 'react-onesignal'
 import { Button } from '../../atoms'
 import { useSession } from 'next-auth/react'
 import { env } from '../../../../env/client.mjs'
-import { ToastService } from '../generic'
 
 export const WebPushButton = () => {
   const [pushEnabled, setPushEnabled] = useState<boolean>(false)

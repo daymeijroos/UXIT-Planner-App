@@ -91,7 +91,11 @@ const Shiften = () => {
       setExpandedRow(shift.id)
       updateStaffedUsers(shift)
       setStaffingRequired(shift.staff_required[0].amount)
-      console.log(shift.staff_required[0].amount)
+      setSelectedShiftType(null)
+      setDateValueStart(parseDateTime(getFormattedTimeShift(shift.start)))
+      setDateValueEnd(parseDateTime(getFormattedTimeShift(shift.end)))
+      console.log(dateValueStart)
+      console.log(dateValueEnd)
     }
   }
 
@@ -271,7 +275,9 @@ const Shiften = () => {
                                     label=" "
                                     id="start"
                                     defaultValue={parseDateTime(getFormattedTimeShift(shift.start))}
-                                    onChange={(v) => { setDateValueStart(v) }}
+                                    onChange={(v) => {
+                                      setDateValueStart(v);
+                                    }}
                                 ></DatetimeField>
                               </div>
                             </div>
@@ -289,7 +295,9 @@ const Shiften = () => {
                                     label=" "
                                     id="end"
                                     defaultValue={parseDateTime(getFormattedTimeShift(shift.end))}
-                                    onChange={(v) => { setDateValueEnd(v) }}
+                                    onChange={(v) => {
+                                      setDateValueEnd(v);
+                                    }}
                                 ></DatetimeField>
                               </div>
                             </div>

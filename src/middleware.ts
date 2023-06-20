@@ -33,5 +33,5 @@ export default withAuth(
   * @see https://nextjs.org/docs/api-reference/next.config.js/rewrites
   */
 export const config = {
-  matcher: ["/", "/api/:path*", "/admin/:path*", "/test/:path*"],
+  matcher: ["/", "/api/:path*", "/admin/:path*", "/test/:path*, /open-shift/:path*, /meldingen/:path*"],
 }

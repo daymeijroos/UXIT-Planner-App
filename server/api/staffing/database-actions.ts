@@ -1,9 +1,36 @@
-import { User } from "@prisma/client"
 import { prisma } from "../../db"
-import { Shift, Staff_Required } from "@prisma/client"
+import type { OpenStaffing, Shift, Shift_Type, Staffing, User } from "@prisma/client"
 
-export const createStaffing = async (user: User, shift: Shift, staff_required: Staff_Required) => {
-  return prisma.staffing.create({
+export const createStaffing = async (user: User, openStaffing: OpenStaffing): Promise<Staffing> => {
+  const staffing = await prisma.staffing.create({
+    data: {
+      shift: {
+        connect: {
+          id: openStaffing.shift_id,
+        },
+      },
+      shift_type: {
+        connect: {
+          id: openStaffing.shift_type_id,
+        },
+      },
+      user: {
+        connect: {
+          id: user.id,
+        },
+      }
+    },
+  })
+  if (staffing) prisma.openStaffing.delete({
+    where: {
+      id: openStaffing.id
+    }
+  })
+  return staffing
+}
+
+export const createOpenStaffing = async (shift: Shift, shiftType: Shift_Type): Promise<OpenStaffing> => {
+  return prisma.openStaffing.create({
     data: {
       shift: {
         connect: {
@@ -12,14 +39,9 @@ export const createStaffing = async (user: User, shift: Shift, staff_required: S
       },
       shift_type: {
         connect: {
-          id: staff_required.shift_type_id,
+          id: shiftType.id,
         },
       },
-      user: {
-        connect: {
-          id: user.id,
-        },
-      }
     },
   })
 }

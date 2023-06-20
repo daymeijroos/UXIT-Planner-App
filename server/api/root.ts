@@ -7,6 +7,7 @@ import { absenceRouter } from "./absence/absence"
 import { notificationRouter } from "./notification"
 import { userRouter } from "./user"
 import { roleRouter } from "./role/router";
+import { openStaffingRouter } from "./open-staffing"
 
 
 export const appRouter = createTRPCRouter({
@@ -17,7 +18,7 @@ export const appRouter = createTRPCRouter({
   absence: absenceRouter,
   notification: notificationRouter,
   user: userRouter,
-  role: roleRouter,
+  openStaffing: openStaffingRouter,
 })
 
 export type AppRouter = typeof appRouter

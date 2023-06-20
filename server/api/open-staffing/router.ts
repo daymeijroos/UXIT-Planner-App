@@ -23,7 +23,6 @@ export const openStaffingRouter = createTRPCRouter({
       id: z.string()
     }))
     .mutation(async ({ ctx, input }) => {
-      console.log(ctx.session)
       const openStaffing: OpenStaffing = await ctx.prisma.openStaffing.delete({
         where: {
           id: input.id

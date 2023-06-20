@@ -46,12 +46,6 @@ async function main() {
     }
   })
 
-
-
-  console.log("Shift Types created: ", shiftType1, shiftType2)
-  const users = []
-
-
   // create admin user
   const adminUser = await prisma.user.create({
     data: {
@@ -2027,6 +2021,6 @@ main()
   })
   .finally(() => {
     prisma.$disconnect()
-      .catch((e) => { console.log(e) })
+      .catch((e) => { console.error(e) })
   });
 

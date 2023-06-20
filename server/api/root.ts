@@ -19,6 +19,7 @@ export const appRouter = createTRPCRouter({
   notification: notificationRouter,
   user: userRouter,
   openStaffing: openStaffingRouter,
+  role: roleRouter,
 })
 
 export type AppRouter = typeof appRouter

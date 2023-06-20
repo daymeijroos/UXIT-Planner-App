@@ -7,8 +7,8 @@ import { Modal } from './modal'
 import React from 'react'
 
 function ModalTrigger({ children, ...props }: { children: (close: () => void) => React.ReactElement } & OverlayTriggerProps) {
-  let state = useOverlayTriggerState(props)
-  let { triggerProps, overlayProps } = useOverlayTrigger(
+  const state = useOverlayTriggerState(props)
+  const { triggerProps, overlayProps } = useOverlayTrigger(
     { type: 'dialog' },
     state
   )

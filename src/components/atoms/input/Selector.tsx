@@ -36,7 +36,7 @@ export function Select<T extends object>(props: SelectProps<T>) {
   const { focusProps, isFocusVisible } = useFocusRing();
 
   return (
-    <div className="flex-col w-full mt-4">
+    <div className="flex-col w-full">
       <div
         {...labelProps}
         className="block text-sm font-medium text-gray-700 dark:text-white text-left cursor-default mb-1"

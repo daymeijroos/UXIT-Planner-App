@@ -31,21 +31,16 @@ export const userRouter = createTRPCRouter({
       role_name: z.string().optional(),
     }))
     .mutation(({ ctx, input }) => {
-      let data: {
+      const data: {
         name?: string,
         last_name?: string,
         email?: string,
         role_name?: string,
-      } = {
-        name: undefined,
-        last_name: undefined,
-        email: undefined,
-        role_name: undefined,
-      }
+      } = {}
 
       if (input.name) data.name = input.name.trim().charAt(0).toUpperCase() + input.name.trim().slice(1).toLowerCase()
       if (input.last_name) data.last_name = input.last_name.trim().charAt(0).toUpperCase() + input.last_name.trim().slice(1).toLowerCase()
-      if (input.email) data.email = input.email
+      if (input.email) data.email = input.email.toLowerCase()
       if (input.role_name) data.role_name = input.role_name
 
       return ctx.prisma.user.update({

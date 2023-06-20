@@ -9,7 +9,7 @@ export function TextField(props: { error?: string } & AriaTextFieldProps) {
     const { labelProps, inputProps, descriptionProps, errorMessageProps } = useTextField(props, ref)
 
     return (
-        <div className={"w-full dark:text-white flex flex-col gap-1"}>
+        <div className={"w-full dark:text-white flex flex-col"}>
             <label htmlFor="label" className={classNames(
                 { 'dark:text-red-500': props.error }
             )}{...labelProps}>{props.label}</label>

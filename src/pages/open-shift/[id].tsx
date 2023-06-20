@@ -2,7 +2,7 @@ import { Button, Card, ToastService } from "../../components"
 import { api } from "../../utils/api"
 import { serverSideHelper } from "../../utils/serverSideHelper"
 import type { InferGetServerSidePropsType, GetServerSideProps, GetServerSidePropsContext, PreviewData } from 'next'
-import { ParsedUrlQuery } from "querystring"
+import type { ParsedUrlQuery } from "querystring"
 import { formatDate } from "../../utils/date/formatDate"
 import { formatTime } from "../../utils/date/formatTime"
 import { useSession } from "next-auth/react"
@@ -33,13 +33,13 @@ export default function OpenShiftPage({ id }: InferGetServerSidePropsType<typeof
     onError: (error) => ToastService.error(error.message),
     onSuccess: () => {
       ToastService.success("Shift ingevuld")
-      router.push("/").catch((e) => {
+      router.push("/").catch((e: Error) => {
         ToastService.error(e.message)
       })
-      context.staffing.getPersonalStaffing.invalidate().catch((e) => {
+      context.staffing.getPersonalStaffing.invalidate().catch((e: Error) => {
         ToastService.error(e.message)
       })
-      context.staffing.getStaffing.invalidate().catch((e) => {
+      context.staffing.getStaffing.invalidate().catch((e: Error) => {
         ToastService.error(e.message)
       })
     }
@@ -49,7 +49,7 @@ export default function OpenShiftPage({ id }: InferGetServerSidePropsType<typeof
   if (!openStaffing) return <div>Not found</div>
 
   const skipOpenStaffing = () => {
-    router.push("/").catch((e) => {
+    router.push("/").catch((e: Error) => {
       ToastService.error(e.message)
     })
     ToastService.info("Shift niet ingevuld")

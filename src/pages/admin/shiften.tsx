@@ -207,7 +207,7 @@ const Shiften = () => {
   }
 
   return (
-    <div className="mb-20">
+    <div className="mb-20 ">
       <div className="flex justify-between items-center p-4 mb-4">
         <h1 className="text-xl font-bold mx-auto">Shiften</h1>
       </div>
@@ -215,7 +215,7 @@ const Shiften = () => {
         <table className="w-full md:max-w-2xl divide-y divide-gray-200 border-2 border-black">
           {/* Table headers */}
           <thead className="bg-gray-50 border-2 border-black">
-          <tr>
+          <tr className="dark:bg-gray-700">
             <th className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider border-2 border-black">
               Datum
             </th>
@@ -227,7 +227,7 @@ const Shiften = () => {
             </th>
           </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody className="bg-white divide-y divide-gray-200 dark:bg-gray-700">
           {/* Shift displayed as row in table */}
           {shifts.data?.map((shift) => (
             <React.Fragment key={shift.id}>
@@ -239,18 +239,18 @@ const Shiften = () => {
                   {/* Shift date*/}
                   <td className="px-6 py-4 whitespace-nowrap border-2 border-black">
                     <div
-                      className="text-sm text-gray-900">{shift.start.toString().slice(8, 10)} {shift.start.toString().slice(3, 7)} {shift.start.toString().slice(11, 15)}
+                      className="text-sm text-gray-900 dark:text-white">{shift.start.toString().slice(8, 10)} {shift.start.toString().slice(3, 7)} {shift.start.toString().slice(11, 15)}
                     </div>
                   </td>
                   {/* Shift time start to time end */}
                   <td className="px-6 py-4 whitespace-nowrap border-2 border-black">
-                    <div className="text-sm text-gray-900">
+                    <div className="text-sm text-gray-900 dark:text-white">
                       {shift.start.toString().slice(16, 21)} tot {shift.end.toString().slice(16, 21)}
                     </div>
                   </td>
                   {/* Shift staffings */}
                   <td className="px-6 py-4 whitespace-nowrap border-2 border-black">
-                    <div className="text-sm text-gray-900">
+                    <div className="text-sm text-gray-900 dark:text-white">
                       {shift.staffings.map((staffing) => (
                         <div key={staffing.id}>{staffing.user.name} {staffing.user.last_name}</div>
                       ))}
@@ -323,7 +323,7 @@ const Shiften = () => {
                                 inputMode="numeric"
                                 value={staffingRequired}
                                 placeholder="0"
-                                className="w-16 px-4 py-2 bg-white text-gray-700 text-xl focus:outline-none text-center cursor-auto"
+                                className="w-16 px-4 py-2 bg-white text-gray-700 text-xl focus:outline-none text-center cursor-auto dark:bg-gray-700 dark:text-white"
                                 readOnly/>
                             <button
                                 type="button"

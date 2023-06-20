@@ -49,18 +49,6 @@ async function main() {
 
 
   console.log("Shift Types created: ", shiftType1, shiftType2)
-
-  // mockdata voor gebruikers, voorkeuren en standaard beschikbaarheid
-  // user 1: robert swarts, elke dag, max 2x
-  // user 2, lars baer, dinsdag/woensdag, max 2x
-  // user 3, manuel vermeer, donderdag/vrijdag, max 2x
-  // user 4, david sprong, zaterdag, max 1x
-  // user 5, olivier verbeten, zondag, max 1x
-  // user 6, emma beil, elke dag, max 4x
-  // user 7, barbara damme, woensdag/zaterdag/zondag, max 1x
-  // user 8, isabella host, dinsdag/woensdag, max 2x
-  // user 9, marieke burckhard, donerdag/vrijdag/zaterdag, max 2x
-  // user 10, maria nellessen, vrijdag/zaterdag/zondag, max 3x
   const users = []
 
 

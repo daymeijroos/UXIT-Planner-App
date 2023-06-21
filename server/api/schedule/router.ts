@@ -37,7 +37,7 @@ export const scheduleRouter = createTRPCRouter({
       })
     }
     ),
-  // return true if  shift by date and starttime 
+  // return true if  shift by date and starttime
   checkShiftExistsByDate: protectedProcedure
     .input(z.object({
       start: z.date(),

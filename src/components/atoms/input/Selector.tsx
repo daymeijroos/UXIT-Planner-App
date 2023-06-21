@@ -18,9 +18,12 @@ export { Item } from "react-stately"
 
 
 
-export function Select<T extends object>(props: AriaSelectProps<T>) {
+export function Select<T extends object>(
+    { id, initialText, ...props }: AriaSelectProps<T> & { id: string; initialText: string }
+) {
   // Create state based on the incoming props
   const state = useSelectState(props)
+
 
   // Get props for child elements from useSelect
   const ref = React.useRef(null)
@@ -57,12 +60,13 @@ export function Select<T extends object>(props: AriaSelectProps<T>) {
       >
         <span
           {...valueProps}
+          id={id}
           className={`text-md ${state.selectedItem ? "dark:text-white text-black" : "dark:text-gray-400 text-gray-600"
             }`}
         >
           {state.selectedItem
             ? state.selectedItem.rendered
-            : "Kies een medewerker/Vrijwilliger"}
+            : initialText}
         </span>
         <>
           {!state.isOpen && (

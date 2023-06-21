@@ -73,9 +73,7 @@ export default function Admin() {
             <Button>Nieuw shifttype toevoegen</Button>
             <Button
               onPress={() => {
-                router.push("/admin/add-shift").catch((error) => {
-                  console.error(error)
-                })
+                router.push("/admin/add-shift")
               }}
             >Nieuw shift toevoegen</Button>
           </div>

@@ -57,7 +57,7 @@ async function main() {
 
 
 
-  console.log("Shift Types created: ", shiftType1, shiftType2, shiftType3)
+  console.log("Shift Types created: ", shiftType1, shiftType2)
 
   // mockdata voor gebruikers, voorkeuren en standaard beschikbaarheid
   // user 1: robert swarts, elke dag, max 2x

@@ -26,14 +26,7 @@ export const scheduleRouter = createTRPCRouter({
             reject(error)
           })
       })
-    })
-})
-
-            reject(error)
-          })
-      })
     }),
-
     getShiftTypes: publicProcedure
     .query(() => {
         return prisma.shift_Type.findMany({

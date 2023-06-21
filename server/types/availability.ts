@@ -1,4 +1,4 @@
-import { Availability, AvailabilityWeek, Shift_Type } from "@prisma/client"
+import type { Availability, AvailabilityFlexible, AvailabilityEvenWeek, AvailabilityOddWeek, Shift_Type } from "@prisma/client"
 
 export interface AvailabilityWeekWithAvailabilityWithShiftTypes extends AvailabilityWeek {
   availability: AvailabilityWithShiftTypes[]
@@ -6,4 +6,23 @@ export interface AvailabilityWeekWithAvailabilityWithShiftTypes extends Availabi
 
 export interface AvailabilityWithShiftTypes extends Availability {
   shift_types: Shift_Type[]
+}
+
+
+export interface AvailabilityEvenWeekWithAvailability extends AvailabilityEvenWeek {
+  availability: (Availability & {
+    shift_types: Shift_Type[]
+  })[]
+}
+
+export interface AvailabilityOddWeekWithAvailability extends AvailabilityOddWeek {
+  availability: (Availability & {
+    shift_types: Shift_Type[]
+  })[]
+}
+
+export interface AvailabilityFlexibleWithAvailability extends AvailabilityFlexible {
+  availability: (Availability & {
+    shift_types: Shift_Type[]
+  })[]
 }

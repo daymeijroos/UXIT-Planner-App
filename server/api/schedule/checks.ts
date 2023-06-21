@@ -1,26 +1,41 @@
-import { Shift, Shift_Type } from "@prisma/client"
-import { SplitDate } from "../../../shared/types/splitDate"
-import { getAvailabilityForDate } from "../availability"
-import { getUserStaffings, getUserStaffingsForWeek } from "../user/database-actions"
 import { getBackupsOnDate } from "../backup"
+import { getUserStaffings } from "../user/database-actions"
+import { Shift, Shift_Type } from "@prisma/client"
 import { UserWithPreferenceAndStaffings } from "../../types/user"
+import { getWeekNumber } from './helper-functions'
+import { AvailabilityEvenWeekWithAvailability, AvailabilityFlexibleWithAvailability, AvailabilityOddWeekWithAvailability, AvailabilityWithShiftTypes } from "../../types/availability"
+import { prisma } from "../../db"
+import { ShiftWithStaffingDetails } from "../../types/shift"
 
-export const checkUserAvailability = async (user: UserWithPreferenceAndStaffings, on: Date) => {
-  if (!user.preference) return false
-  const onSplit = SplitDate.fromDate(on)
-
-  const availability = await getAvailabilityForDate(user.preference.availability_week, onSplit)
-  return !!availability
+export const checkUserFlexibleAvailability = (user: UserWithPreferenceAndStaffings, date: Date): boolean => {
+  if (!(user.preference && user.preference.availability_flexible)) return false
+  let availability: AvailabilityFlexibleWithAvailability = user.preference.availability_flexible
+  const dayOfWeek: number = date.getDay()
+  const availabilityForDay: AvailabilityWithShiftTypes | undefined = availability.availability.find((availability) => availability.weekday === dayOfWeek)
+  return !!availabilityForDay
 }
 
-export const checkUserAvailabilityForShiftType = async (user: UserWithPreferenceAndStaffings, shiftType: Shift_Type, on: Date) => {
-  if (!user.preference) return false
-  const onSplit = SplitDate.fromDate(on)
+export const checkUserFlexibleAvailabilityForShiftType = (user: UserWithPreferenceAndStaffings, shiftType: Shift_Type, date: Date) => {
+  if (!(user.preference && user.preference.availability_flexible)) return false
+  let availability: AvailabilityFlexibleWithAvailability = user.preference.availability_flexible
+  const dayOfWeek: number = date.getDay()
+  const availabilityForDay: AvailabilityWithShiftTypes | undefined = availability.availability.find((availability) => availability.weekday === dayOfWeek)
+  const isAvailable: boolean = !!availabilityForDay?.shift_types.find((availabilityShiftType) => availabilityShiftType.id === shiftType.id)
+  return isAvailable
+}
 
-  const availability = await getAvailabilityForDate(user.preference.availability_week, onSplit)
-  if (!availability) return false
-  if (!availability.shift_types.find((st) => st.id === shiftType.id)) return false
-  return true
+export const checkUserAvailabilityForShiftType = (user: UserWithPreferenceAndStaffings, shiftType: Shift_Type, date: Date): boolean => {
+  if (!user.preference) return false
+  let availability: AvailabilityEvenWeekWithAvailability | AvailabilityOddWeekWithAvailability = user.preference.availability_even_week
+  if (user.preference.availability_odd_week) {
+    const weekNumber: number = getWeekNumber(date)
+    const isOddWeek: boolean = weekNumber % 2 === 1
+    if (isOddWeek) availability = user.preference.availability_odd_week
+  }
+  const dayOfWeek: number = date.getDay()
+  const availabilityForDay: AvailabilityWithShiftTypes | undefined = availability.availability.find((availability) => availability.weekday === dayOfWeek)
+  const isAvailable: boolean = !!availabilityForDay?.shift_types.find((availabilityShiftType) => availabilityShiftType.id === shiftType.id)
+  return isAvailable
 }
 
 export const checkUserAbsent = (user: UserWithPreferenceAndStaffings, from: Date, to: Date) => {
@@ -37,17 +52,8 @@ export const checkUserAbsentDuringShift = async (user: UserWithPreferenceAndStaf
   return checkUserAbsent(user, shift.start, shift.end)
 }
 
-export const checkReachedMaxStaffings = async (user: UserWithPreferenceAndStaffings, start: Date) => {
-  const startSplit = SplitDate.fromDate(start)
-  const maxStaffings = user.preference?.maxStaffings || 0
-  const amountStaffed = await getUserStaffingsForWeek(user, startSplit)
-  if (maxStaffings === 0) return false
-  if (amountStaffed < maxStaffings) return false
-  return true
-}
-
 export const checkUserAlreadyStaffed = async (user: UserWithPreferenceAndStaffings, from: Date, to: Date): Promise<boolean> => {
-  const staffings = await getUserStaffings(user, new Date(new Date(from).setHours(0, 0, 0, 0)), new Date(new Date(to).setHours(23, 59, 59, 999)))
+  const staffings = await getUserStaffings(user, new Date(from.setHours(0, 0, 0, 0)), new Date(new Date(to).setHours(23, 59, 59, 999)))
   if (staffings.length > 0) return true
   return false
 }
@@ -56,6 +62,35 @@ export const checkUserAlreadyStaffedDuringShift = async (user: UserWithPreferenc
   return checkUserAlreadyStaffed(user, shift.start, shift.end)
 }
 
+export const checkUserAlreadyStaffedForDays = async (user: UserWithPreferenceAndStaffings, startDate: Date, endDate: Date) => {
+  const start = new Date(new Date(startDate).setHours(0, 0, 0, 0))
+  const end = new Date(new Date(endDate).setHours(23, 59, 59, 999))
+  const staffings = await getUserStaffings(user, start, end)
+  if (staffings.length > 0) return true
+  return false
+}
+
 export const checkEnoughBackupStaff = async (date: Date) => {
   return (await getBackupsOnDate(date)).length >= 2
+}
+
+export const shiftHasEnoughOpenStaffings = async (shift: ShiftWithStaffingDetails, shiftType: Shift_Type) => {
+  const staffingRequiredCount = shift.staff_required.find((staffingRequired) => staffingRequired.shift_type.id === shiftType.id)?.amount ?? 0
+  const openStaffingsCount = await prisma.openStaffing.count({
+    where: {
+      shift: {
+        id: shift.id
+      },
+      shift_type: shiftType
+    }
+  })
+  const staffingCount = await prisma.staffing.count({
+    where: {
+      shift: {
+        id: shift.id
+      },
+      shift_type: shiftType
+    }
+  })
+  return openStaffingsCount + staffingCount >= staffingRequiredCount
 }

@@ -3,12 +3,23 @@ import { Button, NavigationBar } from "../../components"
 import { api } from "../../utils/api"
 import { ToastService } from "../../components"
 import React from 'react'
-import { useRouter } from "next/router"
+import { useRouter } from "next/navigation"
 import { Calendar } from "react-feather"
 
 export default function Admin() {
+  const router = useRouter();
+  const { mutateAsync: generateSchedule } = api.schedule.generate.useMutation({
+    onSuccess: () => {
+      ToastService.success("Het is gelukt!")
+      context.schedule.getUnfulfilledShifts.invalidate().catch((error) => {
+        console.error(error)
+      })
+    }, onError: (error) => {
+      ToastService.error(error.message)
+    }
+  })
+  const unfulfilledShifts = api.schedule.getUnfulfilledShifts.useQuery()
   const context = api.useContext()
-  const router = useRouter()
 
   const { mutate: removeStaffings } = api.staffing.removeAllStaffing.useMutation({
     onSuccess: () => {
@@ -36,10 +47,7 @@ export default function Admin() {
           <div className="grid w-full grid-cols-2 gap-4">
             <div className="col-span-2">
               <Button color="teal" onPress={() => {
-                router.push("/admin/genereer-rooster").catch((error) => {
-                  console.error(error)
-                })
-              }}>
+                router.push("/admin/genereer-rooster")}}>
                 <h4>Genereer Rooster</h4>
                 <Calendar size="24" className="ml-2 stroke-2" />
               </Button>
@@ -49,12 +57,12 @@ export default function Admin() {
                 removeStaffings()
               }
             }>Verwijder rooster</Button>
-            <Button>Handmatige aanpassingen</Button>
+            <Button onPress={() => router.push("/admin/shiften")}>Handmatige aanpassingen</Button>
             <Button>Openingsweekend aangeven</Button>
           </div>
           <h2>Vrijwilligers</h2>
           <div className="grid w-full grid-cols-2 gap-4">
-            <Button>Voorkeur aanpassen</Button>
+            <Button onPress={() => router.push("/admin/gebruikers")}>Voorkeur aanpassen</Button>
             <Button>Beschikbaarheid aanpassen</Button>
             <Button>Werkuren aanpassen</Button>
             <Button>Verlof aangeven</Button>
@@ -65,16 +73,18 @@ export default function Admin() {
             <Button>Nieuw shifttype toevoegen</Button>
             <Button
               onPress={() => {
-                router.push("/admin/add-shift").catch((error) => {
-                  console.error(error)
-                })
+                router.push("/admin/add-shift")
               }}
             >Nieuw shift toevoegen</Button>
           </div>
           <h2>Accounts beheren</h2>
           <div className="grid w-full grid-cols-2 gap-4">
-            <Button>Account aanmaken</Button>
-            <Button>Rollenbeheer</Button>
+            <Button onPress={() => {
+              router.push("/admin/create-user")
+            }}> Account aanmaken</Button>
+            <Button onPress={() => {
+              router.push("/admin/modify-user")
+            }}> Account wijzigen</Button>
           </div>
         </div>
       </div >

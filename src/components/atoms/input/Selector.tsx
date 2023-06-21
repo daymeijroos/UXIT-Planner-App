@@ -19,7 +19,7 @@ export { Item } from "react-stately";
 
 
 export function Select<T extends object>(
-    { id, onSelect, initialText, ...props }: AriaSelectProps<T> & { id: string; initialText: string }
+    { id, initialText, ...props }: AriaSelectProps<T> & { id: string; initialText: string }
 ) {
   // Create state based on the incoming props
 

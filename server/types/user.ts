@@ -1,4 +1,4 @@
-import { Absence, AvailabilityWeek, Staffing, User, User_Preference } from "@prisma/client"
+import { Absence, Staffing, User, User_Preference } from "@prisma/client"
 import { AvailabilityWeekWithAvailabilityWithShiftTypes, } from "./availability"
 
 export interface UserWithPreferenceAndStaffings extends User {

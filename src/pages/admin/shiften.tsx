@@ -6,11 +6,18 @@ import {CheckSquare, Edit, Minimize2, Trash2} from "react-feather"
 import {Select} from "../../components/atoms/input/Selector"
 import {Item} from "react-stately"
 import type {User} from "@prisma/client"
-import type {ShiftWithStaffings} from "../../../server/types/shift"
+import type {ShiftWithStaffingsAndStaffRequired} from "../../../server/types/shift"
 import {DatetimeField} from "../../components/atoms/input/calendar/datetime-field"
 import {parseDateTime} from "@internationalized/date"
-import {DateTime} from "next-auth/providers/kakao"
-import {DateValue} from "react-aria"
+import {Shift} from "@prisma/client";
+
+interface DateValue {
+  year: string;
+  month: string;
+  day: string;
+  hour: string;
+  minute: string;
+}
 
 const Shiften = () => {
   const context = api.useContext()
@@ -49,21 +56,20 @@ const Shiften = () => {
       context.shift.getAllShifts.invalidate().catch((reason) => {
         console.log(reason)
       })
-      ToastService.succes("Het aantal is gewijzigd")
+      ToastService.success("Het aantal is gewijzigd")
     }
   })
 
   const users: User[] = api.user.getUsersWithPreferencesAndStaffings.useQuery().data ?? []
-  const employees: User[] = api.user.getUsersThatAreEmployees.useQuery().data
+  const employees: User[] = api.user.getUsersThatAreEmployees.useQuery().data ?? []
   const shifts = api.shift.getAllShifts.useQuery()
   const [unstaffedUsers, setUnstaffedUsers] = useState<User[]>([])
   const [unstaffedEmployees, setUnstaffedEmployees] = useState<User[]>([])
-  const [staffedUsers, setStaffedUsers] = useState<User[]>([])
   const [expandedRow, setExpandedRow] = useState<null | string>(null)
   const [selectedShiftType, setSelectedShiftType] = useState<string | null>(null)
-  const [dateValueStart, setDateValueStart] = useState<{start: DateValue, end: DateValue}>()
-  const [dateValueEnd, setDateValueEnd] = useState<{start: DateValue, end: DateValue}>()
-  const [staffingRequired, setStaffingRequired] = useState<number>(1);
+  const [dateValueStart, setDateValueStart] = useState<DateValue | null>(null)
+  const [dateValueEnd, setDateValueEnd] = useState<DateValue | null>(null)
+  const [staffingRequired, setStaffingRequired] = useState<number>(1)
 
   const [staffingList] = useAutoAnimate()
 
@@ -84,36 +90,70 @@ const Shiften = () => {
     return <div>{shifts.error.message}</div>
   }
 
-  const expandRow = (shift: ShiftWithStaffings) => {
+  const expandRow = (shift: ShiftWithStaffingsAndStaffRequired) => {
     if (expandedRow === shift.id) {
       setExpandedRow(null)
     } else {
-      setExpandedRow(shift.id)
       updateStaffedUsers(shift)
       setStaffingRequired(shift.staff_required[0].amount)
       setSelectedShiftType(null)
-      setDateValueStart(parseDateTime(getFormattedTimeShift(shift.start)))
-      setDateValueEnd(parseDateTime(getFormattedTimeShift(shift.end)))
-      console.log(dateValueStart)
-      console.log(dateValueEnd)
+      tempMethod(shift)
+      setExpandedRow(shift.id)
     }
   }
 
-  const getFormattedTimeShift = (shiftTime: DateTime) => {
-    const dateTime = new Date(shiftTime)
+  const tempMethod = (shift: ShiftWithStaffingsAndStaffRequired) => {
+    const startDateTime = parseDateTime(getFormattedTimeShift(shift.start));
+    const endDateTime = parseDateTime(getFormattedTimeShift(shift.end));
 
-    const year = dateTime.getFullYear()
-    const month = String(dateTime.getMonth() + 1).padStart(2, "0")
-    const day = String(dateTime.getDate()).padStart(2, "0")
-    const hours = String(dateTime.getHours()).padStart(2, "0")
-    const minutes = String(dateTime.getMinutes()).padStart(2, "0")
+    const start: DateValue = {
+      year: String(startDateTime.year),
+      month: String(startDateTime.month),
+      day: String(startDateTime.day),
+      hour: String(startDateTime.hour),
+      minute: String(startDateTime.minute),
+    };
 
-    return `${year}-${month}-${day}T${hours}:${minutes}`
-  }
+    const end: DateValue = {
+      year: String(endDateTime.year),
+      month: String(endDateTime.month),
+      day: String(endDateTime.day),
+      hour: String(endDateTime.hour),
+      minute: String(endDateTime.minute),
+    };
 
-  const handleChangeTime = (shift: ShiftWithStaffings) => {
-    const newStartTime: Date = new Date(dateValueStart)
-    const newEndTime: Date = new Date(dateValueEnd)
+    setDateValueStart(start);
+    setDateValueEnd(end);
+  };
+
+  const getFormattedTimeShift = (shiftTime: Date): string => {
+    const dateTime = new Date(shiftTime);
+
+    const year = String(dateTime.getFullYear());
+    const month = String(dateTime.getMonth() + 1).padStart(2, "0");
+    const day = String(dateTime.getDate()).padStart(2, "0");
+    const hours = String(dateTime.getHours()).padStart(2, "0");
+    const minutes = String(dateTime.getMinutes()).padStart(2, "0");
+
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
+  };
+
+  const handleChangeTime = (shift: ShiftWithStaffingsAndStaffRequired) => {
+    const newStartTime: Date = new Date(
+        parseInt(dateValueStart!.year),
+        parseInt(dateValueStart!.month) - 1,
+        parseInt(dateValueStart!.day),
+        parseInt(dateValueStart!.hour),
+        parseInt(dateValueStart!.minute)
+    );
+
+    const newEndTime: Date = new Date(
+        parseInt(dateValueEnd!.year),
+        parseInt(dateValueEnd!.month) - 1,
+        parseInt(dateValueEnd!.day),
+        parseInt(dateValueEnd!.hour),
+        parseInt(dateValueEnd!.minute)
+    );
     const shiftId: string = shift.id
 
     if (newStartTime < new Date()) {
@@ -131,7 +171,7 @@ const Shiften = () => {
     }
   }
 
-  const handleStaffingChange = (shift: ShiftWithStaffings, plusOrMinus: string) => {
+  const handleStaffingChange = (shift: ShiftWithStaffingsAndStaffRequired, plusOrMinus: string) => {
     let newStaffingRequired: number
     if (plusOrMinus === "plus") {
       newStaffingRequired = staffingRequired + 1
@@ -140,11 +180,13 @@ const Shiften = () => {
     } else if (plusOrMinus === "minus" && staffingRequired === 0) {
       ToastService.error("Dit getal kan niet onder 0 komen")
       return
+    } else {
+      newStaffingRequired = 0
     }
     setStaffingRequired(newStaffingRequired)
   }
 
-  const handleConfirmStaffingCharge = (shift: ShiftWithStaffings) => {
+  const handleConfirmStaffingCharge = (shift: ShiftWithStaffingsAndStaffRequired) => {
     changeStaffRequired({id: shift.staff_required[0].id, staffRequired: staffingRequired})
   }
 
@@ -162,7 +204,7 @@ const Shiften = () => {
     setUnstaffedEmployees(updatedUnstaffedEmployees)
   }
 
-  const updateStaffedUsers = (shift: ShiftWithStaffings) => {
+  const updateStaffedUsers = (shift: ShiftWithStaffingsAndStaffRequired) => {
     const updatedStaffedUsers: User[] = []
     shift.staffings?.forEach((staffing) => {
       if (staffing?.user) {
@@ -170,12 +212,11 @@ const Shiften = () => {
       }
     })
 
-    setStaffedUsers(updatedStaffedUsers)
     updateUnstaffedUsers(updatedStaffedUsers)
     updateUnstaffedEmployees(updatedStaffedUsers)
   }
 
-  const handleRemoveStaffing = async (shift: ShiftWithStaffings, staffingId: string) => {
+  const handleRemoveStaffing = async (shift: ShiftWithStaffingsAndStaffRequired, staffingId: string) => {
     try {
       await removeSelectedStaffing({ staffing_id: staffingId })
       updateStaffedUsers(shift)
@@ -192,7 +233,7 @@ const Shiften = () => {
     }
   }
 
-  const handleAddStaffing = (shift: ShiftWithStaffings, shift_type: string) => {
+  const handleAddStaffing = (shift: ShiftWithStaffingsAndStaffRequired, shift_type: string) => {
     const spanContent = document.getElementById(shift_type)?.textContent ?? ""
     users.forEach((user) => {
       if (spanContent === `${user.name} ${user.last_name}`) {
@@ -276,7 +317,15 @@ const Shiften = () => {
                                     id="start"
                                     defaultValue={parseDateTime(getFormattedTimeShift(shift.start))}
                                     onChange={(v) => {
-                                      setDateValueStart(v);
+                                      const startDateTime: DateValue = {
+                                        ...v,
+                                        year: String(v.year),
+                                        month: String(v.month),
+                                        day: String(v.day),
+                                        hour: String(v.hour),
+                                        minute: String(v.minute),
+                                      };
+                                      setDateValueStart(startDateTime);
                                     }}
                                 ></DatetimeField>
                               </div>
@@ -296,7 +345,15 @@ const Shiften = () => {
                                     id="end"
                                     defaultValue={parseDateTime(getFormattedTimeShift(shift.end))}
                                     onChange={(v) => {
-                                      setDateValueEnd(v);
+                                      const endDateTime: DateValue = {
+                                        ...v,
+                                        year: String(v.year),
+                                        month: String(v.month),
+                                        day: String(v.day),
+                                        hour: String(v.hour),
+                                        minute: String(v.minute),
+                                      };
+                                      setDateValueEnd(endDateTime);
                                     }}
                                 ></DatetimeField>
                               </div>
@@ -347,7 +404,7 @@ const Shiften = () => {
                           </Button>
                         </div>
                         <div className="w-30 ml-4 absolute left-0 top-4">
-                          <Button aria-label="Klap shift in" title="Klap shift in" color="teal" onClick={() => expandRow(shift)}>
+                          <Button aria-label="Klap shift in" title="Klap shift in" color="teal" onPress={() => expandRow(shift)}>
                             <Minimize2 size="24" className="stroke-5/4" />
                           </Button>
                         </div>
@@ -408,9 +465,11 @@ const Shiften = () => {
                         {selectedShiftType === 'Balie' && (
                             <>
                               <div className="mb-4">
-                                <Select label="Balievrijwilligers" id={"Balie"} initialText="Kies een vrijwilliger">
+                                <Select label="Balievrijwilligers" id="Balie" initialText="Kies een vrijwilliger">
                                   {unstaffedUsers.map((user) => (
-                                      <Item key={user.name + user.last_name}>{user.name + " " + user.last_name}</Item>
+                                      <Item key={user.name! + user.last_name!}>
+                                        {user.name! && user.last_name! ? `${user.name!} ${user.last_name!}` : "Unknown"}
+                                      </Item>
                                   ))}
                                 </Select>
                               </div>
@@ -425,7 +484,9 @@ const Shiften = () => {
                               <div className="mb-4">
                                 <Select label="Galeriemedewerkers en -vrijwilligers" id={"Galerie"} initialText="Kies een medewerker of vrijwilliger" items={employees}>
                                   {unstaffedEmployees.map((user) => (
-                                      <Item key={user.name + user.last_name}>{user.name + " " + user.last_name}</Item>
+                                      <Item key={user.name! + user.last_name!}>
+                                        {user.name! && user.last_name! ? `${user.name!} ${user.last_name!}` : "Unknown"}
+                                      </Item>
                                   ))}
                                 </Select>
                               </div>

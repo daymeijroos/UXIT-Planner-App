@@ -28,7 +28,7 @@ export default function Absence() {
         <h1>Absentie Verwerken</h1>
 
         <div className={"mt-5"}>
-          <Select label="Medewerker / Vrijwilliger" items={users.data}>
+          <Select label="Medewerker / Vrijwilliger" initialText="Medewerker / Vrijwilliger" id="absence" items={users.data}>
             {(item) => <Item>{item.name}</Item>}
           </Select>
         </div>

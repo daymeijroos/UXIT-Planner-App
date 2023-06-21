@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client"
 import { Role } from "./role"
 import { Weekday } from "./weekday"
-import { CalendarDate, Time, toCalendarDateTime, getDayOfWeek } from "@internationalized/date"
+import { CalendarDate, Time, toCalendarDateTime, getDayOfWeek, CalendarDateTime } from "@internationalized/date"
 
 const prisma = new PrismaClient()
 
@@ -46,27 +46,10 @@ async function main() {
     }
   })
 
-
-
-  console.log("Shift Types created: ", shiftType1, shiftType2)
-
-  // mockdata voor gebruikers, voorkeuren en standaard beschikbaarheid
-  // user 1: robert swarts, elke dag, max 2x
-  // user 2, lars baer, dinsdag/woensdag, max 2x
-  // user 3, manuel vermeer, donderdag/vrijdag, max 2x
-  // user 4, david sprong, zaterdag, max 1x
-  // user 5, olivier verbeten, zondag, max 1x
-  // user 6, emma beil, elke dag, max 4x
-  // user 7, barbara damme, woensdag/zaterdag/zondag, max 1x
-  // user 8, isabella host, dinsdag/woensdag, max 2x
-  // user 9, marieke burckhard, donerdag/vrijdag/zaterdag, max 2x
-  // user 10, maria nellessen, vrijdag/zaterdag/zondag, max 3x
-  const users = []
-
-
   // create admin user
   const adminUser = await prisma.user.create({
     data: {
+      id: "clj13gfeh0004u1o1lt55cfuk",
       name: "Admin",
       last_name: "Admin",
       email: process.env.ADMIN_EMAIL,
@@ -75,137 +58,28 @@ async function main() {
           name: Role.ADMIN
         }
       },
-    }
-  })
-
-  const mockUser1 = await prisma.user.create({
-    data: {
-      name: "Ronja",
-      last_name: "van Boxtel",
-      email: "example@hotmail.com",
-      role: {
-        connect: {
-          name: Role.USER
-        }
-      },
       preference: {
         create: {
-          maxStaffings: 6,
           shift_type: {
             connect: {
               id: shiftType1.id
             }
           },
-          availability_week: {
-            create: [
-              {
-                sequence: 0,
-                availability: {
-                  create: [
-                    {
-                      weekday: Weekday.TUESDAY,
-                      shift_types: {
-                        connect: {
-                          id: shiftType1.id
-                        }
-                      }
-                    },
-                    {
-                      weekday: Weekday.WEDNESDAY,
-                      shift_types: {
-                        connect: {
-                          id: shiftType1.id
-                        }
-                      }
-                    },
-                    {
-                      weekday: Weekday.FRIDAY,
-                      shift_types: {
-                        connect: {
-                          id: shiftType1.id
-                        }
-                      }
-                    },
-                    {
-                      weekday: Weekday.SATURDAY,
-                      shift_types: {
-                        connect: {
-                          id: shiftType1.id
-                        }
-                      }
-                    },
-                    {
-                      weekday: Weekday.SUNDAY,
-                      shift_types: {
-                        connect: {
-                          id: shiftType1.id
-                        }
-                      }
-                    }
-                  ]
-                }
-              },
-              {
-                sequence: 1,
-                availability: {
-                  create: [
-                    {
-                      weekday: Weekday.TUESDAY,
-                      shift_types: {
-                        connect: {
-                          id: shiftType1.id
-                        }
-                      }
-                    },
-                    {
-                      weekday: Weekday.WEDNESDAY,
-                      shift_types: {
-                        connect: {
-                          id: shiftType1.id
-                        }
-                      }
-                    },
-                    {
-                      weekday: Weekday.FRIDAY,
-                      shift_types: {
-                        connect: {
-                          id: shiftType1.id
-                        }
-                      }
-                    },
-                    {
-                      weekday: Weekday.SATURDAY,
-                      shift_types: {
-                        connect: {
-                          id: shiftType1.id
-                        }
-                      }
-                    },
-                    {
-                      weekday: Weekday.THURSDAY,
-                      shift_types: {
-                        connect: {
-                          id: shiftType1.id
-                        }
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
-          }
+          availability_even_week: {
+            create: {
+            }
+          },
         }
       }
     }
   })
 
 
-
-  const mockUser2 = await prisma.user.create({
+  const mockUser1 = await prisma.user.create({
     data: {
-      name: "Willem",
-      last_name: "Bekker",
-      email: "example2@hotmail.com",
+      name: "Ronja",
+      last_name: "van Boxtel",
+      email: "example@gmail.com",
       role: {
         connect: {
           name: Role.USER
@@ -213,18 +87,47 @@ async function main() {
       },
       preference: {
         create: {
-          maxStaffings: 6,
           shift_type: {
             connect: {
               id: shiftType1.id
             }
           },
-          availability_week: {
+          availability_even_week: {
             create: {
-              sequence: 0,
               availability: {
                 create: [
-
+                  {
+                    weekday: Weekday.SUNDAY,
+                    shift_types: {
+                      connect: {
+                        id: shiftType1.id
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          availability_odd_week: {
+            create: {
+              availability: {
+                create: [
+                  {
+                    weekday: Weekday.THURSDAY,
+                    shift_types: {
+                      connect: {
+                        id: shiftType1.id
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          availability_flexible: {
+            create: {
+              availability: {
+                create: [
                   {
                     weekday: Weekday.TUESDAY,
                     shift_types: {
@@ -242,7 +145,108 @@ async function main() {
                     }
                   },
                   {
-                    weekday: Weekday.THURSDAY,
+                    weekday: Weekday.FRIDAY,
+                    shift_types: {
+                      connect: {
+                        id: shiftType1.id
+                      }
+                    }
+                  },
+                  {
+                    weekday: Weekday.SATURDAY,
+                    shift_types: {
+                      connect: {
+                        id: shiftType1.id
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          },
+        }
+      }
+    }
+  })
+
+  const staffing = await prisma.staffing.create({
+    data: {
+      shift: {
+        create: {
+          start: new Date("2023-06-23T18:00:00.000Z"),
+          end: new Date("2023-06-23T23:00:00.000Z"),
+        },
+      },
+      user: {
+        connect: {
+          id: adminUser.id
+        },
+      },
+      shift_type: {
+        connect: {
+          id: shiftType1.id
+        },
+      },
+    }
+  })
+
+  const backup = await prisma.backup.create({
+    data: {
+      date: new Date("2023-06-23T02:00:00.000Z"),
+      user: {
+        connect: {
+          id: adminUser.id
+        },
+      },
+    }
+  })
+
+
+  const mockUser2 = await prisma.user.create({
+    data: {
+      name: "Willem",
+      last_name: "Bekker",
+      email: "example2@gmail.com",
+      role: {
+        connect: {
+          name: Role.USER
+        }
+      },
+      preference: {
+        create: {
+          shift_type: {
+            connect: {
+              id: shiftType1.id
+            }
+          },
+          availability_even_week: {
+            create: {
+              availability: {
+                create: []
+              }
+            }
+          },
+          availability_odd_week: {
+            create: {
+              availability: {
+                create: []
+              }
+            }
+          },
+          availability_flexible: {
+            create: {
+              availability: {
+                create: [
+                  {
+                    weekday: Weekday.TUESDAY,
+                    shift_types: {
+                      connect: {
+                        id: shiftType1.id
+                      }
+                    }
+                  },
+                  {
+                    weekday: Weekday.WEDNESDAY,
                     shift_types: {
                       connect: {
                         id: shiftType1.id
@@ -272,7 +276,7 @@ async function main() {
                         id: shiftType1.id
                       }
                     }
-                  },
+                  }
                 ]
               }
             }
@@ -282,11 +286,13 @@ async function main() {
     }
   })
 
+
+
   const mockUser3 = await prisma.user.create({
     data: {
       name: "Ellen",
       last_name: "Coster",
-      email: "example3@hotmail.com",
+      email: "example3@gmail.com",
       role: {
         connect: {
           name: Role.USER
@@ -294,15 +300,36 @@ async function main() {
       },
       preference: {
         create: {
-          maxStaffings: 3,
           shift_type: {
             connect: {
               id: shiftType1.id
             }
           },
-          availability_week: {
+          availability_even_week: {
             create: {
-              sequence: 0,
+              availability: {
+                create: [
+                  {
+                    weekday: Weekday.THURSDAY,
+                    shift_types: {
+                      connect: {
+                        id: shiftType1.id
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          availability_odd_week: {
+            create: {
+              availability: {
+                create: []
+              }
+            }
+          },
+          availability_flexible: {
+            create: {
               availability: {
                 create: [
                   {
@@ -342,7 +369,7 @@ async function main() {
     data: {
       name: "Wilbert",
       last_name: "van Dijk",
-      email: "example4@hotmail.com",
+      email: "example4@gmail.com",
       role: {
         connect: {
           name: Role.USER
@@ -350,15 +377,27 @@ async function main() {
       },
       preference: {
         create: {
-          maxStaffings: 2,
           shift_type: {
             connect: {
               id: shiftType1.id
             }
           },
-          availability_week: {
+          availability_even_week: {
             create: {
-              sequence: 0,
+              availability: {
+                create: []
+              }
+            }
+          },
+          availability_odd_week: {
+            create: {
+              availability: {
+                create: []
+              }
+            }
+          },
+          availability_flexible: {
+            create: {
               availability: {
                 create: [
                   {
@@ -390,7 +429,7 @@ async function main() {
     data: {
       name: "Willem",
       last_name: "Donkers",
-      email: "example5@hotmail.com",
+      email: "example5@gmail.com",
       role: {
         connect: {
           name: Role.USER
@@ -398,15 +437,180 @@ async function main() {
       },
       preference: {
         create: {
-          maxStaffings: 6,
           shift_type: {
             connect: {
               id: shiftType1.id
             }
           },
-          availability_week: {
+          availability_even_week: {
             create: {
-              sequence: 0,
+              availability: {
+                create: []
+              }
+            }
+          },
+          availability_odd_week: {
+            create: {
+              availability: {
+                create: []
+              }
+            }
+          },
+          availability_flexible: {
+            create: {
+              availability: {
+                create: [
+                  {
+                    weekday: Weekday.TUESDAY,
+                    shift_types: {
+                      connect: {
+                        id: shiftType1.id
+                      }
+                    }
+                  },
+                  {
+                    weekday: Weekday.WEDNESDAY,
+                    shift_types: {
+                      connect: {
+                        id: shiftType1.id
+                      }
+                    }
+                  },
+                  {
+                    weekday: Weekday.THURSDAY,
+                    shift_types: {
+                      connect: {
+                        id: shiftType1.id
+                      }
+                    }
+                  },
+                  {
+                    weekday: Weekday.FRIDAY,
+                    shift_types: {
+                      connect: {
+                        id: shiftType1.id
+                      }
+                    }
+                  },
+                  {
+                    weekday: Weekday.SATURDAY,
+                    shift_types: {
+                      connect: {
+                        id: shiftType1.id
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  })
+
+  const mockUser6 = await prisma.user.create({
+    data: {
+      name: "Mariëtte",
+      last_name: "Groen",
+      email: "example6@gmail.com",
+      role: {
+        connect: {
+          name: Role.USER
+        }
+      },
+      preference: {
+        create: {
+          shift_type: {
+            connect: {
+              id: shiftType1.id
+            }
+          },
+          availability_even_week: {
+            create: {
+              availability: {
+                create: [
+                  {
+                    weekday: Weekday.WEDNESDAY,
+                    shift_types: {
+                      connect: {
+                        id: shiftType1.id
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          availability_odd_week: {
+            create: {
+              availability: {
+                create: []
+              }
+            }
+          },
+          availability_flexible: {
+            create: {
+              availability: {
+                create: [
+                  {
+                    weekday: Weekday.TUESDAY,
+                    shift_types: {
+                      connect: {
+                        id: shiftType1.id
+                      }
+                    }
+                  },
+                  {
+                    weekday: Weekday.SATURDAY,
+                    shift_types: {
+                      connect: {
+                        id: shiftType1.id
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  })
+
+  const mockUser7 = await prisma.user.create({
+    data: {
+      name: "Ellen",
+      last_name: "de Jongh",
+      email: "example7@gmail.com",
+      role: {
+        connect: {
+          name: Role.USER
+        }
+      },
+      preference: {
+        create: {
+          shift_type: {
+            connect: {
+              id: shiftType1.id
+            }
+          },
+          availability_even_week: {
+            create: {
+              availability: {
+                create: []
+              }
+            }
+          },
+          availability_odd_week: {
+            create: {
+              availability: {
+                create: []
+              }
+            }
+          },
+          availability_flexible: {
+            create: {
               availability: {
                 create: [
                   {
@@ -466,11 +670,11 @@ async function main() {
     }
   })
 
-  const mockUser6 = await prisma.user.create({
+  const mockUser8 = await prisma.user.create({
     data: {
-      name: "Mariëtte",
-      last_name: "Groen",
-      email: "example6@hotmail.com",
+      name: "Linda",
+      last_name: "Liem",
+      email: "example8@gmail.com",
       role: {
         connect: {
           name: Role.USER
@@ -478,107 +682,22 @@ async function main() {
       },
       preference: {
         create: {
-          maxStaffings: 3,
           shift_type: {
             connect: {
               id: shiftType1.id
             }
           },
-          availability_week: {
-            create: [
-              {
-                sequence: 0,
-                availability: {
-                  create: [
-                    {
-                      weekday: Weekday.TUESDAY,
-                      shift_types: {
-                        connect: {
-                          id: shiftType1.id
-                        }
-                      }
-                    },
-                    {
-                      weekday: Weekday.WEDNESDAY,
-                      shift_types: {
-                        connect: {
-                          id: shiftType1.id
-                        }
-                      }
-                    },
-                    {
-                      weekday: Weekday.SATURDAY,
-                      shift_types: {
-                        connect: {
-                          id: shiftType1.id
-                        }
-                      }
-                    }
-                  ]
-                }
-              },
-              {
-                sequence: 1,
-                availability: {
-                  create: [
-                    {
-                      weekday: Weekday.TUESDAY,
-                      shift_types: {
-                        connect: {
-                          id: shiftType1.id
-                        }
-                      }
-                    },
-                    {
-                      weekday: Weekday.SATURDAY,
-                      shift_types: {
-                        connect: {
-                          id: shiftType1.id
-                        }
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-        }
-      }
-    }
-  })
-
-
-  const mockUser7 = await prisma.user.create({
-    data: {
-      name: "ELlen",
-      last_name: "de Jongh",
-      email: "example7@hotmail.com",
-      role: {
-        connect: {
-          name: Role.USER
-        }
-      },
-      preference: {
-        create: {
-          maxStaffings: 6,
-          shift_type: {
-            connect: {
-              id: shiftType1.id
-            }
-          },
-          availability_week: {
+          availability_even_week: {
             create: {
-              sequence: 0,
+              availability: {
+                create: []
+              }
+            }
+          },
+          availability_odd_week: {
+            create: {
               availability: {
                 create: [
-                  {
-                    weekday: Weekday.TUESDAY,
-                    shift_types: {
-                      connect: {
-                        id: shiftType1.id
-                      }
-                    }
-                  },
                   {
                     weekday: Weekday.WEDNESDAY,
                     shift_types: {
@@ -586,17 +705,17 @@ async function main() {
                         id: shiftType1.id
                       }
                     }
-                  },
+                  }
+                ]
+              }
+            }
+          },
+          availability_flexible: {
+            create: {
+              availability: {
+                create: [
                   {
-                    weekday: Weekday.THURSDAY,
-                    shift_types: {
-                      connect: {
-                        id: shiftType1.id
-                      }
-                    }
-                  },
-                  {
-                    weekday: Weekday.FRIDAY,
+                    weekday: Weekday.TUESDAY,
                     shift_types: {
                       connect: {
                         id: shiftType1.id
@@ -618,7 +737,7 @@ async function main() {
                         id: shiftType1.id
                       }
                     }
-                  },
+                  }
                 ]
               }
             }
@@ -628,109 +747,11 @@ async function main() {
     }
   })
 
-  const mockUser8 = await prisma.user.create({
-    data: {
-      name: "Linda",
-      last_name: "Liem",
-      email: "example8@hotmail.com",
-      role: {
-        connect: {
-          name: Role.USER
-        }
-      },
-      preference: {
-        create: {
-          maxStaffings: 4,
-          shift_type: {
-            connect: {
-              id: shiftType1.id
-            }
-          },
-          availability_week: {
-            create: [
-              {
-                sequence: 0,
-                availability: {
-                  create: [
-                    {
-                      weekday: Weekday.TUESDAY,
-                      shift_types: {
-                        connect: {
-                          id: shiftType1.id
-                        }
-                      }
-                    },
-                    {
-                      weekday: Weekday.SATURDAY,
-                      shift_types: {
-                        connect: {
-                          id: shiftType1.id
-                        }
-                      }
-                    },
-                    {
-                      weekday: Weekday.SUNDAY,
-                      shift_types: {
-                        connect: {
-                          id: shiftType1.id
-                        }
-                      }
-                    }
-                  ]
-                }
-              },
-              {
-                sequence: 1,
-                availability: {
-                  create: [
-                    {
-                      weekday: Weekday.TUESDAY,
-                      shift_types: {
-                        connect: {
-                          id: shiftType1.id
-                        }
-                      }
-                    },
-                    {
-                      weekday: Weekday.WEDNESDAY,
-                      shift_types: {
-                        connect: {
-                          id: shiftType1.id
-                        }
-                      }
-                    },
-                    {
-                      weekday: Weekday.SATURDAY,
-                      shift_types: {
-                        connect: {
-                          id: shiftType1.id
-                        }
-                      }
-                    },
-                    {
-                      weekday: Weekday.SUNDAY,
-                      shift_types: {
-                        connect: {
-                          id: shiftType1.id
-                        }
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-        }
-      }
-    }
-  })
-
-
   const mockUser9 = await prisma.user.create({
     data: {
       name: "Marijke",
       last_name: "Rodermond",
-      email: "example9@hotmail.com",
+      email: "example9@gmail.com",
       role: {
         connect: {
           name: Role.USER
@@ -738,65 +759,60 @@ async function main() {
       },
       preference: {
         create: {
-          maxStaffings: 2,
           shift_type: {
             connect: {
               id: shiftType1.id
             }
           },
-          availability_week: {
-            create: [
-              {
-                sequence: 0,
-                availability: {
-                  create: [
-                    {
-                      weekday: Weekday.WEDNESDAY,
-                      shift_types: {
-                        connect: {
-                          id: shiftType1.id
-                        }
-                      }
-                    }
-                  ]
-                }
-              },
-              {
-                sequence: 1,
-                availability: {
-                  create: [
-                    {
-                      weekday: Weekday.WEDNESDAY,
-                      shift_types: {
-                        connect: {
-                          id: shiftType1.id
-                        }
-                      }
-                    },
-                    {
-                      weekday: Weekday.THURSDAY,
-                      shift_types: {
-                        connect: {
-                          id: shiftType1.id
-                        }
-                      }
-                    }
-                  ]
-                }
+          availability_even_week: {
+            create: {
+              availability: {
+                create: []
               }
-            ]
+            }
+          },
+          availability_odd_week: {
+            create: {
+              availability: {
+                create: [
+                  {
+                    weekday: Weekday.THURSDAY,
+                    shift_types: {
+                      connect: {
+                        id: shiftType1.id
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          availability_flexible: {
+            create: {
+              availability: {
+                create: [
+                  {
+                    weekday: Weekday.WEDNESDAY,
+                    shift_types: {
+                      connect: {
+                        id: shiftType1.id
+                      }
+                    }
+                  }
+                ]
+              }
+            }
           }
         }
       }
     }
   })
-
 
   const mockUser10 = await prisma.user.create({
     data: {
       name: "Angelique",
       last_name: "Schröter",
-      email: "example10@hotmail.com",
+      email: "example10@gmail.com",
       role: {
         connect: {
           name: Role.USER
@@ -804,15 +820,45 @@ async function main() {
       },
       preference: {
         create: {
-          maxStaffings: 3,
           shift_type: {
             connect: {
               id: shiftType1.id
             }
           },
-          availability_week: {
+          availability_even_week: {
             create: {
-              sequence: 0,
+              availability: {
+                create: [
+                  {
+                    weekday: Weekday.SATURDAY,
+                    shift_types: {
+                      connect: {
+                        id: shiftType1.id
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          availability_odd_week: {
+            create: {
+              availability: {
+                create: [
+                  {
+                    weekday: Weekday.SUNDAY,
+                    shift_types: {
+                      connect: {
+                        id: shiftType1.id
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          availability_flexible: {
+            create: {
               availability: {
                 create: [
                   {
@@ -852,7 +898,7 @@ async function main() {
     data: {
       name: "Ingrid",
       last_name: "Vossenaar",
-      email: "example11@hotmail.com",
+      email: "example11@gmail.com",
       role: {
         connect: {
           name: Role.USER
@@ -860,18 +906,15 @@ async function main() {
       },
       preference: {
         create: {
-          maxStaffings: 6,
           shift_type: {
             connect: {
               id: shiftType1.id
             }
           },
-          availability_week: {
+          availability_even_week: {
             create: {
-              sequence: 0,
               availability: {
                 create: [
-
                   {
                     weekday: Weekday.TUESDAY,
                     shift_types: {
@@ -879,7 +922,31 @@ async function main() {
                         id: shiftType1.id
                       }
                     }
-                  },
+                  }
+                ]
+              }
+            }
+          },
+          availability_odd_week: {
+            create: {
+              availability: {
+                create: [
+                  {
+                    weekday: Weekday.TUESDAY,
+                    shift_types: {
+                      connect: {
+                        id: shiftType1.id
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          availability_flexible: {
+            create: {
+              availability: {
+                create: [
                   {
                     weekday: Weekday.WEDNESDAY,
                     shift_types: {
@@ -919,7 +986,7 @@ async function main() {
                         id: shiftType1.id
                       }
                     }
-                  },
+                  }
                 ]
               }
             }
@@ -933,7 +1000,7 @@ async function main() {
     data: {
       name: "Hennie",
       last_name: "Vosters",
-      email: "example12@hotmail.com",
+      email: "example12@gmail.com",
       role: {
         connect: {
           name: Role.USER
@@ -941,18 +1008,47 @@ async function main() {
       },
       preference: {
         create: {
-          maxStaffings: 1,
           shift_type: {
             connect: {
               id: shiftType1.id
             }
           },
-          availability_week: {
+          availability_even_week: {
             create: {
-              sequence: 0,
               availability: {
                 create: [
-
+                  {
+                    weekday: Weekday.TUESDAY,
+                    shift_types: {
+                      connect: {
+                        id: shiftType1.id
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          availability_odd_week: {
+            create: {
+              availability: {
+                create: [
+                  {
+                    weekday: Weekday.TUESDAY,
+                    shift_types: {
+                      connect: {
+                        id: shiftType1.id
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          availability_flexible: {
+            create: {
+              availability: {
+                create: [
                   {
                     weekday: Weekday.TUESDAY,
                     shift_types: {
@@ -973,8 +1069,8 @@ async function main() {
   const mockUser13 = await prisma.user.create({
     data: {
       name: "Anja",
-      last_name: "De Vries",
-      email: "example13@hotmail.com",
+      last_name: "de Vries",
+      email: "example13@gmail.com",
       role: {
         connect: {
           name: Role.USER
@@ -982,18 +1078,38 @@ async function main() {
       },
       preference: {
         create: {
-          maxStaffings: 3,
           shift_type: {
             connect: {
               id: shiftType1.id
             }
           },
-          availability_week: {
+          availability_even_week: {
             create: {
-              sequence: 0,
               availability: {
                 create: [
-
+                  {
+                    weekday: Weekday.THURSDAY,
+                    shift_types: {
+                      connect: {
+                        id: shiftType1.id
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          availability_odd_week: {
+            create: {
+              availability: {
+                create: []
+              }
+            }
+          },
+          availability_flexible: {
+            create: {
+              availability: {
+                create: [
                   {
                     weekday: Weekday.TUESDAY,
                     shift_types: {
@@ -1030,8 +1146,8 @@ async function main() {
   const mockUser14 = await prisma.user.create({
     data: {
       name: "Debbie",
-      last_name: "Conink Westenberg",
-      email: "example14@hotmail.com",
+      last_name: "Coninck Westenberg",
+      email: "example14@gmail.com",
       role: {
         connect: {
           name: Role.USER
@@ -1039,18 +1155,38 @@ async function main() {
       },
       preference: {
         create: {
-          maxStaffings: 4,
           shift_type: {
             connect: {
               id: shiftType1.id
             }
           },
-          availability_week: {
+          availability_even_week: {
             create: {
-              sequence: 0,
+              availability: {
+                create: []
+              }
+            }
+          },
+          availability_odd_week: {
+            create: {
               availability: {
                 create: [
-
+                  {
+                    weekday: Weekday.FRIDAY,
+                    shift_types: {
+                      connect: {
+                        id: shiftType1.id
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          availability_flexible: {
+            create: {
+              availability: {
+                create: [
                   {
                     weekday: Weekday.TUESDAY,
                     shift_types: {
@@ -1096,7 +1232,7 @@ async function main() {
     data: {
       name: "Frits",
       last_name: "van der Zweep",
-      email: "example15@hotmail.com",
+      email: "example15@gmail.com",
       role: {
         connect: {
           name: Role.USER
@@ -1104,18 +1240,29 @@ async function main() {
       },
       preference: {
         create: {
-          maxStaffings: 3,
           shift_type: {
             connect: {
               id: shiftType1.id
             }
           },
-          availability_week: {
+          availability_even_week: {
             create: {
-              sequence: 0,
+              availability: {
+                create: []
+              }
+            }
+          },
+          availability_odd_week: {
+            create: {
+              availability: {
+                create: []
+              }
+            }
+          },
+          availability_flexible: {
+            create: {
               availability: {
                 create: [
-
                   {
                     weekday: Weekday.TUESDAY,
                     shift_types: {
@@ -1153,7 +1300,7 @@ async function main() {
     data: {
       name: "Jacobine",
       last_name: "van Nieuwkuijk",
-      email: "example16@hotmail.com",
+      email: "example16@gmail.com",
       role: {
         connect: {
           name: Role.USER
@@ -1161,15 +1308,36 @@ async function main() {
       },
       preference: {
         create: {
-          maxStaffings: 1,
           shift_type: {
             connect: {
               id: shiftType1.id
             }
           },
-          availability_week: {
+          availability_even_week: {
             create: {
-              sequence: 0,
+              availability: {
+                create: [
+                  {
+                    weekday: Weekday.WEDNESDAY,
+                    shift_types: {
+                      connect: {
+                        id: shiftType1.id
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          availability_odd_week: {
+            create: {
+              availability: {
+                create: []
+              }
+            }
+          },
+          availability_flexible: {
+            create: {
               availability: {
                 create: [
                   {
@@ -1193,7 +1361,7 @@ async function main() {
     data: {
       name: "Janine",
       last_name: "Ossewaarde",
-      email: "example17@hotmail.com",
+      email: "example17@gmail.com",
       role: {
         connect: {
           name: Role.USER
@@ -1201,18 +1369,47 @@ async function main() {
       },
       preference: {
         create: {
-          maxStaffings: 6,
           shift_type: {
             connect: {
               id: shiftType1.id
             }
           },
-          availability_week: {
+          availability_even_week: {
             create: {
-              sequence: 0,
               availability: {
                 create: [
-
+                  {
+                    weekday: Weekday.FRIDAY,
+                    shift_types: {
+                      connect: {
+                        id: shiftType1.id
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          availability_odd_week: {
+            create: {
+              availability: {
+                create: [
+                  {
+                    weekday: Weekday.FRIDAY,
+                    shift_types: {
+                      connect: {
+                        id: shiftType1.id
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          availability_flexible: {
+            create: {
+              availability: {
+                create: [
                   {
                     weekday: Weekday.TUESDAY,
                     shift_types: {
@@ -1260,7 +1457,7 @@ async function main() {
                         id: shiftType1.id
                       }
                     }
-                  },
+                  }
                 ]
               }
             }
@@ -1274,7 +1471,7 @@ async function main() {
     data: {
       name: "Mirjam",
       last_name: "Alexi",
-      email: "example18@hotmail.com",
+      email: "example18@gmail.com",
       role: {
         connect: {
           name: Role.USER
@@ -1282,64 +1479,20 @@ async function main() {
       },
       preference: {
         create: {
-          maxStaffings: 1,
           shift_type: {
             connect: {
               id: shiftType1.id
             }
           },
-          availability_week: {
-            create: [
-              {
-                sequence: 0,
-                availability: {
-                  create: []
-                }
-              },
-              {
-                sequence: 1,
-                availability: {
-                  create: [
-                    {
-                      weekday: Weekday.SATURDAY,
-                      shift_types: {
-                        connect: {
-                          id: shiftType1.id
-                        }
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
-          }
-        }
-      }
-    }
-  })
-
-
-  const mockUser19 = await prisma.user.create({
-    data: {
-      name: "Fenna",
-      last_name: "Heezen",
-      email: "example19@hotmail.com",
-      role: {
-        connect: {
-          name: Role.USER
-        }
-      },
-      preference: {
-        create: {
-          maxStaffings: 1,
-          shift_type: {
-            connect: {
-              id: shiftType1.id
-            }
-          },
-          availability_week: {
+          availability_even_week: {
             create: {
-              sequence: 0,
+              availability: {
+                create: []
+              }
+            }
+          },
+          availability_odd_week: {
+            create: {
               availability: {
                 create: [
                   {
@@ -1353,6 +1506,65 @@ async function main() {
                 ]
               }
             }
+          },
+          availability_flexible: {
+            create: {
+              availability: {
+                create: []
+              }
+            }
+          }
+        }
+      }
+    }
+  })
+
+  const mockUser19 = await prisma.user.create({
+    data: {
+      name: "Fenna",
+      last_name: "Heezen",
+      email: "example19@gmail.com",
+      role: {
+        connect: {
+          name: Role.USER
+        }
+      },
+      preference: {
+        create: {
+          shift_type: {
+            connect: {
+              id: shiftType1.id
+            }
+          },
+          availability_even_week: {
+            create: {
+              availability: {
+                create: []
+              }
+            }
+          },
+          availability_odd_week: {
+            create: {
+              availability: {
+                create: [
+                  {
+                    weekday: Weekday.SATURDAY,
+                    shift_types: {
+                      connect: {
+                        id: shiftType1.id
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          availability_flexible: {
+            create: {
+              availability: {
+                create: []
+              }
+            }
           }
         }
       }
@@ -1363,7 +1575,7 @@ async function main() {
     data: {
       name: "Linda",
       last_name: "van der Touw",
-      email: "example20@hotmail.com",
+      email: "example20@gmail.com",
       role: {
         connect: {
           name: Role.USER
@@ -1371,48 +1583,51 @@ async function main() {
       },
       preference: {
         create: {
-          maxStaffings: 1,
           shift_type: {
             connect: {
               id: shiftType1.id
             }
           },
-          availability_week: {
-            create: [
-              {
-                sequence: 0,
-                availability: {
-                  create: [
-                    {
-                      weekday: Weekday.SUNDAY,
-                      shift_types: {
-                        connect: {
-                          id: shiftType1.id
-                        }
+          availability_even_week: {
+            create: {
+              availability: {
+                create: [
+                  {
+                    weekday: Weekday.SUNDAY,
+                    shift_types: {
+                      connect: {
+                        id: shiftType1.id
                       }
                     }
-                  ]
-                }
-              },
-              {
-                sequence: 1,
-                availability: {
-                  create: []
-                }
+                  }
+                ]
               }
-            ]
+            }
+          },
+          availability_odd_week: {
+            create: {
+              availability: {
+                create: []
+              }
+            }
+          },
+          availability_flexible: {
+            create: {
+              availability: {
+                create: []
+              }
+            }
           }
         }
       }
     }
   })
 
-
   const mockUser21 = await prisma.user.create({
     data: {
       name: "Marcella",
       last_name: "van de Mortel",
-      email: "example21@hotmail.com",
+      email: "example21@gmail.com",
       role: {
         connect: {
           name: Role.USER
@@ -1420,15 +1635,13 @@ async function main() {
       },
       preference: {
         create: {
-          maxStaffings: 1,
           shift_type: {
             connect: {
               id: shiftType1.id
             }
           },
-          availability_week: {
+          availability_even_week: {
             create: {
-              sequence: 0,
               availability: {
                 create: [
                   {
@@ -1442,6 +1655,29 @@ async function main() {
                 ]
               }
             }
+          },
+          availability_odd_week: {
+            create: {
+              availability: {
+                create: [
+                  {
+                    weekday: Weekday.TUESDAY,
+                    shift_types: {
+                      connect: {
+                        id: shiftType1.id
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          availability_flexible: {
+            create: {
+              availability: {
+                create: []
+              }
+            }
           }
         }
       }
@@ -1452,7 +1688,7 @@ async function main() {
     data: {
       name: "Danielle",
       last_name: "Proper",
-      email: "example22@hotmail.com",
+      email: "example22@gmail.com",
       role: {
         connect: {
           name: Role.USER
@@ -1460,48 +1696,51 @@ async function main() {
       },
       preference: {
         create: {
-          maxStaffings: 1,
           shift_type: {
             connect: {
               id: shiftType1.id
             }
           },
-          availability_week: {
-            create: [
-              {
-                sequence: 0,
-                availability: {
-                  create: [
-                    {
-                      weekday: Weekday.FRIDAY,
-                      shift_types: {
-                        connect: {
-                          id: shiftType1.id
-                        }
+          availability_even_week: {
+            create: {
+              availability: {
+                create: [
+                  {
+                    weekday: Weekday.FRIDAY,
+                    shift_types: {
+                      connect: {
+                        id: shiftType1.id
                       }
                     }
-                  ]
-                }
-              },
-              {
-                sequence: 1,
-                availability: {
-                  create: []
-                }
+                  }
+                ]
               }
-            ]
+            }
+          },
+          availability_odd_week: {
+            create: {
+              availability: {
+                create: []
+              }
+            }
+          },
+          availability_flexible: {
+            create: {
+              availability: {
+                create: []
+              }
+            }
           }
         }
       }
     }
   })
-
 
   const mockUser23 = await prisma.user.create({
     data: {
       name: "Marcella",
       last_name: "Zietse",
-      email: "example23@hotmail.com",
+      email: "example23@gmail.com",
       role: {
         connect: {
           name: Role.USER
@@ -1509,48 +1748,51 @@ async function main() {
       },
       preference: {
         create: {
-          maxStaffings: 1,
           shift_type: {
             connect: {
               id: shiftType1.id
             }
           },
-          availability_week: {
-            create: [
-              {
-                sequence: 0,
-                availability: {
-                  create: []
-                }
-              },
-              {
-                sequence: 1,
-                availability: {
-                  create: [
-                    {
-                      weekday: Weekday.SUNDAY,
-                      shift_types: {
-                        connect: {
-                          id: shiftType1.id
-                        }
+          availability_even_week: {
+            create: {
+              availability: {
+                create: []
+              }
+            }
+          },
+          availability_odd_week: {
+            create: {
+              availability: {
+                create: [
+                  {
+                    weekday: Weekday.SUNDAY,
+                    shift_types: {
+                      connect: {
+                        id: shiftType1.id
                       }
                     }
-                  ]
-                }
+                  }
+                ]
               }
-            ]
+            }
+          },
+          availability_flexible: {
+            create: {
+              availability: {
+                create: []
+              }
+            }
           }
         }
       }
     }
   })
 
-
   const mockUser24 = await prisma.user.create({
     data: {
       name: "Paula",
       last_name: "Knotter",
-      email: "example24@hotmail.com",
+      email: "example24@gmail.com",
       role: {
         connect: {
           name: Role.USER
@@ -1558,15 +1800,13 @@ async function main() {
       },
       preference: {
         create: {
-          maxStaffings: 1,
           shift_type: {
             connect: {
               id: shiftType1.id
             }
           },
-          availability_week: {
+          availability_even_week: {
             create: {
-              sequence: 0,
               availability: {
                 create: [
                   {
@@ -1580,6 +1820,29 @@ async function main() {
                 ]
               }
             }
+          },
+          availability_odd_week: {
+            create: {
+              availability: {
+                create: [
+                  {
+                    weekday: Weekday.WEDNESDAY,
+                    shift_types: {
+                      connect: {
+                        id: shiftType1.id
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          availability_flexible: {
+            create: {
+              availability: {
+                create: []
+              }
+            }
           }
         }
       }
@@ -1588,9 +1851,9 @@ async function main() {
 
   const mockUser25 = await prisma.user.create({
     data: {
-      name: "Sally",
-      last_name: "Ann Hartmann",
-      email: "example25@hotmail.com",
+      name: "Sally Ann",
+      last_name: "Hartmann",
+      email: "example25@gmail.com",
       role: {
         connect: {
           name: Role.USER
@@ -1598,48 +1861,51 @@ async function main() {
       },
       preference: {
         create: {
-          maxStaffings: 1,
           shift_type: {
             connect: {
               id: shiftType1.id
             }
           },
-          availability_week: {
-            create: [
-              {
-                sequence: 0,
-                availability: {
-                  create: [
-                    {
-                      weekday: Weekday.THURSDAY,
-                      shift_types: {
-                        connect: {
-                          id: shiftType1.id
-                        }
+          availability_even_week: {
+            create: {
+              availability: {
+                create: [
+                  {
+                    weekday: Weekday.THURSDAY,
+                    shift_types: {
+                      connect: {
+                        id: shiftType1.id
                       }
                     }
-                  ]
-                }
-              },
-              {
-                sequence: 1,
-                availability: {
-                  create: []
-                }
+                  }
+                ]
               }
-            ]
+            }
+          },
+          availability_odd_week: {
+            create: {
+              availability: {
+                create: []
+              }
+            }
+          },
+          availability_flexible: {
+            create: {
+              availability: {
+                create: []
+              }
+            }
           }
         }
       }
     }
   })
-
 
   const mockUser26 = await prisma.user.create({
     data: {
       name: "Ingrid",
       last_name: "Zichem",
-      email: "example26@hotmail.com",
+      email: "example26@gmail.com",
       role: {
         connect: {
           name: Role.USER
@@ -1647,43 +1913,45 @@ async function main() {
       },
       preference: {
         create: {
-          maxStaffings: 1,
           shift_type: {
             connect: {
               id: shiftType1.id
             }
           },
-          availability_week: {
-            create: [
-              {
-                sequence: 0,
-                availability: {
-                  create: [
-                    {
-                      weekday: Weekday.FRIDAY,
-                      shift_types: {
-                        connect: {
-                          id: shiftType1.id
-                        }
+          availability_even_week: {
+            create: {
+              availability: {
+                create: [
+                  {
+                    weekday: Weekday.FRIDAY,
+                    shift_types: {
+                      connect: {
+                        id: shiftType1.id
                       }
                     }
-                  ]
-                }
-              },
-              {
-                sequence: 1,
-                availability: {
-                  create: []
-                }
+                  }
+                ]
               }
-            ]
+            }
+          },
+          availability_odd_week: {
+            create: {
+              availability: {
+                create: []
+              }
+            }
+          },
+          availability_flexible: {
+            create: {
+              availability: {
+                create: []
+              }
+            }
           }
         }
       }
     }
   })
-
-
 
   let startDate = new CalendarDate(2023, 1, 1)
   const endDate = new CalendarDate(2024, 1, 1)
@@ -1753,6 +2021,5 @@ main()
   })
   .finally(() => {
     prisma.$disconnect()
-      .catch((e) => { console.log(e) })
-  });
-
+      .catch((e) => { console.error(e) })
+  })

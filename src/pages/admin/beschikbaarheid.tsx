@@ -1,14 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { api } from "../../utils/api";
 import { NavigationBar } from "../../components";
+import { UserWithPreferenceAndStaffings } from "../../../server/types/user";
+import { Weekday } from "../../../prisma/weekday";
+import { AvailabilityWithShiftTypes } from "../../../server/types/availibility";
 
-const UserPreferencesPopup = ({ user, onClose }) => {
-  if (!user) {
-    return null;
-  }
+const UserPreferencesPopup = ({ user, onClose }: { user: UserWithPreferenceAndStaffings, onclose: (close) => void}) => {
+  const getDayName = (dayNumber: number) => {
+    const weekdays = ["Zondag", "Maandag", "Dinsdag", "Woensdag", "Donderdag", "Vrijdag", "Zaterdag"];
+    return weekdays[dayNumber];
+  };
 
-
-  // Hier moet ik de user preferences ophalens
+  const sortedEvenAvailability: AvailabilityWithShiftTypes[] = user.preference.availability_even_week.availability?.sort((
+    compareFirstElement: AvailabilityWithShiftTypes, compareSecondElement: AvailabilityWithShiftTypes) => {
+    if (compareFirstElement.weekday === 0) return 1;
+    return compareFirstElement.weekday - compareSecondElement.weekday
+  })
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
@@ -16,6 +23,17 @@ const UserPreferencesPopup = ({ user, onClose }) => {
         <h2 className="text-xl font-bold mb-6 text-center">Gebruiker voorkeuren</h2>
         <div className="flex-grow flex flex-col justify-end">
           <div className="px-4 py-2">
+            <div>
+              <span className="font-bold">Voornaam: {user.name} </span>
+              <span className="font-bold">Beschikbaarheid: {user.preference?.availability_even_week.id} </span>
+              <div>
+                {sortedEvenAvailability.map((availability) => (
+                    <div key={availability.id}>
+                      <span className="font-bold">Dag: {getDayName(availability.weekday)} </span>
+                    </div>
+                  ))}
+              </div>
+            </div>
             {/* Voorkeuren hier */}
           </div>
           <button
@@ -23,6 +41,13 @@ const UserPreferencesPopup = ({ user, onClose }) => {
             onClick={onClose}
           >
             Close
+          </button>
+
+          <button
+            className="bg-gray-300 hover:bg-green-600 text-gray-800 font-semibold py-2 px-10 rounded mt-6 mb-2 transition duration-300 ease-in-out"
+            onClick={onClose}
+          >
+            Test
           </button>
         </div>
       </div>
@@ -36,7 +61,7 @@ const UserPreferencesPopup = ({ user, onClose }) => {
 const Gebruikers = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const users = api.user.getAllUsers.useQuery();
+  const users = api.user.getAllUserWithPreferences.useQuery();
 
   if (users.isLoading) {
     return <div>loading...</div>;

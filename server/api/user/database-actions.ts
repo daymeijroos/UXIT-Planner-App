@@ -8,7 +8,7 @@ export const getUsersWithPreferencesAndStaffings = async () => {
       preference: {
         include: {
           absence: true,
-          availability_week: {
+          availability_even_week: {
             include: {
               availability: {
                 include: {
@@ -20,6 +20,27 @@ export const getUsersWithPreferencesAndStaffings = async () => {
         },
       },
       staffings: true,
+    },
+  })
+}
+
+export const getUserPreferences = async () => {
+  return prisma.user.findMany({
+    include: {
+      preference: {
+        include: {
+          absence: true,
+          availability_even_week: {
+            include: {
+              availability: {
+                include: {
+                  shift_types: true,
+                }
+              }
+            },
+          },
+        },
+      },
     },
   })
 }

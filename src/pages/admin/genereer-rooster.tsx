@@ -16,17 +16,17 @@ export default function GenereerRooster() {
   const { mutate: generateSchedule, isLoading } = api.schedule.generate.useMutation({
     onSuccess: () => {
       ToastService.success("Het is gelukt!")
-      context.schedule.getUnfulfilledShifts.invalidate().catch((error) => {
-        console.error(error)
+      context.schedule.getUnfulfilledShifts.invalidate().catch(() => {
+        ToastService.error("Er is iets misgegaan bij het ophalen van de onvervulde diensten")
       })
-      context.staffing.getStaffing.invalidate().catch((error) => {
-        console.error(error)
+      context.staffing.getStaffing.invalidate().catch(() => {
+        ToastService.error("Er is iets misgegaan bij het ophalen van de planning")
       })
-      context.staffing.getPersonalStaffing.invalidate().catch((error) => {
-        console.error(error)
+      context.staffing.getPersonalStaffing.invalidate().catch(() => {
+        ToastService.error("Er is iets misgegaan bij het ophalen van de persoonlijke planning")
       })
-      router.push("/").catch((error) => {
-        console.error(error)
+      router.push("/").catch(() => {
+        ToastService.error("Er is iets misgegaan bij het openen van de planning")
       })
     },
     onError: (error) => {
@@ -44,7 +44,7 @@ export default function GenereerRooster() {
             value={range}
             onChange={setRange}
           />
-          <Button color="teal" disabled={isLoading} onPress={() => {
+          <Button color="teal" isDisabled={isLoading} onPress={() => {
             if (range) {
               generateSchedule({
                 from: range?.start.toDate("Europe/Amsterdam"),

@@ -54,25 +54,6 @@ async function main() {
     }
   })
 
-
-
-
-  console.log("Shift Types created: ", shiftType1, shiftType2)
-
-  // mockdata voor gebruikers, voorkeuren en standaard beschikbaarheid
-  // user 1: robert swarts, elke dag, max 2x
-  // user 2, lars baer, dinsdag/woensdag, max 2x
-  // user 3, manuel vermeer, donderdag/vrijdag, max 2x
-  // user 4, david sprong, zaterdag, max 1x
-  // user 5, olivier verbeten, zondag, max 1x
-  // user 6, emma beil, elke dag, max 4x
-  // user 7, barbara damme, woensdag/zaterdag/zondag, max 1x
-  // user 8, isabella host, dinsdag/woensdag, max 2x
-  // user 9, marieke burckhard, donerdag/vrijdag/zaterdag, max 2x
-  // user 10, maria nellessen, vrijdag/zaterdag/zondag, max 3x
-  const users = []
-
-
   // create admin user
   const adminUser = await prisma.user.create({
     data: {
@@ -83,6 +64,19 @@ async function main() {
       role: {
         connect: {
           name: Role.ADMIN
+        }
+      },
+      preference: {
+        create: {
+          shift_type: {
+            connect: {
+              id: shiftType1.id
+            }
+          },
+          availability_even_week: {
+            create: {
+            }
+          },
         }
       }
     }
@@ -209,27 +203,38 @@ async function main() {
     }
   })
 
-  const openStaffing = await prisma.openStaffing.create({
+  const staffing = await prisma.staffing.create({
     data: {
-      id: "birthday",
+      shift: {
+        create: {
+          start: new Date("2023-06-23T18:00:00.000Z"),
+          end: new Date("2023-06-23T23:00:00.000Z"),
+        },
+      },
+      user: {
+        connect: {
+          id: adminUser.id
+        },
+      },
       shift_type: {
         connect: {
           id: shiftType1.id
-        }
+        },
       },
-      shift: {
-        create: {
-          start: new CalendarDateTime(2023, 6, 18, 11, 46).toDate('Europe/Amsterdam'),
-          end: new CalendarDateTime(2023, 6, 18, 17, 15).toDate('Europe/Amsterdam'),
-        }
-      },
-      absent_user: {
-        connect: {
-          id: mockUser1.id
-        }
-      }
     }
   })
+
+  const backup = await prisma.backup.create({
+    data: {
+      date: new Date("2023-06-23T02:00:00.000Z"),
+      user: {
+        connect: {
+          id: adminUser.id
+        },
+      },
+    }
+  })
+
 
   const mockUser2 = await prisma.user.create({
     data: {
@@ -2050,6 +2055,5 @@ main()
   })
   .finally(() => {
     prisma.$disconnect()
-      .catch((e) => { console.log(e) })
-  });
-
+      .catch((e) => { console.error(e) })
+  })

@@ -79,8 +79,12 @@ export default function Admin() {
           </div>
           <h2>Accounts beheren</h2>
           <div className="grid w-full grid-cols-2 gap-4">
-            <Button>Account aanmaken</Button>
-            <Button>Rollenbeheer</Button>
+            <Button onPress={() => {
+              router.push("/admin/create-user")
+            }}> Account aanmaken</Button>
+            <Button onPress={() => {
+              router.push("/admin/modify-user")
+            }}> Account wijzigen</Button>
           </div>
         </div>
       </div >

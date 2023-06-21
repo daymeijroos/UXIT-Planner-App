@@ -45,8 +45,8 @@ model User {
   image              String?
   role               Role            @relation(fields: [role_name], references: [name])
   role_name          String          @default("USER")
-  preference         User_Preference @relation(fields: [user_preference_id], references: [id])
-  user_preference_id String          @unique
+  preference         User_Preference? @relation(fields: [user_preference_id], references: [id])
+  user_preference_id String?          @unique
   staffings          Staffing[]
   backups            Backup[]
   accounts           Account[]

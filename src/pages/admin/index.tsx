@@ -83,7 +83,6 @@ export default function Admin() {
                 console.error(error)
               })
             }}> Account wijzigen</Button>
-            <Button>Rollenbeheer</Button>
           </div>
         </div>
       </div >

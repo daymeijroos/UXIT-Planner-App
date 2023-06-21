@@ -5,7 +5,7 @@ import { StaffingCard } from "./staffing-card"
 import type { StaffingWithColleagues } from "../../../types/StaffingWithColleagues"
 import { Button } from "../../atoms/input/button"
 import React from 'react'
-import { Shift, Shift_Type, Staffing } from "@prisma/client"
+import type { Shift, Shift_Type, Staffing } from "@prisma/client"
 
 export function PersonalStaffingList({ fromDate }: { fromDate?: Date }) {
   const personalStaffings = api.staffing.getPersonalStaffing.useInfiniteQuery({ fromDate, limit: 10 }, {

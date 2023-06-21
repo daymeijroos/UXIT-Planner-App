@@ -1,17 +1,17 @@
-import Datepicker from "react-tailwindcss-datepicker"
-import React, { FormEvent, useState } from "react";
-import { Item } from "react-stately"
-import { Select } from "../../components/atoms/input/Selector"
+import React, { type FormEvent} from "react";
 import { Button, NavigationBar, TextField, ToastService } from "../../components";
 import { api } from "../../utils/api"
-import type { DateValueType } from "react-tailwindcss-datepicker/dist/types"
 import { errorToast } from "../../components/elements/generic/toast/errorToast";
 
 export default function CreateUser() {
-
-
-
-  const {mutate: createUserBackend} = api.user.create.useMutation({})
+  const {mutate: createUserBackend} = api.user.create.useMutation({
+    onSuccess: () => {
+      ToastService.success("Gebruiker is aangemaakt");
+    },
+    onError: () => {
+      ToastService.error("Er is een fout opgetreden")
+    }
+  })
 
   const handleCreateUser = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -24,8 +24,21 @@ export default function CreateUser() {
     const lastName = target.lastName.value
     const email = target.email.value
 
-    if(!firstName || !lastName || !email) {
+    if(!firstName && !lastName && !email) {
       errorToast("Vul alle velden in")
+      return;
+    }
+
+    if(!firstName) {
+      errorToast("Vul een voornaam in")
+      return;
+    }
+    if(!lastName) {
+      errorToast("Vul een achternaam in")
+      return;
+    }
+    if(!email) {
+      errorToast("Vul een email in")
       return;
     }
 
@@ -34,14 +47,7 @@ export default function CreateUser() {
       last_name: lastName,
       email: email,
     }
-
-    Promise.all([createUserBackend(formData)])
-      .then(() => {
-        ToastService.success("Gebruiker is aangemaakt");
-      })
-      .catch(() => {
-        ToastService.error("Er is een fout opgetreden");
-      });
+    createUserBackend(formData)
   };
 
   return (

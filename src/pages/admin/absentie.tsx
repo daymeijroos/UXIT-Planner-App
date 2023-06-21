@@ -4,8 +4,8 @@ import { Select } from "../../components/atoms/input/Selector"
 import { Button, NavigationBar } from "../../components"
 import { api } from "../../utils/api"
 import { DateRangePicker } from "../../components/atoms/input/calendar/date-range-picker"
-import { DateValue } from "react-aria"
-import { User } from "@prisma/client"
+import { type DateValue } from "react-aria"
+import { type User } from "@prisma/client"
 
 export default function Absence() {
   const users = api.user.getAll.useQuery()

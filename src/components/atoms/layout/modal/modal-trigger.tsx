@@ -1,5 +1,5 @@
 import { useOverlayTrigger } from 'react-aria'
-import { OverlayTriggerProps, useOverlayTriggerState } from 'react-stately'
+import { type OverlayTriggerProps, useOverlayTriggerState } from 'react-stately'
 
 // Reuse the Button from your component library. See below for details.
 import { Button } from '../../input'
@@ -19,7 +19,7 @@ function ModalTrigger({ children, ...props }: { children: (close: () => void) =>
       {state.isOpen &&
         (
           <Modal {...props} state={state}>
-            {React.cloneElement(children(state.close), overlayProps)}
+            {React.cloneElement(children(() => state.close()), overlayProps)}
           </Modal>
         )}
     </>

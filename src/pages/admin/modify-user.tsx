@@ -1,20 +1,19 @@
-import React, { FormEvent, Key, useState } from "react";
+import React, { useState } from "react";
 import { api } from "../../utils/api";
 import { Button, NavigationBar, TextField, ToastService } from "../../components";
-import { mockSession } from "next-auth/client/__tests__/helpers/mocks";
-import type { User } from  "@prisma/client";
-import { errorToast } from "../../components/elements/generic/toast/errorToast";
-import ModifyUser from "./modify-user";
-import { Item, Select } from "../../components/atoms/input/Selector";
+import type { Role, User } from "@prisma/client";
+import { Item} from "../../components/atoms/input/Selector";
+import { RolSelect } from "../../components/atoms/input/rol-selector";
 
 
 
 const ModifyUserPopup = ({ user, onClose: close }: { user: User, onClose: () => void }) => {
   const apiContext = api.useContext();
-  const [selectedRole, setSelectedRole] = useState<string>(user.role_name);
-
-
-  const { data: rolesData, isLoading: rolesLoading } = api.role.getAll.useQuery();
+  const [selectedName, setSelectedName] = useState<string>(user.name ?? "");
+  const [selectedLastname, setSelectedLastname] = useState<string>(user.last_name ?? "");
+  const [selectedEmail, setSelectedEmail] = useState<string>(user.email ?? "");
+  const [selectedRole, setSelectedRole] = useState<string>(user.role_name ?? "");
+  const { data: rolesData}: { data: Role[] | undefined, isLoading: boolean } = api.role.getAll.useQuery();
 
   const {mutate: modifyUserBackend} = api.user.update.useMutation({
     onSuccess: () => {
@@ -30,16 +29,10 @@ const ModifyUserPopup = ({ user, onClose: close }: { user: User, onClose: () => 
     }
   })
 
-  const handleModifySubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    const target = event.target as typeof event.target & {
-      firstName: { value: string },
-      lastName: { value: string },
-      email: { value: string },
-    }
-    const firstName = target.firstName.value
-    const lastName = target.lastName.value
-    const email = target.email.value === "" ? undefined : target.email.value
+  const handleModifySubmit = () => {
+    const firstName = selectedName
+    const lastName = selectedLastname
+    const email = selectedEmail === "" ? undefined : selectedEmail
     const role = selectedRole
     const userId : string = user.id
 
@@ -65,25 +58,20 @@ const ModifyUserPopup = ({ user, onClose: close }: { user: User, onClose: () => 
       <div className="bg-white w-full md:w-1/2 h-5/6 p-6 rounded shadow-lg flex flex-col dark:bg-gray-700">
         <div className="flex flex-col flex-grow justify-center items-center px-4 py-2">
           <div>
-            <form onSubmit={handleModifySubmit} className="flex flex-col items-stretch gap-4">
+            <div className="flex flex-col items-stretch gap-4">
               <h1 className="mb-4 text-center">Account wijzigen</h1>
-              <TextField type="text" label="Voornaam" id="firstName" name="firstName" placeholder={"John"} />
-              <TextField type="text" label="Achternaam" id="lastName" name="lastName" placeholder={"Deere"} />
-              <TextField type="text" label="E-mail" id="email" name="email" placeholder={"John@deere.nl"} />
-              <Select label="Role" id="role" name="role" placeholder={"Selecteer een rol"} selectedKey={selectedRole} onSelectionChange={(newRole: Key) => setSelectedRole(newRole as string)}>
-                <>
-                {!rolesLoading &&
-                  rolesData?.map((role) => (
-                    <Item key={role.name}>{role.name}</Item>
-                  ))}
-                </>
-              </Select>
+              <TextField type="text" label="Voornaam" id="firstName" name="firstName" placeholder={"John"} value={selectedName} onChange={(event) => setSelectedName(event)}/>
+              <TextField type="text" label="Achternaam" id="lastName" name="lastName" placeholder={"Deere"} value={selectedLastname} onChange={(event) => setSelectedLastname(event)}/>
+              <TextField type="text" label="E-mail" id="email" name="email" placeholder={"John@deere.nl"} value={selectedEmail} onChange={(event) => setSelectedEmail(event)}/>
+              {<RolSelect label="Role" id="role" placeholder="Kies een rol" items={rolesData ?? []} selectedKey={selectedRole} onSelectionChange={(key: any) => {if (typeof key === "string") setSelectedRole(key)}}>
+                {(role : Role) => <Item key={role.name}>{role.name}</Item>}
+              </RolSelect>}
               <div className={"mt-4"}>
-              <Button type="submit" color="teal">
-                Account aanmaken
+              <Button onClick={handleModifySubmit} type="button" color="teal">
+                Account wijzigen
               </Button>
               </div>
-            </form>
+            </div>
           </div>
         </div>
         <button
@@ -124,7 +112,7 @@ const Users = () => {
           <p className="text-sm">{users.data?.length} Gebruikers</p>
         </div>
         <div className="overflow-x-auto">
-          <table className="w-full divide-y divide-gray-200 border-2 border-black">
+          <table className="w-full divide-y divide-gray-200 border-2 border-black mb-[100px]">
             <thead className="bg-gray-50 border-2 border-black">
             <tr>
               <th

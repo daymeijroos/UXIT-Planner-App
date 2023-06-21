@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { ToastService, TextField, Button, RangeCalendar, ButtonRound } from "../../components";
+import { ToastService, TextField, Button} from "../../components";
 import { api } from "../../utils/api";
 import "react-datepicker/dist/react-datepicker.css";
 import React from "react";
@@ -54,10 +54,12 @@ export default function AddShiftPage() {
   const shiftTypeNames = getAllShiftTypeNames.data?.map((shiftType) => shiftType.name) || [];
   const createNewShift = api.schedule.createShift.useMutation({
     onSuccess: () => {
-      router.push("/");
+      router.push("/").catch(() => {
+        ToastService.error("Er is iets misgegaan!");
+      });
       ToastService.success("Shift is toegevoegd!!");
     },
-    onError: (error) => {
+    onError: () => {
         ToastService.error( "Er is iets misgegaan!")
     },
 });
@@ -85,7 +87,7 @@ export default function AddShiftPage() {
     }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!selectedShift) {

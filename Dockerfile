@@ -1,24 +1,63 @@
-# Use an official Node.js runtime as the parent image
-FROM node:16-alpine
+##### DEPENDENCIES
 
-# Set the working directory in the container to /app
+FROM --platform=linux/amd64 node:16-alpine3.17 AS deps
+RUN apk add --no-cache libc6-compat openssl1.1-compat
 WORKDIR /app
 
-# Copy package.json and package-lock.json into the directory
-COPY package*.json ./
+# Install Prisma Client - remove if not using Prisma
 
-# Install application dependencies
-# If you are building your code for production, use `npm ci --only=production`
-RUN npm install
+COPY prisma ./
 
-# Bundle the app source inside the Docker image
+# Install dependencies based on the preferred package manager
+
+COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml\* ./
+
+RUN \
+  if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
+  elif [ -f package-lock.json ]; then npm ci; \
+  elif [ -f pnpm-lock.yaml ]; then yarn global add pnpm && pnpm i; \
+  else echo "Lockfile not found." && exit 1; \
+  fi
+
+##### BUILDER
+
+FROM --platform=linux/amd64 node:16-alpine3.17 AS builder
+ARG DATABASE_URL
+ARG NEXT_PUBLIC_CLIENTVAR
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# Build the app
-RUN npm run build
+# ENV NEXT_TELEMETRY_DISABLED 1
 
-# Make the app's port available to the outside world 
+RUN \
+  if [ -f yarn.lock ]; then SKIP_ENV_VALIDATION=1 yarn build; \
+  elif [ -f package-lock.json ]; then SKIP_ENV_VALIDATION=1 npm run build; \
+  elif [ -f pnpm-lock.yaml ]; then yarn global add pnpm && SKIP_ENV_VALIDATION=1 pnpm run build; \
+  else echo "Lockfile not found." && exit 1; \
+  fi
+
+##### RUNNER
+
+FROM --platform=linux/amd64 node:16-alpine3.17 AS runner
+WORKDIR /app
+
+ENV NODE_ENV production
+
+# ENV NEXT_TELEMETRY_DISABLED 1
+
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
+
+COPY --from=builder /app/next.config.mjs ./
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/package.json ./package.json
+
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+
+USER nextjs
 EXPOSE 3000
+ENV PORT 3000
 
-# Start the app
-CMD ["npm", "run", "start"]
+CMD ["node", "server.js"]

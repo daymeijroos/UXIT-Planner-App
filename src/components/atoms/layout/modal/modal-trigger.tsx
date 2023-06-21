@@ -6,7 +6,7 @@ import { Button } from '../../input'
 import { Modal } from './modal'
 import React from 'react'
 
-function ModalTrigger({ children, ...props }: { children: (close: () => void) => React.ReactElement } & OverlayTriggerProps) {
+export function ModalTrigger({ children, ...props }: { children: (close: () => void) => React.ReactElement } & OverlayTriggerProps) {
   const state = useOverlayTriggerState(props)
   const { triggerProps, overlayProps } = useOverlayTrigger(
     { type: 'dialog' },
@@ -19,7 +19,7 @@ function ModalTrigger({ children, ...props }: { children: (close: () => void) =>
       {state.isOpen &&
         (
           <Modal {...props} state={state}>
-            {React.cloneElement(children(() => state.close()), overlayProps)}
+            {React.cloneElement(children(() => { state.close() }), overlayProps)}
           </Modal>
         )}
     </>

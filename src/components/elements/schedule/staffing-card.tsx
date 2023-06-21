@@ -1,75 +1,75 @@
-import { api } from "../../../utils/api";
-import { type FormEvent, useState } from "react";
-import { useSession } from "next-auth/react";
+import { api } from "../../../utils/api"
+import { type FormEvent, useState } from "react"
+import { useSession } from "next-auth/react"
 
-import type { StaffingWithColleagues } from "../../../types/StaffingWithColleagues";
-import { formatDate } from "../../../utils/date/formatDate";
-import { formatTime } from "../../../utils/date/formatTime";
-import { formatShiftStaffList } from "../../../utils/formatShiftStaffList";
-import { Button, Card, TextField } from "../../atoms";
-import { errorToast } from "../generic/toast/errorToast";
-import React from 'react';
+import type { StaffingWithColleagues } from "../../../types/StaffingWithColleagues"
+import { formatDate } from "../../../utils/date/formatDate"
+import { formatTime } from "../../../utils/date/formatTime"
+import { formatShiftStaffList } from "../../../utils/formatShiftStaffList"
+import { Button, Card, TextField } from "../../atoms"
+import { errorToast } from "../generic/toast/errorToast"
+import React from 'react'
 
 interface StaffingCardProps {
-  staffing: StaffingWithColleagues;
+  staffing: StaffingWithColleagues
 }
 
 export function StaffingCard(props: StaffingCardProps) {
-  const { data: sessionData } = useSession();
-  const userId = sessionData?.user?.id;
-  const [showForm, setShowForm] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
+  const { data: sessionData } = useSession()
+  const userId = sessionData?.user?.id
+  const [showForm, setShowForm] = useState(false)
+  const [submitted, setSubmitted] = useState(false)
 
   const determineShowButton = (staffing: StaffingWithColleagues): boolean => {
     if (submitted) {
-      return false;
+      return false
     }
 
-    let result = false;
+    let result = false
     staffing.shift.staffings.forEach((nestedStaffing) => {
       if (nestedStaffing.user.id == userId) {
-        result = true;
+        result = true
       }
-    });
+    })
 
-    return result;
-  };
+    return result
+  }
 
   const handleButtonClick = () => {
-    setShowForm(true);
-    setSubmitted(false);
-  };
+    setShowForm(true)
+    setSubmitted(false)
+  }
 
-  const context = api.useContext();
+  const context = api.useContext()
 
   const { mutate: handleCheckOut } = api.absence.checkOut.useMutation({
     onSuccess: () => {
       context.staffing.getStaffing.invalidate().catch((error) => {
-        throw error;
-      });
+        throw error
+      })
     }
-  });
+  })
 
   const handleFormAndStaffingSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+    event.preventDefault()
     const target = event.target as typeof event.target & {
-      reasonForAbsence: { value: string };
-    };
-    const reason = target.reasonForAbsence.value;
+      reasonForAbsence: { value: string }
+    }
+    const reason = target.reasonForAbsence.value
     const formData = {
       shift_id: props.staffing.shift.id,
       reason: reason,
-    };
+    }
 
     Promise.all([handleCheckOut(formData)])
       .then(() => {
-        setSubmitted(true);
-        setShowForm(false); // Hide the form after successful submission
+        setSubmitted(true)
+        setShowForm(false) // Hide the form after successful submission
       })
       .catch(() => {
-        errorToast("There has been an error");
-      });
-  };
+        errorToast("There has been an error")
+      })
+  }
 
   return (
     <Card>
@@ -93,5 +93,5 @@ export function StaffingCard(props: StaffingCardProps) {
         </form>
       )}
     </Card>
-  );
+  )
 }

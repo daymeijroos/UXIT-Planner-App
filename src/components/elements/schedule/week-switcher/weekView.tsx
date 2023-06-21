@@ -1,3 +1,5 @@
+'use client'
+
 import { useCalendarState } from "@react-stately/calendar"
 import { useCalendar, useCalendarGrid } from "@react-aria/calendar"
 import { useLocale, useDateFormatter } from "@react-aria/i18n"

@@ -1,17 +1,27 @@
 version: "3.9"
 services:
-  app:
-    platform: "linux/amd64"
+  nextjs:
+    platform: "linux/arm64/v8"
     build:
       context: .
       dockerfile: Dockerfile
-      args:
-        NEXT_PUBLIC_APP_URL: "http://pulchri.daymeijroos.nl"
-        NEXT_PUBLIC_APP_PORT: "80"
-        NEXTAUTH_URL: "http://pulchri.daymeijroos.nl"
     working_dir: /app
     ports:
-      - "3000:80"
+      - "3000:3000"
     image: t3-app
+    restart: unless-stopped
+  nginx:
+    image: valian/docker-nginx-auto-ssl
+    restart: on-failure
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ssl_data:/etc/resty-auto-ssl
     environment:
-      - DATABASE_URL=database_url_goes_here
+      ALLOWED_DOMAINS: 'localhost'
+      SITES: 'localhost=nextjs:3000'
+      FORCE_HTTPS: true
+
+volumes:
+  ssl_data:

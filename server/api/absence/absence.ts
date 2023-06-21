@@ -2,6 +2,7 @@ import { z } from "zod"
 import { createTRPCRouter, protectedProcedure } from "../trpc"
 import { notificationService } from "../../notificationService"
 import { env } from "../../../env/server.mjs"
+import { Backup } from "@prisma/client"
 
 export const absenceRouter = createTRPCRouter({
   checkOut: protectedProcedure
@@ -87,7 +88,7 @@ export const absenceRouter = createTRPCRouter({
           },
         },
       })
-      const backupUserIds = backups.map((backup) => backup.user_id)
+      const backupUserIds = backups.map((backup: Backup) => backup.user_id)
       let sendAllUserDelayTime = 0
       if (backupUserIds.length > 0) {
         notificationService.sendNotificationToUser({ user_ids: backupUserIds, message: `${user.name} has checked out of ${shift.start.toLocaleString()} - ${shift.end.toLocaleString()}`, callbackURL: `${env.NEXT_PUBLIC_APP_URL}:${env.NEXT_PUBLIC_APP_PORT}/open-shift/${openStaffing.id}` })

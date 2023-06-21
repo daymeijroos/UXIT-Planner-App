@@ -14,6 +14,14 @@ async function main() {
     }
   })
 
+  //create employee role
+  const employeeRole = await prisma.role.create({
+    data: {
+      name: Role.EMPLOYEE,
+      description: "Dit zijn de handmatig ingeroosterde medewerkers."
+    }
+  })
+
   //create admin role
   const adminRole = await prisma.role.create({
     data: {
@@ -74,6 +82,114 @@ async function main() {
     }
   })
 
+
+  const employeeUser1 = await prisma.user.create({
+    data: {
+      name: "Mede",
+      last_name: "Werker",
+      email: "exampleEmp@hotmail.com",
+      role: {
+        connect: {
+          name: Role.EMPLOYEE
+        }
+      },
+      preference: {
+        create: {
+          shift_type: {
+            connect: {
+              id: shiftType1.id
+            }
+          },
+          availability_even_week: {
+            create: {
+              availability: {
+                create: [
+                  {
+                    weekday: Weekday.SUNDAY,
+                    shift_types: {
+                      connect: {
+                        id: shiftType1.id
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          availability_odd_week: {
+            create: {
+              availability: {
+                create: [
+                  {
+                    weekday: Weekday.THURSDAY,
+                    shift_types: {
+                      connect: {
+                        id: shiftType1.id
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  })
+
+  const employeeUser2 = await prisma.user.create({
+    data: {
+      name: "Medew",
+      last_name: "Erker",
+      email: "exampleEmp2@hotmail.com",
+      role: {
+        connect: {
+          name: Role.EMPLOYEE
+        }
+      },
+      preference: {
+        create: {
+          shift_type: {
+            connect: {
+              id: shiftType1.id
+            }
+          },
+          availability_even_week: {
+            create: {
+              availability: {
+                create: [
+                  {
+                    weekday: Weekday.SUNDAY,
+                    shift_types: {
+                      connect: {
+                        id: shiftType1.id
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          availability_odd_week: {
+            create: {
+              availability: {
+                create: [
+                  {
+                    weekday: Weekday.THURSDAY,
+                    shift_types: {
+                      connect: {
+                        id: shiftType1.id
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  })
 
   const mockUser1 = await prisma.user.create({
     data: {

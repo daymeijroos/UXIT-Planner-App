@@ -4,6 +4,7 @@ export interface AvailabilityWithShiftTypes extends Availability {
   shift_types: Shift_Type[]
 }
 
+
 export interface AvailabilityEvenWeekWithAvailability extends AvailabilityEvenWeek {
   availability: (Availability & {
     shift_types: Shift_Type[]

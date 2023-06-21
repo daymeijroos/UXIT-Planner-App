@@ -8,16 +8,18 @@ import { notificationRouter } from "./notification"
 import { userRouter } from "./user"
 import { roleRouter } from "./role/router";
 import { openStaffingRouter } from "./open-staffing"
+import { shiftRouter } from "./shift"
 
 
 export const appRouter = createTRPCRouter({
   schedule: scheduleRouter,
   staffing: staffingRouter,
+  user: userRouter,
   staffRequired: staffRequiredRouter,
   availability: availabilityRouter,
   absence: absenceRouter,
+  shift: shiftRouter,
   notification: notificationRouter,
-  user: userRouter,
   openStaffing: openStaffingRouter,
   role: roleRouter,
 })

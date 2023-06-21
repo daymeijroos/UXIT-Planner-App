@@ -5,7 +5,7 @@ import { UserWithPreferenceAndStaffings } from "../../../server/types/user";
 import { Weekday } from "../../../prisma/weekday";
 import { AvailabilityWithShiftTypes } from "../../../server/types/availibility";
 
-const UserPreferencesPopup = ({ user, onClose }: { user: UserWithPreferenceAndStaffings, onclose: (close) => void}) => {
+const UserPreferencesPopup = ({ user, onClose }) => {
   const getDayName = (dayNumber: number) => {
     const weekdays = ["Zondag", "Maandag", "Dinsdag", "Woensdag", "Donderdag", "Vrijdag", "Zaterdag"];
     return weekdays[dayNumber];

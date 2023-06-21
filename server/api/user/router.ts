@@ -53,8 +53,15 @@ export const userRouter = createTRPCRouter({
             name: input.name.trim().charAt(0).toUpperCase() + input.name.trim().slice(1).toLowerCase(),
             last_name: input.last_name.trim().charAt(0).toUpperCase() + input.last_name.trim().slice(1).toLowerCase(),
             email: input.email,
+            preference: {
+              create: {
+                availability_even_week: {
+                  create: {} // Maak een lege availability_even_week aan
+                }
+              }
+            }
           },
-        })
+        });
       }),
   update: restrictedProcedure(Role.ADMIN)
     .input(z.object({

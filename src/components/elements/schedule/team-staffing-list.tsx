@@ -3,7 +3,7 @@ import { StaffingCard } from "./staffing-card"
 import { api } from '../../../utils/api'
 import type { StaffingWithColleagues } from '../../../types/StaffingWithColleagues'
 import { useAutoAnimate } from '@formkit/auto-animate/react'
-import { LoadingMessage } from "../generic"
+import { LoadingMessage, ToastService } from "../generic"
 import { WeekView } from "./week-switcher"
 import { type CalendarDate, getLocalTimeZone, parseDate } from "@internationalized/date"
 
@@ -60,12 +60,12 @@ export const TeamStaffingList = () => {
   return (
     <div ref={parent} className='flex flex-col gap-4 dark:text-white'>
       <WeekView value={selectedDate} onChange={setSelectedDate} onNextWeek={() => {
-        context.staffing.getStaffing.invalidate().catch((error) => {
-          console.error(error)
+        context.staffing.getStaffing.invalidate().catch(() => {
+          ToastService.error("Er is iets misgegaan bij het ophalen van de planning")
         })
       }} onPrevWeek={() => {
-        context.staffing.getStaffing.invalidate().catch((error) => {
-          console.error(error)
+        context.staffing.getStaffing.invalidate().catch(() => {
+          ToastService.error("Er is iets misgegaan bij het ophalen van de planning")
         })
       }} />
       {

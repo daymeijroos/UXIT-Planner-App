@@ -28,37 +28,36 @@ export const scheduleRouter = createTRPCRouter({
       })
     }),
 
-    getShiftTypes: publicProcedure
+  getShiftTypes: publicProcedure
     .query(() => {
-        return prisma.shift_Type.findMany({
-            select: {
-                name: true
-            }
-        })
+      return prisma.shift_Type.findMany({
+        select: {
+          name: true
+        }
+      })
     }
     ),
-    // return true if  shift by date and starttime 
-    checkShiftExistsByDate: protectedProcedure
+  // return true if  shift by date and starttime 
+  checkShiftExistsByDate: protectedProcedure
     .input(z.object({
       start: z.date(),
       end: z.date(),
     }))
     .query(async ({ input }) => {
-        const shift = await prisma.shift.findFirst({
-            where: {
-                start: input.start,
-                end: input.end,
-            }
-        })
-        if (shift) {
-          return true
-        } else {
-            return false
+      const shift = await prisma.shift.findFirst({
+        where: {
+          start: input.start,
+          end: input.end,
         }
+      })
+      if (shift) {
+        return true
+      } else {
+        return false
+      }
     }),
 
-   
-    createShift : protectedProcedure
+  createShift: protectedProcedure
     .input(
       z.object({
         start: z.date(),
@@ -87,14 +86,14 @@ export const scheduleRouter = createTRPCRouter({
             })),
           },
         },
-      });
-      return shift;
-      }),
+      })
+      return shift
+    }),
 
-      // get all shifts
-      getAllShifts : protectedProcedure
-      .query(()=>prisma.shift.findMany()),
+  // get all shifts
+  getAllShifts: protectedProcedure
+    .query(() => prisma.shift.findMany()),
 
-      
+
 })
 

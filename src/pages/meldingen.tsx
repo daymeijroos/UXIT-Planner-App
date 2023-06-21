@@ -1,4 +1,4 @@
-import { Button, Card, CardList, LoadingMessage, NavigationBar } from "../components"
+import { Button, Card, CardList, LoadingMessage, NavigationBar, ToastService } from "../components"
 import { api } from "../utils/api"
 import { X } from "react-feather"
 import { useRouter } from "next/router"
@@ -8,8 +8,8 @@ const Index = () => {
   const notifications = api.notification.getAll.useQuery()
   const { mutate: deleteNotification } = api.notification.delete.useMutation({
     onSuccess: () => {
-      notifications.refetch().catch((e) => {
-        console.log(e)
+      notifications.refetch().catch(() => {
+        ToastService.error("Er is iets misgegaan bij het ophalen van de notificaties")
       })
     }
   })
@@ -32,7 +32,7 @@ const Index = () => {
                           <Button onPress={
                             () => {
                               router.push(new URL(notification.web_url ? notification.web_url : "/"))
-                                .catch((e) => console.log(e))
+                                .catch(() => ToastService.error("Er is iets misgegaan bij het openen van de notificatie"))
                             }
                           }>Open</Button>
                         }

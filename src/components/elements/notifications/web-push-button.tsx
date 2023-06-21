@@ -20,7 +20,7 @@ export const WebPushButton = () => {
       }).then(() => {
         setOneSignalInitialized(true)
       }).catch((e) => {
-        console.log(e)
+        console.error(e)
       })
     }
   })
@@ -28,12 +28,12 @@ export const WebPushButton = () => {
   useEffect(() => {
     if (oneSignalInitialized && status === "authenticated" && sessionData?.user?.id) {
       OneSignal.setExternalUserId(sessionData?.user?.id).catch((e) => {
-        console.log(e)
+        console.error(e)
       })
       OneSignal.isPushNotificationsEnabled((isEnabled) => {
         setPushEnabled(isEnabled)
       }).catch((e) => {
-        console.log(e)
+        console.error(e)
       })
     }
   }, [oneSignalInitialized, status, sessionData?.user?.id])
@@ -43,17 +43,14 @@ export const WebPushButton = () => {
       OneSignal.isPushNotificationsEnabled((isEnabled) => {
         setPushEnabled(isEnabled)
       }).catch((e) => {
-        console.log(e)
+        console.error(e)
       })
     }
   }, [oneSignalInitialized])
 
   const toggleNotifications = async () => {
-    console.log("Toggling notifications...")
     if (pushEnabled == false) {
-      console.log("Registering for push notifications...")
       await OneSignal.registerForPushNotifications()
-      console.log("Setting subscription to true...")
       await OneSignal.setSubscription(true)
     } else {
       await OneSignal.setSubscription(false)
@@ -61,14 +58,14 @@ export const WebPushButton = () => {
     OneSignal.isPushNotificationsEnabled((isEnabled) => {
       setPushEnabled(isEnabled)
     }).catch((e) => {
-      console.log(e)
+      console.error(e)
     })
   }
 
 
   return (
     <>
-      <Button onPress={() => { toggleNotifications().catch((e) => console.log(e)) }} color={!pushEnabled ? "teal" : "red"}>{!pushEnabled ? 'Subscribe to Notifications' : 'Unsubscribe from Notifications'}</Button>
+      <Button onPress={() => { toggleNotifications().catch((e) => console.error(e)) }} color={!pushEnabled ? "teal" : "red"}>{!pushEnabled ? 'Subscribe to Notifications' : 'Unsubscribe from Notifications'}</Button>
     </>
   )
 }

@@ -9,6 +9,7 @@ import type {User} from "@prisma/client"
 import type {ShiftWithStaffingsAndStaffRequired} from "../../../server/types/shift"
 import {DatetimeField} from "../../components/atoms/input/calendar/datetime-field"
 import {parseDateTime} from "@internationalized/date"
+import { shiftRouter } from "../../../server/api/shift"
 
 interface DateValue {
   year: string
@@ -94,7 +95,9 @@ const Shiften = () => {
       setExpandedRow(null)
     } else {
       updateStaffedUsers(shift)
-      setStaffingRequired(shift.staff_required[0].amount)
+      if (shift.staff_required.length > 0) {
+        setStaffingRequired(shift.staff_required[0].amount)
+      }
       setSelectedShiftType(null)
       tempMethod(shift)
       setExpandedRow(shift.id)
@@ -246,6 +249,7 @@ const Shiften = () => {
       <div className="flex justify-between items-center p-4 mb-4">
         <h1 className="text-xl font-bold mx-auto">Shiften</h1>
       </div>
+     
       <div className="flex justify-center items-center">
         <table className="w-full md:max-w-2xl divide-y divide-gray-200 border-2 border-black">
           {/* Table headers */}

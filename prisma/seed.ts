@@ -93,6 +93,47 @@ async function main() {
           name: Role.EMPLOYEE
         }
       },
+      preference: {
+        create: {
+          shift_type: {
+            connect: {
+              id: shiftType1.id
+            }
+          },
+          availability_even_week: {
+            create: {
+              availability: {
+                create: [
+                  {
+                    weekday: Weekday.SUNDAY,
+                    shift_types: {
+                      connect: {
+                        id: shiftType1.id
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          availability_odd_week: {
+            create: {
+              availability: {
+                create: [
+                  {
+                    weekday: Weekday.THURSDAY,
+                    shift_types: {
+                      connect: {
+                        id: shiftType1.id
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
     }
   })
 
@@ -106,6 +147,47 @@ async function main() {
           name: Role.EMPLOYEE
         }
       },
+      preference: {
+        create: {
+          shift_type: {
+            connect: {
+              id: shiftType1.id
+            }
+          },
+          availability_even_week: {
+            create: {
+              availability: {
+                create: [
+                  {
+                    weekday: Weekday.SUNDAY,
+                    shift_types: {
+                      connect: {
+                        id: shiftType1.id
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          availability_odd_week: {
+            create: {
+              availability: {
+                create: [
+                  {
+                    weekday: Weekday.THURSDAY,
+                    shift_types: {
+                      connect: {
+                        id: shiftType1.id
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      }
     }
   })
 

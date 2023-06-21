@@ -28,7 +28,7 @@ export default function Absence() {
           <h1>Absentie Verwerken</h1>
 
           <div className={"mt-5"}>
-            <Select label="Medewerker / Vrijwilliger" items={users.data} onSelectionChange={(item) => {
+            <Select label="Medewerker / Vrijwilliger" id="users" initialText="Medewerker / Vrijwilliger" items={users.data} onSelectionChange={(item) => {
               setUserValue(users.data?.find((u) => u.id === item))
             }}>
               {(item) => <Item key={item.id}>{item.name}</Item>}

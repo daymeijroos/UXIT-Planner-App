@@ -9,12 +9,6 @@ export const staffingRouter = createTRPCRouter({
     .input(z.object({
       fromDate: z.date().optional(),
       limit: z.number().min(1).max(20).nullish(),
-      cursor: z.object({
-        id: z.string(),
-        shift: z.object({
-          start: z.date(),
-        }),
-      }).nullish(),
     }))
     .query(async ({ ctx, input }) => {
       const limit = input?.limit || 7
@@ -23,13 +17,10 @@ export const staffingRouter = createTRPCRouter({
         where: {
           shift: {
             start: {
-              gte: new Date((input.cursor?.shift.start || input?.fromDate || new Date()).setHours(0, 0, 0, 0) - ((limit + 1) * 24 * 60 * 60 * 1000)),
+              gte: new Date((input?.fromDate || new Date()).setHours(0, 0, 0, 0)),
             },
           }
         },
-        cursor: input?.cursor ? {
-          id: input.cursor.id,
-        } : undefined,
         include: {
           shift: {
             include: {
@@ -54,21 +45,7 @@ export const staffingRouter = createTRPCRouter({
           }
         }
       })
-      let nextCursor: { id: string, shift: { start: Date } } | undefined = undefined
-      if (items.length > limit) {
-        const nextItem = items.pop()
-        nextCursor = nextItem
-      }
-      let previousCursor: { id: string, shift: { start: Date } } | undefined = undefined
-      if (items.length > 0) {
-        const previousItem = items.shift()
-        previousCursor = previousItem
-      }
-      return {
-        items,
-        nextCursor,
-        previousCursor
-      }
+      return items
     }),
   getPersonalStaffing: protectedProcedure
     .input(z.object({

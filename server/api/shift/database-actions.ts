@@ -1,6 +1,7 @@
 import { prisma } from "../../db"
+import { ShiftWithStaffingDetails } from "../../types/shift"
 
-export const getShifts = async (fromDate?: Date, toDate?: Date) => {
+export async function getShifts(fromDate?: Date, toDate?: Date): Promise<ShiftWithStaffingDetails[]> {
   return prisma.shift.findMany({
     where: {
       start: {
@@ -14,13 +15,10 @@ export const getShifts = async (fromDate?: Date, toDate?: Date) => {
       staff_required: {
         include: {
           shift_type: true,
-          shift: {
-            include: {
-              staffings: true,
-            }
-          }
         },
-      }
+      },
+      staffings: true,
     }
   })
+
 }

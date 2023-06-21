@@ -5,6 +5,7 @@ import { StaffingCard } from "./staffing-card"
 import type { StaffingWithColleagues } from "../../../types/StaffingWithColleagues"
 import { Button } from "../../atoms/input/button"
 import React from 'react'
+import type { Shift, Shift_Type, Staffing } from "@prisma/client"
 
 export function PersonalStaffingList({ fromDate }: { fromDate?: Date }) {
   const personalStaffings = api.staffing.getPersonalStaffing.useInfiniteQuery({ fromDate, limit: 10 }, {
@@ -23,7 +24,21 @@ export function PersonalStaffingList({ fromDate }: { fromDate?: Date }) {
     </div>
   }
 
-  const staffings = personalStaffings.data?.pages.flatMap((page) => page.items)
+  const staffings = personalStaffings.data?.pages.flatMap(({ items }: {
+    items: (Staffing & {
+      shift: Shift & {
+        staffings: (Staffing & {
+          user: {
+            id: string
+            name: string | null
+          }
+          shift_type: Shift_Type
+        })[]
+      }
+      shift_type: Shift_Type
+    })[]
+  }) => items)
+
   return (
     <div className="flex flex-col items-center gap-4">
       <CardList<StaffingWithColleagues> objects={staffings} CardLayout={

@@ -33,9 +33,6 @@ RUN SKIP_ENV_VALIDATION=1 npm run build
 FROM --platform=linux/amd64 node:20-alpine3.16 AS runner
 WORKDIR /app
 
-RUN npx prisma db push
-RUN npx prisma db seed
-
 ENV NODE_ENV production
 
 # ENV NEXT_TELEMETRY_DISABLED 1
@@ -47,10 +44,12 @@ COPY --from=builder /app/next.config.js ./
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/package.json ./package.json
 COPY --from=builder /app/prisma ./prisma
-RUN chmod a+rw ./prisma ./prisma/database.db
 
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+
+RUN npx prisma db push
+RUN npx prisma db seed
 
 USER nextjs
 EXPOSE 3000

@@ -5,11 +5,15 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        - DATABASE_URL=mysql://root:example@db:3306/db_name
     working_dir: /app
     ports:
       - "3000:3000"
     image: t3-app
     restart: unless-stopped
+    environment:
+      - DATABASE_URL=mysql://root:pulchriplanner@db:3306/db_name
   nginx:
     image: valian/docker-nginx-auto-ssl
     restart: on-failure
@@ -22,6 +26,14 @@ services:
       ALLOWED_DOMAINS: 'localhost'
       SITES: 'localhost=nextjs:3000'
       FORCE_HTTPS: true
+  db:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_USER: root
+      MYSQL_ROOT_PASSWORD: gsd7jewg79hdadsa
+      MYSQL_DATABASE: pulchriplanner
 
 volumes:
   ssl_data:

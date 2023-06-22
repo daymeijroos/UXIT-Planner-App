@@ -28,9 +28,9 @@ export const NavigationBar = () => {
   return (
     <nav className="fixed bottom-0 flex justify-center w-full p-4 bg-white dark:bg-blue-gray-400">
       <div className="flex w-full max-w-xl gap-4">
-        <Button aria-label="Notificaties" title="Notificaties" color={path.notifications.active() ? "teal" : undefined} onPress={() => router.push(path.notifications.pathname)}>
+        {/* <Button aria-label="Notificaties" title="Notificaties" color={path.notifications.active() ? "teal" : undefined} onPress={() => router.push(path.notifications.pathname)}>
           <Bell size="24" className="stroke-5/4" />
-        </Button>
+        </Button> */}
         <Button aria-label="Kalender" title="Kalender" color={path.home.active() ? "teal" : undefined} onPress={() => router.push(path.home.pathname)}>
           <Calendar size="24" className="stroke-5/4" />
         </Button>

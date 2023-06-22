@@ -12,6 +12,8 @@ services:
       - "3000:3000"
     image: t3-app
     restart: unless-stopped
+    depends_on:
+      - db
   nginx:
     image: valian/docker-nginx-auto-ssl
     restart: on-failure

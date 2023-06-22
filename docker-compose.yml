@@ -11,7 +11,7 @@ services:
     image: t3-app
     restart: unless-stopped
     volumes:
-      - prisma:/app/prisma
+      - ./prisma:/app/prisma
   nginx:
     image: valian/docker-nginx-auto-ssl
     restart: on-failure
@@ -27,5 +27,5 @@ services:
 
 volumes:
   ssl_data:
-  prisma:
+  ./prisma:
     external: true

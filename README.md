@@ -6,7 +6,9 @@ Run `npm install` to install all the dependencies.
 
 You will also need to push and seed the database. You can do this by running `npm run seed`.
 
-After that you can run the project in developer mode with `npm run dev`.
+After that you can run the project in developer mode with `docker-compose up`.
+
+If you need to rebuild your docker image after that you can run `docker-compose up --build`.
 
 
 ## Documentation
@@ -21,19 +23,4 @@ After that you can run the project in developer mode with `npm run dev`.
 - [AutoAnimate](https://auto-animate.formkit.com/#usage)
 - [React-feather](https://github.com/feathericons/react-feather#readme)
   - [Icon names](https://feathericons.com/)
-
-
-
-
-```mermaid
-erDiagram
-	User ||--o{ User_Preference : has
-	User_Preference ||--o{ Absence : has
-	User_Preference ||--o{ Availability : has
-	Availability ||--o{ Shift : has
-	Shift ||--|{ Staff_Required : has
-	Shift ||--o{ Staffing : has
-	Shift_Type ||--|{ Staff_Required : "is part of"
-	Shift_Type ||--o{ Staffing : "is part of"
-	Shift_Type ||--o{ Availability : "is part of"
-```
+- [OneSignal](https://documentation.onesignal.com)

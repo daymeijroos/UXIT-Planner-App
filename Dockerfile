@@ -22,11 +22,10 @@ ARG NEXT_PUBLIC_APP_URL
 ARG NEXT_PUBLIC_APP_PORT
 ARG NEXTAUTH_URL
 WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 COPY ./.env ./
 
-RUN npx prisma db push
+RUN npx prisma generate
 RUN SKIP_ENV_VALIDATION=1 npm run build
 
 ##### RUNNER
@@ -49,7 +48,6 @@ COPY --from=builder /app/prisma ./prisma
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
-USER nextjs
 EXPOSE 3000
 ENV PORT 3000
 

@@ -29,4 +29,4 @@ volumes:
   ssl_data:
   prisma:
     external:
-      name: "./prisma"
+      name: "./prisma/"

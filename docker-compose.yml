@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile
     working_dir: /app
     ports:
-      - "3000:3000"
+      - 3000:3000
     image: t3-app
     restart: unless-stopped
     depends_on:
@@ -30,11 +30,13 @@ services:
     image: mysql
     restart: always
     ports:
-      - "3306:3306"
+      - 3306:3306
     environment:
       MYSQL_ROOT_USER: root
       MYSQL_ROOT_PASSWORD: gsd7jewg79hdadsa
       MYSQL_DATABASE: pulchriplanner
+      MYSQL_USER: plannerapp
+      MYSQL_PASSWORD: uteg3ads221dasdek3
     volumes:
       - my-db:/var/lib/mysql
 

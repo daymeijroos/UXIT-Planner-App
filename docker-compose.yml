@@ -19,9 +19,9 @@ services:
     volumes:
       - ssl_data:/etc/resty-auto-ssl
     environment:
-      ALLOWED_DOMAINS: 'localhost'
-      SITES: 'localhost=nextjs:3000'
-      FORCE_HTTPS: true
+      ALLOWED_DOMAINS: 'pulchri.daymeijroos.nl'
+      SITES: 'pulchri.daymeijroos.nl=nextjs:3000'
+      FORCE_HTTPS: 'true'
 
 volumes:
   ssl_data:

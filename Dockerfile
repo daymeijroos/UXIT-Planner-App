@@ -26,8 +26,7 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 COPY ./.env ./
 
-RUN npx prisma generate
-
+RUN npx prisma db push
 RUN SKIP_ENV_VALIDATION=1 npm run build
 
 ##### RUNNER

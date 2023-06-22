@@ -22,7 +22,6 @@ ARG NEXT_PUBLIC_APP_URL
 ARG NEXT_PUBLIC_APP_PORT
 ARG NEXTAUTH_URL
 WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 COPY ./.env ./
 

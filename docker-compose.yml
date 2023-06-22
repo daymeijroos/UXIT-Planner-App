@@ -5,8 +5,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      args:
-        - DATABASE_URL=mysql://root:gsd7jewg79hdadsa@db:3306/pulchriplanner
     working_dir: /app
     ports:
       - "3000:3000"
@@ -16,6 +14,8 @@ services:
       - db
     links:
       - db
+    environment:
+      - DATABASE_URL=mysql://root:gsd7jewg79hdadsa@db:3306/pulchriplanner
   nginx:
     image: valian/docker-nginx-auto-ssl
     restart: on-failure

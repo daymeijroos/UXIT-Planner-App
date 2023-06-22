@@ -26,7 +26,7 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 COPY ./.env ./
 
-RUN npx prisma db push
+RUN npx prisma generate
 RUN SKIP_ENV_VALIDATION=1 npm run build
 
 ##### RUNNER
@@ -48,9 +48,6 @@ COPY --from=builder /app/prisma ./prisma
 
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
-
-RUN npx prisma db push
-RUN npx prisma db seed
 
 USER nextjs
 EXPOSE 3000

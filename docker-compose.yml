@@ -10,10 +10,6 @@ services:
       - 3000:3000
     image: t3-app
     restart: unless-stopped
-    depends_on:
-      - db
-    links:
-      - db
   nginx:
     image: valian/docker-nginx-auto-ssl
     restart: on-failure
@@ -26,20 +22,6 @@ services:
       ALLOWED_DOMAINS: 'pulchri.daymeijroos.nl'
       SITES: 'pulchri.daymeijroos.nl=nextjs:3000'
       FORCE_HTTPS: 'true'
-  db:
-    image: mysql
-    restart: always
-    ports:
-      - 3306:3306
-    environment:
-      MYSQL_ROOT_USER: root
-      MYSQL_ROOT_PASSWORD: gsd7jewg79hdadsa
-      MYSQL_DATABASE: pulchriplanner
-      MYSQL_USER: plannerapp
-      MYSQL_PASSWORD: uteg3ads221dasdek3
-    volumes:
-      - my-db:/var/lib/mysql
 
 volumes:
   ssl_data:
-  my-db:

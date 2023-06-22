@@ -27,6 +27,7 @@ COPY . .
 COPY ./.env ./
 
 RUN npx prisma db push
+RUN npx prisma db seed
 RUN SKIP_ENV_VALIDATION=1 npm run build
 
 ##### RUNNER

@@ -2137,5 +2137,5 @@ main()
   })
   .finally(() => {
     prisma.$disconnect()
-      .catch((e) => { console.error(e) })
+      .catch(() => { console.error("Something went wrong") })
   })

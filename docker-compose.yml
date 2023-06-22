@@ -14,6 +14,8 @@ services:
     restart: unless-stopped
     depends_on:
       - db
+    links:
+      - db
   nginx:
     image: valian/docker-nginx-auto-ssl
     restart: on-failure

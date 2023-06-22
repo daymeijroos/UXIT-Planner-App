@@ -26,14 +26,15 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 COPY ./.env ./
 
-RUN npx prisma db push
-RUN npx prisma db seed
 RUN SKIP_ENV_VALIDATION=1 npm run build
 
 ##### RUNNER
 
 FROM --platform=linux/amd64 node:20-alpine3.16 AS runner
 WORKDIR /app
+
+RUN npx prisma db push
+RUN npx prisma db seed
 
 ENV NODE_ENV production
 

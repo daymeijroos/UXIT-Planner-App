@@ -1,24 +1,54 @@
-# Use an official Node.js runtime as the parent image
-FROM node:16-alpine
+##### DEPENDENCIES
 
-# Set the working directory in the container to /app
+FROM --platform=linux/amd64 node:20-alpine3.16 AS deps
+RUN apk add --no-cache libc6-compat openssl
 WORKDIR /app
 
-# Copy package.json and package-lock.json into the directory
-COPY package*.json ./
+# Install Prisma Client - remove if not using Prisma
 
-# Install application dependencies
-# If you are building your code for production, use `npm ci --only=production`
-RUN npm install
+COPY prisma ./
 
-# Bundle the app source inside the Docker image
+# Install dependencies using NPM
+
+COPY package.json package-lock.json* ./
+
+RUN npm ci
+
+##### BUILDER
+
+FROM --platform=linux/amd64 node:20-alpine3.16 AS builder
+ARG DATABASE_URL
+ARG NEXT_PUBLIC_APP_URL
+ARG NEXT_PUBLIC_APP_PORT
+ARG NEXTAUTH_URL
+WORKDIR /app
 COPY . .
+COPY ./.env ./
 
-# Build the app
-RUN npm run build
+RUN npx prisma generate
+RUN SKIP_ENV_VALIDATION=1 npm run build
 
-# Make the app's port available to the outside world 
+##### RUNNER
+
+FROM --platform=linux/amd64 node:20-alpine3.16 AS runner
+WORKDIR /app
+
+ENV NODE_ENV production
+
+# ENV NEXT_TELEMETRY_DISABLED 1
+
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
+
+COPY --from=builder /app/next.config.js ./
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/package.json ./package.json
+COPY --from=builder /app/prisma ./prisma
+
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+
 EXPOSE 3000
+ENV PORT 3000
 
-# Start the app
-CMD ["npm", "run", "start"]
+CMD ["node", "server.js"]

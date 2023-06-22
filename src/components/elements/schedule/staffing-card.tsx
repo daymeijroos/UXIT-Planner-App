@@ -14,19 +14,20 @@ interface StaffingCardProps {
   staffing: StaffingWithColleagues
 }
 
-
-
 export function StaffingCard(props: StaffingCardProps) {
-  // const shift_type_id = api.requiredStaffing.getReserveShiftType.useQuery();
-
   const { data: sessionData } = useSession()
-  const userName = sessionData?.user?.name
+  const userId = sessionData?.user?.id
   const [showForm, setShowForm] = useState(false)
+  const [submitted, setSubmitted] = useState(false)
 
   const determineShowButton = (staffing: StaffingWithColleagues): boolean => {
+    if (submitted) {
+      return false
+    }
+
     let result = false
     staffing.shift.staffings.forEach((nestedStaffing) => {
-      if (nestedStaffing.user.name == userName) {
+      if (nestedStaffing.user.id == userId) {
         result = true
       }
     })
@@ -34,13 +35,12 @@ export function StaffingCard(props: StaffingCardProps) {
     return result
   }
 
-
   const handleButtonClick = () => {
     setShowForm(true)
+    setSubmitted(false)
   }
 
   const context = api.useContext()
-
 
   const { mutate: handleCheckOut } = api.absence.checkOut.useMutation({
     onSuccess: () => {
@@ -61,41 +61,36 @@ export function StaffingCard(props: StaffingCardProps) {
       reason: reason,
     }
 
-    Promise.all([
-      handleCheckOut(formData)
-
-    ]).catch(() => {
-      errorToast("There has been an error")
-    })
+    Promise.all([handleCheckOut(formData)])
+      .then(() => {
+        setSubmitted(true)
+        setShowForm(false) // Hide the form after successful submission
+      })
+      .catch(() => {
+        errorToast("There has been an error")
+      })
   }
-
-
 
   return (
     <Card>
       <h1 className="text-2xl font-bold">
-        {
-          `${formatTime(props.staffing.shift.start)}-${formatTime(props.staffing.shift.end)}`
-        }
+        {`${formatTime(props.staffing.shift.start)}-${formatTime(props.staffing.shift.end)}`}
       </h1>
       <p>
-        {
-          `${formatDate(props.staffing.shift.start)[0].toUpperCase()}${formatDate(props.staffing.shift.start).slice(1)}`
-        }
+        {`${formatDate(props.staffing.shift.start)[0].toUpperCase()}${formatDate(props.staffing.shift.start).slice(1)}`}
       </p>
       <br />
       <p>
-        {
-          formatShiftStaffList(props.staffing)
-        }
+        {formatShiftStaffList(props.staffing)}
       </p>
       {determineShowButton(props.staffing) && !showForm && (
         <Button onPress={handleButtonClick}>Afmelden</Button>
       )}
-      {showForm && (<form onSubmit={handleFormAndStaffingSubmit}>
-        <TextField type="text" id="reasonForAbsence" name="reasonForAbsence" placeholder="Vul hier uw reden in:" />
-        <Button type="submit" id="reason" name="reason" >Submit</Button>
-      </form>
+      {showForm && (
+        <form onSubmit={handleFormAndStaffingSubmit}>
+          <TextField type="text" id="reasonForAbsence" name="reasonForAbsence" placeholder="Vul hier uw reden in:" />
+          <Button type="submit" id="reason" name="reason">Submit</Button>
+        </form>
       )}
     </Card>
   )

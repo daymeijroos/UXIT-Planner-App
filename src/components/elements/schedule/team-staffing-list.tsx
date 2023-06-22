@@ -3,7 +3,7 @@ import { StaffingCard } from "./staffing-card"
 import { api } from '../../../utils/api'
 import type { StaffingWithColleagues } from '../../../types/StaffingWithColleagues'
 import { useAutoAnimate } from '@formkit/auto-animate/react'
-import { LoadingMessage } from "../generic"
+import { LoadingMessage, ToastService } from "../generic"
 import { WeekView } from "./week-switcher"
 import { type CalendarDate, getLocalTimeZone, parseDate } from "@internationalized/date"
 
@@ -11,14 +11,7 @@ export const TeamStaffingList = () => {
   const [selectedDate, setSelectedDate] = useState<CalendarDate>(parseDate(new Date(new Date().setHours(2, 0, 0, 0)).toISOString().slice(0, 10)))
   const context = api.useContext()
 
-  const staffings = api.staffing.getStaffing.useInfiniteQuery({ fromDate: selectedDate.toDate(getLocalTimeZone()) }, {
-    getNextPageParam: (lastPage) => {
-      return lastPage.nextCursor
-    },
-    getPreviousPageParam: (firstPage) => {
-      return firstPage.previousCursor
-    }
-  })
+  const staffings = api.staffing.getStaffing.useQuery({ fromDate: selectedDate.toDate(getLocalTimeZone()) })
 
   useEffect(() => {
     setSelectedDate(parseDate(new Date(new Date().setHours(2, 0, 0, 0)).toISOString().slice(0, 10)))
@@ -38,7 +31,7 @@ export const TeamStaffingList = () => {
   let filteredStaffings: StaffingWithColleagues[] = []
 
   if (!staffings.isLoading) {
-    uniqueStaffings = staffings.data.pages.flatMap((page) => page.items).reduce((accumulator: StaffingWithColleagues[], current: StaffingWithColleagues) => {
+    uniqueStaffings = staffings.data.reduce((accumulator: StaffingWithColleagues[], current: StaffingWithColleagues) => {
       const existingStaffing = accumulator.find((staffing: StaffingWithColleagues) => {
         const sameStart = staffing.shift.start.getTime() === current.shift.start.getTime()
         const sameEnd = staffing.shift.end.getTime() === current.shift.end.getTime()
@@ -67,15 +60,13 @@ export const TeamStaffingList = () => {
   return (
     <div ref={parent} className='flex flex-col gap-4 dark:text-white'>
       <WeekView value={selectedDate} onChange={setSelectedDate} onNextWeek={() => {
-        context.staffing.getStaffing.invalidate().catch((error) => {
-          console.error(error)
+        context.staffing.getStaffing.invalidate().catch(() => {
+          ToastService.error("Er is iets misgegaan bij het ophalen van de planning")
         })
-        staffings.fetchNextPage().catch((e) => console.log(e))
       }} onPrevWeek={() => {
-        context.staffing.getStaffing.invalidate().catch((error) => {
-          console.error(error)
+        context.staffing.getStaffing.invalidate().catch(() => {
+          ToastService.error("Er is iets misgegaan bij het ophalen van de planning")
         })
-        staffings.fetchPreviousPage().catch((e) => console.log(e))
       }} />
       {
         staffings.isLoading ? (

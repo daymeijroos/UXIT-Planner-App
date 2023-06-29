@@ -4,16 +4,18 @@ import { NavigationBar } from "../../components";
 import { UserWithPreferenceAndStaffings } from "../../../server/types/user";
 import { Weekday } from "../../../prisma/weekday";
 import { AvailabilityWithShiftTypes } from "../../../server/types/availibility";
-import {AvailabilityEvenWeek} from "@prisma/client";
+import {AvailabilityEvenWeek, User, User_Preference} from "@prisma/client";
 
-const UserPreferencesPopup = ({ user, onClose }) => {
+const UserPreferencesPopup = ({ user, onClose }: {user: UserWithPreferenceAndStaffings, onClose: () => void}) => {
   const getDayName = (dayNumber: number) => {
     const weekdays = ["Zondag", "Maandag", "Dinsdag", "Woensdag", "Donderdag", "Vrijdag", "Zaterdag"];
     return weekdays[dayNumber];
   };
 
 
-  const sortedEvenAvailability: AvailabilityEvenWeek[] = user.preference?.availability_even_week.availability
+  const sortedEvenAvailability: AvailabilityEvenWeek[] = user.preference?.availability_even_week?.availability
+
+
 
   /*
   const sortedEvenAvailability: AvailabilityWithShiftTypes[] = user.preference?.availability_even_week?.sort((
@@ -29,7 +31,7 @@ const UserPreferencesPopup = ({ user, onClose }) => {
         <h2 className="text-xl font-bold mb-6 text-center">Gebruiker voorkeuren</h2>
         <div className="flex-grow flex flex-col justify-end">
           <span className="font-bold">Voornaam: {user.name} </span>
-          <span className="font-bold">Beschikbaarheid: {user.preference?.availability_even_week.id} </span>
+          <span className="font-bold">Beschikbaarheid: {user.preference?.availability_even_week?.id} </span>
           <div>
             {sortedEvenAvailability?.map((availability) => (
                 <div key={availability.id}>
@@ -57,19 +59,21 @@ const UserPreferencesPopup = ({ user, onClose }) => {
 
 
 const Gebruikers = () => {
-  const [selectedUser, setSelectedUser] = useState(null);
+  const [selectedUser, setSelectedUser] = useState<UserWithPreferenceAndStaffings | null>(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const users = api.user.getAllUsers.useQuery();
+  const usersQuery = api.user.getUsersWithPreferencesAndStaffings.useQuery();
 
-  if (users.isLoading) {
+  if (usersQuery.isLoading) {
     return <div>loading...</div>;
   }
 
-  if (users.error) {
-    return <div>{users.error.message}</div>;
+  if (usersQuery.error) {
+    return <div>{usersQuery.error.message}</div>;
   }
 
-  const handleRowClick = (user) => {
+  const users: UserWithPreferenceAndStaffings[] = usersQuery.data
+
+  const handleRowClick = (user: UserWithPreferenceAndStaffings) => {
     setSelectedUser(user);
     setIsPopupOpen(true);
   };
@@ -78,7 +82,7 @@ const Gebruikers = () => {
     <div className="p-4">
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-xl font-bold mx-auto">Gebruikers</h1>
-        <p className="text-sm">{users.data?.length} Gebruikers</p>
+        <p className="text-sm">{users.length} Gebruikers</p>
       </div>
       <div className="flex justify-center items-center">
         <table className="w-full md:max-w-2xl divide-y divide-gray-200 border-2 border-black">
@@ -96,7 +100,7 @@ const Gebruikers = () => {
           </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-          {users.data?.map((user) => (
+          {users.map((user) => (
             <tr key={user.id} className="hover:bg-gray-200 cursor-pointer" onClick={() => handleRowClick(user)}>
               <td className="px-6 py-4 whitespace-nowrap border border-black">
                 <div className="text-sm text-gray-900">{user.name}</div>

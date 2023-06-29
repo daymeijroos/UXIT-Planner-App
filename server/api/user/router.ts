@@ -13,6 +13,9 @@ export const userRouter = createTRPCRouter({
           preference: {
             include: {
               absence: true,
+              availability_even_week: {include: {availability: {include: {shift_types: true}}}},
+              availability_odd_week: {include: {availability: {include: {shift_types: true}}}},
+              availability_flexible: {include: {availability: {include: {shift_types: true}}}}
             }
           },
           staffings: true

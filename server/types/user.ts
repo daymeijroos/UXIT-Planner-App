@@ -7,7 +7,7 @@ export interface UserWithPreferenceAndStaffings extends User {
       availability: (Availability & {
         shift_types: Shift_Type[]
       })[]
-    },
+    } | null,
     availability_odd_week: AvailabilityOddWeek & {
       availability: (Availability & {
         shift_types: Shift_Type[]

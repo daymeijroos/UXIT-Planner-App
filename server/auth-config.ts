@@ -2,7 +2,6 @@ import type { GetServerSidePropsContext } from "next"
 import {
   getServerSession,
   type NextAuthOptions,
-  type DefaultSession,
 } from "next-auth"
 import EmailProvider from "next-auth/providers/email"
 import { createTransport } from "nodemailer"
@@ -58,7 +57,7 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         token.id = user.id
         token.role = user.role_name
-        token.name = user.name
+        token.name = user.first_name
         token.last_name = user.last_name
         token.email = user.email
         token.image = user.image
@@ -76,7 +75,7 @@ export const authOptions: NextAuthOptions = {
       }
       return session
     },
-    redirect({ url, baseUrl }) {
+    redirect({ baseUrl }) {
       return new URL('/', baseUrl).toString()
     }
   },

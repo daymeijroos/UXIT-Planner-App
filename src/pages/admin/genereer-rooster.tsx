@@ -13,17 +13,20 @@ export default function GenereerRooster() {
   } | undefined>()
 
   const context = api.useContext()
-  const { mutateAsync: generateSchedule } = api.schedule.generate.useMutation({
+  const { mutate: generateSchedule, isLoading } = api.schedule.generate.useMutation({
     onSuccess: () => {
       ToastService.success("Het is gelukt!")
-      context.schedule.getUnfulfilledShifts.invalidate().catch((error) => {
-        console.error(error)
+      context.schedule.getUnfulfilledShifts.invalidate().catch(() => {
+        ToastService.error("Er is iets misgegaan bij het ophalen van de onvervulde diensten")
       })
-      context.staffing.getStaffing.invalidate().catch((error) => {
-        console.error(error)
+      context.staffing.getStaffing.invalidate().catch(() => {
+        ToastService.error("Er is iets misgegaan bij het ophalen van de planning")
       })
-      context.staffing.getPersonalStaffing.invalidate().catch((error) => {
-        console.error(error)
+      context.staffing.getPersonalStaffing.invalidate().catch(() => {
+        ToastService.error("Er is iets misgegaan bij het ophalen van de persoonlijke planning")
+      })
+      router.push("/").catch(() => {
+        ToastService.error("Er is iets misgegaan bij het openen van de planning")
       })
     },
     onError: (error) => {
@@ -41,17 +44,11 @@ export default function GenereerRooster() {
             value={range}
             onChange={setRange}
           />
-          <Button color="teal" onPress={() => {
+          <Button color="teal" isDisabled={isLoading} onPress={() => {
             if (range) {
               generateSchedule({
                 from: range?.start.toDate("Europe/Amsterdam"),
                 to: range?.end.add({ days: 1 }).toDate("Europe/Amsterdam")
-              }).then(() => {
-                router.push("/").catch((error) => {
-                  console.error(error)
-                })
-              }).catch((error) => {
-                console.error(error)
               })
             } else {
               ToastService.info("Kies een periode om een rooster te genereren.")

@@ -1,0 +1,27 @@
+version: "3.9"
+services:
+  nextjs:
+    platform: "linux/arm64/v8"
+    build:
+      context: .
+      dockerfile: Dockerfile
+    working_dir: /app
+    ports:
+      - 3000:3000
+    image: t3-app
+    restart: unless-stopped
+  nginx:
+    image: valian/docker-nginx-auto-ssl
+    restart: on-failure
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ssl_data:/etc/resty-auto-ssl
+    environment:
+      ALLOWED_DOMAINS: 'pulchri.daymeijroos.nl'
+      SITES: 'pulchri.daymeijroos.nl=nextjs:3000'
+      FORCE_HTTPS: 'true'
+
+volumes:
+  ssl_data:

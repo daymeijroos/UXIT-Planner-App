@@ -1,13 +1,15 @@
+'use client'
+
 import { useCalendarState } from "@react-stately/calendar"
 import { useCalendar, useCalendarGrid } from "@react-aria/calendar"
 import { useLocale, useDateFormatter } from "@react-aria/i18n"
 import type { CalendarDate, DateValue } from "@internationalized/date"
-import { createCalendar } from "@internationalized/date"
+import { createCalendar, parseDate } from "@internationalized/date"
 import { CalendarCell } from "../../../atoms/input/calendar/calender-cell"
 import type { AriaCalendarGridProps, AriaCalendarProps } from "react-aria"
 import { ChevronLeft, ChevronRight } from "react-feather"
 import { ButtonRound } from "../../../atoms"
-import React from 'react'
+import React, { useEffect } from 'react'
 
 export function WeekView<T extends DateValue>(props: AriaCalendarProps<T> & AriaCalendarGridProps & { onNextWeek?: () => void, onPrevWeek?: () => void }) {
   const { locale } = useLocale()
@@ -17,6 +19,10 @@ export function WeekView<T extends DateValue>(props: AriaCalendarProps<T> & Aria
     locale,
     createCalendar
   })
+
+  useEffect(() => {
+    state.selectDate(parseDate(new Date().toISOString().split("T")[0]))
+  }, [])
   const { prevButtonProps, nextButtonProps } = useCalendar(
     props,
     state
@@ -97,3 +103,4 @@ export function WeekView<T extends DateValue>(props: AriaCalendarProps<T> & Aria
     </div>
   )
 }
+

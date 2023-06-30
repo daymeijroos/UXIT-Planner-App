@@ -36,59 +36,53 @@ export default function Admin() {
   })
 
   return (
-    <>
-      <Head>
-        <title>Home | Pulchri Planner</title>
-      </Head>
-      <div className="flex flex-col items-center gap-5 pt-8 pb-24">
-        <h1>Admin paneel</h1>
-        <div className="flex flex-col w-full max-w-screen-md gap-4">
-          <h2>Rooster</h2>
-          <div className="grid w-full grid-cols-2 gap-4">
-            <div className="col-span-2">
-              <Button color="teal" onPress={() => {
-                router.push("/admin/genereer-rooster")}}>
-                <h4>Genereer Rooster</h4>
-                <Calendar size="24" className="ml-2 stroke-2" />
-              </Button>
+      <>
+        <Head>
+          <title>Home | Pulchri Planner</title>
+        </Head>
+        <div className="flex flex-col items-center gap-5 pt-8 pb-24">
+          <h1>Admin paneel</h1>
+          <div className="flex flex-col w-full max-w-screen-md gap-4">
+            <h2>Rooster</h2>
+            <div className="grid w-full grid-cols-2 gap-4">
+              <div className="col-span-2">
+                <Button color="teal" onPress={() => {
+                  router.push("/admin/genereer-rooster")}}>
+                  <h4>Genereer Rooster</h4>
+                  <Calendar size="24" className="ml-2 stroke-2" />
+                </Button>
+              </div>
+              {/*Delete roster button, can be undone by uncommenting these lines*/}
+              {/*<Button onPress={*/}
+              {/*  () => {*/}
+              {/*    removeStaffings()*/}
+              {/*  }*/}
+              {/*}>Verwijder rooster</Button>*/}
+              <Button
+                  onPress={() => {
+                    router.push("/admin/add-shift")
+                  }}
+              >Nieuwe shift toevoegen</Button>
+              <Button onPress={() => router.push("/admin/shiften")}>Handmatige aanpassingen</Button>
             </div>
-            <Button onPress={
-              () => {
-                removeStaffings()
-              }
-            }>Verwijder rooster</Button>
-            <Button onPress={() => router.push("/admin/shiften")}>Handmatige aanpassingen</Button>
-            <Button>Openingsweekend aangeven</Button>
+            <h2>Vrijwilligers</h2>
+            <div className="grid w-full grid-cols-2 gap-4">
+              <Button onPress={() => router.push("/admin/gebruikers")}>Vrijwilligers beheren</Button>
+              {/*Missing functionality, uncomment if implemented*/}
+              {/*<Button>Verlof aangeven</Button>*/}
+            </div>
+            <h2>Accounts beheren</h2>
+            <div className="grid w-full grid-cols-2 gap-4">
+              <Button onPress={() => {
+                router.push("/admin/create-user")
+              }}> Account aanmaken</Button>
+              <Button onPress={() => {
+                router.push("/admin/modify-user")
+              }}> Account wijzigen</Button>
+            </div>
           </div>
-          <h2>Vrijwilligers</h2>
-          <div className="grid w-full grid-cols-2 gap-4">
-            <Button onPress={() => router.push("/admin/gebruikers")}>Voorkeur aanpassen</Button>
-            <Button>Beschikbaarheid aanpassen</Button>
-            <Button>Werkuren aanpassen</Button>
-            <Button>Verlof aangeven</Button>
-            <Button>Inwerken inroosteren</Button>
-          </div>
-          <h2>Uitbreiding</h2>
-          <div className="grid w-full grid-cols-2 gap-4">
-            <Button>Nieuw shifttype toevoegen</Button>
-            <Button
-              onPress={() => {
-                router.push("/admin/add-shift")
-              }}
-            >Nieuw shift toevoegen</Button>
-          </div>
-          <h2>Accounts beheren</h2>
-          <div className="grid w-full grid-cols-2 gap-4">
-            <Button onPress={() => {
-              router.push("/admin/create-user")
-            }}> Account aanmaken</Button>
-            <Button onPress={() => {
-              router.push("/admin/modify-user")
-            }}> Account wijzigen</Button>
-          </div>
-        </div>
-      </div >
-      <NavigationBar />
-    </>
+        </div >
+        <NavigationBar />
+      </>
   )
 }

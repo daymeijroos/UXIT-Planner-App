@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { api } from "../../utils/api";
-import { NavigationBar } from "../../components";
+import {NavigationBar, Checkbox, Button, ToastService} from "../../components";
 import { UserWithPreferenceAndStaffings } from "../../../server/types/user";
 import { Weekday } from "../../../prisma/weekday";
 import { AvailabilityWithShiftTypes } from "../../../server/types/availibility";
-import {AvailabilityEvenWeek, User, User_Preference} from "@prisma/client";
+import {AvailabilityEvenWeek, AvailabilityFlexible, AvailabilityOddWeek, User, User_Preference} from "@prisma/client";
+import {useToggleState} from 'react-stately';
+import {useCheckbox} from 'react-aria';
 
 const UserPreferencesPopup = ({ user, onClose }: {user: UserWithPreferenceAndStaffings, onClose: () => void}) => {
   const getDayName = (dayNumber: number) => {
@@ -15,6 +17,7 @@ const UserPreferencesPopup = ({ user, onClose }: {user: UserWithPreferenceAndSta
 
   const sortedEvenAvailability: AvailabilityEvenWeek[] = user.preference?.availability_even_week?.availability
 
+  let [selected, setSelection] = React.useState(false);
 
 
   /*
@@ -30,6 +33,12 @@ const UserPreferencesPopup = ({ user, onClose }: {user: UserWithPreferenceAndSta
       <div className="bg-white w-1/2 h-5/6 p-6 rounded shadow-lg flex flex-col dark:bg-gray-700">
         <h2 className="text-xl font-bold mb-6 text-center">Gebruiker voorkeuren</h2>
         <div className="flex-grow flex flex-col justify-end">
+
+            <AvailabilityEvenWeekForm user={user}/>
+
+            <Checkbox isSelected={selected} onChange={setSelection}>
+              Maandag
+            </Checkbox>
           <span className="font-bold">Voornaam: {user.name} </span>
           <span className="font-bold">Beschikbaarheid: {user.preference?.availability_even_week?.id} </span>
           <div>
@@ -54,6 +63,39 @@ const UserPreferencesPopup = ({ user, onClose }: {user: UserWithPreferenceAndSta
     </div>
   );
 };
+
+const AvailabilityEvenWeekForm = ({ user }: {user: UserWithPreferenceAndStaffings}) => {
+
+  const context = api.useContext()
+
+  const {mutate} = api.availability.addDefaultAvailability.useMutation({
+    onSuccess: () => {
+      context.user.getUsersWithPreferencesAndStaffings.invalidate().catch(() => {
+        ToastService.error("Er is wat misgegaan")
+      })
+    }
+  })
+
+  function addDefaultAvailability() {
+    mutate({
+      preferenceId: user.user_preference_id
+    })
+  }
+
+  if (!user.preference?.availability_even_week) {
+
+    return (
+        <Button onPress={addDefaultAvailability}>
+          Voeg vaste beschikbaarheid toe
+        </Button>
+    )
+  }
+  return (
+      <form>
+        not implemented
+      </form>
+  )
+}
 
 
 

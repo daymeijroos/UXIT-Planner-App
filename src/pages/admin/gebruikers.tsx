@@ -14,8 +14,8 @@ const Gebruikers = () => {
   }
 
   return (
-    <div className="p-4">
-      <div className="flex justify-between items-center mb-4">
+    <div className="p-4 mb-32">
+      <div className="flex justify-between items-center mb-2">
         <h1 className="text-xl font-bold mx-auto">Gebruikers</h1>
         <p className="text-sm">{users.data?.length} Gebruikers</p>
       </div>

@@ -16,6 +16,8 @@ const UserPreferencesPopup = ({ user, onClose }: {user: UserWithPreferenceAndSta
 
 
   const sortedEvenAvailability: AvailabilityEvenWeek[] = user.preference?.availability_even_week?.availability
+  const sortedOddAvailability: AvailabilityOddWeek[] = user.preference?.availability_odd_week?.availability
+  const sortedFlexibleAvailability: AvailabilityFlexible[] = user.preference?.availability_flexible?.availability
 
   let [selected, setSelection] = React.useState(false);
 
@@ -30,22 +32,31 @@ const UserPreferencesPopup = ({ user, onClose }: {user: UserWithPreferenceAndSta
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-      <div className="bg-white w-1/2 h-5/6 p-6 rounded shadow-lg flex flex-col dark:bg-gray-700">
-        <h2 className="text-xl font-bold mb-6 text-center">Gebruiker voorkeuren</h2>
+      <div className="bg-white w-2/3 h-5/6 p-6 rounded shadow-lg flex flex-col dark:bg-gray-700">
+        <h2 className="text-xl font-bold mb-6 text-center">{user.name}'s voorkeuren</h2>
         <div className="flex-grow flex flex-col justify-end">
 
-            <AvailabilityEvenWeekForm user={user}/>
 
-            <Checkbox isSelected={selected} onChange={setSelection}>
-              Maandag
-            </Checkbox>
-          <span className="font-bold">Voornaam: {user.name} </span>
-          <span className="font-bold">Beschikbaarheid: {user.preference?.availability_even_week?.id} </span>
+            <AvailabilityEvenWeekForm user={user}/>
           <div>
             {sortedEvenAvailability?.map((availability) => (
                 <div key={availability.id}>
-                  <span className="font-bold">Dag: {getDayName(availability.weekday)} </span>
+                  <span className="font-bold">Dag even: {getDayName(availability.weekday)} </span>
                 </div>
+            ))}
+          </div>
+          <div>
+            {sortedOddAvailability?.map((availability) => (
+              <div key={availability.id}>
+                <span className="font-bold">Dag oneven: {getDayName(availability.weekday)} </span>
+              </div>
+            ))}
+          </div>
+          <div>
+            {sortedFlexibleAvailability?.map((availability) => (
+              <div key={availability.id}>
+                <span className="font-bold">Dag flexibel: {getDayName(availability.weekday)} </span>
+              </div>
             ))}
           </div>
 
@@ -64,38 +75,70 @@ const UserPreferencesPopup = ({ user, onClose }: {user: UserWithPreferenceAndSta
   );
 };
 
-const AvailabilityEvenWeekForm = ({ user }: {user: UserWithPreferenceAndStaffings}) => {
+const AvailabilityEvenWeekForm = ({ user }: { user: UserWithPreferenceAndStaffings }) => {
+  const context = api.useContext();
 
-  const context = api.useContext()
-
-  const {mutate} = api.availability.addDefaultAvailability.useMutation({
+  const { mutate } = api.availability.addDefaultAvailability.useMutation({
     onSuccess: () => {
-      context.user.getUsersWithPreferencesAndStaffings.invalidate().catch(() => {
-        ToastService.error("Er is wat misgegaan")
-      })
-    }
-  })
+      context.user.getUsersWithPreferencesAndStaffings
+        .invalidate()
+        .catch(() => {
+          ToastService.error("Er is wat misgegaan");
+        });
+    },
+  });
+
+  const weekdays = [
+    "Zondag",
+    "Maandag",
+    "Dinsdag",
+    "Woensdag",
+    "Donderdag",
+    "Vrijdag",
+    "Zaterdag",
+  ];
 
   function addDefaultAvailability() {
     mutate({
-      preferenceId: user.user_preference_id
-    })
+      preferenceId: user.user_preference_id,
+    });
   }
 
-  if (!user.preference?.availability_even_week) {
 
-    return (
-        <Button onPress={addDefaultAvailability}>
-          Voeg vaste beschikbaarheid toe
-        </Button>
-    )
-  }
+  const hasEvenWeekAvailability = user.preference?.availability_even_week?.availability?.length > 0;
+
   return (
-      <form>
-        not implemented
-      </form>
-  )
-}
+    <form>
+      {hasEvenWeekAvailability ? (
+        weekdays.map((day, index) => {
+          const isSelected = user.preference.availability_even_week.availability.some(
+            (availability) => availability.weekday === index
+          );
+
+          return (
+            <div key={index} className="flex items-center mb-4">
+              <Checkbox
+                id={day}
+                value={day}
+                isSelected={isSelected}
+                onChange={() => {}}
+              />
+              <label htmlFor={day} className="ml-2">
+                {day} (even week vast)
+              </label>
+            </div>
+          );
+        })
+      ) : (
+        <Button onPress={addDefaultAvailability}>
+          Voeg vaste beschikbaarheid toe voor even weken
+        </Button>
+      )}
+    </form>
+  );
+};
+
+
 
 
 
@@ -123,7 +166,7 @@ const Gebruikers = () => {
   return (
     <div className="p-4">
       <div className="flex justify-between items-center mb-4">
-        <h1 className="text-xl font-bold mx-auto">Gebruikers</h1>
+        <h1 className="text-xl font-bold mx-auto">Voorkeuren aanpassen</h1>
         <p className="text-sm">{users.length} Gebruikers</p>
       </div>
       <div className="flex justify-center items-center">

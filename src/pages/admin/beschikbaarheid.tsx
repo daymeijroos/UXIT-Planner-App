@@ -75,7 +75,7 @@ const AvailabilityEvenWeekForm = ({ user }: { user: UserWithPreferenceAndStaffin
       context.user.getUsersWithPreferencesAndStaffings
         .invalidate()
         .catch(() => {
-          ToastService.error("Er is wat misgegaan")
+          ToastService.error("Er is wat misgegaan");
         });
     },
   });
@@ -102,7 +102,7 @@ const AvailabilityEvenWeekForm = ({ user }: { user: UserWithPreferenceAndStaffin
       },
       {
         onSuccess: () => {
-          const updatedUser = { ...user }
+          const updatedUser = { ...user };
 
           if (!updatedUser.preference.availability_even_week) {
             updatedUser.preference.availability_even_week = {
@@ -325,3 +325,5 @@ const Gebruikers = () => {
     </div>
   )
 }
+
+export default Gebruikers

@@ -3,7 +3,7 @@ import { api } from "../../utils/api";
 import {NavigationBar, Checkbox, Button, ToastService} from "../../components";
 import { UserWithPreferenceAndStaffings } from "../../../server/types/user";
 import { Weekday } from "../../../prisma/weekday";
-import { AvailabilityWithShiftTypes } from "../../../server/types/availibility";
+import { AvailabilityWithShiftTypes } from "../../../server/types/availability";
 import {AvailabilityEvenWeek, AvailabilityFlexible, AvailabilityOddWeek, User, User_Preference} from "@prisma/client";
 import {useToggleState} from 'react-stately';
 import {useCheckbox} from 'react-aria';

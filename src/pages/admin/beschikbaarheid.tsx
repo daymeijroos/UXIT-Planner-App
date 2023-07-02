@@ -7,6 +7,7 @@ import { AvailabilityWithShiftTypes } from "../../../server/types/availability";
 import {AvailabilityEvenWeek, AvailabilityFlexible, AvailabilityOddWeek, User, User_Preference} from "@prisma/client";
 import {useToggleState} from 'react-stately';
 import {useCheckbox} from 'react-aria';
+import { PrismaClient } from "@prisma/client";
 
 const UserPreferencesPopup = ({ user, onClose }: {user: UserWithPreferenceAndStaffings, onClose: () => void}) => {
   const getDayName = (dayNumber: number) => {
@@ -91,6 +92,7 @@ const AvailabilityEvenWeekForm = ({ user }: { user: UserWithPreferenceAndStaffin
   ];
 
   function addDefaultAvailability(weekday: Weekday) {
+
     const availability = {
       weekday,
     };
@@ -102,7 +104,7 @@ const AvailabilityEvenWeekForm = ({ user }: { user: UserWithPreferenceAndStaffin
       },
       {
         onSuccess: () => {
-          const updatedUser = { ...user };
+          const updatedUser = {...user}
 
           if (!updatedUser.preference.availability_even_week) {
             updatedUser.preference.availability_even_week = {
@@ -280,7 +282,7 @@ const Gebruikers = () => {
   const handleRowClick = (user: UserWithPreferenceAndStaffings) => {
     setSelectedUser(user)
     setIsPopupOpen(true)
-  };
+  }
 
   return (
     <div className="p-4">
